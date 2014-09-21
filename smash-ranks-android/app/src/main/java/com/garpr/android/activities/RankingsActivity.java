@@ -2,6 +2,9 @@ package com.garpr.android.activities;
 
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -19,6 +22,9 @@ import java.util.ArrayList;
 
 public class RankingsActivity extends BaseActivity {
 
+    private ArrayList<Player> mPlayers;
+    private ListView mListView;
+    private ProgressBar mProgress;
 
     @Override
     protected int getContentView() {
@@ -28,8 +34,22 @@ public class RankingsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        findViews();
         downloadRankings();
     }
+
+    private void findViews(){
+        mListView = (ListView) findViewById(R.id.activity_rankings_list);
+        mProgress = (ProgressBar) findViewById(R.id.progress);
+    }
+
+    private void showList(){
+        mProgress.setVisibility(View.GONE);
+        
+
+    }
+
+
 
     private void downloadRankings(){
         Networking.Callback callback = new Networking.Callback() {
@@ -56,7 +76,8 @@ public class RankingsActivity extends BaseActivity {
                         }
                     }
                     playersList.trimToSize();
-
+                    mPlayers = playersList;
+                    showList();
                 } catch (JSONException e) {
 
                 }

@@ -3,6 +3,13 @@ package com.garpr.android.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.garpr.android.misc.Constants;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Comparator;
+
 /**
  * Created by Turok on 9/20/2014.
  */
@@ -17,6 +24,13 @@ public class Player implements Parcelable {
         rank = source.readInt();
         id = source.readString();
         name = source.readString();
+    }
+
+    public Player(JSONObject json) throws JSONException {
+        rating = (float) json.getDouble(Constants.RATING);
+        rank = json.getInt(Constants.RANK);
+        id = json.getString(Constants.ID);
+        name = json.getString(Constants.NAME);
     }
 
     public String getId(){
@@ -80,6 +94,21 @@ public class Player implements Parcelable {
             return new Player[i];
         }
     };
+
+    public static final Comparator<Player> ALPHABETICAL_ORDER = new Comparator<Player>() {
+        @Override
+        public int compare(Player p0, Player p1) {
+            return p0.getName().compareTo(p1.getName());
+        }
+    };
+
+    public static final Comparator<Player> RANK_ORDER = new Comparator<Player>() {
+        @Override
+        public int compare(Player p0, Player p1) {
+            return p0.getRank()-p1.getRank();
+        }
+    };
+
 }
 
 

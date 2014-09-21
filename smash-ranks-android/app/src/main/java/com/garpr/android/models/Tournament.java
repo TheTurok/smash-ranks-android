@@ -7,14 +7,14 @@ import android.os.Parcelable;
  * Created by Turok on 9/20/2014.
  */
 public class Tournament implements Parcelable {
+    private String date;
     private String id;
     private String name;
-    private String date;
 
     public Tournament(Parcel source){
+        date = source.readString();
         id = source.readString();
         name = source.readString();
-        date = source.readString();
     }
 
     public String getId(){
@@ -57,9 +57,9 @@ public class Tournament implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(date);
         parcel.writeString(id);
         parcel.writeString(name);
-        parcel.writeString(date);
     }
 
     public static final Creator<Tournament> CREATOR = new Creator<Tournament>(){

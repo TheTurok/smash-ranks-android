@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -24,7 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class RankingsActivity extends BaseActivity {
+public class RankingsActivity extends BaseActivity implements AdapterView.OnItemClickListener{
 
     private ArrayList<Player> mPlayers;
     private ListView mListView;
@@ -49,6 +50,7 @@ public class RankingsActivity extends BaseActivity {
 
     private void showList(){
         mListView.setAdapter(new RankingsAdapter());
+        mListView.setOnItemClickListener(this);
         mProgress.setVisibility(View.GONE);
     }
 
@@ -88,6 +90,12 @@ public class RankingsActivity extends BaseActivity {
         };
         Networking.getRankings(callback);
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Player pee = mPlayers.get(i);
+        PlayerActivity.start(this, pee);
     }
 
     private class RankingsAdapter extends BaseAdapter{

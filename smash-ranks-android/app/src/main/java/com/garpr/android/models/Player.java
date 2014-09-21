@@ -3,6 +3,11 @@ package com.garpr.android.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.garpr.android.misc.Constants;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Turok on 9/20/2014.
  */
@@ -17,6 +22,13 @@ public class Player implements Parcelable {
         rank = source.readInt();
         id = source.readString();
         name = source.readString();
+    }
+
+    public Player(JSONObject json) throws JSONException {
+        rating = (float) json.getDouble(Constants.RATING);
+        rank = json.getInt(Constants.RANK);
+        id = json.getString(Constants.ID);
+        name = json.getString(Constants.NAME);
     }
 
     public String getId(){

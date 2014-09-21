@@ -63,7 +63,6 @@ public class RankingsActivity extends BaseActivity {
 
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(RankingsActivity.this, response.toString(), Toast.LENGTH_LONG).show();
 
                 try {
                     ArrayList<Player> playersList = new ArrayList<Player>();

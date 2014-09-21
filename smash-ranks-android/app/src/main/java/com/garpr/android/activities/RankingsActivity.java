@@ -2,9 +2,13 @@ package com.garpr.android.activities;
 
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -44,9 +48,8 @@ public class RankingsActivity extends BaseActivity {
     }
 
     private void showList(){
+        mListView.setAdapter(new RankingsAdapter());
         mProgress.setVisibility(View.GONE);
-        
-
     }
 
 
@@ -86,5 +89,44 @@ public class RankingsActivity extends BaseActivity {
         };
         Networking.getRankings(callback);
 
+    }
+
+    private class RankingsAdapter extends BaseAdapter{
+
+        private final LayoutInflater mInflater;
+
+        private RankingsAdapter() {
+            mInflater = getLayoutInflater();
+        }
+
+        @Override
+        public int getCount() {
+            return mPlayers.size();
+        }
+
+        @Override
+        public Player getItem(final int i) {
+            return mPlayers.get(i);
+        }
+
+        @Override
+        public long getItemId(final int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(final int i, View view, final ViewGroup viewGroup) {
+            view = mInflater.inflate(R.layout.model_player, viewGroup, false);
+            TextView rank = (TextView) view.findViewById(R.id.model_player_rank);
+            TextView name = (TextView) view.findViewById(R.id.model_player_name);
+            TextView rating = (TextView) view.findViewById(R.id.model_player_rating);
+
+            Player player = getItem(i);
+            rank.setText(String.valueOf(player.getRank()));
+            name.setText(player.getName());
+            rating.setText(String.valueOf(player.getRating()));
+
+            return view;
+        }
     }
 }

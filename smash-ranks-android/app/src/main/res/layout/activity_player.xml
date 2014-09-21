@@ -11,15 +11,13 @@
             android:id="@+id/activity_player_name"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="@string/hello_world"
             android:textSize="32sp" />
         <TextView
             android:id="@+id/activity_player_rank"
             android:layout_gravity="right|center_vertical"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="@string/hello_world"
-            android:textSize="24sp" />
+            android:textSize="32sp" />
     </FrameLayout>
     <ListView
         android:id="@+id/activity_player_list"

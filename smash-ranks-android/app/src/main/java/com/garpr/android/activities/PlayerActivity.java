@@ -56,7 +56,6 @@ public class PlayerActivity extends BaseActivity {
     private void prepareViews() {
         mName.setText(mPlayer.getName());
         mRank.setText(String.valueOf(mPlayer.getRank()));
-        mRank.setText(R.string.hello_world);
     }
 
 

@@ -11,8 +11,9 @@
         android:theme="@style/theme" >
 
         <activity
-            android:name=".activities.RankingsActivity"
-            android:label="@string/rankings" >
+            android:label="@string/rankings"
+            android:launchMode="singleTop"
+            android:name=".activities.RankingsActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,8 +21,9 @@
         </activity>
 
         <activity
-            android:name=".activities.PlayerActivity"
             android:label="@string/player"
+            android:launchMode="singleTop"
+            android:name=".activities.PlayerActivity"
             android:parentActivityName=".activities.RankingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -30,6 +32,7 @@
 
         <activity
             android:label="@string/players"
+            android:launchMode="singleTop"
             android:name=".activities.PlayersActivity"
             android:parentActivityName=".activities.RankingsActivity">
             <meta-data

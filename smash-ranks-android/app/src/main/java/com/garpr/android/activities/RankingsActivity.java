@@ -3,6 +3,7 @@ package com.garpr.android.activities;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class RankingsActivity extends BaseActivity implements AdapterView.OnItemClickListener{
@@ -30,10 +32,31 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
     private ArrayList<Player> mPlayers;
     private ListView mListView;
     private ProgressBar mProgress;
+    private RankingsAdapter mAdapter;
 
     @Override
     protected int getOptionsMenu() {
         return R.menu.activity_rankings;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.activity_rankings_menu_abc:
+                Collections.sort(mPlayers, Player.ALPHABETICAL_ORDER);
+                mAdapter.notifyDataSetChanged();
+                break;
+
+            case R.id.activity_rankings_menu_rank:
+                Collections.sort(mPlayers, Player.RANK_ORDER);
+                mAdapter.notifyDataSetChanged();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
     }
 
     @Override
@@ -54,7 +77,8 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
     }
 
     private void showList(){
-        mListView.setAdapter(new RankingsAdapter());
+        mAdapter = new RankingsAdapter();
+        mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
         mProgress.setVisibility(View.GONE);
     }

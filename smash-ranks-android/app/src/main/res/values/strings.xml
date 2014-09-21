@@ -5,6 +5,7 @@
     <string name="player">Player</string>
     <string name="players">Players</string>
     <string name="rankings">Rankings</string>
+    <string name="network_error">Network error!</string>
     <string name="hello_world">Hello world!</string>
     <string name="abc">Alphabetical Order</string>
     <string name="rank_order">Rank Order</string>

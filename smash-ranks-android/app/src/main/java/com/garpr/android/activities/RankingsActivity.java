@@ -2,6 +2,7 @@ package com.garpr.android.activities;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +15,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.garpr.android.R;
@@ -34,12 +34,15 @@ public class RankingsActivity extends BaseActivity implements
         AdapterView.OnItemClickListener,
         SearchView.OnQueryTextListener {
 
+    private static final String TAG = RankingsActivity.class.getSimpleName();
+
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
     private RankingsFilter mFilter;
     private ListView mListView;
     private ProgressBar mProgress;
     private RankingsAdapter mAdapter;
+    private TextView mError;
     private boolean isAbcOrder;
 
     @Override
@@ -84,8 +87,14 @@ public class RankingsActivity extends BaseActivity implements
     }
 
     private void findViews(){
+        mError = (TextView) findViewById(R.id.activity_rankings_error);
         mListView = (ListView) findViewById(R.id.activity_rankings_list);
         mProgress = (ProgressBar) findViewById(R.id.progress);
+    }
+
+    private void showError() {
+        mProgress.setVisibility(View.GONE);
+        mError.setVisibility(View.VISIBLE);
     }
 
     private void showList(){
@@ -141,12 +150,12 @@ public class RankingsActivity extends BaseActivity implements
         Networking.Callback callback = new Networking.Callback() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(RankingsActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Network exception when downloading rankings!", error);
+                showError();
             }
 
             @Override
             public void onResponse(JSONObject response) {
-
                 try {
                     ArrayList<Player> playersList = new ArrayList<Player>();
                     JSONArray ranking = response.getJSONArray(Constants.RANKING);
@@ -157,7 +166,7 @@ public class RankingsActivity extends BaseActivity implements
                             Player player = new Player(playerJSON);
                             playersList.add(player);
                         } catch (JSONException e) {
-                            //nothing
+                            Log.e(TAG, "Exception when building player at index " + i, e);
                         }
                     }
                     playersList.trimToSize();
@@ -165,9 +174,8 @@ public class RankingsActivity extends BaseActivity implements
                     mPlayersShown = new ArrayList<Player>(mPlayers);
                     showList();
                 } catch (JSONException e) {
-
+                    showError();
                 }
-
             }
         };
         Networking.getRankings(callback);

@@ -116,17 +116,40 @@ public class RankingsActivity extends BaseActivity {
 
         @Override
         public View getView(final int i, View view, final ViewGroup viewGroup) {
-            view = mInflater.inflate(R.layout.model_player, viewGroup, false);
-            TextView rank = (TextView) view.findViewById(R.id.model_player_rank);
-            TextView name = (TextView) view.findViewById(R.id.model_player_name);
-            TextView rating = (TextView) view.findViewById(R.id.model_player_rating);
+            if (view == null) {
+                view = mInflater.inflate(R.layout.model_player, viewGroup, false);
+            }
 
-            Player player = getItem(i);
-            rank.setText(String.valueOf(player.getRank()));
-            name.setText(player.getName());
-            rating.setText(String.valueOf(player.getRating()));
+            ViewHolder holder = (ViewHolder) view.getTag();
+
+            if (holder == null) {
+                holder = new ViewHolder(view);
+                view.setTag(holder);
+            }
+
+            final Player player = getItem(i);
+            holder.mRank.setText(String.valueOf(player.getRank()));
+            holder.mName.setText(player.getName());
+            holder.mRating.setText(String.valueOf(player.getRating()));
 
             return view;
         }
     }
+
+
+    private final static class ViewHolder {
+
+        private final TextView mName;
+        private final TextView mRank;
+        private final TextView mRating;
+
+        private ViewHolder(final View view) {
+            mRank = (TextView) view.findViewById(R.id.model_player_rank);
+            mName = (TextView) view.findViewById(R.id.model_player_name);
+            mRating = (TextView) view.findViewById(R.id.model_player_rating);
+        }
+
+    }
+
+
 }

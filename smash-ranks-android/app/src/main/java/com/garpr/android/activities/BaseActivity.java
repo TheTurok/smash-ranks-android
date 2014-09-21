@@ -12,15 +12,18 @@ public abstract class BaseActivity extends Activity {
 
     protected abstract int getContentView();
 
+
     protected int getOptionsMenu(){
         return 0;
     }
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -31,4 +34,6 @@ public abstract class BaseActivity extends Activity {
         }
         return super.onCreateOptionsMenu(menu);
     }
+
+
 }

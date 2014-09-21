@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,9 +30,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class RankingsActivity extends BaseActivity implements AdapterView.OnItemClickListener{
+public class RankingsActivity extends BaseActivity implements
+        AdapterView.OnItemClickListener,
+        SearchView.OnQueryTextListener {
 
     private ArrayList<Player> mPlayers;
+    private ArrayList<Player> mPlayersShown;
+    private RankingsFilter mFilter;
     private ListView mListView;
     private ProgressBar mProgress;
     private RankingsAdapter mAdapter;
@@ -45,14 +51,14 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_rankings_menu_abc:
-                Collections.sort(mPlayers, Player.ALPHABETICAL_ORDER);
+                Collections.sort(mPlayersShown, Player.ALPHABETICAL_ORDER);
                 mAdapter.notifyDataSetChanged();
                 isAbcOrder = true;
                 invalidateOptionsMenu();
                 break;
 
             case R.id.activity_rankings_menu_rank:
-                Collections.sort(mPlayers, Player.RANK_ORDER);
+                Collections.sort(mPlayersShown, Player.RANK_ORDER);
                 mAdapter.notifyDataSetChanged();
                 isAbcOrder = false;
                 invalidateOptionsMenu();
@@ -84,6 +90,7 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
 
     private void showList(){
         mAdapter = new RankingsAdapter();
+        mFilter = new RankingsFilter();
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
         mProgress.setVisibility(View.GONE);
@@ -99,6 +106,10 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
         if(mProgress.getVisibility()== View.GONE){
             search.setVisible(true);
 
+            final SearchView searchView = (SearchView) search.getActionView();
+            searchView.setQueryHint(getString(R.string.search_players));
+            searchView.setOnQueryTextListener(this);
+
             if(isAbcOrder) {
                 abc.setVisible(false);
                 rank.setVisible(true);
@@ -109,9 +120,22 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
             }
         }
 
-
         return super.onPrepareOptionsMenu(menu);
     }
+
+
+    @Override
+    public boolean onQueryTextChange(final String newText) {
+        mFilter.filter(newText);
+        return false;
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(final String query) {
+        return false;
+    }
+
 
     private void downloadRankings(){
         Networking.Callback callback = new Networking.Callback() {
@@ -138,6 +162,7 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
                     }
                     playersList.trimToSize();
                     mPlayers = playersList;
+                    mPlayersShown = new ArrayList<Player>(mPlayers);
                     showList();
                 } catch (JSONException e) {
 
@@ -165,12 +190,12 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
 
         @Override
         public int getCount() {
-            return mPlayers.size();
+            return mPlayersShown.size();
         }
 
         @Override
         public Player getItem(final int i) {
-            return mPlayers.get(i);
+            return mPlayersShown.get(i);
         }
 
         @Override
@@ -198,6 +223,43 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
 
             return view;
         }
+    }
+
+
+    private final class RankingsFilter extends Filter {
+
+
+        @Override
+        protected FilterResults performFiltering(final CharSequence constraint) {
+            final ArrayList<Player> playersList = new ArrayList<Player>(mPlayers.size());
+            final String query = constraint.toString().trim().toLowerCase();
+
+            for (final Player player : mPlayers) {
+                final String name = player.getName().toLowerCase();
+
+                if (name.contains(query)) {
+                    playersList.add(player);
+                }
+            }
+
+            playersList.trimToSize();
+
+            final FilterResults results = new FilterResults();
+            results.count = playersList.size();
+            results.values = playersList;
+
+            return results;
+        }
+
+
+        @Override
+        @SuppressWarnings("unchecked")
+        protected void publishResults(final CharSequence constraint, final FilterResults results) {
+            mPlayersShown = (ArrayList<Player>) results.values;
+            mAdapter.notifyDataSetChanged();
+        }
+
+
     }
 
 

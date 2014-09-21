@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.garpr.android.R;
 import com.garpr.android.models.Player;
 
+
 public class PlayerActivity extends BaseActivity {
 
 

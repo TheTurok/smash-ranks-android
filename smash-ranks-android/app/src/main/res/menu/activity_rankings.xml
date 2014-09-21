@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <item
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@android:drawable/ic_menu_search"
+        android:id="@+id/activity_rankings_menu_search"
+        android:title="@string/search"
+        android:showAsAction="ifRoom"
+        android:visible="false" />
     <item
         android:id="@+id/activity_rankings_menu_tournament"
         android:title="@string/tournaments"
@@ -13,12 +18,9 @@
         android:title="@string/abc"
         android:showAsAction="never"
         android:visible="false"/>
-
     <item
         android:id="@+id/activity_rankings_menu_rank"
         android:title="@string/rank_order"
         android:showAsAction="never"
         android:visible="false"/>
-
-
 </menu>

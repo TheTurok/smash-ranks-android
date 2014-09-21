@@ -5,6 +5,14 @@
         android:id="@+id/activity_rankings_list"
         android:layout_height="match_parent"
         android:layout_width="match_parent" />
+    <TextView
+        android:id="@+id/activity_rankings_error"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/network_error"
+        android:textSize="20sp"
+        android:visibility="gone" />
     <include
         layout="@layout/progress" />
 </FrameLayout>

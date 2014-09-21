@@ -135,7 +135,6 @@ public class TournamentsActivity extends BaseActivity{
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             }
-//hello
             final Tournament tournament = getItem(i);
             holder.mDate.setText(tournament.getDate());
             holder.mName.setText(tournament.getName());

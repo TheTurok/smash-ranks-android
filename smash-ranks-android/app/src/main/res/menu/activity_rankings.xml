@@ -8,13 +8,19 @@
         android:showAsAction="ifRoom"
         android:visible="false" />
     <item
+        android:id="@+id/activity_rankings_menu_tournament"
+        android:title="@string/tournaments"
+        android:showAsAction="ifRoom"
+        android:visible="true"/>
+
+    <item
         android:id="@+id/activity_rankings_menu_abc"
         android:title="@string/abc"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:visible="false"/>
     <item
         android:id="@+id/activity_rankings_menu_rank"
         android:title="@string/rank_order"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:visible="false"/>
 </menu>

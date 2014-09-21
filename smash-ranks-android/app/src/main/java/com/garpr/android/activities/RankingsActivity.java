@@ -67,6 +67,9 @@ public class RankingsActivity extends BaseActivity implements
                 invalidateOptionsMenu();
                 break;
 
+            case R.id.activity_rankings_menu_tournament:
+                TournamentsActivity.start(this);
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -161,7 +164,6 @@ public class RankingsActivity extends BaseActivity implements
                     JSONArray ranking = response.getJSONArray(Constants.RANKING);
                     for(int i = 0; i < ranking.length() ; ++i ){
                         JSONObject playerJSON = ranking.getJSONObject(i);
-
                         try {
                             Player player = new Player(playerJSON);
                             playersList.add(player);

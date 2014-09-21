@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -17,7 +16,6 @@ import com.android.volley.VolleyError;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Networking;
-import com.garpr.android.models.Player;
 import com.garpr.android.models.Tournament;
 
 import org.json.JSONArray;
@@ -93,7 +91,8 @@ public class TournamentsActivity extends BaseActivity{
                 }
             }
         };
-        Networking.getTournaments(callback);
+
+        Networking.getTournaments(this, callback);
     }
 
     public static void start(final Activity activity) {

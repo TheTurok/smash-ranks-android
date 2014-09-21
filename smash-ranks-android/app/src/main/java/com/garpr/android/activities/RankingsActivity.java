@@ -180,8 +180,8 @@ public class RankingsActivity extends BaseActivity implements
                 }
             }
         };
-        Networking.getRankings(callback);
 
+        Networking.getRankings(this, callback);
     }
 
     @Override

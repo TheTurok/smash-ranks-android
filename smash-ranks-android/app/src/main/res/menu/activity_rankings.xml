@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/activity_rankings_menu_abc"
+        android:title="@string/abc"
+        android:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/activity_rankings_menu_rank"
+        android:title="@string/rank_order"
+        android:showAsAction="ifRoom"
+        android:visible="false"/>
+
+
+</menu>

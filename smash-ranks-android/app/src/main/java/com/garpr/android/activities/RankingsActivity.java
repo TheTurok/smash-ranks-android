@@ -32,6 +32,11 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
     private ProgressBar mProgress;
 
     @Override
+    protected int getOptionsMenu() {
+        return R.menu.activity_rankings;
+    }
+
+    @Override
     protected int getContentView() {
         return R.layout.activity_rankings;
     }

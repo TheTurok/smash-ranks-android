@@ -12,4 +12,5 @@ public class Constants {
     public static final String DATE = "date";
     public static final String TOURNAMENTS = "tournaments";
     public static final String TIME = "time";
+    public static final String RANKING = "ranking";
 }

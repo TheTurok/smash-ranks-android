@@ -4,5 +4,8 @@
     <string name="app_name">smash-ranks-android</string>
     <string name="players">Players</string>
     <string name="rankings">Rankings</string>
+    <string name="player">Player</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

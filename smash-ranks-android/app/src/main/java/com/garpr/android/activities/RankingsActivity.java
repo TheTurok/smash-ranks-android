@@ -129,7 +129,7 @@ public class RankingsActivity extends BaseActivity {
             final Player player = getItem(i);
             holder.mRank.setText(String.valueOf(player.getRank()));
             holder.mName.setText(player.getName());
-            holder.mRating.setText(String.valueOf(player.getRating()));
+            holder.mRating.setText(String.format("%.3f", player.getRating()));
 
             return view;
         }

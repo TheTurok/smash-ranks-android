@@ -4,12 +4,12 @@ package com.garpr.android.activities;
 import com.garpr.android.R;
 
 
-public class RankingsActivity extends BaseActivity {
+public class PlayersActivity extends BaseActivity {
 
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_rankings;
+        return R.layout.activity_players;
     }
 
 

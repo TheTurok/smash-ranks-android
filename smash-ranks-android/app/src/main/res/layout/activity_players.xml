@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/root">
     <ListView
-        android:id="@+id/activity_rankings_list"
+        android:id="@+id/activity_players_list"
         android:layout_height="match_parent"
         android:layout_width="match_parent" />
     <include

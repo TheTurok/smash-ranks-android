@@ -22,15 +22,21 @@ public final class Networking {
 
 
 
-    public static void getRankings(final Callback callback) {
-        final String url = makeUrl(RANKINGS);
-        sendRequest(url, callback);
+    public static void cancelRequest(final VolleyTag tag) {
+        final RequestQueue queue = App.getRequestQueue();
+        queue.cancelAll(tag);
     }
 
 
-    public static void getTournaments(final Callback callback) {
+    public static void getRankings(final VolleyTag tag, final Callback callback) {
+        final String url = makeUrl(RANKINGS);
+        sendRequest(url, tag, callback);
+    }
+
+
+    public static void getTournaments(final VolleyTag tag, final Callback callback) {
         final String url = makeUrl(TOURNAMENTS);
-        sendRequest(url, callback);
+        sendRequest(url, tag, callback);
     }
 
 
@@ -39,9 +45,10 @@ public final class Networking {
     }
 
 
-    private static void sendRequest(final String url, final Callback callback) {
+    private static void sendRequest(final String url, final VolleyTag tag, final Callback callback) {
         final RequestQueue requestQueue = App.getRequestQueue();
         final JsonObjectRequest request = new JsonObjectRequest(url, null, callback, callback);
+        request.setTag(tag);
         requestQueue.add(request);
     }
 

@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import com.garpr.android.misc.Networking;
+import com.garpr.android.misc.VolleyTag;
 
-public abstract class BaseActivity extends Activity {
+
+public abstract class BaseActivity extends Activity implements VolleyTag {
 
 
     protected abstract int getContentView();
@@ -33,6 +36,13 @@ public abstract class BaseActivity extends Activity {
             inflater.inflate(menuRes, menu);
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Networking.cancelRequest(this);
     }
 
 

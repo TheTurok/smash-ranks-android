@@ -3,6 +3,7 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +12,11 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Networking;
-import com.garpr.android.models.Player;
 import com.garpr.android.models.Tournament;
 
 import org.json.JSONArray;
@@ -31,12 +30,15 @@ import java.util.ArrayList;
  */
 public class TournamentsActivity extends BaseActivity{
 
+    private static final String TAG = RankingsActivity.class.getSimpleName();
+
     private ListView mList;
 
     private ArrayList<Tournament> mTournaments;
     private ListView mListView;
     private ProgressBar mProgress;
     private TournamentAdapter mAdapter;
+    private TextView mError;
 
 
     @Override
@@ -54,6 +56,7 @@ public class TournamentsActivity extends BaseActivity{
     private void findViews() {
         mListView = (ListView) findViewById(R.id.activity_tournaments_list);
         mProgress = (ProgressBar) findViewById(R.id.progress);
+        mError = (TextView) findViewById(R.id.activity_tournaments_error);
     }
 
 
@@ -68,7 +71,8 @@ public class TournamentsActivity extends BaseActivity{
         Networking.Callback callback = new Networking.Callback(){
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TournamentsActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Network exception when downloading rankings!", error);
+                showError();
             }
 
             @Override
@@ -82,18 +86,23 @@ public class TournamentsActivity extends BaseActivity{
                             Tournament tournament = new Tournament(tournamentJSON);
                             tournamentsList.add(tournament);
                         } catch (JSONException e) {
-                            //nothing
+                            Log.e(TAG, "Exception when building tournament at index " + i, e);
                         }
                     }
                     tournamentsList.trimToSize();
                     mTournaments = tournamentsList;
                     showList();
                 } catch(JSONException e){
-                    //nothing
+                    showError();
                 }
             }
         };
         Networking.getTournaments(callback);
+    }
+
+    private void showError() {
+        mProgress.setVisibility(View.GONE);
+        mError.setVisibility(View.VISIBLE);
     }
 
     public static void start(final Activity activity) {

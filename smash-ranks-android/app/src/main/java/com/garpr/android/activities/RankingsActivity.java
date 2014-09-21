@@ -3,6 +3,7 @@ package com.garpr.android.activities;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
     private ListView mListView;
     private ProgressBar mProgress;
     private RankingsAdapter mAdapter;
+    private boolean isAbcOrder;
 
     @Override
     protected int getOptionsMenu() {
@@ -45,11 +47,15 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
             case R.id.activity_rankings_menu_abc:
                 Collections.sort(mPlayers, Player.ALPHABETICAL_ORDER);
                 mAdapter.notifyDataSetChanged();
+                isAbcOrder = true;
+                invalidateOptionsMenu();
                 break;
 
             case R.id.activity_rankings_menu_rank:
                 Collections.sort(mPlayers, Player.RANK_ORDER);
                 mAdapter.notifyDataSetChanged();
+                isAbcOrder = false;
+                invalidateOptionsMenu();
                 break;
 
             default:
@@ -81,9 +87,27 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
         mProgress.setVisibility(View.GONE);
+        invalidateOptionsMenu();
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem abc = menu.findItem(R.id.activity_rankings_menu_abc);
+        MenuItem rank = menu.findItem(R.id.activity_rankings_menu_rank);
+        if(mProgress.getVisibility()== View.GONE){
+            if(isAbcOrder) {
+                abc.setVisible(false);
+                rank.setVisible(true);
+            }
+            else{
+                abc.setVisible(true);
+                rank.setVisible(false);
+            }
+        }
 
+
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     private void downloadRankings(){
         Networking.Callback callback = new Networking.Callback() {

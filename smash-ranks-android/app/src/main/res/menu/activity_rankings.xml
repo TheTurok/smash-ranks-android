@@ -5,7 +5,8 @@
     <item
         android:id="@+id/activity_rankings_menu_abc"
         android:title="@string/abc"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom"
+        android:visible="false"/>
 
     <item
         android:id="@+id/activity_rankings_menu_rank"

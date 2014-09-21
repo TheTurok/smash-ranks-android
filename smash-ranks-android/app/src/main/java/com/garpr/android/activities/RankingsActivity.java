@@ -58,6 +58,9 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
                 invalidateOptionsMenu();
                 break;
 
+            case R.id.activity_rankings_menu_tournament:
+                TournamentsActivity.start(this);
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -124,7 +127,6 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
                     JSONArray ranking = response.getJSONArray(Constants.RANKING);
                     for(int i = 0; i < ranking.length() ; ++i ){
                         JSONObject playerJSON = ranking.getJSONObject(i);
-
                         try {
                             Player player = new Player(playerJSON);
                             playersList.add(player);
@@ -136,7 +138,7 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
                     mPlayers = playersList;
                     showList();
                 } catch (JSONException e) {
-
+                    //nothing
                 }
 
             }

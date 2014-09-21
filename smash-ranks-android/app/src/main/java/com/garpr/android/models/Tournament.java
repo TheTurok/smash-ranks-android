@@ -3,6 +3,11 @@ package com.garpr.android.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.garpr.android.misc.Constants;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Turok on 9/20/2014.
  */
@@ -11,12 +16,19 @@ public class Tournament implements Parcelable {
     private String id;
     private String name;
 
-    public Tournament(Parcel source){
+
+
+    private Tournament(Parcel source) {
         date = source.readString();
         id = source.readString();
         name = source.readString();
     }
 
+    public Tournament(JSONObject json) throws JSONException {
+        date = json.getString(Constants.DATE);
+        id = json.getString(Constants.ID);
+        name = json.getString(Constants.NAME);
+    }
     public String getId(){
         return id;
     }

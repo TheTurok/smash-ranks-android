@@ -8,5 +8,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="abc">Alphabetical Order</string>
     <string name="rank_order">Rank Order</string>
+    <string name="tournament">Tournament</string>
+    <string name="tournaments">Tournaments</string>
 
 </resources>

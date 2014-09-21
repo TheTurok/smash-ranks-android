@@ -30,7 +30,7 @@ import java.util.ArrayList;
  */
 public class TournamentsActivity extends BaseActivity{
 
-    private static final String TAG = RankingsActivity.class.getSimpleName();
+    private static final String TAG = TournamentsActivity.class.getSimpleName();
 
     private ListView mList;
 
@@ -71,7 +71,7 @@ public class TournamentsActivity extends BaseActivity{
         Networking.Callback callback = new Networking.Callback(){
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Network exception when downloading rankings!", error);
+                Log.e(TAG, "Network exception when downloading tournaments!", error);
                 showError();
             }
 

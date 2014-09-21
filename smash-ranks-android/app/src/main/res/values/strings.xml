@@ -8,5 +8,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="abc">Alphabetical Order</string>
     <string name="rank_order">Rank Order</string>
+    <string name="search">Search</string>
 
 </resources>

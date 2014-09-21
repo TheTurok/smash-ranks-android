@@ -94,7 +94,11 @@ public class RankingsActivity extends BaseActivity implements AdapterView.OnItem
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem abc = menu.findItem(R.id.activity_rankings_menu_abc);
         MenuItem rank = menu.findItem(R.id.activity_rankings_menu_rank);
+        MenuItem search = menu.findItem(R.id.activity_rankings_menu_search);
+
         if(mProgress.getVisibility()== View.GONE){
+            search.setVisible(true);
+
             if(isAbcOrder) {
                 abc.setVisible(false);
                 rank.setVisible(true);

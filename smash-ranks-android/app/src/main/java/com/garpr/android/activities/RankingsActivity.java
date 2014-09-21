@@ -2,6 +2,7 @@ package com.garpr.android.activities;
 
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,13 +13,13 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 import com.garpr.android.misc.Networking;
 import com.garpr.android.models.Player;
 
@@ -32,23 +33,29 @@ import java.util.Collections;
 
 public class RankingsActivity extends BaseActivity implements
         AdapterView.OnItemClickListener,
-        SearchView.OnQueryTextListener {
+        SearchView.OnQueryTextListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = RankingsActivity.class.getSimpleName();
 
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
+    private boolean mIsFinishedDownloading;
+    private FlexibleSwipeRefreshLayout mRefreshLayout;
     private RankingsFilter mFilter;
     private ListView mListView;
-    private ProgressBar mProgress;
     private RankingsAdapter mAdapter;
     private TextView mError;
     private boolean isAbcOrder;
+
+
+
 
     @Override
     protected int getOptionsMenu() {
         return R.menu.activity_rankings;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -77,10 +84,12 @@ public class RankingsActivity extends BaseActivity implements
         return true;
     }
 
+
     @Override
     protected int getContentView() {
         return R.layout.activity_rankings;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,23 +98,32 @@ public class RankingsActivity extends BaseActivity implements
         downloadRankings();
     }
 
-    private void findViews(){
+
+    private void findViews() {
         mError = (TextView) findViewById(R.id.activity_rankings_error);
         mListView = (ListView) findViewById(R.id.activity_rankings_list);
-        mProgress = (ProgressBar) findViewById(R.id.progress);
+        mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_rankings_refresh);
+        mRefreshLayout.setOnRefreshListener(this);
+        mRefreshLayout.setScrollableView(mListView);
+        mRefreshLayout.setColorSchemeResources(R.color.cyan, R.color.magenta, R.color.yellow, R.color.black);
     }
 
+
     private void showError() {
-        mProgress.setVisibility(View.GONE);
         mError.setVisibility(View.VISIBLE);
+        mRefreshLayout.setRefreshing(false);
+        mIsFinishedDownloading = true;
     }
+
 
     private void showList(){
         mAdapter = new RankingsAdapter();
         mFilter = new RankingsFilter();
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
-        mProgress.setVisibility(View.GONE);
+        mListView.setVisibility(View.VISIBLE);
+        mRefreshLayout.setRefreshing(false);
+        mIsFinishedDownloading = true;
         invalidateOptionsMenu();
     }
 
@@ -115,7 +133,7 @@ public class RankingsActivity extends BaseActivity implements
         MenuItem rank = menu.findItem(R.id.activity_rankings_menu_rank);
         MenuItem search = menu.findItem(R.id.activity_rankings_menu_search);
 
-        if(mProgress.getVisibility()== View.GONE){
+        if (mIsFinishedDownloading) {
             search.setVisible(true);
 
             final SearchView searchView = (SearchView) search.getActionView();
@@ -146,6 +164,14 @@ public class RankingsActivity extends BaseActivity implements
     @Override
     public boolean onQueryTextSubmit(final String query) {
         return false;
+    }
+
+
+    @Override
+    public void onRefresh() {
+        if (mIsFinishedDownloading) {
+            downloadRankings();
+        }
     }
 
 
@@ -181,14 +207,17 @@ public class RankingsActivity extends BaseActivity implements
             }
         };
 
+        mRefreshLayout.setRefreshing(true);
         Networking.getRankings(this, callback);
     }
+
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Player pee = mPlayers.get(i);
         PlayerActivity.start(this, pee);
     }
+
 
     private class RankingsAdapter extends BaseAdapter{
 

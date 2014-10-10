@@ -79,12 +79,12 @@ public class Match implements Parcelable {
 
 
     public boolean isLose() {
-        return result == Result.LOSE;
+        return result.isLose();
     }
 
 
     public boolean isWin() {
-        return result == Result.WIN;
+        return result.isWin();
     }
 
 

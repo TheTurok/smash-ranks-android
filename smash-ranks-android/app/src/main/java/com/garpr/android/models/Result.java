@@ -48,13 +48,23 @@ public enum Result implements Parcelable {
     }
 
 
+    public boolean isLose() {
+        return this == LOSE;
+    }
+
+
+    public boolean isWin() {
+        return this == WIN;
+    }
+
+
     @Override
     public String toString() {
         final int resId;
 
-        if (this == LOSE) {
+        if (isLose()) {
             resId = R.string.lose;
-        } else if (this == WIN) {
+        } else if (isWin()) {
             resId = R.string.win;
         } else {
             // this should never happen

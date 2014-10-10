@@ -8,7 +8,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.garpr.android.R;
+import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
+
+import java.util.ArrayList;
 
 
 public class PlayerActivity extends BaseActivity {
@@ -17,6 +20,7 @@ public class PlayerActivity extends BaseActivity {
     private static final String CNAME = PlayerActivity.class.getCanonicalName();
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
 
+    private ArrayList<Match> mMatches;
     private ListView mListView;
     private Player mPlayer;
     private TextView mRank;
@@ -28,6 +32,11 @@ public class PlayerActivity extends BaseActivity {
         final Intent intent = new Intent(activity, PlayerActivity.class);
         intent.putExtra(EXTRA_PLAYER, player);
         activity.startActivity(intent);
+    }
+
+
+    protected void downloadMatches() {
+        // TODO
     }
 
 
@@ -51,6 +60,13 @@ public class PlayerActivity extends BaseActivity {
         readIntent();
         findViews();
         prepareViews();
+
+        if (mPlayer.hasMatches()) {
+            mMatches = mPlayer.getMatches();
+            showList();
+        } else {
+            downloadMatches();
+        }
     }
 
 
@@ -63,6 +79,11 @@ public class PlayerActivity extends BaseActivity {
     private void readIntent() {
         final Intent intent = getIntent();
         mPlayer = intent.getParcelableExtra(EXTRA_PLAYER);
+    }
+
+
+    protected void showList() {
+        // TODO
     }
 
 

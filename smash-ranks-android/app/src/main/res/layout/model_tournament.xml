@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:gravity="center_vertical"
-    android:layout_height="@dimen/list_item_height"
-    android:layout_width="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    style="@style/list_item_root">
     <TextView
+        android:gravity="center"
         android:id="@+id/model_tournament_date"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/root_padding"
-        android:layout_width="72dp"
-        android:gravity="center"
+        android:layout_weight="25"
+        android:layout_width="0dp"
         android:textSize="16sp"
         tools:text="10/10/14" />
     <TextView
@@ -18,10 +16,14 @@
         android:gravity="center_vertical"
         android:id="@+id/model_tournament_name"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_marginBottom="@dimen/root_padding_fourth"
+        android:layout_marginLeft="@dimen/root_padding_half"
+        android:layout_marginRight="@dimen/root_padding_half"
+        android:layout_marginTop="@dimen/root_padding_fourth"
+        android:layout_weight="75"
         android:layout_width="0dp"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:textSize="20sp"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="3"
+        android:textSize="22sp"
         tools:text="The Big House 4" />
 </LinearLayout>

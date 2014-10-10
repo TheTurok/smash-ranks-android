@@ -78,6 +78,7 @@ public class RankingsActivity extends BaseActivity implements
                     }
 
                     playersList.trimToSize();
+                    Collections.sort(playersList, Player.RANK_ORDER);
                     mPlayers = playersList;
                     mPlayersShown = new ArrayList<Player>(mPlayers);
                     showList();

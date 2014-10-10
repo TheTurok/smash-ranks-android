@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -33,9 +32,8 @@ public class TournamentsActivity extends BaseActivity {
 
     private ArrayList<Tournament> mTournaments;
     private ListView mListView;
-    private ProgressBar mProgress;
-    private TournamentAdapter mAdapter;
     private TextView mError;
+    private TournamentAdapter mAdapter;
 
 
 
@@ -84,9 +82,10 @@ public class TournamentsActivity extends BaseActivity {
     }
 
 
-    private void findViews() {
+    @Override
+    protected void findViews() {
+        super.findViews();
         mListView = (ListView) findViewById(R.id.activity_tournaments_list);
-        mProgress = (ProgressBar) findViewById(R.id.progress);
         mError = (TextView) findViewById(R.id.activity_tournaments_error);
     }
 
@@ -106,7 +105,7 @@ public class TournamentsActivity extends BaseActivity {
 
 
     private void showError() {
-        mProgress.setVisibility(View.GONE);
+        hideProgress();
         mError.setVisibility(View.VISIBLE);
     }
 
@@ -114,7 +113,7 @@ public class TournamentsActivity extends BaseActivity {
     private void showList() {
         mAdapter = new TournamentAdapter();
         mListView.setAdapter(mAdapter);
-        mProgress.setVisibility(View.GONE);
+        hideProgress();
         invalidateOptionsMenu();
     }
 

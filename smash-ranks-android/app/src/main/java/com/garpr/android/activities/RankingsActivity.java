@@ -92,7 +92,9 @@ public class RankingsActivity extends BaseActivity implements
     }
 
 
-    private void findViews() {
+    @Override
+    protected void findViews() {
+        super.findViews();
         mError = (TextView) findViewById(R.id.activity_rankings_error);
         mListView = (ListView) findViewById(R.id.activity_rankings_list);
         mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_rankings_refresh);

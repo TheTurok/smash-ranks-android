@@ -5,7 +5,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.ProgressBar;
 
+import com.garpr.android.R;
 import com.garpr.android.misc.Networking;
 
 
@@ -16,11 +19,26 @@ import com.garpr.android.misc.Networking;
 public abstract class BaseActivity extends Activity implements Networking.Tag {
 
 
+    private ProgressBar mProgressBar;
+
+
+
+
+    protected void findViews() {
+        mProgressBar = (ProgressBar) findViewById(R.id.progress);
+    }
+
+
     protected abstract int getContentView();
 
 
     protected int getOptionsMenu() {
         return 0;
+    }
+
+
+    protected void hideProgress() {
+        mProgressBar.setVisibility(View.GONE);
     }
 
 
@@ -48,6 +66,11 @@ public abstract class BaseActivity extends Activity implements Networking.Tag {
     protected void onDestroy() {
         super.onDestroy();
         Networking.cancelRequest(this);
+    }
+
+
+    protected void showProgress() {
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
 

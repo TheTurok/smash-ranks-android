@@ -31,7 +31,9 @@ public class PlayerActivity extends BaseActivity {
     }
 
 
-    private void findViews() {
+    @Override
+    protected void findViews() {
+        super.findViews();
         mListView = (ListView) findViewById(R.id.activity_player_list);
         mRank = (TextView) findViewById(R.id.activity_player_rank);
     }

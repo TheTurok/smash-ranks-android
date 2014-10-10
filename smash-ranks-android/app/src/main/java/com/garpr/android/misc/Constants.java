@@ -21,6 +21,7 @@ public final class Constants {
     public static final String TIME = "time";
     public static final String TOURNAMENTS = "tournaments";
     public static final String TOURNAMENT_DATE = "tournament_date";
+    public static final String TOURNAMENT_DATE_FORMAT = "MM/dd/yy";
     public static final String TOURNAMENT_ID = "tournament_id";
     public static final String TOURNAMENT_NAME = "tournament_name";
     public static final String WIN = "win";

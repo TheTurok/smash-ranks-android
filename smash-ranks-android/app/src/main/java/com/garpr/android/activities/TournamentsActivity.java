@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class TournamentsActivity extends BaseActivity {
@@ -70,6 +71,7 @@ public class TournamentsActivity extends BaseActivity {
                     }
 
                     tournamentsList.trimToSize();
+                    Collections.sort(tournamentsList, Tournament.DATE_ORDER);
                     mTournaments = tournamentsList;
                     showList();
                 } catch (final JSONException e) {

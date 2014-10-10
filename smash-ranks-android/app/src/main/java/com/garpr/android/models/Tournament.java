@@ -9,22 +9,41 @@ import com.garpr.android.misc.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
+
 
 public class Tournament implements Parcelable {
 
 
-    private String date;
+    private static final SimpleDateFormat sTournamentDateFormat;
+
+    private Date date;
+    private String dateString;
     private String id;
     private String name;
 
 
 
 
+    static {
+        sTournamentDateFormat = new SimpleDateFormat(Constants.TOURNAMENT_DATE_FORMAT);
+    }
+
+
     public Tournament(final JSONObject json) throws JSONException {
         if (json.has(Constants.TOURNAMENT_DATE)) {
-            date = json.getString(Constants.TOURNAMENT_DATE);
+            dateString = json.getString(Constants.TOURNAMENT_DATE);
         } else {
-            date = json.getString(Constants.DATE);
+            dateString = json.getString(Constants.DATE);
+        }
+
+        try {
+            date = sTournamentDateFormat.parse(dateString);
+        } catch (final ParseException e) {
+            throw new JSONException("Couldn't parse the date: \"" + dateString + "\"");
         }
 
         if (json.has(Constants.TOURNAMENT_ID)) {
@@ -42,7 +61,14 @@ public class Tournament implements Parcelable {
 
 
     private Tournament(final Parcel source) {
-        date = source.readString();
+        dateString = source.readString();
+
+        try {
+            date = sTournamentDateFormat.parse(dateString);
+        } catch (final ParseException e) {
+            throw new RuntimeException("Couldn't parse the date: \"" + dateString + "\"");
+        }
+
         id = source.readString();
         name = source.readString();
     }
@@ -64,8 +90,9 @@ public class Tournament implements Parcelable {
         return isEqual;
     }
 
+
     public String getDate() {
-        return date;
+        return dateString;
     }
 
 
@@ -85,6 +112,22 @@ public class Tournament implements Parcelable {
     }
 
 
+    public static final Comparator<Tournament> ALPHABETICAL_ORDER = new Comparator<Tournament>() {
+        @Override
+        public int compare(final Tournament t0, final Tournament t1) {
+            return t0.getName().compareTo(t1.getName());
+        }
+    };
+
+
+    public static final Comparator<Tournament> DATE_ORDER = new Comparator<Tournament>() {
+        @Override
+        public int compare(final Tournament t0, final Tournament t1) {
+            return t1.date.compareTo(t0.date);
+        }
+    };
+
+
 
 
     /*
@@ -101,7 +144,7 @@ public class Tournament implements Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeString(date);
+        dest.writeString(dateString);
         dest.writeString(id);
         dest.writeString(name);
     }

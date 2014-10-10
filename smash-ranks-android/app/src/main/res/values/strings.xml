@@ -2,7 +2,7 @@
 <resources>
 
     <string name="abc">Alphabetical Order</string>
-    <string name="app_name">smash-ranks-android</string>
+    <string name="app_name">GAR PR</string>
     <string name="hello_world">Hello, World!</string>
     <string name="network_error">Network error!</string>
     <string name="player">Player</string>

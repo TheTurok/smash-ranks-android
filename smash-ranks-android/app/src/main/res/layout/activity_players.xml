@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/root">
+    style="@style/root.no_padding">
     <ListView
         android:id="@+id/activity_players_list"
         android:layout_height="match_parent"

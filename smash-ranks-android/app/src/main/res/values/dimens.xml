@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <dimen name="list_item_height">56dp</dimen>
     <dimen name="root_padding">16dp</dimen>
     <dimen name="root_padding_fourth">4dp</dimen>
     <dimen name="root_padding_half">8dp</dimen>
+
 </resources>

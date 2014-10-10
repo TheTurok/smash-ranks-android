@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="abc">Alphabetical Order</string>
     <string name="app_name">smash-ranks-android</string>
+    <string name="hello_world">Hello, World!</string>
+    <string name="network_error">Network error!</string>
     <string name="player">Player</string>
     <string name="players">Players</string>
     <string name="rankings">Rankings</string>
-    <string name="network_error">Network error!</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="abc">Alphabetical Order</string>
     <string name="rank_order">Rank Order</string>
     <string name="search">Search</string>
     <string name="search_players">Search players…</string>

@@ -5,15 +5,15 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "android.garpr.com.smash_ranks_android"
         minSdkVersion 15
         targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

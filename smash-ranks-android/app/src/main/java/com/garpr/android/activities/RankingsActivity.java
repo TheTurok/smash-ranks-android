@@ -52,6 +52,62 @@ public class RankingsActivity extends BaseActivity implements
 
 
 
+    private void downloadRankings() {
+        final Networking.Callback callback = new Networking.Callback() {
+            @Override
+            public void onErrorResponse(final VolleyError error) {
+                Log.e(TAG, "Network exception when downloading rankings!", error);
+                showError();
+            }
+
+            @Override
+            public void onResponse(final JSONObject response) {
+                try {
+                    final ArrayList<Player> playersList = new ArrayList<Player>();
+                    final JSONArray ranking = response.getJSONArray(Constants.RANKING);
+
+                    for (int i = 0; i < ranking.length() ; ++i) {
+                        final JSONObject playerJSON = ranking.getJSONObject(i);
+
+                        try {
+                            final Player player = new Player(playerJSON);
+                            playersList.add(player);
+                        } catch (final JSONException e) {
+                            Log.e(TAG, "Exception when building Player at index " + i, e);
+                        }
+                    }
+
+                    playersList.trimToSize();
+                    mPlayers = playersList;
+                    mPlayersShown = new ArrayList<Player>(mPlayers);
+                    showList();
+                } catch (final JSONException e) {
+                    showError();
+                }
+            }
+        };
+
+        mRefreshLayout.setRefreshing(true);
+        Networking.getRankings(this, callback);
+    }
+
+
+    private void findViews() {
+        mError = (TextView) findViewById(R.id.activity_rankings_error);
+        mListView = (ListView) findViewById(R.id.activity_rankings_list);
+        mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_rankings_refresh);
+        mRefreshLayout.setOnRefreshListener(this);
+        mRefreshLayout.setScrollableView(mListView);
+        mRefreshLayout.setColorSchemeResources(R.color.cyan, R.color.magenta, R.color.yellow, R.color.black);
+    }
+
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_rankings;
+    }
+
+
     @Override
     protected int getOptionsMenu() {
         return R.menu.activity_rankings;
@@ -88,12 +144,6 @@ public class RankingsActivity extends BaseActivity implements
 
 
     @Override
-    protected int getContentView() {
-        return R.layout.activity_rankings;
-    }
-
-
-    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViews();
@@ -101,39 +151,19 @@ public class RankingsActivity extends BaseActivity implements
     }
 
 
-    private void findViews() {
-        mError = (TextView) findViewById(R.id.activity_rankings_error);
-        mListView = (ListView) findViewById(R.id.activity_rankings_list);
-        mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_rankings_refresh);
-        mRefreshLayout.setOnRefreshListener(this);
-        mRefreshLayout.setScrollableView(mListView);
-        mRefreshLayout.setColorSchemeResources(R.color.cyan, R.color.magenta, R.color.yellow, R.color.black);
+    @Override
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position,
+            final long id) {
+        final Player player = mPlayers.get(position);
+        PlayerActivity.start(this, player);
     }
 
-
-    private void showError() {
-        mError.setVisibility(View.VISIBLE);
-        mRefreshLayout.setRefreshing(false);
-        mIsFinishedDownloading = true;
-    }
-
-
-    private void showList(){
-        mAdapter = new RankingsAdapter();
-        mFilter = new RankingsFilter();
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
-        mListView.setVisibility(View.VISIBLE);
-        mRefreshLayout.setRefreshing(false);
-        mIsFinishedDownloading = true;
-        invalidateOptionsMenu();
-    }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem abc = menu.findItem(R.id.activity_rankings_menu_abc);
-        MenuItem rank = menu.findItem(R.id.activity_rankings_menu_rank);
-        MenuItem search = menu.findItem(R.id.activity_rankings_menu_search);
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        final MenuItem abc = menu.findItem(R.id.activity_rankings_menu_abc);
+        final MenuItem rank = menu.findItem(R.id.activity_rankings_menu_rank);
+        final MenuItem search = menu.findItem(R.id.activity_rankings_menu_search);
 
         if (mIsFinishedDownloading) {
             search.setVisible(true);
@@ -142,11 +172,10 @@ public class RankingsActivity extends BaseActivity implements
             searchView.setQueryHint(getString(R.string.search_players));
             searchView.setOnQueryTextListener(this);
 
-            if(isAbcOrder) {
+            if (isAbcOrder) {
                 abc.setVisible(false);
                 rank.setVisible(true);
-            }
-            else{
+            } else{
                 abc.setVisible(true);
                 rank.setVisible(false);
             }
@@ -177,47 +206,22 @@ public class RankingsActivity extends BaseActivity implements
     }
 
 
-    private void downloadRankings(){
-        Networking.Callback callback = new Networking.Callback() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Network exception when downloading rankings!", error);
-                showError();
-            }
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    ArrayList<Player> playersList = new ArrayList<Player>();
-                    JSONArray ranking = response.getJSONArray(Constants.RANKING);
-                    for(int i = 0; i < ranking.length() ; ++i ){
-                        JSONObject playerJSON = ranking.getJSONObject(i);
-                        try {
-                            Player player = new Player(playerJSON);
-                            playersList.add(player);
-                        } catch (JSONException e) {
-                            Log.e(TAG, "Exception when building player at index " + i, e);
-                        }
-                    }
-                    playersList.trimToSize();
-                    mPlayers = playersList;
-                    mPlayersShown = new ArrayList<Player>(mPlayers);
-                    showList();
-                } catch (JSONException e) {
-                    showError();
-                }
-            }
-        };
-
-        mRefreshLayout.setRefreshing(true);
-        Networking.getRankings(this, callback);
+    private void showError() {
+        mError.setVisibility(View.VISIBLE);
+        mRefreshLayout.setRefreshing(false);
+        mIsFinishedDownloading = true;
     }
 
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Player pee = mPlayers.get(i);
-        PlayerActivity.start(this, pee);
+    private void showList(){
+        mAdapter = new RankingsAdapter();
+        mFilter = new RankingsFilter();
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(this);
+        mListView.setVisibility(View.VISIBLE);
+        mRefreshLayout.setRefreshing(false);
+        mIsFinishedDownloading = true;
+        invalidateOptionsMenu();
     }
 
 

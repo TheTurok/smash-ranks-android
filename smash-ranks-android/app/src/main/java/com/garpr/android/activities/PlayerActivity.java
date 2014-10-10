@@ -17,9 +17,8 @@ public class PlayerActivity extends BaseActivity {
     private static final String CNAME = PlayerActivity.class.getCanonicalName();
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
 
-    private ListView mList;
+    private ListView mListView;
     private Player mPlayer;
-    private TextView mName;
     private TextView mRank;
 
 
@@ -33,20 +32,19 @@ public class PlayerActivity extends BaseActivity {
 
 
     private void findViews() {
-        mList = (ListView) findViewById(R.id.activity_player_list);
-        mName = (TextView) findViewById(R.id.activity_player_name);
+        mListView = (ListView) findViewById(R.id.activity_player_list);
         mRank = (TextView) findViewById(R.id.activity_player_rank);
     }
 
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_player ;
+        return R.layout.activity_player;
     }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         readIntent();
         findViews();
@@ -55,7 +53,7 @@ public class PlayerActivity extends BaseActivity {
 
 
     private void prepareViews() {
-        mName.setText(mPlayer.getName());
+        setTitle(mPlayer.getName());
         mRank.setText(String.valueOf(mPlayer.getRank()));
     }
 

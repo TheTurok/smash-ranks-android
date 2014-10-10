@@ -36,17 +36,18 @@ public class RankingsActivity extends BaseActivity implements
         SearchView.OnQueryTextListener,
         SwipeRefreshLayout.OnRefreshListener {
 
+
     private static final String TAG = RankingsActivity.class.getSimpleName();
 
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
     private boolean mIsFinishedDownloading;
+    private boolean isAbcOrder;
     private FlexibleSwipeRefreshLayout mRefreshLayout;
-    private RankingsFilter mFilter;
     private ListView mListView;
     private RankingsAdapter mAdapter;
+    private RankingsFilter mFilter;
     private TextView mError;
-    private boolean isAbcOrder;
 
 
 
@@ -58,7 +59,7 @@ public class RankingsActivity extends BaseActivity implements
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_rankings_menu_abc:
                 Collections.sort(mPlayersShown, Player.ALPHABETICAL_ORDER);
@@ -77,6 +78,7 @@ public class RankingsActivity extends BaseActivity implements
             case R.id.activity_rankings_menu_tournament:
                 TournamentsActivity.start(this);
                 break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -92,7 +94,7 @@ public class RankingsActivity extends BaseActivity implements
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViews();
         downloadRankings();
@@ -219,49 +221,59 @@ public class RankingsActivity extends BaseActivity implements
     }
 
 
-    private class RankingsAdapter extends BaseAdapter{
+
+
+    private final class RankingsAdapter extends BaseAdapter {
+
 
         private final LayoutInflater mInflater;
+
 
         private RankingsAdapter() {
             mInflater = getLayoutInflater();
         }
+
 
         @Override
         public int getCount() {
             return mPlayersShown.size();
         }
 
-        @Override
-        public Player getItem(final int i) {
-            return mPlayersShown.get(i);
-        }
 
         @Override
-        public long getItemId(final int i) {
-            return i;
+        public Player getItem(final int position) {
+            return mPlayersShown.get(position);
         }
 
+
         @Override
-        public View getView(final int i, View view, final ViewGroup viewGroup) {
-            if (view == null) {
-                view = mInflater.inflate(R.layout.model_player, viewGroup, false);
+        public long getItemId(final int position) {
+            return position;
+        }
+
+
+        @Override
+        public View getView(final int position, View convertView, final ViewGroup parent) {
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.model_player, parent, false);
             }
 
-            ViewHolder holder = (ViewHolder) view.getTag();
+            ViewHolder holder = (ViewHolder) convertView.getTag();
 
             if (holder == null) {
-                holder = new ViewHolder(view);
-                view.setTag(holder);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
             }
 
-            final Player player = getItem(i);
+            final Player player = getItem(position);
             holder.mRank.setText(String.valueOf(player.getRank()));
             holder.mName.setText(player.getName());
             holder.mRating.setText(String.format("%.3f", player.getRating()));
 
-            return view;
+            return convertView;
         }
+
+
     }
 
 
@@ -304,9 +316,11 @@ public class RankingsActivity extends BaseActivity implements
 
     private final static class ViewHolder {
 
+
         private final TextView mName;
         private final TextView mRank;
         private final TextView mRating;
+
 
         private ViewHolder(final View view) {
             mRank = (TextView) view.findViewById(R.id.model_player_rank);

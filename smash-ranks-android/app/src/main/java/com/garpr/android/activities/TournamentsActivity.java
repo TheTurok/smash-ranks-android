@@ -1,5 +1,6 @@
 package com.garpr.android.activities;
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,14 +25,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by Turok on 9/20/2014.
- */
-public class TournamentsActivity extends BaseActivity{
+
+public class TournamentsActivity extends BaseActivity {
+
 
     private static final String TAG = TournamentsActivity.class.getSimpleName();
-
-    private ListView mList;
 
     private ArrayList<Tournament> mTournaments;
     private ListView mListView;
@@ -40,17 +38,27 @@ public class TournamentsActivity extends BaseActivity{
     private TextView mError;
 
 
+
+
+    public static void start(final Activity activity) {
+        final Intent intent = new Intent(activity, TournamentsActivity.class);
+        activity.startActivity(intent);
+    }
+
+
     @Override
     protected int getContentView() {
         return R.layout.activity_tournaments;
     }
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViews();
         downloadTournaments();
     }
+
 
     private void findViews() {
         mListView = (ListView) findViewById(R.id.activity_tournaments_list);
@@ -59,14 +67,7 @@ public class TournamentsActivity extends BaseActivity{
     }
 
 
-    private void showList(){
-        mAdapter = new TournamentAdapter();
-        mListView.setAdapter(mAdapter);
-        mProgress.setVisibility(View.GONE);
-        invalidateOptionsMenu();
-    }
-
-    private void downloadTournaments(){
+    private void downloadTournaments() {
         Networking.Callback callback = new Networking.Callback(){
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -100,70 +101,88 @@ public class TournamentsActivity extends BaseActivity{
         Networking.getTournaments(this, callback);
     }
 
+
     private void showError() {
         mProgress.setVisibility(View.GONE);
         mError.setVisibility(View.VISIBLE);
     }
 
-    public static void start(final Activity activity) {
-        final Intent intent = new Intent(activity, TournamentsActivity.class);
-        activity.startActivity(intent);
+
+    private void showList() {
+        mAdapter = new TournamentAdapter();
+        mListView.setAdapter(mAdapter);
+        mProgress.setVisibility(View.GONE);
+        invalidateOptionsMenu();
     }
 
 
-    private class TournamentAdapter extends BaseAdapter{
+
+
+    private final class TournamentAdapter extends BaseAdapter {
+
+
         private final LayoutInflater mInflater;
+
+
         private TournamentAdapter() {
             mInflater = getLayoutInflater();
         }
+
 
         @Override
         public int getCount() {
             return mTournaments.size();
         }
 
-        @Override
-        public Tournament getItem(int i) {
-            return mTournaments.get(i);
-        }
 
         @Override
-        public long getItemId(int i) {
-            return i;
+        public Tournament getItem(final int position) {
+            return mTournaments.get(position);
         }
 
+
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = mInflater.inflate(R.layout.model_tournament, viewGroup, false);
+        public long getItemId(final int position) {
+            return position;
+        }
+
+
+        @Override
+        public View getView(final int position, View convertView, final ViewGroup parent) {
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.model_tournament, parent, false);
             }
 
-            ViewHolder holder = (ViewHolder) view.getTag();
+            ViewHolder holder = (ViewHolder) convertView.getTag();
 
             if (holder == null) {
-                holder = new ViewHolder(view);
-                view.setTag(holder);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
             }
-            final Tournament tournament = getItem(i);
+
+            final Tournament tournament = getItem(position);
             holder.mDate.setText(tournament.getDate());
             holder.mName.setText(tournament.getName());
 
-            return view;
+            return convertView;
         }
     }
 
 
     private final static class ViewHolder {
 
+
         private final TextView mName;
         private final TextView mDate;
+
 
         private ViewHolder(final View view) {
             mDate = (TextView) view.findViewById(R.id.model_tournament_date);
             mName = (TextView) view.findViewById(R.id.model_tournament_name);
         }
-    }
 
+
+    }
 
 
 }

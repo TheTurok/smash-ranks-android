@@ -22,19 +22,19 @@ public final class Networking {
 
 
 
-    public static void cancelRequest(final VolleyTag tag) {
+    public static void cancelRequest(final Tag tag) {
         final RequestQueue queue = App.getRequestQueue();
         queue.cancelAll(tag);
     }
 
 
-    public static void getRankings(final VolleyTag tag, final Callback callback) {
+    public static void getRankings(final Tag tag, final Callback callback) {
         final String url = makeUrl(RANKINGS);
         sendRequest(url, tag, callback);
     }
 
 
-    public static void getTournaments(final VolleyTag tag, final Callback callback) {
+    public static void getTournaments(final Tag tag, final Callback callback) {
         final String url = makeUrl(TOURNAMENTS);
         sendRequest(url, tag, callback);
     }
@@ -45,7 +45,7 @@ public final class Networking {
     }
 
 
-    private static void sendRequest(final String url, final VolleyTag tag, final Callback callback) {
+    private static void sendRequest(final String url, final Tag tag, final Callback callback) {
         final RequestQueue requestQueue = App.getRequestQueue();
         final JsonObjectRequest request = new JsonObjectRequest(url, null, callback, callback);
         request.setTag(tag);
@@ -69,6 +69,14 @@ public final class Networking {
     }
 
 
+    /**
+     * An empty interface that should be implemented by classes that utilize this class. Allows
+     * requests to be canceled.
+     */
+    public interface Tag {
+
+
+    }
 
 
 }

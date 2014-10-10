@@ -7,16 +7,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import com.garpr.android.misc.Networking;
-import com.garpr.android.misc.VolleyTag;
 
 
-public abstract class BaseActivity extends Activity implements VolleyTag {
+/**
+ * All Activities should extend from this base class, as it greatly reduces the otherwise
+ * necessary boilerplate.
+ */
+public abstract class BaseActivity extends Activity implements Networking.Tag {
 
 
     protected abstract int getContentView();
 
 
-    protected int getOptionsMenu(){
+    protected int getOptionsMenu() {
         return 0;
     }
 
@@ -29,12 +32,14 @@ public abstract class BaseActivity extends Activity implements VolleyTag {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        int menuRes = getOptionsMenu();
-        if(menuRes != 0){
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        final int menuRes = getOptionsMenu();
+
+        if (menuRes != 0) {
+            final MenuInflater inflater = getMenuInflater();
             inflater.inflate(menuRes, menu);
         }
+
         return super.onCreateOptionsMenu(menu);
     }
 

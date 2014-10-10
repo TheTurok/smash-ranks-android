@@ -41,8 +41,8 @@ public class RankingsActivity extends BaseActivity implements
 
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
+    private boolean mIsAbcOrder;
     private boolean mIsFinishedDownloading;
-    private boolean isAbcOrder;
     private FlexibleSwipeRefreshLayout mRefreshLayout;
     private ListView mListView;
     private RankingsAdapter mAdapter;
@@ -120,14 +120,14 @@ public class RankingsActivity extends BaseActivity implements
             case R.id.activity_rankings_menu_abc:
                 Collections.sort(mPlayersShown, Player.ALPHABETICAL_ORDER);
                 mAdapter.notifyDataSetChanged();
-                isAbcOrder = true;
+                mIsAbcOrder = true;
                 invalidateOptionsMenu();
                 break;
 
             case R.id.activity_rankings_menu_rank:
                 Collections.sort(mPlayersShown, Player.RANK_ORDER);
                 mAdapter.notifyDataSetChanged();
-                isAbcOrder = false;
+                mIsAbcOrder = false;
                 invalidateOptionsMenu();
                 break;
 
@@ -172,7 +172,7 @@ public class RankingsActivity extends BaseActivity implements
             searchView.setQueryHint(getString(R.string.search_players));
             searchView.setOnQueryTextListener(this);
 
-            if (isAbcOrder) {
+            if (mIsAbcOrder) {
                 abc.setVisible(false);
                 rank.setVisible(true);
             } else{

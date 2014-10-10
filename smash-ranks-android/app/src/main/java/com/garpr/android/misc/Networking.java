@@ -14,10 +14,7 @@ import org.json.JSONObject;
 public final class Networking {
 
 
-    private static final String BASE_URL = "http://www.garpr.com:5100/";
-    private static final String REGION = "norcal/";
-    private static final String RANKINGS = "rankings";
-    private static final String TOURNAMENTS = "tournaments";
+    private static final String BASE_URL = "http://www.garpr.com:5100";
 
 
 
@@ -28,20 +25,26 @@ public final class Networking {
     }
 
 
+    public static void getMatches(final String playerId, final Tag tag, final Callback callback) {
+        final String url = makeUrl(Constants.MATCHES + '?' + Constants.PLAYER + '=' + playerId);
+        sendRequest(url, tag, callback);
+    }
+
+
     public static void getRankings(final Tag tag, final Callback callback) {
-        final String url = makeUrl(RANKINGS);
+        final String url = makeUrl(Constants.RANKINGS);
         sendRequest(url, tag, callback);
     }
 
 
     public static void getTournaments(final Tag tag, final Callback callback) {
-        final String url = makeUrl(TOURNAMENTS);
+        final String url = makeUrl(Constants.TOURNAMENTS);
         sendRequest(url, tag, callback);
     }
 
 
-    private static String makeUrl(final String endpoint) {
-        return BASE_URL + REGION + endpoint;
+    private static String makeUrl(final String suffix) {
+        return BASE_URL + '/' + App.getRegion() + '/' + suffix;
     }
 
 

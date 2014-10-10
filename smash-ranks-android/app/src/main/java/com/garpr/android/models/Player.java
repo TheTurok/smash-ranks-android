@@ -9,12 +9,14 @@ import com.garpr.android.misc.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 
 public class Player implements Parcelable {
 
 
+    private ArrayList<Match> matches;
     private float rating;
     private int rank;
     private String id;
@@ -32,6 +34,7 @@ public class Player implements Parcelable {
 
 
     private Player(final Parcel source) {
+        matches = source.createTypedArrayList(Match.CREATOR);
         rating = source.readFloat();
         rank = source.readInt();
         id = source.readString();
@@ -61,6 +64,11 @@ public class Player implements Parcelable {
     }
 
 
+    public ArrayList<Match> getMatches() {
+        return matches;
+    }
+
+
     public String getName() {
         return name;
     }
@@ -73,6 +81,16 @@ public class Player implements Parcelable {
 
     public float getRating() {
         return rating;
+    }
+
+
+    public boolean hasMatches() {
+        return matches != null && !matches.isEmpty();
+    }
+
+
+    public void setMatches(final ArrayList<Match> matches) {
+        this.matches = matches;
     }
 
 
@@ -114,6 +132,7 @@ public class Player implements Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeTypedList(matches);
         dest.writeFloat(rating);
         dest.writeInt(rank);
         dest.writeString(id);

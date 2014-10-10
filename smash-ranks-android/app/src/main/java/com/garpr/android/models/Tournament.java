@@ -21,9 +21,23 @@ public class Tournament implements Parcelable {
 
 
     public Tournament(final JSONObject json) throws JSONException {
-        date = json.getString(Constants.DATE);
-        id = json.getString(Constants.ID);
-        name = json.getString(Constants.NAME);
+        if (json.has(Constants.TOURNAMENT_DATE)) {
+            date = json.getString(Constants.TOURNAMENT_DATE);
+        } else {
+            date = json.getString(Constants.DATE);
+        }
+
+        if (json.has(Constants.TOURNAMENT_ID)) {
+            id = json.getString(Constants.TOURNAMENT_ID);
+        } else {
+            id = json.getString(Constants.ID);
+        }
+
+        if (json.has(Constants.TOURNAMENT_NAME)) {
+            name = json.getString(Constants.TOURNAMENT_NAME);
+        } else {
+            name = json.getString(Constants.NAME);
+        }
     }
 
 

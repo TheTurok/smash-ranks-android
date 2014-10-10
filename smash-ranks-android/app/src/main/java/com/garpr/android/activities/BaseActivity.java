@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.garpr.android.R;
 import com.garpr.android.misc.Networking;
@@ -19,13 +18,13 @@ import com.garpr.android.misc.Networking;
 public abstract class BaseActivity extends Activity implements Networking.Tag {
 
 
-    private ProgressBar mProgressBar;
+    private View mProgressBar;
 
 
 
 
     protected void findViews() {
-        mProgressBar = (ProgressBar) findViewById(R.id.progress);
+        mProgressBar = findViewById(R.id.progress);
     }
 
 

@@ -95,7 +95,7 @@ public class Player implements Parcelable {
 
 
     @Override
-    public String toString(){
+    public String toString() {
         return getName();
     }
 

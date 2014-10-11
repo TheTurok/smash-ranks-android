@@ -66,7 +66,7 @@ public class RankingsActivity extends BaseActivity implements
                     final ArrayList<Player> playersList = new ArrayList<Player>();
                     final JSONArray ranking = response.getJSONArray(Constants.RANKING);
 
-                    for (int i = 0; i < ranking.length() ; ++i) {
+                    for (int i = 0; i < ranking.length(); ++i) {
                         final JSONObject playerJSON = ranking.getJSONObject(i);
 
                         try {
@@ -325,7 +325,7 @@ public class RankingsActivity extends BaseActivity implements
     }
 
 
-    private final static class ViewHolder {
+    private static final class ViewHolder {
 
 
         private final TextView mName;

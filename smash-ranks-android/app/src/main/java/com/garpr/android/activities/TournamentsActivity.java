@@ -59,7 +59,7 @@ public class TournamentsActivity extends BaseActivity {
                     final ArrayList<Tournament> tournamentsList = new ArrayList<Tournament>();
                     final JSONArray tournaments = response.getJSONArray(Constants.TOURNAMENTS);
 
-                    for (int i = 0; i < tournaments.length() ; ++i) {
+                    for (int i = 0; i < tournaments.length(); ++i) {
                         final JSONObject tournamentJSON = tournaments.getJSONObject(i);
 
                         try {
@@ -173,7 +173,7 @@ public class TournamentsActivity extends BaseActivity {
     }
 
 
-    private final static class ViewHolder {
+    private static final class ViewHolder {
 
 
         private final TextView mName;

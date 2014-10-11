@@ -118,6 +118,14 @@ public class RankingsActivity extends BaseActivity implements
 
 
     @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        findViews();
+        downloadRankings();
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_rankings_menu_abc:
@@ -143,14 +151,6 @@ public class RankingsActivity extends BaseActivity implements
         }
 
         return true;
-    }
-
-
-    @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        findViews();
-        downloadRankings();
     }
 
 

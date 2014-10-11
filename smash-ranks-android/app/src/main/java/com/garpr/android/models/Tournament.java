@@ -115,7 +115,7 @@ public class Tournament implements Parcelable {
     public static final Comparator<Tournament> ALPHABETICAL_ORDER = new Comparator<Tournament>() {
         @Override
         public int compare(final Tournament t0, final Tournament t1) {
-            return t0.getName().compareTo(t1.getName());
+            return t0.getName().compareToIgnoreCase(t1.getName());
         }
     };
 

@@ -103,7 +103,7 @@ public class Player implements Parcelable {
     public static final Comparator<Player> ALPHABETICAL_ORDER = new Comparator<Player>() {
         @Override
         public int compare(final Player p0, final Player p1) {
-            return p0.getName().compareTo(p1.getName());
+            return p0.getName().compareToIgnoreCase(p1.getName());
         }
     };
 

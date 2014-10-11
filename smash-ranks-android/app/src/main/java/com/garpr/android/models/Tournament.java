@@ -33,7 +33,11 @@ public class Tournament implements Parcelable {
     }
 
 
-    public Tournament(final JSONObject json) throws JSONException {
+    public Tournament(JSONObject json) throws JSONException {
+        if (json.has(Constants.TOURNAMENT)) {
+            json = json.getJSONObject(Constants.TOURNAMENT);
+        }
+
         if (json.has(Constants.TOURNAMENT_DATE)) {
             dateString = json.getString(Constants.TOURNAMENT_DATE);
         } else {
@@ -103,6 +107,20 @@ public class Tournament implements Parcelable {
 
     public String getName() {
         return name;
+    }
+
+
+    public JSONObject toJSON() {
+        try {
+            final JSONObject json = new JSONObject();
+            json.put(Constants.DATE, dateString);
+            json.put(Constants.ID, id);
+            json.put(Constants.NAME, name);
+
+            return json;
+        } catch (final JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

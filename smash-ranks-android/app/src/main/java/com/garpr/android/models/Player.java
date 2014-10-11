@@ -3,9 +3,11 @@ package com.garpr.android.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.garpr.android.misc.Constants;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +17,8 @@ import java.util.Comparator;
 
 public class Player implements Parcelable {
 
+
+    private static final String TAG = Player.class.getSimpleName();
 
     private ArrayList<Match> matches;
     private float rating;
@@ -30,6 +34,28 @@ public class Player implements Parcelable {
         rank = json.getInt(Constants.RANK);
         id = json.getString(Constants.ID);
         name = json.getString(Constants.NAME);
+
+        if (json.has(Constants.MATCHES)) {
+            final JSONArray matchesJSON = json.getJSONArray(Constants.MATCHES);
+            final int matchesLength = matchesJSON.length();
+            matches = new ArrayList<Match>(matchesLength);
+
+            for (int i = 0; i < matchesLength; ++i) {
+                try {
+                    final JSONObject matchJSON = matchesJSON.getJSONObject(i);
+                    final Match match = new Match(matchJSON);
+                    matches.add(match);
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Exception when building Match at index " + i, e);
+                }
+            }
+
+            if (matches.isEmpty()) {
+                matches = null;
+            } else {
+                matches.trimToSize();
+            }
+        }
     }
 
 
@@ -91,6 +117,32 @@ public class Player implements Parcelable {
 
     public void setMatches(final ArrayList<Match> matches) {
         this.matches = matches;
+    }
+
+
+    public JSONObject toJSON() {
+        try {
+            final JSONObject json = new JSONObject();
+            json.put(Constants.ID, id);
+            json.put(Constants.NAME, name);
+            json.put(Constants.RANK, rank);
+            json.put(Constants.RATING, rating);
+
+            if (hasMatches()) {
+                final JSONArray matchesJSON = new JSONArray();
+
+                for (final Match match : matches) {
+                    final JSONObject matchJSON = match.toJSON();
+                    matchesJSON.put(matchJSON);
+                }
+
+                json.put(Constants.MATCHES, matchesJSON);
+            }
+
+            return json;
+        } catch (final JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

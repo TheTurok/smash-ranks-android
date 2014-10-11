@@ -5,8 +5,10 @@ public final class Constants {
 
 
     public static final String DATE = "date";
+    public static final String GAME = "game";
     public static final String ID = "id";
     public static final String LOSE = "lose";
+    public static final String MATCH = "match";
     public static final String MATCHES = "matches";
     public static final String NAME = "name";
     public static final String NORCAL = "norcal";
@@ -19,6 +21,7 @@ public final class Constants {
     public static final String RATING = "rating";
     public static final String RESULT = "result";
     public static final String TIME = "time";
+    public static final String TOURNAMENT = "tournament";
     public static final String TOURNAMENTS = "tournaments";
     public static final String TOURNAMENT_DATE = "tournament_date";
     public static final String TOURNAMENT_DATE_FORMAT = "MM/dd/yy";

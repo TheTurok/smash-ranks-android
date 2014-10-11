@@ -157,8 +157,12 @@ public class RankingsActivity extends BaseActivity implements
     @Override
     public void onItemClick(final AdapterView<?> parent, final View view, final int position,
             final long id) {
-        final Player player = mPlayers.get(position);
-        PlayerActivity.start(this, player);
+        final Object item = parent.getItemAtPosition(position);
+
+        if (item instanceof Player) {
+            final Player player = (Player) item;
+            PlayerActivity.start(this, player);
+        }
     }
 
 

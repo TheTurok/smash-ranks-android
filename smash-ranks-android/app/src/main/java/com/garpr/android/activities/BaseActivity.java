@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.View;
 
 import com.garpr.android.R;
+import com.garpr.android.misc.HealthListener;
 import com.garpr.android.misc.Networking;
 
 
@@ -15,9 +16,10 @@ import com.garpr.android.misc.Networking;
  * All Activities should extend from this base class, as it greatly reduces the otherwise
  * necessary boilerplate.
  */
-public abstract class BaseActivity extends Activity implements Networking.Tag {
+public abstract class BaseActivity extends Activity implements HealthListener {
 
 
+    private boolean mIsAlive;
     private View mProgressBar;
 
 
@@ -42,8 +44,15 @@ public abstract class BaseActivity extends Activity implements Networking.Tag {
 
 
     @Override
+    public boolean isAlive() {
+        return mIsAlive;
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mIsAlive = true;
         setContentView(getContentView());
     }
 
@@ -64,6 +73,7 @@ public abstract class BaseActivity extends Activity implements Networking.Tag {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mIsAlive = false;
         Networking.cancelRequest(this);
     }
 

@@ -19,27 +19,28 @@ public final class Networking {
 
 
 
-    public static void cancelRequest(final Tag tag) {
+    public static void cancelRequest(final HealthListener heartbeat) {
         final RequestQueue queue = App.getRequestQueue();
-        queue.cancelAll(tag);
+        queue.cancelAll(heartbeat);
     }
 
 
-    public static void getMatches(final String playerId, final Tag tag, final Callback callback) {
+    public static void getMatches(final String playerId, final HealthListener heartbeat,
+            final Callback callback) {
         final String url = makeUrl(Constants.MATCHES + '?' + Constants.PLAYER + '=' + playerId);
-        sendRequest(url, tag, callback);
+        sendRequest(url, heartbeat, callback);
     }
 
 
-    public static void getRankings(final Tag tag, final Callback callback) {
+    public static void getRankings(final HealthListener heartbeat, final Callback callback) {
         final String url = makeUrl(Constants.RANKINGS);
-        sendRequest(url, tag, callback);
+        sendRequest(url, heartbeat, callback);
     }
 
 
-    public static void getTournaments(final Tag tag, final Callback callback) {
+    public static void getTournaments(final HealthListener heartbeat, final Callback callback) {
         final String url = makeUrl(Constants.TOURNAMENTS);
-        sendRequest(url, tag, callback);
+        sendRequest(url, heartbeat, callback);
     }
 
 
@@ -48,10 +49,11 @@ public final class Networking {
     }
 
 
-    private static void sendRequest(final String url, final Tag tag, final Callback callback) {
+    private static void sendRequest(final String url, final HealthListener heartbeat,
+            final Callback callback) {
         final RequestQueue requestQueue = App.getRequestQueue();
         final JsonObjectRequest request = new JsonObjectRequest(url, null, callback, callback);
-        request.setTag(tag);
+        request.setTag(heartbeat);
         requestQueue.add(request);
     }
 
@@ -67,16 +69,6 @@ public final class Networking {
 
         @Override
         public abstract void onResponse(final JSONObject response);
-
-
-    }
-
-
-    /**
-     * An empty interface that should be implemented by classes that utilize this class. Allows
-     * requests to be canceled.
-     */
-    public interface Tag {
 
 
     }

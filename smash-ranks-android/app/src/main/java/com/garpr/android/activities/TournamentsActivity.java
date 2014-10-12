@@ -55,6 +55,14 @@ public class TournamentsActivity extends BaseActivity {
                 mTournaments = list;
                 showList();
             }
+
+
+            @Override
+            public void response(final Tournament item) {
+                final ArrayList<Tournament> list = new ArrayList<Tournament>(1);
+                list.add(item);
+                response(list);
+            }
         };
 
         Tournaments.get(callback);

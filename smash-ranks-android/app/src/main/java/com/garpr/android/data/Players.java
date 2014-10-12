@@ -84,6 +84,11 @@ public final class Players {
     }
 
 
+    public static void getPlayer(final String id, final PlayersCallback callback) {
+
+    }
+
+
     private static ArrayList<Player> parseJSON(final JSONObject json) throws JSONException {
         final JSONArray rankingsJSON = json.getJSONArray(Constants.RANKING);
         final int rankingsLength = rankingsJSON.length();
@@ -154,6 +159,29 @@ public final class Players {
     }
 
 
+    private static final class AsyncReadPlayersFile extends AsyncReadFile<Player> {
+
+
+        private AsyncReadPlayersFile(final PlayersCallback callback) {
+            super(callback);
+        }
+
+
+        @Override
+        int getRawResourceId() {
+            return R.raw.players;
+        }
+
+
+        @Override
+        ArrayList<Player> parseJSON(final JSONObject json) throws JSONException {
+            return Players.parseJSON(json);
+        }
+
+
+    }
+
+
     private static final class AsyncSavePlayersDatabase extends AsyncTask<Void, Void, Void> {
 
 
@@ -193,29 +221,6 @@ public final class Players {
     }
 
 
-    private static final class AsyncReadPlayersFile extends AsyncReadFile<Player> {
-
-
-        private AsyncReadPlayersFile(final PlayersCallback callback) {
-            super(callback);
-        }
-
-
-        @Override
-        int getRawResourceId() {
-            return R.raw.players;
-        }
-
-
-        @Override
-        ArrayList<Player> parseJSON(final JSONObject json) throws JSONException {
-            return Players.parseJSON(json);
-        }
-
-
-    }
-
-
     public static abstract class PlayersCallback extends Callback<Player> {
 
 
@@ -245,14 +250,6 @@ public final class Players {
                 Log.e(TAG, "Exception when parsing JSON response", e);
                 getFromJSON(this);
             }
-        }
-
-
-        @Override
-        public final void response(final Player item) {
-            final ArrayList<Player> players = new ArrayList<Player>(1);
-            players.add(item);
-            response(players);
         }
 
 

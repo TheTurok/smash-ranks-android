@@ -96,6 +96,7 @@ public final class Rankings {
             }
         }
 
+        players.trimToSize();
         return players;
     }
 
@@ -236,14 +237,13 @@ public final class Rankings {
 
 
         @Override
-        public final void parseJSON(final JSONObject json) {
+        final void parseJSON(final JSONObject json) {
             try {
                 final ArrayList<Player> players = Rankings.parseJSON(json);
 
                 if (players.isEmpty()) {
                     getFromJSON(this);
                 } else {
-                    players.trimToSize();
                     save(players);
 
                     if (isAlive()) {

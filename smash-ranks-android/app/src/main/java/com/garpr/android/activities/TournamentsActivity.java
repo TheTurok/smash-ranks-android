@@ -12,15 +12,10 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.garpr.android.R;
-import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.Networking;
+import com.garpr.android.data.Tournaments;
+import com.garpr.android.data.Tournaments.TournamentsCallback;
 import com.garpr.android.models.Tournament;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,41 +41,23 @@ public class TournamentsActivity extends BaseActivity {
 
 
     private void downloadTournaments() {
-        final Networking.Callback callback = new Networking.Callback(){
+        final TournamentsCallback callback = new TournamentsCallback(this) {
             @Override
-            public void onErrorResponse(final VolleyError error) {
-                Log.e(TAG, "Network exception when downloading tournaments!", error);
+            public void error(final Exception e) {
+                Log.e(TAG, "Exception when retrieving tournaments!", e);
                 showError();
             }
 
+
             @Override
-            public void onResponse(final JSONObject response) {
-                try {
-                    final ArrayList<Tournament> tournamentsList = new ArrayList<Tournament>();
-                    final JSONArray tournaments = response.getJSONArray(Constants.TOURNAMENTS);
-
-                    for (int i = 0; i < tournaments.length(); ++i) {
-                        final JSONObject tournamentJSON = tournaments.getJSONObject(i);
-
-                        try {
-                            final Tournament tournament = new Tournament(tournamentJSON);
-                            tournamentsList.add(tournament);
-                        } catch (final JSONException e) {
-                            Log.e(TAG, "Exception when building Tournament at index " + i, e);
-                        }
-                    }
-
-                    tournamentsList.trimToSize();
-                    Collections.sort(tournamentsList, Tournament.DATE_ORDER);
-                    mTournaments = tournamentsList;
-                    showList();
-                } catch (final JSONException e) {
-                    showError();
-                }
+            public void response(final ArrayList<Tournament> list) {
+                Collections.sort(list, Tournament.DATE_ORDER);
+                mTournaments = list;
+                showList();
             }
         };
 
-        Networking.getTournaments(this, callback);
+        Tournaments.get(callback);
     }
 
 

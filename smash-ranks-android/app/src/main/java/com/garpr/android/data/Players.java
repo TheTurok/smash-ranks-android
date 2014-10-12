@@ -140,6 +140,7 @@ public final class Players {
                 cursor.moveToNext();
             } while (!cursor.isAfterLast());
 
+            players.trimToSize();
             return players;
         }
 

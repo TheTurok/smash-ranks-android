@@ -140,6 +140,7 @@ public final class Tournaments {
                 cursor.moveToNext();
             } while (!cursor.isAfterLast());
 
+            tournaments.trimToSize();
             return tournaments;
         }
 

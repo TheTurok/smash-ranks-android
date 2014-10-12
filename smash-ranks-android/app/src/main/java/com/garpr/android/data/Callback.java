@@ -39,6 +39,15 @@ abstract class Callback<T> implements Response.ErrorListener, Response.Listener<
     }
 
 
+    @Override
+    public final void onResponse(final JSONObject response) {
+        parseJSON(response);
+    }
+
+
+    abstract void parseJSON(final JSONObject json);
+
+
     public abstract void response(final T item);
 
 

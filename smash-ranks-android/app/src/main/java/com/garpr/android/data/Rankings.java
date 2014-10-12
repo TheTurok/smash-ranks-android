@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 
 import org.json.JSONArray;
@@ -45,8 +47,7 @@ public final class Rankings {
         cursor.moveToFirst();
 
         if (cursor.isAfterLast()) {
-            cursor.close();
-            database.close();
+            Utils.closeCloseables(cursor, database);
             getFromNetwork(callback);
         } else {
             final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
@@ -67,8 +68,7 @@ public final class Rankings {
                 cursor.moveToNext();
             } while (!cursor.isAfterLast());
 
-            cursor.close();
-            database.close();
+            Utils.closeCloseables(cursor, database);
 
             if (players.isEmpty()) {
                 getFromNetwork(callback);
@@ -88,7 +88,8 @@ public final class Rankings {
             return;
         }
 
-        // TODO
+        final AsyncReadRankingsFile task = new AsyncReadRankingsFile(callback);
+        task.execute();
     }
 
 
@@ -99,6 +100,25 @@ public final class Rankings {
 
         final String url = Network.makeUrl(Constants.RANKINGS);
         Network.sendRequest(url, callback);
+    }
+
+
+    private static ArrayList<Player> parseJSON(final JSONObject json) throws JSONException {
+        final JSONArray rankingsJSON = json.getJSONArray(Constants.RANKING);
+        final int rankingsLength = rankingsJSON.length();
+        final ArrayList<Player> players = new ArrayList<Player>(rankingsLength);
+
+        for (int i = 0; i < rankingsLength; ++i) {
+            try {
+                final JSONObject playerJSON = rankingsJSON.getJSONObject(i);
+                final Player player = new Player(playerJSON);
+                players.add(player);
+            } catch (final JSONException e) {
+                Log.e(TAG, "Exception when building Player at index " + i, e);
+            }
+        }
+
+        return players;
     }
 
 
@@ -122,6 +142,37 @@ public final class Rankings {
 
 
 
+    private static final class AsyncReadRankingsFile extends AsyncReadFile<Player> {
+
+
+        private AsyncReadRankingsFile(final RankingsCallback callback) {
+            super(callback);
+        }
+
+
+        @Override
+        int getRawResourceId() {
+            return R.raw.rankings;
+        }
+
+
+        @Override
+        ArrayList<Player> parseJSON(final JSONObject json) {
+            ArrayList<Player> players = null;
+
+            try {
+                players = Rankings.parseJSON(json);
+            } catch (final JSONException e) {
+                setException(e);
+            }
+
+            return players;
+        }
+
+
+    }
+
+
     public static abstract class RankingsCallback extends Callback<Player> {
 
 
@@ -134,21 +185,9 @@ public final class Rankings {
 
 
         @Override
-        public final void onResponse(final JSONObject json) {
+        public final void parseJSON(final JSONObject json) {
             try {
-                final JSONArray rankingsJSON = json.getJSONArray(Constants.RANKING);
-                final int rankingsLength = rankingsJSON.length();
-                final ArrayList<Player> players = new ArrayList<Player>(rankingsLength);
-
-                for (int i = 0; i < rankingsLength; ++i) {
-                    try {
-                        final JSONObject playerJSON = rankingsJSON.getJSONObject(i);
-                        final Player player = new Player(playerJSON);
-                        players.add(player);
-                    } catch (final JSONException e) {
-                        Log.e(TAG, "Exception when building Player at index " + i, e);
-                    }
-                }
+                final ArrayList<Player> players = Rankings.parseJSON(json);
 
                 if (players.isEmpty()) {
                     getFromJSON(this);

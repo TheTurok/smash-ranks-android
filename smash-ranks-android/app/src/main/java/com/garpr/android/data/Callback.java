@@ -27,8 +27,13 @@ abstract class Callback<T> implements Response.ErrorListener, Response.Listener<
     public abstract void error(final Exception e);
 
 
+    Heartbeat getHeartbeat() {
+        return mHeartbeat.get();
+    }
+
+
     boolean isAlive() {
-        final Heartbeat heartbeat = mHeartbeat.get();
+        final Heartbeat heartbeat = getHeartbeat();
         return heartbeat != null && heartbeat.isAlive();
     }
 

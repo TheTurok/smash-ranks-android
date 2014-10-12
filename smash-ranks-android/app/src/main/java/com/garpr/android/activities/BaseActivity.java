@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
-import com.garpr.android.misc.HealthListener;
 import com.garpr.android.misc.Heartbeat;
 
 
@@ -17,7 +16,7 @@ import com.garpr.android.misc.Heartbeat;
  * All Activities should extend from this base class, as it greatly reduces the otherwise
  * necessary boilerplate.
  */
-public abstract class BaseActivity extends Activity implements Heartbeat, HealthListener {
+public abstract class BaseActivity extends Activity implements Heartbeat {
 
 
     private boolean mIsAlive;

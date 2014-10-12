@@ -40,7 +40,7 @@ public class TournamentsActivity extends BaseActivity {
     }
 
 
-    private void downloadTournaments() {
+    private void fetchTournaments() {
         final TournamentsCallback callback = new TournamentsCallback(this) {
             @Override
             public void error(final Exception e) {
@@ -79,7 +79,7 @@ public class TournamentsActivity extends BaseActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViews();
-        downloadTournaments();
+        fetchTournaments();
     }
 
 

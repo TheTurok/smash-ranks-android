@@ -47,7 +47,7 @@ public class RankingsActivity extends BaseActivity implements
 
 
 
-    private void getRankings() {
+    private void fetchRankings() {
         mRefreshLayout.setRefreshing(true);
 
         final PlayersCallback callback = new PlayersCallback(this) {
@@ -101,7 +101,7 @@ public class RankingsActivity extends BaseActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViews();
-        getRankings();
+        fetchRankings();
     }
 
 
@@ -189,7 +189,7 @@ public class RankingsActivity extends BaseActivity implements
     public void onRefresh() {
         if (mIsFinishedRetrieving) {
             Players.clear();
-            getRankings();
+            fetchRankings();
         }
     }
 

@@ -258,7 +258,7 @@ public final class Tournaments {
 
 
         @Override
-        public void response(final Tournament item) {
+        public final void response(final Tournament item) {
             final ArrayList<Tournament> tournaments = new ArrayList<Tournament>(1);
             tournaments.add(item);
             response(tournaments);

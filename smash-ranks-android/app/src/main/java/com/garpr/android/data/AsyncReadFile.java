@@ -49,7 +49,7 @@ abstract class AsyncReadFile<T> extends AsyncTask<Void, Void, ArrayList<T>> {
             reader = new BufferedReader(streamReader);
             writer = new StringWriter();
 
-            final char[] buffer = new char[1024];
+            final char[] buffer = new char[4 * 1024];
             int ch;
 
             while ((ch = reader.read(buffer)) != -1) {

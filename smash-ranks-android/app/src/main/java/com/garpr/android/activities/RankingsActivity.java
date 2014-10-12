@@ -79,7 +79,9 @@ public class RankingsActivity extends BaseActivity implements
         mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_rankings_refresh);
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setScrollableView(mListView);
-        mRefreshLayout.setColorSchemeResources(R.color.cyan, R.color.magenta, R.color.yellow, R.color.black);
+        mRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_light,
+                android.R.color.holo_orange_dark, android.R.color.holo_red_light,
+                android.R.color.holo_red_dark);
     }
 
 

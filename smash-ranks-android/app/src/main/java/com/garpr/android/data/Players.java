@@ -43,7 +43,10 @@ public final class Players {
 
     static void createTable(final SQLiteDatabase database) {
         Log.i(TAG, "Creating " + TAG + " database table");
-        final String sql = "CREATE TABLE " + TAG + " (" + Constants.JSON + " TEXT NOT NULL);";
+        final String sql = "CREATE TABLE " + TAG + " ("
+                + Constants.ID + " TEXT NOT NULL, "
+                + Constants.JSON + " TEXT NOT NULL, "
+                + "PRIMARY KEY (" + Constants.ID + "));";
         database.execSQL(sql);
     }
 
@@ -149,7 +152,8 @@ public final class Players {
 
         @Override
         Cursor query(final SQLiteDatabase database) {
-            return database.query(TAG, null, null, null, null, null, null);
+            final String[] columns = { Constants.JSON };
+            return database.query(TAG, columns, null, null, null, null, null);
         }
 
 
@@ -179,6 +183,7 @@ public final class Players {
                 final String playerString = playerJSON.toString();
 
                 final ContentValues values = new ContentValues();
+                values.put(Constants.ID , player.getId());
                 values.put(Constants.JSON, playerString);
                 database.insert(TAG, null, values);
             }

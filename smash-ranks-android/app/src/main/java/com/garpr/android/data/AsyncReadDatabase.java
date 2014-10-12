@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 
 import com.garpr.android.misc.Utils;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 
@@ -23,7 +25,7 @@ abstract class AsyncReadDatabase<T> extends AsyncTask<Void, Void, ArrayList<T>> 
     }
 
 
-    abstract ArrayList<T> buildResults(final Cursor cursor);
+    abstract ArrayList<T> buildResults(final Cursor cursor) throws JSONException;
 
 
     @Override
@@ -35,8 +37,13 @@ abstract class AsyncReadDatabase<T> extends AsyncTask<Void, Void, ArrayList<T>> 
         ArrayList<T> result = null;
 
         if (!cursor.isAfterLast()) {
-            result = buildResults(cursor);
-            result.trimToSize();
+            try {
+                result = buildResults(cursor);
+                result.trimToSize();
+            } catch (final JSONException e) {
+                // this should never happen
+                throw new RuntimeException(e);
+            }
         }
 
         Utils.closeCloseables(cursor, database);

@@ -121,26 +121,19 @@ public final class Tournaments {
 
 
         @Override
-        ArrayList<Tournament> buildResults(final Cursor cursor) {
+        ArrayList<Tournament> buildResults(final Cursor cursor) throws JSONException {
             final ArrayList<Tournament> tournaments = new ArrayList<Tournament>();
             final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
 
             do {
                 final String tournamentString = cursor.getString(jsonIndex);
-
-                try {
-                    final JSONObject tournamentJSON = new JSONObject(tournamentString);
-                    final Tournament tournament = new Tournament(tournamentJSON);
-                    tournaments.add(tournament);
-                } catch (final JSONException e) {
-                    // this should never happen
-                    throw new RuntimeException(e);
-                }
+                final JSONObject tournamentJSON = new JSONObject(tournamentString);
+                final Tournament tournament = new Tournament(tournamentJSON);
+                tournaments.add(tournament);
 
                 cursor.moveToNext();
             } while (!cursor.isAfterLast());
 
-            tournaments.trimToSize();
             return tournaments;
         }
 
@@ -176,16 +169,8 @@ public final class Tournaments {
 
 
         @Override
-        ArrayList<Tournament> parseJSON(final JSONObject json) {
-            ArrayList<Tournament> tournaments = null;
-
-            try {
-                tournaments = Tournaments.parseJSON(json);
-            } catch (final JSONException e) {
-                setException(e);
-            }
-
-            return tournaments;
+        ArrayList<Tournament> parseJSON(final JSONObject json) throws JSONException {
+            return Tournaments.parseJSON(json);
         }
 
 

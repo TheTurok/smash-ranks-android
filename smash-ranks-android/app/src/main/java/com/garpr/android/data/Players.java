@@ -121,26 +121,19 @@ public final class Players {
 
 
         @Override
-        ArrayList<Player> buildResults(final Cursor cursor) {
+        ArrayList<Player> buildResults(final Cursor cursor) throws JSONException {
             final ArrayList<Player> players = new ArrayList<Player>();
             final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
 
             do {
                 final String playerString = cursor.getString(jsonIndex);
-
-                try {
-                    final JSONObject playerJSON = new JSONObject(playerString);
-                    final Player player = new Player(playerJSON);
-                    players.add(player);
-                } catch (final JSONException e) {
-                    // this should never happen
-                    throw new RuntimeException(e);
-                }
+                final JSONObject playerJSON = new JSONObject(playerString);
+                final Player player = new Player(playerJSON);
+                players.add(player);
 
                 cursor.moveToNext();
             } while (!cursor.isAfterLast());
 
-            players.trimToSize();
             return players;
         }
 
@@ -215,16 +208,8 @@ public final class Players {
 
 
         @Override
-        ArrayList<Player> parseJSON(final JSONObject json) {
-            ArrayList<Player> players = null;
-
-            try {
-                players = Players.parseJSON(json);
-            } catch (final JSONException e) {
-                setException(e);
-            }
-
-            return players;
+        ArrayList<Player> parseJSON(final JSONObject json) throws JSONException {
+            return Players.parseJSON(json);
         }
 
 

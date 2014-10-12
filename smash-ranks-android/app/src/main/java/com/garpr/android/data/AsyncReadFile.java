@@ -100,12 +100,7 @@ abstract class AsyncReadFile<T> extends AsyncTask<Void, Void, ArrayList<T>> {
     }
 
 
-    abstract ArrayList<T> parseJSON(final JSONObject json);
-
-
-    final void setException(final Exception exception) {
-        mException = exception;
-    }
+    abstract ArrayList<T> parseJSON(final JSONObject json) throws JSONException;
 
 
 }

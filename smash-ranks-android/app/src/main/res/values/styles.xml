@@ -7,11 +7,19 @@
 
     <style name="list_item_root">
         <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:minHeight">@dimen/list_item_height</item>
         <item name="android:paddingLeft">@dimen/root_padding_fourth</item>
         <item name="android:paddingRight">@dimen/root_padding_fourth</item>
+    </style>
+
+    <style name="list_item_root.separator">
+        <item name="android:layout_height">@dimen/list_item_separator_height</item>
+        <item name="android:minHeight">@dimen/list_item_separator_height</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="progress">

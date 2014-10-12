@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    style="@style/list_item_root.separator">
+    <TextView
+        android:gravity="center"
+        android:id="@+id/model_tournament_date"
+        android:layout_height="wrap_content"
+        android:layout_weight="25"
+        android:layout_width="0dp"
+        android:textSize="12sp"
+        tools:text="10/10/14" />
+    <TextView
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:id="@+id/model_tournament_name"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/root_padding_fourth"
+        android:layout_marginLeft="@dimen/root_padding_half"
+        android:layout_marginRight="@dimen/root_padding_half"
+        android:layout_marginTop="@dimen/root_padding_fourth"
+        android:layout_weight="75"
+        android:layout_width="0dp"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="3"
+        android:textSize="16sp"
+        tools:text="The Big House 4" />
+</LinearLayout>

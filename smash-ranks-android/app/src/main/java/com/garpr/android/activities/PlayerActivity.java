@@ -3,6 +3,7 @@ package com.garpr.android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,11 +105,17 @@ public class PlayerActivity extends BaseActivity {
     private final class MatchesAdapter extends BaseAdapter {
 
 
+        private final int mColorLose;
+        private final int mColorWin;
         private final LayoutInflater mInflater;
 
 
         private MatchesAdapter() {
             mInflater = getLayoutInflater();
+
+            final Resources resources = getResources();
+            mColorLose = resources.getColor(android.R.color.holo_red_light);
+            mColorWin = resources.getColor(android.R.color.holo_green_light);
         }
 
 
@@ -145,6 +152,12 @@ public class PlayerActivity extends BaseActivity {
 
             final Match match = getItem(position);
             holder.mOpponent.setText(match.getOpponentName());
+
+            if (match.isWin()) {
+                holder.mOpponent.setTextColor(mColorWin);
+            } else {
+                holder.mOpponent.setText(mColorLose);
+            }
 
             return convertView;
         }

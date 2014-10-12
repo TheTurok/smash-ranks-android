@@ -5,16 +5,17 @@
     style="@style/list_item_root.separator">
     <TextView
         android:gravity="center"
-        android:id="@+id/model_tournament_date"
+        android:id="@+id/separator_tournament_date"
         android:layout_height="wrap_content"
         android:layout_weight="25"
         android:layout_width="0dp"
+        android:textAllCaps="true"
         android:textSize="12sp"
         tools:text="10/10/14" />
     <TextView
         android:ellipsize="end"
         android:gravity="center_vertical"
-        android:id="@+id/model_tournament_name"
+        android:id="@+id/separator_tournament_name"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/root_padding_fourth"
         android:layout_marginLeft="@dimen/root_padding_half"
@@ -24,6 +25,7 @@
         android:layout_width="0dp"
         android:lineSpacingExtra="2dp"
         android:maxLines="3"
-        android:textSize="16sp"
+        android:textAllCaps="true"
+        android:textSize="14sp"
         tools:text="The Big House 4" />
 </LinearLayout>

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.garpr.android.R;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
+import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ public class PlayerActivity extends BaseActivity {
     private static final String CNAME = PlayerActivity.class.getCanonicalName();
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
 
-    private ArrayList<Match> mMatches;
+    private ArrayList<ListItem> mListItems;
     private ListView mListView;
     private MatchesAdapter mAdapter;
     private Player mPlayer;
@@ -41,7 +42,28 @@ public class PlayerActivity extends BaseActivity {
     }
 
 
-    protected void fetchMatches() {
+    private void createListItems(final ArrayList<Match> matches) {
+        mListItems = new ArrayList<ListItem>();
+        Tournament lastTournament = null;
+
+        for (final Match match : matches) {
+            final Tournament tournament = match.getTournament();
+
+            if (!tournament.equals(lastTournament)) {
+                lastTournament = tournament;
+                final ListItem listItem = new ListItem(tournament);
+                mListItems.add(listItem);
+            }
+
+            final ListItem listItem = new ListItem(match);
+            mListItems.add(listItem);
+        }
+
+        mListItems.trimToSize();
+    }
+
+
+    private void fetchMatches() {
         // TODO
     }
 
@@ -68,7 +90,7 @@ public class PlayerActivity extends BaseActivity {
         prepareViews();
 
         if (mPlayer.hasMatches()) {
-            mMatches = mPlayer.getMatches();
+            createListItems(mPlayer.getMatches());
             showList();
         } else {
             fetchMatches();
@@ -87,19 +109,46 @@ public class PlayerActivity extends BaseActivity {
     }
 
 
-    protected void showError() {
+    private void showError() {
         hideProgress();
         mError.setVisibility(View.VISIBLE);
     }
 
 
-    protected void showList() {
+    private void showList() {
         mAdapter = new MatchesAdapter();
         mListView.setAdapter(mAdapter);
         hideProgress();
     }
 
 
+
+
+    private static final class ListItem {
+
+
+        private static final int LIST_TYPE_MATCH = 0;
+        private static final int LIST_TYPE_TOURNAMENT = 1;
+        private static final int TOTAL_LIST_TYPES = 2;
+
+        private final int mListType;
+        private Match mMatch;
+        private Tournament mTournament;
+
+
+        private ListItem(final Match match) {
+            mListType = LIST_TYPE_MATCH;
+            mMatch = match;
+        }
+
+
+        private ListItem(final Tournament tournament) {
+            mListType = LIST_TYPE_TOURNAMENT;
+            mTournament = tournament;
+        }
+
+
+    }
 
 
     private final class MatchesAdapter extends BaseAdapter {
@@ -121,13 +170,13 @@ public class PlayerActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return mMatches.size();
+            return mListItems.size();
         }
 
 
         @Override
-        public Match getItem(final int position) {
-            return mMatches.get(position);
+        public ListItem getItem(final int position) {
+            return mListItems.get(position);
         }
 
 
@@ -138,19 +187,23 @@ public class PlayerActivity extends BaseActivity {
 
 
         @Override
-        public View getView(final int position, View convertView, final ViewGroup parent) {
+        public int getItemViewType(final int position) {
+            return getItem(position).mListType;
+        }
+
+
+        private View getMatchView(final Match match, View convertView, final ViewGroup parent) {
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.model_match, parent, false);
             }
 
-            ViewHolder holder = (ViewHolder) convertView.getTag();
+            MatchViewHolder holder = (MatchViewHolder) convertView.getTag();
 
             if (holder == null) {
-                holder = new ViewHolder(convertView);
+                holder = new MatchViewHolder(convertView);
                 convertView.setTag(holder);
             }
 
-            final Match match = getItem(position);
             holder.mOpponent.setText(match.getOpponentName());
 
             if (match.isWin()) {
@@ -163,17 +216,74 @@ public class PlayerActivity extends BaseActivity {
         }
 
 
+        private View getTournamentView(final Tournament tournament, View convertView, final ViewGroup parent) {
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.model_tournament, parent, false);
+            }
+
+            TournamentViewHolder holder = (TournamentViewHolder) convertView.getTag();
+
+            if (holder == null) {
+                holder = new TournamentViewHolder(convertView);
+                convertView.setTag(holder);
+            }
+
+            holder.mDate.setText(tournament.getDate());
+            holder.mName.setText(tournament.getName());
+
+            return convertView;
+        }
+
+
+        @Override
+        public View getView(final int position, View convertView, final ViewGroup parent) {
+            final ListItem listItem = getItem(position);
+
+            if (listItem.mListType == ListItem.LIST_TYPE_MATCH) {
+                final Match match = listItem.mMatch;
+                convertView = getMatchView(match, convertView, parent);
+            } else {
+                final Tournament tournament = listItem.mTournament;
+                convertView = getTournamentView(tournament, convertView, parent);
+            }
+
+            return convertView;
+        }
+
+
+        @Override
+        public int getViewTypeCount() {
+            return ListItem.TOTAL_LIST_TYPES;
+        }
+
+
     }
 
 
-    private static final class ViewHolder {
+    private static final class MatchViewHolder {
 
 
         private final TextView mOpponent;
 
 
-        private ViewHolder(final View view) {
+        private MatchViewHolder(final View view) {
             mOpponent = (TextView) view.findViewById(R.id.model_match_opponent);
+        }
+
+
+    }
+
+
+    private static final class TournamentViewHolder {
+
+
+        private final TextView mDate;
+        private final TextView mName;
+
+
+        private TournamentViewHolder(final View view) {
+            mDate = (TextView) view.findViewById(R.id.separator_tournament_date);
+            mName = (TextView) view.findViewById(R.id.separator_tournament_name);
         }
 
 

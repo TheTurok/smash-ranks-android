@@ -16,16 +16,11 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.garpr.android.R;
-import com.garpr.android.misc.Constants;
+import com.garpr.android.data.Rankings;
+import com.garpr.android.data.Rankings.RankingsCallback;
 import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
-import com.garpr.android.misc.Networking;
 import com.garpr.android.models.Player;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,43 +48,26 @@ public class RankingsActivity extends BaseActivity implements
 
 
     private void downloadRankings() {
-        final Networking.Callback callback = new Networking.Callback() {
+        mRefreshLayout.setRefreshing(true);
+
+        final RankingsCallback callback = new RankingsCallback(this) {
             @Override
-            public void onErrorResponse(final VolleyError error) {
-                Log.e(TAG, "Network exception when downloading rankings!", error);
+            public void error(final Exception e) {
+                Log.e(TAG, "Exception when retrieving rankings!", e);
                 showError();
             }
 
+
             @Override
-            public void onResponse(final JSONObject response) {
-                try {
-                    final ArrayList<Player> playersList = new ArrayList<Player>();
-                    final JSONArray ranking = response.getJSONArray(Constants.RANKING);
-
-                    for (int i = 0; i < ranking.length(); ++i) {
-                        final JSONObject playerJSON = ranking.getJSONObject(i);
-
-                        try {
-                            final Player player = new Player(playerJSON);
-                            playersList.add(player);
-                        } catch (final JSONException e) {
-                            Log.e(TAG, "Exception when building Player at index " + i, e);
-                        }
-                    }
-
-                    playersList.trimToSize();
-                    Collections.sort(playersList, Player.RANK_ORDER);
-                    mPlayers = playersList;
-                    mPlayersShown = new ArrayList<Player>(mPlayers);
-                    showList();
-                } catch (final JSONException e) {
-                    showError();
-                }
+            public void response(final ArrayList<Player> list) {
+                Collections.sort(list, Player.RANK_ORDER);
+                mPlayers = list;
+                mPlayersShown = new ArrayList<Player>(mPlayers);
+                showList();
             }
         };
 
-        mRefreshLayout.setRefreshing(true);
-        Networking.getRankings(this, callback);
+        Rankings.get(callback);
     }
 
 

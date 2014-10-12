@@ -7,6 +7,7 @@ public final class Constants {
     public static final String DATE = "date";
     public static final String GAME = "game";
     public static final String ID = "id";
+    public static final String JSON = "json";
     public static final String LOSE = "lose";
     public static final String MATCH = "match";
     public static final String MATCHES = "matches";

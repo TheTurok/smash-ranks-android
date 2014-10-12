@@ -7,16 +7,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 
+import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.misc.HealthListener;
-import com.garpr.android.misc.Networking;
+import com.garpr.android.misc.Heartbeat;
 
 
 /**
  * All Activities should extend from this base class, as it greatly reduces the otherwise
  * necessary boilerplate.
  */
-public abstract class BaseActivity extends Activity implements HealthListener {
+public abstract class BaseActivity extends Activity implements Heartbeat, HealthListener {
 
 
     private boolean mIsAlive;
@@ -74,7 +75,7 @@ public abstract class BaseActivity extends Activity implements HealthListener {
     protected void onDestroy() {
         super.onDestroy();
         mIsAlive = false;
-        Networking.cancelRequest(this);
+        App.cancelNetworkRequests(this);
     }
 
 

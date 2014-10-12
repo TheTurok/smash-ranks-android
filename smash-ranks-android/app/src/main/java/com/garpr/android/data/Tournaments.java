@@ -84,11 +84,6 @@ public final class Tournaments {
     }
 
 
-    public static void getTournament(final String id, final TournamentsCallback callback) {
-
-    }
-
-
     private static ArrayList<Tournament> parseJSON(final JSONObject json) throws JSONException {
         final JSONArray tournamentsJSON = json.getJSONArray(Constants.TOURNAMENTS);
         final int tournamentsLength = tournamentsJSON.length();
@@ -250,6 +245,14 @@ public final class Tournaments {
                 Log.e(TAG, "Exception when parsing JSON response", e);
                 getFromJSON(this);
             }
+        }
+
+
+        @Override
+        public final void response(final Tournament item) {
+            final ArrayList<Tournament> list = new ArrayList<Tournament>(1);
+            list.add(item);
+            response(list);
         }
 
 

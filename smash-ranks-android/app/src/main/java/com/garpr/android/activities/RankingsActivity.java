@@ -65,14 +65,6 @@ public class RankingsActivity extends BaseActivity implements
                 mPlayersShown = new ArrayList<Player>(mPlayers);
                 showList();
             }
-
-
-            @Override
-            public void response(final Player item) {
-                final ArrayList<Player> list = new ArrayList<Player>(1);
-                list.add(item);
-                response(list);
-            }
         };
 
         Players.get(callback);

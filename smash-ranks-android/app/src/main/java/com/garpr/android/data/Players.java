@@ -41,6 +41,18 @@ public final class Players {
     }
 
 
+    private static ContentValues createContentValues(final Player player) {
+        final JSONObject playerJSON = player.toJSON();
+        final String playerString = playerJSON.toString();
+
+        final ContentValues values = new ContentValues();
+        values.put(Constants.ID, player.getId());
+        values.put(Constants.JSON, playerString);
+
+        return values;
+    }
+
+
     static void createTable(final SQLiteDatabase database) {
         Log.i(TAG, "Creating " + TAG + " database table");
         final String sql = "CREATE TABLE " + TAG + " ("
@@ -84,11 +96,6 @@ public final class Players {
     }
 
 
-    public static void getPlayer(final String id, final PlayersCallback callback) {
-
-    }
-
-
     private static ArrayList<Player> parseJSON(final JSONObject json) throws JSONException {
         final JSONArray rankingsJSON = json.getJSONArray(Constants.RANKING);
         final int rankingsLength = rankingsJSON.length();
@@ -112,6 +119,16 @@ public final class Players {
     private static void save(final ArrayList<Player> players) {
         final AsyncSavePlayersDatabase task = new AsyncSavePlayersDatabase(players);
         task.execute();
+    }
+
+
+    public static void save(final Player player) {
+        final SQLiteDatabase database = Database.writeTo();
+        final ContentValues values = createContentValues(player);
+        final String whereClause = Constants.ID + " = ?";
+        final String[] whereArgs = { player.getId() };
+        database.update(TAG, values, whereClause, whereArgs);
+        Utils.closeCloseables(database);
     }
 
 
@@ -201,12 +218,7 @@ public final class Players {
             database.beginTransaction();
 
             for (final Player player : mPlayers) {
-                final JSONObject playerJSON = player.toJSON();
-                final String playerString = playerJSON.toString();
-
-                final ContentValues values = new ContentValues();
-                values.put(Constants.ID, player.getId());
-                values.put(Constants.JSON, playerString);
+                final ContentValues values = createContentValues(player);
                 database.insert(TAG, null, values);
             }
 
@@ -250,6 +262,14 @@ public final class Players {
                 Log.e(TAG, "Exception when parsing JSON response", e);
                 getFromJSON(this);
             }
+        }
+
+
+        @Override
+        public final void response(final Player item) {
+            final ArrayList<Player> list = new ArrayList<Player>(1);
+            list.add(item);
+            response(list);
         }
 
 

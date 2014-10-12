@@ -76,9 +76,6 @@ abstract class AsyncReadFile<T> extends AsyncTask<Void, Void, ArrayList<T>> {
     abstract int getRawResourceId();
 
 
-    abstract ArrayList<T> parseJSON(final JSONObject json);
-
-
     @Override
     protected final void onPostExecute(final ArrayList<T> result) {
         super.onPostExecute(result);
@@ -101,6 +98,9 @@ abstract class AsyncReadFile<T> extends AsyncTask<Void, Void, ArrayList<T>> {
             mCallback.error(mException);
         }
     }
+
+
+    abstract ArrayList<T> parseJSON(final JSONObject json);
 
 
     final void setException(final Exception exception) {

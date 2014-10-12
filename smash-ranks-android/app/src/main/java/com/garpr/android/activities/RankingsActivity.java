@@ -186,6 +186,7 @@ public class RankingsActivity extends BaseActivity implements
     @Override
     public void onRefresh() {
         if (mIsFinishedDownloading) {
+            Rankings.clear();
             downloadRankings();
         }
     }

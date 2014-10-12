@@ -4,6 +4,7 @@ package com.garpr.android.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.garpr.android.R;
@@ -27,6 +28,19 @@ public final class Rankings {
 
 
 
+    public static void clear() {
+        final SQLiteDatabase database = Database.writeTo();
+        clear(database);
+        Utils.closeCloseables(database);
+    }
+
+
+    static void clear(final SQLiteDatabase database) {
+        dropTable(database);
+        createTable(database);
+    }
+
+
     static void createTable(final SQLiteDatabase database) {
         Log.i(TAG, "Creating " + TAG + " database table");
         final String sql = "CREATE TABLE " + TAG + " (" + Constants.JSON + " TEXT NOT NULL);";
@@ -41,45 +55,14 @@ public final class Rankings {
     }
 
 
+    private static void time() {
+        Log.d(TAG, "Time: " + String.valueOf(System.currentTimeMillis()));
+    }
+
+
     public static void get(final RankingsCallback callback) {
-        final SQLiteDatabase database = Database.readFrom();
-        final Cursor cursor = database.query(TAG, null, null, null, null, null, null);
-        cursor.moveToFirst();
-
-        if (cursor.isAfterLast()) {
-            Utils.closeCloseables(cursor, database);
-            getFromNetwork(callback);
-        } else {
-            final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
-            final ArrayList<Player> players = new ArrayList<Player>();
-
-            do {
-                final String playerString = cursor.getString(jsonIndex);
-
-                try {
-                    final JSONObject playerJSON = new JSONObject(playerString);
-                    final Player player = new Player(playerJSON);
-                    players.add(player);
-                } catch (final JSONException e) {
-                    // this should never happen
-                    throw new RuntimeException(e);
-                }
-
-                cursor.moveToNext();
-            } while (!cursor.isAfterLast());
-
-            Utils.closeCloseables(cursor, database);
-
-            if (players.isEmpty()) {
-                getFromNetwork(callback);
-            } else {
-                players.trimToSize();
-
-                if (callback.isAlive()) {
-                    callback.response(players);
-                }
-            }
-        }
+        final AsyncReadRankingsDatabase task = new AsyncReadRankingsDatabase(callback);
+        task.execute();
     }
 
 
@@ -123,23 +106,96 @@ public final class Rankings {
 
 
     private static void save(final ArrayList<Player> players) {
-        final SQLiteDatabase database = Database.writeTo();
-        dropTable(database);
-        createTable(database);
-
-        for (final Player player : players) {
-            final JSONObject playerJSON = player.toJSON();
-            final String playerString = playerJSON.toString();
-
-            final ContentValues values = new ContentValues();
-            values.put(Constants.JSON, playerString);
-            database.insert(TAG, null, values);
-        }
-
-        database.close();
+        final AsyncSaveRankingsDatabase task = new AsyncSaveRankingsDatabase(players);
+        task.execute();
     }
 
 
+
+
+    private static final class AsyncReadRankingsDatabase extends AsyncReadDatabase<Player> {
+
+
+        private AsyncReadRankingsDatabase(final RankingsCallback callback) {
+            super(callback);
+        }
+
+
+        @Override
+        ArrayList<Player> buildResults(final Cursor cursor) {
+            final ArrayList<Player> players = new ArrayList<Player>();
+            final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
+
+            do {
+                final String playerString = cursor.getString(jsonIndex);
+
+                try {
+                    final JSONObject playerJSON = new JSONObject(playerString);
+                    final Player player = new Player(playerJSON);
+                    players.add(player);
+                } catch (final JSONException e) {
+                    // this should never happen
+                    throw new RuntimeException(e);
+                }
+
+                cursor.moveToNext();
+            } while (!cursor.isAfterLast());
+
+            return players;
+        }
+
+
+        @Override
+        void getFromNetwork(final Callback<Player> callback) {
+            Rankings.getFromNetwork((RankingsCallback) callback);
+        }
+
+
+        @Override
+        Cursor query(final SQLiteDatabase database) {
+            return database.query(TAG, null, null, null, null, null, null);
+        }
+
+
+    }
+
+
+    private static final class AsyncSaveRankingsDatabase extends AsyncTask<Void, Void, Void> {
+
+
+        private final ArrayList<Player> mPlayers;
+
+
+        private AsyncSaveRankingsDatabase(final ArrayList<Player> players) {
+            mPlayers = players;
+        }
+
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            final SQLiteDatabase database = Database.writeTo();
+            clear(database);
+
+            database.beginTransaction();
+
+            for (final Player player : mPlayers) {
+                final JSONObject playerJSON = player.toJSON();
+                final String playerString = playerJSON.toString();
+
+                final ContentValues values = new ContentValues();
+                values.put(Constants.JSON, playerString);
+                database.insert(TAG, null, values);
+            }
+
+            database.setTransactionSuccessful();
+            database.endTransaction();
+            Utils.closeCloseables(database);
+
+            return null;
+        }
+
+
+    }
 
 
     private static final class AsyncReadRankingsFile extends AsyncReadFile<Player> {
@@ -208,7 +264,9 @@ public final class Rankings {
 
         @Override
         public final void response(final Player item) {
-            // this method intentionally left blank
+            final ArrayList<Player> players = new ArrayList<Player>(1);
+            players.add(item);
+            response(players);
         }
 
 

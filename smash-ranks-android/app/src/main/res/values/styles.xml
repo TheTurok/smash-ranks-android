@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="action_bar" parent="android:style/Widget.Holo.ActionBar.Solid">
+
+    </style>
+
     <style name="list_item_root">
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_height">wrap_content</item>
@@ -31,7 +35,7 @@
     </style>
 
     <style name="theme" parent="android:Theme.Holo">
-
+        <item name="android:actionBarStyle">@style/action_bar</item>
     </style>
 
 </resources>

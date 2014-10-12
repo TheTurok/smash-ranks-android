@@ -88,6 +88,21 @@ public class Match implements Parcelable {
     }
 
 
+    public JSONObject toJSON() {
+        try {
+            final JSONObject json = new JSONObject();
+            json.put(Constants.RESULT, result.toString());
+            json.put(Constants.OPPONENT_ID, opponentId);
+            json.put(Constants.OPPONENT_NAME, opponentName);
+            json.put(Constants.TOURNAMENT, tournament.toJSON());
+
+            return json;
+        } catch (final JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     @Override
     public String toString() {
         final Context context = App.getContext();

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 abstract class AsyncReadFile<T> extends AsyncTask<Void, Void, ArrayList<T>> {
 
 
-    private Callback<T> mCallback;
+    private final Callback<T> mCallback;
     private Exception mException;
 
 
@@ -82,6 +82,10 @@ abstract class AsyncReadFile<T> extends AsyncTask<Void, Void, ArrayList<T>> {
     @Override
     protected final void onPostExecute(final ArrayList<T> result) {
         super.onPostExecute(result);
+
+        if (!mCallback.isAlive()) {
+            return;
+        }
 
         if (mException == null) {
             if (result == null || result.isEmpty()) {

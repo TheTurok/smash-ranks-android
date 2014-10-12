@@ -55,11 +55,6 @@ public final class Rankings {
     }
 
 
-    private static void time() {
-        Log.d(TAG, "Time: " + String.valueOf(System.currentTimeMillis()));
-    }
-
-
     public static void get(final RankingsCallback callback) {
         final AsyncReadRankingsDatabase task = new AsyncReadRankingsDatabase(callback);
         task.execute();

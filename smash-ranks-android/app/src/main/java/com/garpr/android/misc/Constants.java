@@ -18,7 +18,7 @@ public final class Constants {
     public static final String PLAYER = "player";
     public static final String RANK = "rank";
     public static final String RANKING = "ranking";
-    public static final String RANKINGS = "rankings";
+    public static final String RANKINGS = "players";
     public static final String RATING = "rating";
     public static final String RESULT = "result";
     public static final String TIME = "time";

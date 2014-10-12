@@ -17,8 +17,8 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.garpr.android.R;
-import com.garpr.android.data.Rankings;
-import com.garpr.android.data.Rankings.RankingsCallback;
+import com.garpr.android.data.Players;
+import com.garpr.android.data.Players.PlayersCallback;
 import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 import com.garpr.android.models.Player;
 
@@ -37,7 +37,7 @@ public class RankingsActivity extends BaseActivity implements
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
     private boolean mIsAbcOrder;
-    private boolean mIsFinishedDownloading;
+    private boolean mIsFinishedRetrieving;
     private FlexibleSwipeRefreshLayout mRefreshLayout;
     private ListView mListView;
     private RankingsAdapter mAdapter;
@@ -47,13 +47,13 @@ public class RankingsActivity extends BaseActivity implements
 
 
 
-    private void downloadRankings() {
+    private void getRankings() {
         mRefreshLayout.setRefreshing(true);
 
-        final RankingsCallback callback = new RankingsCallback(this) {
+        final PlayersCallback callback = new PlayersCallback(this) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when retrieving rankings!", e);
+                Log.e(TAG, "Exception when retrieving players!", e);
                 showError();
             }
 
@@ -67,7 +67,7 @@ public class RankingsActivity extends BaseActivity implements
             }
         };
 
-        Rankings.get(callback);
+        Players.get(callback);
     }
 
 
@@ -101,7 +101,7 @@ public class RankingsActivity extends BaseActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViews();
-        downloadRankings();
+        getRankings();
     }
 
 
@@ -152,7 +152,7 @@ public class RankingsActivity extends BaseActivity implements
         final MenuItem rank = menu.findItem(R.id.activity_rankings_menu_rank);
         final MenuItem search = menu.findItem(R.id.activity_rankings_menu_search);
 
-        if (mIsFinishedDownloading) {
+        if (mIsFinishedRetrieving) {
             search.setVisible(true);
 
             final SearchView searchView = (SearchView) search.getActionView();
@@ -187,9 +187,9 @@ public class RankingsActivity extends BaseActivity implements
 
     @Override
     public void onRefresh() {
-        if (mIsFinishedDownloading) {
-            Rankings.clear();
-            downloadRankings();
+        if (mIsFinishedRetrieving) {
+            Players.clear();
+            getRankings();
         }
     }
 
@@ -197,7 +197,7 @@ public class RankingsActivity extends BaseActivity implements
     private void showError() {
         mError.setVisibility(View.VISIBLE);
         mRefreshLayout.setRefreshing(false);
-        mIsFinishedDownloading = true;
+        mIsFinishedRetrieving = true;
     }
 
 
@@ -208,7 +208,7 @@ public class RankingsActivity extends BaseActivity implements
         mListView.setOnItemClickListener(this);
         mListView.setVisibility(View.VISIBLE);
         mRefreshLayout.setRefreshing(false);
-        mIsFinishedDownloading = true;
+        mIsFinishedRetrieving = true;
         invalidateOptionsMenu();
     }
 

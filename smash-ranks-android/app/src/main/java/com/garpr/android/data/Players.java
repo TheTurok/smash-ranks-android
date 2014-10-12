@@ -20,10 +20,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public final class Rankings {
+public final class Players {
 
 
-    private static final String TAG = Rankings.class.getSimpleName();
+    private static final String TAG = Players.class.getSimpleName();
 
 
 
@@ -55,23 +55,23 @@ public final class Rankings {
     }
 
 
-    public static void get(final RankingsCallback callback) {
-        final AsyncReadRankingsDatabase task = new AsyncReadRankingsDatabase(callback);
+    public static void get(final PlayersCallback callback) {
+        final AsyncReadPlayersDatabase task = new AsyncReadPlayersDatabase(callback);
         task.execute();
     }
 
 
-    private static void getFromJSON(final RankingsCallback callback) {
+    private static void getFromJSON(final PlayersCallback callback) {
         if (!callback.isAlive()) {
             return;
         }
 
-        final AsyncReadRankingsFile task = new AsyncReadRankingsFile(callback);
+        final AsyncReadPlayersFile task = new AsyncReadPlayersFile(callback);
         task.execute();
     }
 
 
-    private static void getFromNetwork(final RankingsCallback callback) {
+    private static void getFromNetwork(final PlayersCallback callback) {
         if (!callback.isAlive()) {
             return;
         }
@@ -102,17 +102,17 @@ public final class Rankings {
 
 
     private static void save(final ArrayList<Player> players) {
-        final AsyncSaveRankingsDatabase task = new AsyncSaveRankingsDatabase(players);
+        final AsyncSavePlayersDatabase task = new AsyncSavePlayersDatabase(players);
         task.execute();
     }
 
 
 
 
-    private static final class AsyncReadRankingsDatabase extends AsyncReadDatabase<Player> {
+    private static final class AsyncReadPlayersDatabase extends AsyncReadDatabase<Player> {
 
 
-        private AsyncReadRankingsDatabase(final RankingsCallback callback) {
+        private AsyncReadPlayersDatabase(final PlayersCallback callback) {
             super(callback);
         }
 
@@ -143,7 +143,7 @@ public final class Rankings {
 
         @Override
         void getFromNetwork(final Callback<Player> callback) {
-            Rankings.getFromNetwork((RankingsCallback) callback);
+            Players.getFromNetwork((PlayersCallback) callback);
         }
 
 
@@ -156,13 +156,13 @@ public final class Rankings {
     }
 
 
-    private static final class AsyncSaveRankingsDatabase extends AsyncTask<Void, Void, Void> {
+    private static final class AsyncSavePlayersDatabase extends AsyncTask<Void, Void, Void> {
 
 
         private final ArrayList<Player> mPlayers;
 
 
-        private AsyncSaveRankingsDatabase(final ArrayList<Player> players) {
+        private AsyncSavePlayersDatabase(final ArrayList<Player> players) {
             mPlayers = players;
         }
 
@@ -194,17 +194,17 @@ public final class Rankings {
     }
 
 
-    private static final class AsyncReadRankingsFile extends AsyncReadFile<Player> {
+    private static final class AsyncReadPlayersFile extends AsyncReadFile<Player> {
 
 
-        private AsyncReadRankingsFile(final RankingsCallback callback) {
+        private AsyncReadPlayersFile(final PlayersCallback callback) {
             super(callback);
         }
 
 
         @Override
         int getRawResourceId() {
-            return R.raw.rankings;
+            return R.raw.players;
         }
 
 
@@ -213,7 +213,7 @@ public final class Rankings {
             ArrayList<Player> players = null;
 
             try {
-                players = Rankings.parseJSON(json);
+                players = Players.parseJSON(json);
             } catch (final JSONException e) {
                 setException(e);
             }
@@ -225,13 +225,13 @@ public final class Rankings {
     }
 
 
-    public static abstract class RankingsCallback extends Callback<Player> {
+    public static abstract class PlayersCallback extends Callback<Player> {
 
 
-        private static final String TAG = RankingsCallback.class.getSimpleName();
+        private static final String TAG = PlayersCallback.class.getSimpleName();
 
 
-        public RankingsCallback(final Heartbeat heartbeat) {
+        public PlayersCallback(final Heartbeat heartbeat) {
             super(heartbeat);
         }
 
@@ -239,7 +239,7 @@ public final class Rankings {
         @Override
         final void parseJSON(final JSONObject json) {
             try {
-                final ArrayList<Player> players = Rankings.parseJSON(json);
+                final ArrayList<Player> players = Players.parseJSON(json);
 
                 if (players.isEmpty()) {
                     getFromJSON(this);

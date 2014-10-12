@@ -177,7 +177,7 @@ public final class Players {
                 final String playerString = playerJSON.toString();
 
                 final ContentValues values = new ContentValues();
-                values.put(Constants.ID , player.getId());
+                values.put(Constants.ID, player.getId());
                 values.put(Constants.JSON, playerString);
                 database.insert(TAG, null, values);
             }

@@ -43,12 +43,14 @@ public final class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(final SQLiteDatabase db) {
         Rankings.createTable(db);
+        Tournaments.createTable(db);
     }
 
 
     @Override
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         Rankings.dropTable(db);
+        Tournaments.dropTable(db);
         onCreate(db);
     }
 

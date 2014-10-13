@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.garpr.android.R;
+import com.garpr.android.data.Matches;
+import com.garpr.android.data.Matches.MatchesCallback;
+import com.garpr.android.data.Players;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Tournament;
@@ -25,6 +29,7 @@ public class PlayerActivity extends BaseActivity {
 
     private static final String CNAME = PlayerActivity.class.getCanonicalName();
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
+    private static final String TAG = PlayerActivity.class.getSimpleName();
 
     private ArrayList<ListItem> mListItems;
     private ListView mListView;
@@ -64,7 +69,24 @@ public class PlayerActivity extends BaseActivity {
 
 
     private void fetchMatches() {
-        // TODO
+        final MatchesCallback callback = new MatchesCallback(this) {
+            @Override
+            public void error(final Exception e) {
+                Log.e(TAG, "Exception when downloading matches for " + mPlayer, e);
+                showError();
+            }
+
+
+            @Override
+            public void response(final ArrayList<Match> list) {
+                mPlayer.setMatches(list);
+                Players.save(mPlayer);
+                createListItems(list);
+                showList();
+            }
+        };
+
+        Matches.get(mPlayer.getId(), callback);
     }
 
 
@@ -209,7 +231,7 @@ public class PlayerActivity extends BaseActivity {
             if (match.isWin()) {
                 holder.mOpponent.setTextColor(mColorWin);
             } else {
-                holder.mOpponent.setText(mColorLose);
+                holder.mOpponent.setTextColor(mColorLose);
             }
 
             return convertView;
@@ -218,7 +240,7 @@ public class PlayerActivity extends BaseActivity {
 
         private View getTournamentView(final Tournament tournament, View convertView, final ViewGroup parent) {
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.model_tournament, parent, false);
+                convertView = mInflater.inflate(R.layout.separator_tournament, parent, false);
             }
 
             TournamentViewHolder holder = (TournamentViewHolder) convertView.getTag();

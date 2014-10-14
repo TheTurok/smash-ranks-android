@@ -4,22 +4,7 @@
         android:actionViewClass="android.widget.SearchView"
         android:icon="@android:drawable/ic_menu_search"
         android:id="@+id/activity_rankings_menu_search"
-        android:title="@string/search"
         android:showAsAction="collapseActionView|ifRoom"
-        android:visible="false" />
-    <item
-        android:id="@+id/activity_rankings_menu_tournament"
-        android:title="@string/tournaments"
-        android:showAsAction="ifRoom"
-        android:visible="true" />
-    <item
-        android:id="@+id/activity_rankings_menu_abc"
-        android:title="@string/alphabetical_order"
-        android:showAsAction="never"
-        android:visible="false" />
-    <item
-        android:id="@+id/activity_rankings_menu_rank"
-        android:title="@string/rank_order"
-        android:showAsAction="never"
+        android:title="@string/search"
         android:visible="false" />
 </menu>

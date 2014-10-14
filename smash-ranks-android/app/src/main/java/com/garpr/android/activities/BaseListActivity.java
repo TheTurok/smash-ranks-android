@@ -37,6 +37,12 @@ abstract class BaseListActivity extends BaseActivity implements
             animator.cancelIfRunning();
         }
 
+        final int visibility = view.getVisibility();
+
+        if ((fadeIn && visibility == View.VISIBLE) || (!fadeIn && visibility == View.GONE)) {
+            return animator;
+        }
+
         if (fadeIn) {
             animator = FadeAnimator.fadeIn(view);
         } else {

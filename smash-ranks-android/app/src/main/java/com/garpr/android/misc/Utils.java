@@ -28,6 +28,5 @@ public class Utils {
         }
     }
 
-    public static final Random RANDOM = new Random();
 
 }

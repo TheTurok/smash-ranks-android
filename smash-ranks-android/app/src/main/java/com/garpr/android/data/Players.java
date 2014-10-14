@@ -255,11 +255,7 @@ public final class Players {
                     save(players);
 
                     if (isAlive()) {
-                        if (Utils.RANDOM.nextInt() % 2 == 0) {
-                            response(players);
-                        } else {
-                            error(new Exception());
-                        }
+                        response(players);
                     }
                 }
             } catch (final JSONException e) {

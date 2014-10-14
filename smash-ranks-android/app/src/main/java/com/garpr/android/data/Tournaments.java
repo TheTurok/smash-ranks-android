@@ -10,7 +10,6 @@ import android.util.Log;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
-import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Tournament;
 
 import org.json.JSONArray;
@@ -238,11 +237,7 @@ public final class Tournaments {
                     save(tournaments);
 
                     if (isAlive()) {
-                        if (Utils.RANDOM.nextInt() % 2 == 0) {
-                            response(tournaments);
-                        } else {
-                            error(new Exception());
-                        }
+                        response(tournaments);
                     }
                 }
             } catch (final JSONException e) {

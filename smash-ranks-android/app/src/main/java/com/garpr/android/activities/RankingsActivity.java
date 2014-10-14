@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Filter;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -33,7 +32,6 @@ public class RankingsActivity extends BaseListActivity implements
 
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
-    private boolean mIsAbcOrder;
     private RankingsFilter mFilter;
 
 
@@ -107,38 +105,7 @@ public class RankingsActivity extends BaseListActivity implements
 
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.activity_rankings_menu_abc:
-                Collections.sort(mPlayersShown, Player.ALPHABETICAL_ORDER);
-                notifyDataSetChanged();
-                mIsAbcOrder = true;
-                invalidateOptionsMenu();
-                break;
-
-            case R.id.activity_rankings_menu_rank:
-                Collections.sort(mPlayersShown, Player.RANK_ORDER);
-                notifyDataSetChanged();
-                mIsAbcOrder = false;
-                invalidateOptionsMenu();
-                break;
-
-            case R.id.activity_rankings_menu_tournament:
-                TournamentsActivity.start(this);
-                break;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-        return true;
-    }
-
-
-    @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        final MenuItem abc = menu.findItem(R.id.activity_rankings_menu_abc);
-        final MenuItem rank = menu.findItem(R.id.activity_rankings_menu_rank);
         final MenuItem search = menu.findItem(R.id.activity_rankings_menu_search);
 
         if (!isRefreshing()) {
@@ -147,14 +114,6 @@ public class RankingsActivity extends BaseListActivity implements
             final SearchView searchView = (SearchView) search.getActionView();
             searchView.setQueryHint(getString(R.string.search_players));
             searchView.setOnQueryTextListener(this);
-
-            if (mIsAbcOrder) {
-                abc.setVisible(false);
-                rank.setVisible(true);
-            } else{
-                abc.setVisible(true);
-                rank.setVisible(false);
-            }
         }
 
         return super.onPrepareOptionsMenu(menu);

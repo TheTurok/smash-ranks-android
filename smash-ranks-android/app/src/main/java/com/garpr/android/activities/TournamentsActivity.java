@@ -79,6 +79,12 @@ public class TournamentsActivity extends BaseListActivity {
     }
 
 
+    @Override
+    protected boolean showHomeAsUpEnabled() {
+        return true;
+    }
+
+
 
 
     private final class TournamentAdapter extends BaseListAdapter {

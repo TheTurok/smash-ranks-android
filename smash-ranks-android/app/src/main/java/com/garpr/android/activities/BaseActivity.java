@@ -1,10 +1,15 @@
 package com.garpr.android.activities;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.garpr.android.App;
 import com.garpr.android.misc.Heartbeat;
@@ -36,11 +41,33 @@ abstract class BaseActivity extends Activity implements Heartbeat {
     }
 
 
+    /**
+     * This method's code taken from the Android documentation:
+     * https://developer.android.com/training/implementing-navigation/ancestral.html
+     */
+    private void navigateUp() {
+        final Intent upIntent = NavUtils.getParentActivityIntent(this);
+
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+        } else {
+            NavUtils.navigateUpTo(this, upIntent);
+        }
+    }
+
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIsAlive = true;
         setContentView(getContentView());
+
+        if (showHomeAsUpEnabled()) {
+            final ActionBar actionBar = getActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
 
@@ -62,6 +89,26 @@ abstract class BaseActivity extends Activity implements Heartbeat {
         super.onDestroy();
         mIsAlive = false;
         App.cancelNetworkRequests(this);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                navigateUp();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
+
+    protected boolean showHomeAsUpEnabled() {
+        return false;
     }
 
 

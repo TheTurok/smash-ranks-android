@@ -130,6 +130,12 @@ public class PlayerActivity extends BaseListActivity {
     }
 
 
+    @Override
+    protected boolean showHomeAsUpEnabled() {
+        return true;
+    }
+
+
 
 
     private static final class ListItem {

@@ -111,6 +111,7 @@ public class RankingsActivity extends BaseListActivity implements
         searchView.setQueryHint(getString(R.string.search_players));
         searchView.setOnQueryTextListener(this);
         searchItem.setVisible(!isRefreshing());
+        searchItem.collapseActionView();
 
         return super.onPrepareOptionsMenu(menu);
     }

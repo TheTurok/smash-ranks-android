@@ -106,15 +106,11 @@ public class RankingsActivity extends BaseListActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        final MenuItem search = menu.findItem(R.id.activity_rankings_menu_search);
-
-        if (!isRefreshing()) {
-            search.setVisible(true);
-
-            final SearchView searchView = (SearchView) search.getActionView();
-            searchView.setQueryHint(getString(R.string.search_players));
-            searchView.setOnQueryTextListener(this);
-        }
+        final MenuItem searchItem = menu.findItem(R.id.activity_rankings_menu_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_players));
+        searchView.setOnQueryTextListener(this);
+        searchItem.setVisible(!isRefreshing());
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -215,8 +211,6 @@ public class RankingsActivity extends BaseListActivity implements
                     playersList.add(player);
                 }
             }
-
-            playersList.trimToSize();
 
             final FilterResults results = new FilterResults();
             results.count = playersList.size();

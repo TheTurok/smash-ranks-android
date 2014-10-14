@@ -31,7 +31,7 @@ public final class Players {
     public static void clear() {
         final SQLiteDatabase database = Database.writeTo();
         clear(database);
-        Utils.closeCloseables(database);
+        database.close();
     }
 
 
@@ -128,7 +128,7 @@ public final class Players {
         final String whereClause = Constants.ID + " = ?";
         final String[] whereArgs = { player.getId() };
         database.update(TAG, values, whereClause, whereArgs);
-        Utils.closeCloseables(database);
+        database.close();
     }
 
 
@@ -224,7 +224,7 @@ public final class Players {
 
             database.setTransactionSuccessful();
             database.endTransaction();
-            Utils.closeCloseables(database);
+            database.close();
 
             return null;
         }
@@ -255,7 +255,11 @@ public final class Players {
                     save(players);
 
                     if (isAlive()) {
-                        response(players);
+                        if (Utils.RANDOM.nextInt() % 2 == 0) {
+                            response(players);
+                        } else {
+                            error(new Exception());
+                        }
                     }
                 }
             } catch (final JSONException e) {

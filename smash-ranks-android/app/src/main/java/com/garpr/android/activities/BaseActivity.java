@@ -5,10 +5,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 
 import com.garpr.android.App;
-import com.garpr.android.R;
 import com.garpr.android.misc.Heartbeat;
 
 
@@ -16,18 +14,12 @@ import com.garpr.android.misc.Heartbeat;
  * All Activities should extend from this base class, as it greatly reduces the otherwise
  * necessary boilerplate.
  */
-public abstract class BaseActivity extends Activity implements Heartbeat {
+abstract class BaseActivity extends Activity implements Heartbeat {
 
 
     private boolean mIsAlive;
-    private View mProgressBar;
 
 
-
-
-    protected void findViews() {
-        mProgressBar = findViewById(R.id.progress);
-    }
 
 
     protected abstract int getContentView();
@@ -35,11 +27,6 @@ public abstract class BaseActivity extends Activity implements Heartbeat {
 
     protected int getOptionsMenu() {
         return 0;
-    }
-
-
-    protected void hideProgress() {
-        mProgressBar.setVisibility(View.GONE);
     }
 
 
@@ -75,11 +62,6 @@ public abstract class BaseActivity extends Activity implements Heartbeat {
         super.onDestroy();
         mIsAlive = false;
         App.cancelNetworkRequests(this);
-    }
-
-
-    protected void showProgress() {
-        mProgressBar.setVisibility(View.VISIBLE);
     }
 
 

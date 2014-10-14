@@ -31,7 +31,7 @@ public final class Tournaments {
     public static void clear() {
         final SQLiteDatabase database = Database.writeTo();
         clear(database);
-        Utils.closeCloseables(database);
+        database.close();
     }
 
 
@@ -207,7 +207,7 @@ public final class Tournaments {
 
             database.setTransactionSuccessful();
             database.endTransaction();
-            Utils.closeCloseables(database);
+            database.close();
 
             return null;
         }
@@ -238,7 +238,11 @@ public final class Tournaments {
                     save(tournaments);
 
                     if (isAlive()) {
-                        response(tournaments);
+                        if (Utils.RANDOM.nextInt() % 2 == 0) {
+                            response(tournaments);
+                        } else {
+                            error(new Exception());
+                        }
                     }
                 }
             } catch (final JSONException e) {

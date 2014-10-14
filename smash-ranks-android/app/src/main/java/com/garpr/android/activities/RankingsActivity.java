@@ -1,8 +1,8 @@
 package com.garpr.android.activities;
 
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,26 +10,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Filter;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.Players.PlayersCallback;
-import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
+import com.garpr.android.misc.ResultCodes;
+import com.garpr.android.misc.ResultData;
 import com.garpr.android.models.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class RankingsActivity extends BaseActivity implements
-        AdapterView.OnItemClickListener,
-        SearchView.OnQueryTextListener,
-        SwipeRefreshLayout.OnRefreshListener {
+public class RankingsActivity extends BaseListActivity implements
+        SearchView.OnQueryTextListener {
 
 
     private static final String TAG = RankingsActivity.class.getSimpleName();
@@ -37,18 +34,13 @@ public class RankingsActivity extends BaseActivity implements
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
     private boolean mIsAbcOrder;
-    private boolean mIsFinishedRetrieving;
-    private FlexibleSwipeRefreshLayout mRefreshLayout;
-    private ListView mListView;
-    private RankingsAdapter mAdapter;
     private RankingsFilter mFilter;
-    private TextView mError;
 
 
 
 
     private void fetchRankings() {
-        mRefreshLayout.setRefreshing(true);
+        setRefreshing(true);
 
         final PlayersCallback callback = new PlayersCallback(this) {
             @Override
@@ -63,7 +55,7 @@ public class RankingsActivity extends BaseActivity implements
                 Collections.sort(list, Player.RANK_ORDER);
                 mPlayers = list;
                 mPlayersShown = new ArrayList<Player>(mPlayers);
-                showList();
+                setAdapter(new RankingsAdapter());
             }
         };
 
@@ -72,22 +64,8 @@ public class RankingsActivity extends BaseActivity implements
 
 
     @Override
-    protected void findViews() {
-        super.findViews();
-        mError = (TextView) findViewById(R.id.activity_rankings_error);
-        mListView = (ListView) findViewById(R.id.activity_rankings_list);
-        mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_rankings_refresh);
-        mRefreshLayout.setOnRefreshListener(this);
-        mRefreshLayout.setScrollableView(mListView);
-        mRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_light,
-                android.R.color.holo_orange_dark, android.R.color.holo_red_light,
-                android.R.color.holo_red_dark);
-    }
-
-
-    @Override
-    protected int getContentView() {
-        return R.layout.activity_rankings;
+    protected String getErrorText() {
+        return getString(R.string.error_fetching_rankings);
     }
 
 
@@ -98,10 +76,33 @@ public class RankingsActivity extends BaseActivity implements
 
 
     @Override
+    protected void onActivityResult(final int requestCode, final int resultCode,
+            final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == ResultCodes.PLAYER_UPDATED) {
+            final Player player = data.getParcelableExtra(ResultData.PLAYER);
+
+            for (final Player p : mPlayers) {
+                if (p.equals(player)) {
+                    p.setMatches(player.getMatches());
+                    break;
+                }
+            }
+        }
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        findViews();
         fetchRankings();
+    }
+
+
+    @Override
+    protected void onItemClick(final Object item) {
+        PlayerActivity.startForResult(this, (Player) item);
     }
 
 
@@ -110,14 +111,14 @@ public class RankingsActivity extends BaseActivity implements
         switch (item.getItemId()) {
             case R.id.activity_rankings_menu_abc:
                 Collections.sort(mPlayersShown, Player.ALPHABETICAL_ORDER);
-                mAdapter.notifyDataSetChanged();
+                notifyDataSetChanged();
                 mIsAbcOrder = true;
                 invalidateOptionsMenu();
                 break;
 
             case R.id.activity_rankings_menu_rank:
                 Collections.sort(mPlayersShown, Player.RANK_ORDER);
-                mAdapter.notifyDataSetChanged();
+                notifyDataSetChanged();
                 mIsAbcOrder = false;
                 invalidateOptionsMenu();
                 break;
@@ -135,24 +136,12 @@ public class RankingsActivity extends BaseActivity implements
 
 
     @Override
-    public void onItemClick(final AdapterView<?> parent, final View view, final int position,
-            final long id) {
-        final Object item = parent.getItemAtPosition(position);
-
-        if (item instanceof Player) {
-            final Player player = (Player) item;
-            PlayerActivity.start(this, player);
-        }
-    }
-
-
-    @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         final MenuItem abc = menu.findItem(R.id.activity_rankings_menu_abc);
         final MenuItem rank = menu.findItem(R.id.activity_rankings_menu_rank);
         final MenuItem search = menu.findItem(R.id.activity_rankings_menu_search);
 
-        if (mIsFinishedRetrieving) {
+        if (!isRefreshing()) {
             search.setVisible(true);
 
             final SearchView searchView = (SearchView) search.getActionView();
@@ -187,35 +176,24 @@ public class RankingsActivity extends BaseActivity implements
 
     @Override
     public void onRefresh() {
-        if (mIsFinishedRetrieving) {
-            Players.clear();
-            fetchRankings();
-        }
+        super.onRefresh();
+        invalidateOptionsMenu();
+        Players.clear();
+        fetchRankings();
     }
 
 
-    private void showError() {
-        mError.setVisibility(View.VISIBLE);
-        mRefreshLayout.setRefreshing(false);
-        mIsFinishedRetrieving = true;
-    }
-
-
-    private void showList(){
-        mAdapter = new RankingsAdapter();
+    @Override
+    protected void setAdapter(final BaseListAdapter adapter) {
+        super.setAdapter(adapter);
         mFilter = new RankingsFilter();
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
-        mListView.setVisibility(View.VISIBLE);
-        mRefreshLayout.setRefreshing(false);
-        mIsFinishedRetrieving = true;
         invalidateOptionsMenu();
     }
 
 
 
 
-    private final class RankingsAdapter extends BaseAdapter {
+    private final class RankingsAdapter extends BaseListAdapter {
 
 
         private final LayoutInflater mInflater;
@@ -235,12 +213,6 @@ public class RankingsActivity extends BaseActivity implements
         @Override
         public Player getItem(final int position) {
             return mPlayersShown.get(position);
-        }
-
-
-        @Override
-        public long getItemId(final int position) {
-            return position;
         }
 
 
@@ -299,7 +271,7 @@ public class RankingsActivity extends BaseActivity implements
         @SuppressWarnings("unchecked")
         protected void publishResults(final CharSequence constraint, final FilterResults results) {
             mPlayersShown = (ArrayList<Player>) results.values;
-            mAdapter.notifyDataSetChanged();
+            notifyDataSetChanged();
         }
 
 

@@ -6,25 +6,26 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Matches;
 import com.garpr.android.data.Matches.MatchesCallback;
 import com.garpr.android.data.Players;
+import com.garpr.android.misc.RequestCodes;
+import com.garpr.android.misc.ResultCodes;
+import com.garpr.android.misc.ResultData;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
-public class PlayerActivity extends BaseActivity {
+public class PlayerActivity extends BaseListActivity {
 
 
     private static final String CNAME = PlayerActivity.class.getCanonicalName();
@@ -32,18 +33,15 @@ public class PlayerActivity extends BaseActivity {
     private static final String TAG = PlayerActivity.class.getSimpleName();
 
     private ArrayList<ListItem> mListItems;
-    private ListView mListView;
-    private MatchesAdapter mAdapter;
     private Player mPlayer;
-    private TextView mError;
 
 
 
 
-    public static void start(final Activity activity, final Player player) {
+    public static void startForResult(final Activity activity, final Player player) {
         final Intent intent = new Intent(activity, PlayerActivity.class);
         intent.putExtra(EXTRA_PLAYER, player);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, RequestCodes.REQUEST_DEFAULT);
     }
 
 
@@ -69,20 +67,27 @@ public class PlayerActivity extends BaseActivity {
 
 
     private void fetchMatches() {
+        setRefreshing(true);
+
         final MatchesCallback callback = new MatchesCallback(this) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when downloading matches for " + mPlayer, e);
+                Log.e(TAG, "Exception when fetching matches for " + mPlayer.toString(), e);
                 showError();
             }
 
 
             @Override
             public void response(final ArrayList<Match> list) {
+                Collections.sort(list, Match.DATE_ORDER);
                 mPlayer.setMatches(list);
                 Players.save(mPlayer);
                 createListItems(list);
-                showList();
+                setAdapter(new MatchesAdapter());
+
+                final Intent data = new Intent();
+                data.putExtra(ResultData.PLAYER, mPlayer);
+                setResult(ResultCodes.PLAYER_UPDATED, data);
             }
         };
 
@@ -91,56 +96,37 @@ public class PlayerActivity extends BaseActivity {
 
 
     @Override
-    protected void findViews() {
-        super.findViews();
-        mListView = (ListView) findViewById(R.id.activity_player_list);
-        mError = (TextView) findViewById(R.id.activity_player_error);
-    }
-
-
-    @Override
-    protected int getContentView() {
-        return R.layout.activity_player;
+    protected String getErrorText() {
+        return getString(R.string.error_fetching_x_matches, mPlayer.getName());
     }
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        readIntent();
-        findViews();
-        prepareViews();
+        setTitle(mPlayer.getName());
 
         if (mPlayer.hasMatches()) {
-            createListItems(mPlayer.getMatches());
-            showList();
+            final ArrayList<Match> matches = mPlayer.getMatches();
+            Collections.sort(matches, Match.DATE_ORDER);
+            createListItems(matches);
+            setAdapter(new MatchesAdapter());
         } else {
             fetchMatches();
         }
     }
 
 
-    private void prepareViews() {
-        setTitle(mPlayer.getName());
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        fetchMatches();
     }
 
 
-    private void readIntent() {
-        final Intent intent = getIntent();
+    @Override
+    protected void readIntentData(final Intent intent) {
         mPlayer = intent.getParcelableExtra(EXTRA_PLAYER);
-    }
-
-
-    private void showError() {
-        hideProgress();
-        mError.setVisibility(View.VISIBLE);
-    }
-
-
-    private void showList() {
-        mAdapter = new MatchesAdapter();
-        mListView.setAdapter(mAdapter);
-        hideProgress();
     }
 
 
@@ -173,17 +159,14 @@ public class PlayerActivity extends BaseActivity {
     }
 
 
-    private final class MatchesAdapter extends BaseAdapter {
+    private final class MatchesAdapter extends BaseListAdapter {
 
 
         private final int mColorLose;
         private final int mColorWin;
-        private final LayoutInflater mInflater;
 
 
         private MatchesAdapter() {
-            mInflater = getLayoutInflater();
-
             final Resources resources = getResources();
             mColorLose = resources.getColor(android.R.color.holo_red_light);
             mColorWin = resources.getColor(android.R.color.holo_green_light);
@@ -199,12 +182,6 @@ public class PlayerActivity extends BaseActivity {
         @Override
         public ListItem getItem(final int position) {
             return mListItems.get(position);
-        }
-
-
-        @Override
-        public long getItemId(final int position) {
-            return position;
         }
 
 
@@ -276,6 +253,12 @@ public class PlayerActivity extends BaseActivity {
         @Override
         public int getViewTypeCount() {
             return ListItem.TOTAL_LIST_TYPES;
+        }
+
+
+        @Override
+        public boolean isEnabled(final int position) {
+            return getItem(position).mListType == ListItem.LIST_TYPE_MATCH;
         }
 
 

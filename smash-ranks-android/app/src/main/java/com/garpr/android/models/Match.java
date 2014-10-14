@@ -12,6 +12,8 @@ import com.garpr.android.misc.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Comparator;
+
 
 public class Match implements Parcelable {
 
@@ -108,6 +110,24 @@ public class Match implements Parcelable {
         final Context context = App.getContext();
         return context.getString(R.string.x_against_y, result.toString(), opponentName);
     }
+
+
+    public static final Comparator<Match> ALPHABETICAL_ORDER = new Comparator<Match>() {
+        @Override
+        public int compare(final Match m0, final Match m1) {
+            return m0.getOpponentName().compareToIgnoreCase(m1.getOpponentName());
+        }
+    };
+
+
+    public static final Comparator<Match> DATE_ORDER = new Comparator<Match>() {
+        @Override
+        public int compare(final Match m0, final Match m1) {
+            final Tournament t0 = m0.getTournament();
+            final Tournament t1 = m1.getTournament();
+            return Tournament.DATE_ORDER.compare(t0, t1);
+        }
+    };
 
 
 

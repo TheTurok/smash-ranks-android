@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -21,15 +19,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class TournamentsActivity extends BaseActivity {
+public class TournamentsActivity extends BaseListActivity {
 
 
     private static final String TAG = TournamentsActivity.class.getSimpleName();
 
     private ArrayList<Tournament> mTournaments;
-    private ListView mListView;
-    private TextView mError;
-    private TournamentAdapter mAdapter;
 
 
 
@@ -41,6 +36,8 @@ public class TournamentsActivity extends BaseActivity {
 
 
     private void fetchTournaments() {
+        setRefreshing(true);
+
         final TournamentsCallback callback = new TournamentsCallback(this) {
             @Override
             public void error(final Exception e) {
@@ -53,7 +50,7 @@ public class TournamentsActivity extends BaseActivity {
             public void response(final ArrayList<Tournament> list) {
                 Collections.sort(list, Tournament.DATE_ORDER);
                 mTournaments = list;
-                showList();
+                setAdapter(new TournamentAdapter());
             }
         };
 
@@ -62,44 +59,29 @@ public class TournamentsActivity extends BaseActivity {
 
 
     @Override
-    protected void findViews() {
-        super.findViews();
-        mListView = (ListView) findViewById(R.id.activity_tournaments_list);
-        mError = (TextView) findViewById(R.id.activity_tournaments_error);
-    }
-
-
-    @Override
-    protected int getContentView() {
-        return R.layout.activity_tournaments;
+    protected String getErrorText() {
+        return getString(R.string.error_fetching_tournaments);
     }
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        findViews();
         fetchTournaments();
     }
 
 
-    private void showError() {
-        hideProgress();
-        mError.setVisibility(View.VISIBLE);
-    }
-
-
-    private void showList() {
-        mAdapter = new TournamentAdapter();
-        mListView.setAdapter(mAdapter);
-        hideProgress();
-        invalidateOptionsMenu();
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        Tournaments.clear();
+        fetchTournaments();
     }
 
 
 
 
-    private final class TournamentAdapter extends BaseAdapter {
+    private final class TournamentAdapter extends BaseListAdapter {
 
 
         private final LayoutInflater mInflater;
@@ -123,12 +105,6 @@ public class TournamentsActivity extends BaseActivity {
 
 
         @Override
-        public long getItemId(final int position) {
-            return position;
-        }
-
-
-        @Override
         public View getView(final int position, View convertView, final ViewGroup parent) {
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.model_tournament, parent, false);
@@ -147,6 +123,8 @@ public class TournamentsActivity extends BaseActivity {
 
             return convertView;
         }
+
+
     }
 
 

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Match;
 
 import org.json.JSONArray;
@@ -65,7 +66,11 @@ public final class Matches {
                 final ArrayList<Match> matches = Matches.parseJSON(json);
 
                 if (isAlive()) {
-                    response(matches);
+                    if (Utils.RANDOM.nextInt() % 2 == 0) {
+                        response(matches);
+                    } else {
+                        error(new Exception());
+                    }
                 }
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when parsing JSON response", e);

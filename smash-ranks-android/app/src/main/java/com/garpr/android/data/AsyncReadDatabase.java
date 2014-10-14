@@ -5,8 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
-import com.garpr.android.misc.Utils;
-
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -46,7 +44,9 @@ abstract class AsyncReadDatabase<T> extends AsyncTask<Void, Void, ArrayList<T>> 
             }
         }
 
-        Utils.closeCloseables(cursor, database);
+        cursor.close();
+        database.close();
+
         return result;
     }
 

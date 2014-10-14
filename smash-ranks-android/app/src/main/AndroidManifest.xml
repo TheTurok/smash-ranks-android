@@ -6,16 +6,15 @@
 
     <application
         android:allowBackup="true"
-        android:label="@string/app_name"
+        android:label="@string/gar_pr"
         android:name=".App"
         android:theme="@style/theme">
 
         <activity
-            android:label="@string/rankings"
+            android:label="@string/gar_pr"
             android:launchMode="singleTop"
             android:name=".activities.RankingsActivity">
-            <intent-filter
-                android:label="@string/app_name">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

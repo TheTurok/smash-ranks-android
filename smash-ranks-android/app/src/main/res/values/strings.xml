@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="about">About</string>
     <string name="x_against_y">%1$s against %2$s</string>
     <string name="alphabetical_order">Alphabetical Order</string>
+    <string name="close_drawer">Close Drawer</string>
     <string name="error">Error</string>
     <string name="error_fetching_matches">Error fetching matches!</string>
     <string name="error_fetching_x_matches">Error fetching %s\'s matches!</string>
@@ -11,10 +13,13 @@
     <string name="gar_pr">GAR PR</string>
     <string name="hello_world">Hello, World!</string>
     <string name="lose">Lose</string>
+    <string name="open_drawer">Open Drawer</string>
     <string name="player">Player</string>
     <string name="players">Players</string>
     <string name="rankings">Rankings</string>
     <string name="rank_order">Rank Order</string>
+    <string name="region">Region</string>
+    <string name="regions">Regions</string>
     <string name="search">Search</string>
     <string name="search_players">Search players…</string>
     <string name="sort">Sort</string>

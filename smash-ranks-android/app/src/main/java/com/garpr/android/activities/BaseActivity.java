@@ -4,14 +4,21 @@ package com.garpr.android.activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.garpr.android.App;
+import com.garpr.android.R;
 import com.garpr.android.misc.Heartbeat;
 
 
@@ -22,9 +29,27 @@ import com.garpr.android.misc.Heartbeat;
 abstract class BaseActivity extends Activity implements Heartbeat {
 
 
+    private ActionBarDrawerToggle mDrawerToggle;
     private boolean mIsAlive;
+    private DrawerLayout mDrawer;
+    private ScrollView mDrawerLayout;
+    private TextView mDrawerAbout;
+    private TextView mDrawerTournaments;
 
 
+
+
+    protected void closeDrawer() {
+        mDrawer.closeDrawer(mDrawerLayout);
+    }
+
+
+    private void findViews() {
+        mDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
+        mDrawerAbout = (TextView) findViewById(R.id.navigation_drawer_about);
+        mDrawerLayout = (ScrollView) findViewById(R.id.navigation_drawer_layout);
+        mDrawerTournaments = (TextView) findViewById(R.id.navigation_drawer_tournaments);
+    }
 
 
     protected abstract int getContentView();
@@ -32,6 +57,47 @@ abstract class BaseActivity extends Activity implements Heartbeat {
 
     protected int getOptionsMenu() {
         return 0;
+    }
+
+
+    private void initializeNavigationDrawer() {
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, R.drawable.icon_drawer,
+                R.string.open_drawer, R.string.close_drawer) {
+            @Override
+            public void onDrawerClosed(final View drawerView) {
+                super.onDrawerClosed(drawerView);
+                actionBar.setTitle(getTitle());
+                invalidateOptionsMenu();
+            }
+
+
+            @Override
+            public void onDrawerOpened(final View drawerView) {
+                super.onDrawerOpened(drawerView);
+                actionBar.setTitle(R.string.gar_pr);
+                invalidateOptionsMenu();
+            }
+        };
+
+        mDrawer.setDrawerListener(mDrawerToggle);
+
+        mDrawerAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                closeDrawer();
+            }
+        });
+
+        mDrawerTournaments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                closeDrawer();
+                TournamentsActivity.start(BaseActivity.this);
+            }
+        });
     }
 
 
@@ -59,15 +125,19 @@ abstract class BaseActivity extends Activity implements Heartbeat {
 
 
     @Override
+    public void onConfigurationChanged(final Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIsAlive = true;
         setContentView(getContentView());
-
-        if (showHomeAsUpEnabled()) {
-            final ActionBar actionBar = getActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        findViews();
+        initializeNavigationDrawer();
     }
 
 
@@ -94,6 +164,10 @@ abstract class BaseActivity extends Activity implements Heartbeat {
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 navigateUp();
@@ -107,8 +181,10 @@ abstract class BaseActivity extends Activity implements Heartbeat {
     }
 
 
-    protected boolean showHomeAsUpEnabled() {
-        return false;
+    @Override
+    protected void onPostCreate(final Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
     }
 
 

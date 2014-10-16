@@ -2,7 +2,6 @@ package com.garpr.android.data;
 
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.garpr.android.misc.Heartbeat;
 
 import org.json.JSONObject;
@@ -36,21 +35,6 @@ abstract class Callback<T> implements Response.ErrorListener, Response.Listener<
         final Heartbeat heartbeat = getHeartbeat();
         return heartbeat != null && heartbeat.isAlive();
     }
-
-
-    @Override
-    public final void onErrorResponse(final VolleyError error) {
-        error(error);
-    }
-
-
-    @Override
-    public final void onResponse(final JSONObject response) {
-        parseJSON(response);
-    }
-
-
-    abstract void parseJSON(final JSONObject json);
 
 
     public abstract void response(final T item);

@@ -3,6 +3,7 @@ package com.garpr.android.data;
 
 import android.util.Log;
 
+import com.android.volley.VolleyError;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Match;
@@ -22,10 +23,21 @@ public final class Matches {
 
 
 
-    public static void get(final String playerId, final MatchesCallback callback) {
-        final String suffix = Constants.MATCHES + '?' + Constants.PLAYER + '=' + playerId;
+    public static void get(final MatchesCallback callback) {
+        final String suffix = Constants.MATCHES + '?' + Constants.PLAYER + '=' + callback.mPlayerId;
         final String url = Network.makeUrl(suffix);
         Network.sendRequest(url, callback);
+    }
+
+
+    private static void getFromJSON(final MatchesCallback callback) {
+        if (callback.isAlive()) {
+            Log.d(TAG, "Grabbing match for " + callback.mPlayerId + " from JSON");
+
+
+        } else {
+            Log.d(TAG, "Canceled grabbing match for " + callback.mPlayerId + " from JSON");
+        }
     }
 
 
@@ -54,25 +66,42 @@ public final class Matches {
     public static abstract class MatchesCallback extends Callback<Match> {
 
 
-        public MatchesCallback(final Heartbeat heartbeat) {
+        private static final String TAG = MatchesCallback.class.getSimpleName();
+
+        private final String mPlayerId;
+
+
+        public MatchesCallback(final Heartbeat heartbeat, final String playerId) {
             super(heartbeat);
+            mPlayerId = playerId;
         }
 
 
         @Override
-        final void parseJSON(final JSONObject json) {
+        public final void onErrorResponse(final VolleyError error) {
+            Log.e(TAG, "Exception when downloading matches", error);
+            getFromJSON(this);
+        }
+
+
+        @Override
+        public final void onResponse(final JSONObject json) {
             try {
                 final ArrayList<Match> matches = Matches.parseJSON(json);
+                Log.d(TAG, "Read in " + matches.size() + " Match objects from JSON response");
 
-                if (isAlive()) {
-                    response(matches);
+                if (matches.isEmpty()) {
+                    getFromJSON(this);
+                } else {
+                    if (isAlive()) {
+                        response(matches);
+                    } else {
+                        Log.d(TAG, "Matches response canceled because the listener is dead");
+                    }
                 }
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when parsing JSON response", e);
-
-                if (isAlive()) {
-                    error(e);
-                }
+                Log.e(TAG, "Exception when parsing matches JSON response", e);
+                getFromJSON(this);
             }
         }
 

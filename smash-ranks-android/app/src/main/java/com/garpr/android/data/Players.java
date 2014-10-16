@@ -7,10 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.android.volley.VolleyError;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
-import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 
 import org.json.JSONArray;
@@ -54,8 +54,8 @@ public final class Players {
 
 
     static void createTable(final SQLiteDatabase database) {
-        Log.i(TAG, "Creating " + TAG + " database table");
-        final String sql = "CREATE TABLE " + TAG + " ("
+        Log.d(TAG, "Creating " + getTableName() + " database table");
+        final String sql = "CREATE TABLE " + getTableName() + " ("
                 + Constants.ID + " TEXT NOT NULL, "
                 + Constants.JSON + " TEXT NOT NULL, "
                 + "PRIMARY KEY (" + Constants.ID + "));";
@@ -64,8 +64,8 @@ public final class Players {
 
 
     static void dropTable(final SQLiteDatabase database) {
-        Log.i(TAG, "Dropping " + TAG + " database table");
-        final String sql = "DROP TABLE IF EXISTS " + TAG + ";";
+        Log.d(TAG, "Dropping " + getTableName() + " database table");
+        final String sql = "DROP TABLE IF EXISTS " + getTableName() + ";";
         database.execSQL(sql);
     }
 
@@ -77,22 +77,29 @@ public final class Players {
 
 
     private static void getFromJSON(final PlayersCallback callback) {
-        if (!callback.isAlive()) {
-            return;
+        if (callback.isAlive()) {
+            Log.d(TAG, "Grabbing players from JSON");
+            final AsyncReadPlayersFile task = new AsyncReadPlayersFile(callback);
+            task.execute();
+        } else {
+            Log.d(TAG, "Canceled grabbing players from JSON");
         }
-
-        final AsyncReadPlayersFile task = new AsyncReadPlayersFile(callback);
-        task.execute();
     }
 
 
     private static void getFromNetwork(final PlayersCallback callback) {
-        if (!callback.isAlive()) {
-            return;
+        if (callback.isAlive()) {
+            Log.d(TAG, "Grabbing players from network");
+            final String url = Network.makeUrl(Constants.RANKINGS);
+            Network.sendRequest(url, callback);
+        } else {
+            Log.d(TAG, "Canceled grabbing players from network");
         }
+    }
 
-        final String url = Network.makeUrl(Constants.RANKINGS);
-        Network.sendRequest(url, callback);
+
+    private static String getTableName() {
+        return TAG;
     }
 
 
@@ -127,7 +134,7 @@ public final class Players {
         final ContentValues values = createContentValues(player);
         final String whereClause = Constants.ID + " = ?";
         final String[] whereArgs = { player.getId() };
-        database.update(TAG, values, whereClause, whereArgs);
+        database.update(getTableName(), values, whereClause, whereArgs);
         database.close();
     }
 
@@ -135,6 +142,9 @@ public final class Players {
 
 
     private static final class AsyncReadPlayersDatabase extends AsyncReadDatabase<Player> {
+
+
+        private static final String TAG = AsyncReadPlayersDatabase.class.getSimpleName();
 
 
         private AsyncReadPlayersDatabase(final PlayersCallback callback) {
@@ -156,6 +166,8 @@ public final class Players {
                 cursor.moveToNext();
             } while (!cursor.isAfterLast());
 
+            Log.d(TAG, "Read in " + players.size() + " Player objects from the database");
+
             return players;
         }
 
@@ -169,7 +181,7 @@ public final class Players {
         @Override
         Cursor query(final SQLiteDatabase database) {
             final String[] columns = { Constants.JSON };
-            return database.query(TAG, columns, null, null, null, null, null);
+            return database.query(getTableName(), columns, null, null, null, null, null);
         }
 
 
@@ -177,6 +189,9 @@ public final class Players {
 
 
     private static final class AsyncReadPlayersFile extends AsyncReadFile<Player> {
+
+
+        private static final String TAG = AsyncReadPlayersFile.class.getSimpleName();
 
 
         private AsyncReadPlayersFile(final PlayersCallback callback) {
@@ -192,7 +207,10 @@ public final class Players {
 
         @Override
         ArrayList<Player> parseJSON(final JSONObject json) throws JSONException {
-            return Players.parseJSON(json);
+            final ArrayList<Player> players = Players.parseJSON(json);
+            Log.d(TAG, "Read in " + players.size() + " Player objects from the JSON file");
+
+            return players;
         }
 
 
@@ -201,6 +219,8 @@ public final class Players {
 
     private static final class AsyncSavePlayersDatabase extends AsyncTask<Void, Void, Void> {
 
+
+        private static final String TAG = AsyncSavePlayersDatabase.class.getSimpleName();
 
         private final ArrayList<Player> mPlayers;
 
@@ -219,12 +239,14 @@ public final class Players {
 
             for (final Player player : mPlayers) {
                 final ContentValues values = createContentValues(player);
-                database.insert(TAG, null, values);
+                database.insert(getTableName(), null, values);
             }
 
             database.setTransactionSuccessful();
             database.endTransaction();
             database.close();
+
+            Log.d(TAG, "Saved " + mPlayers.size() + " Player objects to the database");
 
             return null;
         }
@@ -245,9 +267,17 @@ public final class Players {
 
 
         @Override
-        final void parseJSON(final JSONObject json) {
+        public final void onErrorResponse(final VolleyError error) {
+            Log.e(TAG, "Exception when downloading players", error);
+            getFromJSON(this);
+        }
+
+
+        @Override
+        public final void onResponse(final JSONObject json) {
             try {
                 final ArrayList<Player> players = Players.parseJSON(json);
+                Log.d(TAG, "Read in " + players.size() + " Player objects from JSON response");
 
                 if (players.isEmpty()) {
                     getFromJSON(this);
@@ -256,10 +286,12 @@ public final class Players {
 
                     if (isAlive()) {
                         response(players);
+                    } else {
+                        Log.d(TAG, "Players response canceled because the listener is dead");
                     }
                 }
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when parsing JSON response", e);
+                Log.e(TAG, "Exception when parsing rankings JSON response", e);
                 getFromJSON(this);
             }
         }

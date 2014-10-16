@@ -69,7 +69,7 @@ public class PlayerActivity extends BaseListActivity {
     private void fetchMatches() {
         setRefreshing(true);
 
-        final MatchesCallback callback = new MatchesCallback(this) {
+        final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
             @Override
             public void error(final Exception e) {
                 Log.e(TAG, "Exception when fetching matches for " + mPlayer.toString(), e);
@@ -91,7 +91,7 @@ public class PlayerActivity extends BaseListActivity {
             }
         };
 
-        Matches.get(mPlayer.getId(), callback);
+        Matches.get(callback);
     }
 
 
@@ -120,7 +120,10 @@ public class PlayerActivity extends BaseListActivity {
     @Override
     public void onRefresh() {
         super.onRefresh();
-        fetchMatches();
+
+        if (!isRefreshing()) {
+            fetchMatches();
+        }
     }
 
 

@@ -4,7 +4,6 @@ package com.garpr.android.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,9 +21,11 @@ import com.garpr.android.models.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 
 public class RankingsActivity extends BaseListActivity implements
+        MenuItem.OnActionExpandListener,
         SearchView.OnQueryTextListener {
 
 
@@ -32,6 +33,7 @@ public class RankingsActivity extends BaseListActivity implements
 
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
+    private Comparator<Player> mOrder;
     private RankingsFilter mFilter;
 
 
@@ -50,9 +52,13 @@ public class RankingsActivity extends BaseListActivity implements
 
             @Override
             public void response(final ArrayList<Player> list) {
-                Collections.sort(list, Player.RANK_ORDER);
+                if (mOrder == null) {
+                    mOrder = Player.RANK_ORDER;
+                }
+
+                Collections.sort(list, mOrder);
                 mPlayers = list;
-                mPlayersShown = new ArrayList<Player>(mPlayers);
+                mPlayersShown = list;
                 setAdapter(new RankingsAdapter());
             }
         };
@@ -105,13 +111,68 @@ public class RankingsActivity extends BaseListActivity implements
 
 
     @Override
+    public boolean onMenuItemActionCollapse(final MenuItem item) {
+        mPlayersShown = mPlayers;
+        notifyDataSetChanged();
+        return true;
+    }
+
+
+    @Override
+    public boolean onMenuItemActionExpand(final MenuItem item) {
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.activity_rankings_menu_sort_alphabetical:
+                sort(Player.ALPHABETICAL_ORDER);
+                break;
+
+            case R.id.activity_rankings_menu_sort_rank:
+                sort(Player.RANK_ORDER);
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
+
+    @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         final MenuItem searchItem = menu.findItem(R.id.activity_rankings_menu_search);
+        searchItem.setOnActionExpandListener(this);
+
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getString(R.string.search_players));
         searchView.setOnQueryTextListener(this);
-        searchItem.setVisible(!isRefreshing());
-        searchItem.collapseActionView();
+
+        final MenuItem sort = menu.findItem(R.id.activity_rankings_menu_sort);
+
+        if (isRefreshing()) {
+            searchItem.setVisible(false);
+            searchItem.collapseActionView();
+            sort.setVisible(false);
+        } else {
+            searchItem.setVisible(true);
+            sort.setVisible(true);
+
+            final MenuItem sortAlphabetical = menu.findItem(R.id.activity_rankings_menu_sort_alphabetical);
+            final MenuItem sortRank = menu.findItem(R.id.activity_rankings_menu_sort_rank);
+
+            if (mOrder == Player.ALPHABETICAL_ORDER) {
+                sortAlphabetical.setEnabled(false);
+                sortRank.setEnabled(true);
+            } else {
+                sortAlphabetical.setEnabled(true);
+                sortRank.setEnabled(false);
+            }
+        }
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -133,9 +194,12 @@ public class RankingsActivity extends BaseListActivity implements
     @Override
     public void onRefresh() {
         super.onRefresh();
-        invalidateOptionsMenu();
-        Players.clear();
-        fetchRankings();
+
+        if (!isRefreshing()) {
+            invalidateOptionsMenu();
+            Players.clear();
+            fetchRankings();
+        }
     }
 
 
@@ -147,17 +211,18 @@ public class RankingsActivity extends BaseListActivity implements
     }
 
 
+    private void sort(final Comparator<Player> order) {
+        mOrder = order;
+        Collections.sort(mPlayers, order);
+        Collections.sort(mPlayersShown, order);
+        notifyDataSetChanged();
+        invalidateOptionsMenu();
+    }
+
+
 
 
     private final class RankingsAdapter extends BaseListAdapter {
-
-
-        private final LayoutInflater mInflater;
-
-
-        private RankingsAdapter() {
-            mInflater = getLayoutInflater();
-        }
 
 
         @Override

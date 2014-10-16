@@ -1,6 +1,8 @@
 package com.garpr.android.data;
 
 
+import android.util.Log;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.App;
@@ -11,6 +13,7 @@ final class Network {
 
 
     private static final String BASE_URL = "http://www.garpr.com:5100";
+    private static final String TAG = Network.class.getSimpleName();
 
 
 
@@ -25,13 +28,15 @@ final class Network {
         final Heartbeat heartbeat = callback.getHeartbeat();
 
         if (heartbeat == null || !heartbeat.isAlive()) {
-            return;
-        }
+            Log.d(TAG, "API call to " + url + " was canceled");
+        } else {
+            Log.d(TAG, "Making API call to " + url);
 
-        final RequestQueue requestQueue = App.getRequestQueue();
-        final JsonObjectRequest request = new JsonObjectRequest(url, null, callback, callback);
-        request.setTag(heartbeat);
-        requestQueue.add(request);
+            final RequestQueue requestQueue = App.getRequestQueue();
+            final JsonObjectRequest request = new JsonObjectRequest(url, null, callback, callback);
+            request.setTag(heartbeat);
+            requestQueue.add(request);
+        }
     }
 
 

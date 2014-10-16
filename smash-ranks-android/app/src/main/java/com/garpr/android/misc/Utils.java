@@ -3,7 +3,6 @@ package com.garpr.android.misc;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.Random;
 
 
 public class Utils {

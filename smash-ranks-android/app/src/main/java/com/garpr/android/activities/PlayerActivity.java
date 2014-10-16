@@ -67,7 +67,7 @@ public class PlayerActivity extends BaseListActivity {
 
 
     private void fetchMatches() {
-        setRefreshing(true);
+        setLoading(true);
 
         final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
             @Override
@@ -121,7 +121,7 @@ public class PlayerActivity extends BaseListActivity {
     public void onRefresh() {
         super.onRefresh();
 
-        if (!isRefreshing()) {
+        if (!isLoading()) {
             fetchMatches();
         }
     }

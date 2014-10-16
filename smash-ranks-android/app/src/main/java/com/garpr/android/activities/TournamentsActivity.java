@@ -35,7 +35,7 @@ public class TournamentsActivity extends BaseListActivity {
 
 
     private void fetchTournaments() {
-        setRefreshing(true);
+        setLoading(true);
 
         final TournamentsCallback callback = new TournamentsCallback(this) {
             @Override
@@ -74,7 +74,7 @@ public class TournamentsActivity extends BaseListActivity {
     public void onRefresh() {
         super.onRefresh();
 
-        if (!isRefreshing()) {
+        if (!isLoading()) {
             Tournaments.clear();
             fetchTournaments();
         }

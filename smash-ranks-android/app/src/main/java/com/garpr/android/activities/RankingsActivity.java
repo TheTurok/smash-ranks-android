@@ -40,7 +40,7 @@ public class RankingsActivity extends BaseListActivity implements
 
 
     private void fetchRankings() {
-        setRefreshing(true);
+        setLoading(true);
 
         final PlayersCallback callback = new PlayersCallback(this) {
             @Override
@@ -154,7 +154,7 @@ public class RankingsActivity extends BaseListActivity implements
 
         final MenuItem sort = menu.findItem(R.id.activity_rankings_menu_sort);
 
-        if (isRefreshing()) {
+        if (isLoading()) {
             searchItem.setVisible(false);
             searchItem.collapseActionView();
             sort.setVisible(false);
@@ -195,7 +195,7 @@ public class RankingsActivity extends BaseListActivity implements
     public void onRefresh() {
         super.onRefresh();
 
-        if (!isRefreshing()) {
+        if (!isLoading()) {
             invalidateOptionsMenu();
             Players.clear();
             fetchRankings();

@@ -23,6 +23,7 @@ abstract class BaseListActivity extends BaseActivity implements
 
 
     private BaseListAdapter mAdapter;
+    private boolean mIsLoading;
     private FadeAnimator mErrorAnimator;
     private FadeAnimator mListAnimator;
     private FlexibleSwipeRefreshLayout mRefreshLayout;
@@ -82,8 +83,8 @@ abstract class BaseListActivity extends BaseActivity implements
     }
 
 
-    protected boolean isRefreshing() {
-        return mRefreshLayout.isRefreshing();
+    protected boolean isLoading() {
+        return mIsLoading;
     }
 
 
@@ -138,7 +139,7 @@ abstract class BaseListActivity extends BaseActivity implements
 
 
     protected void showError() {
-        setRefreshing(false);
+        setLoading(false);
         animateList(false);
         animateError(true);
     }
@@ -150,12 +151,13 @@ abstract class BaseListActivity extends BaseActivity implements
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
         animateList(true);
-        setRefreshing(false);
+        setLoading(false);
     }
 
 
-    protected void setRefreshing(final boolean refreshing) {
-        mRefreshLayout.setRefreshing(refreshing);
+    protected void setLoading(final boolean loading) {
+        mRefreshLayout.setRefreshing(loading);
+        mIsLoading = loading;
     }
 
 

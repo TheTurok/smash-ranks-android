@@ -184,7 +184,7 @@ public final class Tournaments {
         private static final String TAG = AsyncReadTournamentsFile.class.getSimpleName();
 
 
-        private AsyncReadTournamentsFile(final Callback<Tournament> callback) {
+        private AsyncReadTournamentsFile(final TournamentsCallback callback) {
             super(callback);
         }
 

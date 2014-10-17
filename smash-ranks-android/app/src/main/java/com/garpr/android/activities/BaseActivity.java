@@ -35,6 +35,7 @@ abstract class BaseActivity extends Activity implements Heartbeat {
     private DrawerLayout mDrawer;
     private ScrollView mDrawerLayout;
     private TextView mDrawerAbout;
+    private TextView mDrawerRegion;
     private TextView mDrawerTournaments;
 
 
@@ -49,6 +50,7 @@ abstract class BaseActivity extends Activity implements Heartbeat {
         mDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
         mDrawerAbout = (TextView) findViewById(R.id.navigation_drawer_about);
         mDrawerLayout = (ScrollView) findViewById(R.id.navigation_drawer_layout);
+        mDrawerRegion = (TextView) findViewById(R.id.navigation_drawer_region);
         mDrawerTournaments = (TextView) findViewById(R.id.navigation_drawer_tournaments);
     }
 
@@ -82,6 +84,13 @@ abstract class BaseActivity extends Activity implements Heartbeat {
 
         mDrawerToggle.setDrawerIndicatorEnabled(showDrawerIndicator());
         mDrawer.setDrawerListener(mDrawerToggle);
+
+        mDrawerRegion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                closeDrawer();
+            }
+        });
 
         mDrawerAbout.setOnClickListener(new View.OnClickListener() {
             @Override

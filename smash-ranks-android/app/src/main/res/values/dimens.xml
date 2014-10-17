@@ -3,6 +3,7 @@
 
     <dimen name="list_item_height">56dp</dimen>
     <dimen name="list_item_separator_height">32dp</dimen>
+    <dimen name="navigation_drawer_item_height">64dp</dimen>
     <dimen name="navigation_drawer_width">260dp</dimen>
     <dimen name="root_padding">16dp</dimen>
     <dimen name="root_padding_fourth">4dp</dimen>

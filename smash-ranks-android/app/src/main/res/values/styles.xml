@@ -49,11 +49,11 @@
     <style name="navigation_drawer_item">
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_height">@dimen/list_item_height</item>
+        <item name="android:layout_height">@dimen/navigation_drawer_item_height</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:paddingLeft">@dimen/root_padding</item>
         <item name="android:paddingRight">@dimen/root_padding</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="theme" parent="android:Theme.Holo">

@@ -29,6 +29,7 @@ import com.garpr.android.misc.Heartbeat;
 abstract class BaseActivity extends Activity implements Heartbeat {
 
 
+    private ActionBar mActionBar;
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean mIsAlive;
     private DrawerLayout mDrawer;
@@ -61,27 +62,25 @@ abstract class BaseActivity extends Activity implements Heartbeat {
 
 
     private void initializeNavigationDrawer() {
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, R.drawable.icon_drawer,
                 R.string.open_drawer, R.string.close_drawer) {
             @Override
             public void onDrawerClosed(final View drawerView) {
                 super.onDrawerClosed(drawerView);
-                actionBar.setTitle(getTitle());
-                invalidateOptionsMenu();
+                BaseActivity.this.onDrawerClosed();
             }
 
 
             @Override
             public void onDrawerOpened(final View drawerView) {
                 super.onDrawerOpened(drawerView);
-                actionBar.setTitle(R.string.gar_pr);
-                invalidateOptionsMenu();
+                BaseActivity.this.onDrawerOpened();
             }
         };
 
+        mDrawerToggle.setDrawerIndicatorEnabled(showDrawerIndicator());
         mDrawer.setDrawerListener(mDrawerToggle);
 
         mDrawerAbout.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +103,16 @@ abstract class BaseActivity extends Activity implements Heartbeat {
     @Override
     public boolean isAlive() {
         return mIsAlive;
+    }
+
+
+    protected boolean isDrawerClosed() {
+        return !isDrawerOpen();
+    }
+
+
+    protected boolean isDrawerOpen() {
+        return mDrawer.isDrawerOpen(mDrawerLayout);
     }
 
 
@@ -136,6 +145,7 @@ abstract class BaseActivity extends Activity implements Heartbeat {
         super.onCreate(savedInstanceState);
         mIsAlive = true;
         setContentView(getContentView());
+        mActionBar = getActionBar();
         findViews();
         initializeNavigationDrawer();
     }
@@ -162,6 +172,16 @@ abstract class BaseActivity extends Activity implements Heartbeat {
     }
 
 
+    protected void onDrawerClosed() {
+        mActionBar.setTitle(getTitle());
+    }
+
+
+    protected void onDrawerOpened() {
+        mActionBar.setTitle(R.string.gar_pr);
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -185,6 +205,11 @@ abstract class BaseActivity extends Activity implements Heartbeat {
     protected void onPostCreate(final Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+    }
+
+
+    protected boolean showDrawerIndicator() {
+        return true;
     }
 
 

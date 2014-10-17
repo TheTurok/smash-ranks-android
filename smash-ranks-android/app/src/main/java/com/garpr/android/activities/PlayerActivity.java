@@ -133,6 +133,12 @@ public class PlayerActivity extends BaseListActivity {
     }
 
 
+    @Override
+    protected boolean showDrawerIndicator() {
+        return false;
+    }
+
+
 
 
     private static final class ListItem {

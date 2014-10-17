@@ -154,7 +154,7 @@ public class RankingsActivity extends BaseListActivity implements
 
         final MenuItem sort = menu.findItem(R.id.activity_rankings_menu_sort);
 
-        if (isLoading()) {
+        if (isDrawerOpen() || isLoading()) {
             searchItem.setVisible(false);
             searchItem.collapseActionView();
             sort.setVisible(false);

@@ -174,11 +174,13 @@ abstract class BaseActivity extends Activity implements Heartbeat {
 
     protected void onDrawerClosed() {
         mActionBar.setTitle(getTitle());
+        invalidateOptionsMenu();
     }
 
 
     protected void onDrawerOpened() {
         mActionBar.setTitle(R.string.gar_pr);
+        invalidateOptionsMenu();
     }
 
 

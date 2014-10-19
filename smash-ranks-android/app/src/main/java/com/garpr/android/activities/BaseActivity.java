@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
@@ -170,11 +169,10 @@ abstract class BaseActivity extends ActionBarActivity implements Heartbeat {
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        final int menuRes = getOptionsMenu();
+        final int menuResId = getOptionsMenu();
 
-        if (menuRes != 0) {
-            final MenuInflater inflater = getMenuInflater();
-            inflater.inflate(menuRes, menu);
+        if (menuResId != 0) {
+            mToolbar.inflateMenu(menuResId);
         }
 
         return super.onCreateOptionsMenu(menu);

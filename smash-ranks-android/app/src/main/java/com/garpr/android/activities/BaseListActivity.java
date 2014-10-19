@@ -4,12 +4,10 @@ package com.garpr.android.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -18,7 +16,6 @@ import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 
 
 abstract class BaseListActivity extends BaseActivity implements
-        AbsListView.OnItemClickListener,
         SwipeRefreshLayout.OnRefreshListener {
 
 
@@ -27,7 +24,7 @@ abstract class BaseListActivity extends BaseActivity implements
     private FadeAnimator mErrorAnimator;
     private FadeAnimator mListAnimator;
     private FlexibleSwipeRefreshLayout mRefreshLayout;
-    private ListView mListView;
+    private RecyclerView mRecyclerView;
     private TextView mErrorView;
 
 
@@ -61,13 +58,13 @@ abstract class BaseListActivity extends BaseActivity implements
 
 
     private void animateList(final boolean fadeIn) {
-        mListAnimator = animate(mListAnimator, mListView, fadeIn);
+        mListAnimator = animate(mListAnimator, mRecyclerView, fadeIn);
     }
 
 
     private void findViews() {
         mErrorView = (TextView) findViewById(R.id.activity_base_list_error);
-        mListView = (ListView) findViewById(R.id.activity_base_list_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.activity_base_list_list);
         mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_base_list_refresh);
     }
 
@@ -104,16 +101,8 @@ abstract class BaseListActivity extends BaseActivity implements
     }
 
 
-    protected void onItemClick(final Object item) {
-
-    }
-
-
-    @Override
-    public void onItemClick(final AdapterView<?> parent, final View view, final int position,
-            final long id) {
-        final Object item = parent.getItemAtPosition(position);
-        onItemClick(item);
+    protected void onItemClick(final View view, final int position) {
+        // this method intentionally left blank (children can override)
     }
 
 
@@ -125,8 +114,9 @@ abstract class BaseListActivity extends BaseActivity implements
 
     private void prepareViews() {
         mErrorView.setText(getErrorText());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRefreshLayout.setOnRefreshListener(this);
-        mRefreshLayout.setScrollableView(mListView);
+        mRefreshLayout.setRecyclerView(mRecyclerView);
     }
 
 
@@ -145,8 +135,7 @@ abstract class BaseListActivity extends BaseActivity implements
     protected void setAdapter(final BaseListAdapter adapter) {
         animateError(false);
         mAdapter = adapter;
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
+        mRecyclerView.setAdapter(mAdapter);
         animateList(true);
         setLoading(false);
     }
@@ -160,7 +149,8 @@ abstract class BaseListActivity extends BaseActivity implements
 
 
 
-    protected abstract class BaseListAdapter extends BaseAdapter {
+    protected abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
+            RecyclerView.Adapter<T> implements View.OnClickListener {
 
 
         protected final LayoutInflater mInflater;
@@ -172,8 +162,9 @@ abstract class BaseListActivity extends BaseActivity implements
 
 
         @Override
-        public long getItemId(final int position) {
-            return position;
+        public void onClick(final View v) {
+            final int position = mRecyclerView.getChildPosition(v);
+            onItemClick(v, position);
         }
 
 

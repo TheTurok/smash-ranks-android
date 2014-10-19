@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,7 +148,6 @@ public class PlayerActivity extends BaseListActivity {
 
         private static final int LIST_TYPE_MATCH = 0;
         private static final int LIST_TYPE_TOURNAMENT = 1;
-        private static final int TOTAL_LIST_TYPES = 2;
 
         private final int mListType;
         private Match mMatch;
@@ -184,104 +184,68 @@ public class PlayerActivity extends BaseListActivity {
 
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return mListItems.size();
         }
 
 
         @Override
-        public ListItem getItem(final int position) {
-            return mListItems.get(position);
-        }
-
-
-        @Override
         public int getItemViewType(final int position) {
-            return getItem(position).mListType;
-        }
-
-
-        private View getMatchView(final Match match, View convertView, final ViewGroup parent) {
-            if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.model_match, parent, false);
-            }
-
-            MatchViewHolder holder = (MatchViewHolder) convertView.getTag();
-
-            if (holder == null) {
-                holder = new MatchViewHolder(convertView);
-                convertView.setTag(holder);
-            }
-
-            holder.mOpponent.setText(match.getOpponentName());
-
-            if (match.isWin()) {
-                holder.mOpponent.setTextColor(mColorWin);
-            } else {
-                holder.mOpponent.setTextColor(mColorLose);
-            }
-
-            return convertView;
-        }
-
-
-        private View getTournamentView(final Tournament tournament, View convertView, final ViewGroup parent) {
-            if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.separator_tournament, parent, false);
-            }
-
-            TournamentViewHolder holder = (TournamentViewHolder) convertView.getTag();
-
-            if (holder == null) {
-                holder = new TournamentViewHolder(convertView);
-                convertView.setTag(holder);
-            }
-
-            holder.mDate.setText(tournament.getDate());
-            holder.mName.setText(tournament.getName());
-
-            return convertView;
+            return mListItems.get(position).mListType;
         }
 
 
         @Override
-        public View getView(final int position, View convertView, final ViewGroup parent) {
-            final ListItem listItem = getItem(position);
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+            final ListItem listItem = mListItems.get(position);
 
             if (listItem.mListType == ListItem.LIST_TYPE_MATCH) {
                 final Match match = listItem.mMatch;
-                convertView = getMatchView(match, convertView, parent);
+                final MatchViewHolder viewHolder = (MatchViewHolder) holder;
+                viewHolder.mOpponent.setText(match.getOpponentName());
+
+                if (match.isWin()) {
+                    viewHolder.mOpponent.setTextColor(mColorWin);
+                } else {
+                    viewHolder.mOpponent.setTextColor(mColorLose);
+                }
             } else {
                 final Tournament tournament = listItem.mTournament;
-                convertView = getTournamentView(tournament, convertView, parent);
+                final TournamentViewHolder viewHolder = (TournamentViewHolder) holder;
+                viewHolder.mDate.setText(tournament.getDate());
+                viewHolder.mName.setText(tournament.getName());
+            }
+        }
+
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
+                final int viewType) {
+            final RecyclerView.ViewHolder holder;
+
+            if (viewType == ListItem.LIST_TYPE_MATCH) {
+                final View view = mInflater.inflate(R.layout.model_match, parent, false);
+                holder = new MatchViewHolder(view);
+            } else {
+                final View view = mInflater.inflate(R.layout.separator_tournament, parent, false);
+                holder = new TournamentViewHolder(view);
             }
 
-            return convertView;
-        }
-
-
-        @Override
-        public int getViewTypeCount() {
-            return ListItem.TOTAL_LIST_TYPES;
-        }
-
-
-        @Override
-        public boolean isEnabled(final int position) {
-            return getItem(position).mListType == ListItem.LIST_TYPE_MATCH;
+            return holder;
         }
 
 
     }
 
 
-    private static final class MatchViewHolder {
+    private static final class MatchViewHolder extends RecyclerView.ViewHolder {
 
 
         private final TextView mOpponent;
 
 
         private MatchViewHolder(final View view) {
+            super(view);
             mOpponent = (TextView) view.findViewById(R.id.model_match_opponent);
         }
 
@@ -289,7 +253,7 @@ public class PlayerActivity extends BaseListActivity {
     }
 
 
-    private static final class TournamentViewHolder {
+    private static final class TournamentViewHolder extends RecyclerView.ViewHolder {
 
 
         private final TextView mDate;
@@ -297,6 +261,7 @@ public class PlayerActivity extends BaseListActivity {
 
 
         private TournamentViewHolder(final View view) {
+            super(view);
             mDate = (TextView) view.findViewById(R.id.separator_tournament_date);
             mName = (TextView) view.findViewById(R.id.separator_tournament_name);
         }

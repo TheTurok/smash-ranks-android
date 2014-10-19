@@ -2,7 +2,9 @@ package com.garpr.android.misc;
 
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.widget.AbsListView;
 
@@ -22,7 +24,7 @@ import android.widget.AbsListView;
 public class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
 
 
-    private AbsListView mAbsListView;
+    private RecyclerView mRecyclerView;
 
 
 
@@ -37,30 +39,23 @@ public class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
     }
 
 
-    private boolean canAbsListViewScrollUp() {
-        // Taken directly from the source for SwipeRefreshLayout:
-        // https://github.com/futuresimple/android-support-v4/blob/master/src/java/android/support/v4/widget/SwipeRefreshLayout.java#L348
-        return mAbsListView.getChildCount() > 0 && (mAbsListView.getFirstVisiblePosition() > 0
-                || mAbsListView.getChildAt(0).getTop() < mAbsListView.getPaddingTop());
-    }
-
-
     @Override
     public boolean canChildScrollUp() {
         final boolean canChildScrollUp;
 
-        if (mAbsListView == null) {
+        if (mRecyclerView == null) {
             canChildScrollUp = super.canChildScrollUp();
         } else {
-            canChildScrollUp = canAbsListViewScrollUp();
+            // -1 means to check scrolling up
+            canChildScrollUp = ViewCompat.canScrollVertically(mRecyclerView, -1);
         }
 
         return canChildScrollUp;
     }
 
 
-    public void setScrollableView(final AbsListView scrollableView) {
-        mAbsListView = scrollableView;
+    public void setRecyclerView(final RecyclerView recyclerView) {
+        mRecyclerView = recyclerView;
     }
 
 

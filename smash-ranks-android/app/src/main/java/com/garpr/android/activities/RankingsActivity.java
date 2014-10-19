@@ -4,6 +4,7 @@ package com.garpr.android.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -106,8 +107,9 @@ public class RankingsActivity extends BaseListActivity implements
 
 
     @Override
-    protected void onItemClick(final Object item) {
-        PlayerActivity.startForResult(this, (Player) item);
+    protected void onItemClick(final View view, final int position) {
+        final Player player = mPlayersShown.get(position);
+        PlayerActivity.startForResult(this, player);
     }
 
 
@@ -223,40 +225,29 @@ public class RankingsActivity extends BaseListActivity implements
 
 
 
-    private final class RankingsAdapter extends BaseListAdapter {
+    private final class RankingsAdapter extends BaseListAdapter<ViewHolder> {
 
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return mPlayersShown.size();
         }
 
 
         @Override
-        public Player getItem(final int position) {
-            return mPlayersShown.get(position);
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+            final Player player = mPlayersShown.get(position);
+            holder.mName.setText(player.getName());
+            holder.mRank.setText(String.valueOf(player.getRank()));
+            holder.mRating.setText(String.format("%.3f", player.getRating()));
         }
 
 
         @Override
-        public View getView(final int position, View convertView, final ViewGroup parent) {
-            if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.model_player, parent, false);
-            }
-
-            ViewHolder holder = (ViewHolder) convertView.getTag();
-
-            if (holder == null) {
-                holder = new ViewHolder(convertView);
-                convertView.setTag(holder);
-            }
-
-            final Player player = getItem(position);
-            holder.mRank.setText(String.valueOf(player.getRank()));
-            holder.mName.setText(player.getName());
-            holder.mRating.setText(String.format("%.3f", player.getRating()));
-
-            return convertView;
+        public ViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
+            final View view = mInflater.inflate(R.layout.model_player, parent, false);
+            view.setOnClickListener(this);
+            return new ViewHolder(view);
         }
 
 
@@ -298,7 +289,7 @@ public class RankingsActivity extends BaseListActivity implements
     }
 
 
-    private static final class ViewHolder {
+    private static final class ViewHolder extends RecyclerView.ViewHolder {
 
 
         private final TextView mName;
@@ -307,6 +298,7 @@ public class RankingsActivity extends BaseListActivity implements
 
 
         private ViewHolder(final View view) {
+            super(view);
             mRank = (TextView) view.findViewById(R.id.model_player_rank);
             mName = (TextView) view.findViewById(R.id.model_player_name);
             mRating = (TextView) view.findViewById(R.id.model_player_rating);

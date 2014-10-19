@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/navigation_drawer">
-    <LinearLayout
-        android:divider="@drawable/divider"
+    <RelativeLayout
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:showDividers="middle">
+        android:layout_width="match_parent">
+        <LinearLayout
+            android:divider="@drawable/divider"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:showDividers="middle">
+            <TextView
+                android:id="@+id/navigation_drawer_tournaments"
+                android:text="@string/tournaments"
+                style="@style/navigation_drawer_item" />
+            <TextView
+                android:id="@+id/navigation_drawer_region"
+                android:text="@string/region"
+                style="@style/navigation_drawer_item" />
+            <TextView
+                android:id="@+id/navigation_drawer_about"
+                android:text="@string/about"
+                style="@style/navigation_drawer_item" />
+        </LinearLayout>
         <TextView
-            android:id="@+id/navigation_drawer_tournaments"
-            android:text="@string/tournaments"
-            style="@style/navigation_drawer_item" />
-        <TextView
-            android:id="@+id/navigation_drawer_region"
-            android:text="@string/region"
-            style="@style/navigation_drawer_item" />
-        <TextView
-            android:id="@+id/navigation_drawer_about"
-            android:text="@string/about"
-            style="@style/navigation_drawer_item" />
-    </LinearLayout>
+            android:gravity="center"
+            android:id="@+id/navigation_drawer_version"
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="@dimen/root_padding_half"
+            android:textSize="12sp"
+            tools:text="v1.1" />
+    </RelativeLayout>
 </ScrollView>

@@ -40,6 +40,7 @@
 
     <style name="navigation_drawer">
         <item name="android:background">?attr/colorPrimaryDark</item>
+        <item name="android:fillViewport">true</item>
         <item name="android:id">@id/navigation_drawer</item>
         <item name="android:layout_below">@id/toolbar</item>
         <item name="android:layout_gravity">start</item>

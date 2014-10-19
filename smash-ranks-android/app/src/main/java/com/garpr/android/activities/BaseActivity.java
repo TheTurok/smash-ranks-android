@@ -36,6 +36,7 @@ abstract class BaseActivity extends ActionBarActivity implements Heartbeat {
     private TextView mDrawerAbout;
     private TextView mDrawerRegion;
     private TextView mDrawerTournaments;
+    private TextView mDrawerVersion;
     private Toolbar mToolbar;
 
 
@@ -52,6 +53,7 @@ abstract class BaseActivity extends ActionBarActivity implements Heartbeat {
         mDrawerLayout = (ScrollView) findViewById(R.id.navigation_drawer);
         mDrawerRegion = (TextView) findViewById(R.id.navigation_drawer_region);
         mDrawerTournaments = (TextView) findViewById(R.id.navigation_drawer_tournaments);
+        mDrawerVersion = (TextView) findViewById(R.id.navigation_drawer_version);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
@@ -82,6 +84,7 @@ abstract class BaseActivity extends ActionBarActivity implements Heartbeat {
         };
 
         mDrawerToggle.setDrawerIndicatorEnabled(showDrawerIndicator());
+        mDrawerVersion.setText(App.getVersionName());
         mDrawer.setDrawerListener(mDrawerToggle);
 
         mDrawerAbout.setOnClickListener(new View.OnClickListener() {

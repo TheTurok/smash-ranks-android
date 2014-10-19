@@ -67,6 +67,11 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
+    protected Toolbar getToolbar() {
+        return mToolbar;
+    }
+
+
     private void initializeNavigationDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.open_drawer,
                 R.string.close_drawer) {

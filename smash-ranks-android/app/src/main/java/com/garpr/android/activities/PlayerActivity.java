@@ -105,6 +105,7 @@ public class PlayerActivity extends BaseListActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(mPlayer.getName());
+        setSubtitle(getString(R.string.rank_x, mPlayer.getRank()));
 
         if (mPlayer.hasMatches()) {
             final ArrayList<Match> matches = mPlayer.getMatches();

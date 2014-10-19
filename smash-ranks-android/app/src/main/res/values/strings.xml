@@ -18,6 +18,7 @@
     <string name="players">Players</string>
     <string name="rankings">Rankings</string>
     <string name="rank_order">Rank Order</string>
+    <string name="rank_x">Rank %d</string>
     <string name="region">Region</string>
     <string name="regions">Regions</string>
     <string name="search">Search</string>

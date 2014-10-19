@@ -3,6 +3,7 @@ package com.garpr.android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +26,7 @@ import java.util.Comparator;
 
 
 public class RankingsActivity extends BaseListActivity implements
-        MenuItem.OnActionExpandListener,
+        MenuItemCompat.OnActionExpandListener,
         SearchView.OnQueryTextListener {
 
 
@@ -145,34 +146,34 @@ public class RankingsActivity extends BaseListActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        final MenuItem searchItem = menu.findItem(R.id.activity_rankings_menu_search);
-        searchItem.setOnActionExpandListener(this);
-
-        final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint(getString(R.string.search_players));
-        searchView.setOnQueryTextListener(this);
-
-        final MenuItem sort = menu.findItem(R.id.activity_rankings_menu_sort);
-
-        if (isDrawerOpen() || isLoading()) {
-            searchItem.setVisible(false);
-            searchItem.collapseActionView();
-            sort.setVisible(false);
-        } else {
-            searchItem.setVisible(true);
-            sort.setVisible(true);
-
-            final MenuItem sortAlphabetical = menu.findItem(R.id.activity_rankings_menu_sort_alphabetical);
-            final MenuItem sortRank = menu.findItem(R.id.activity_rankings_menu_sort_rank);
-
-            if (mOrder == Player.ALPHABETICAL_ORDER) {
-                sortAlphabetical.setEnabled(false);
-                sortRank.setEnabled(true);
-            } else {
-                sortAlphabetical.setEnabled(true);
-                sortRank.setEnabled(false);
-            }
-        }
+//        final MenuItem searchItem = menu.findItem(R.id.activity_rankings_menu_search);
+//        MenuItemCompat.setOnActionExpandListener(searchItem, this);
+//
+//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//        searchView.setQueryHint(getString(R.string.search_players));
+//        searchView.setOnQueryTextListener(this);
+//
+//        final MenuItem sort = menu.findItem(R.id.activity_rankings_menu_sort);
+//
+//        if (isDrawerOpen() || isLoading()) {
+//            searchItem.setVisible(false);
+//            searchItem.collapseActionView();
+//            sort.setVisible(false);
+//        } else {
+//            searchItem.setVisible(true);
+//            sort.setVisible(true);
+//
+//            final MenuItem sortAlphabetical = menu.findItem(R.id.activity_rankings_menu_sort_alphabetical);
+//            final MenuItem sortRank = menu.findItem(R.id.activity_rankings_menu_sort_rank);
+//
+//            if (mOrder == Player.ALPHABETICAL_ORDER) {
+//                sortAlphabetical.setEnabled(false);
+//                sortRank.setEnabled(true);
+//            } else {
+//                sortAlphabetical.setEnabled(true);
+//                sortRank.setEnabled(false);
+//            }
+//        }
 
         return super.onPrepareOptionsMenu(menu);
     }

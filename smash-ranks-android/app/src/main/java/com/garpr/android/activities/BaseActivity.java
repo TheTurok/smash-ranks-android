@@ -1,15 +1,15 @@
 package com.garpr.android.activities;
 
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,10 +26,9 @@ import com.garpr.android.misc.Heartbeat;
  * All Activities should extend from this base class, as it greatly reduces the otherwise
  * necessary boilerplate.
  */
-abstract class BaseActivity extends Activity implements Heartbeat {
+abstract class BaseActivity extends ActionBarActivity implements Heartbeat {
 
 
-    private ActionBar mActionBar;
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean mIsAlive;
     private DrawerLayout mDrawer;
@@ -37,6 +36,7 @@ abstract class BaseActivity extends Activity implements Heartbeat {
     private TextView mDrawerAbout;
     private TextView mDrawerRegion;
     private TextView mDrawerTournaments;
+    private Toolbar mToolbar;
 
 
 
@@ -47,11 +47,12 @@ abstract class BaseActivity extends Activity implements Heartbeat {
 
 
     private void findViews() {
-        mDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerAbout = (TextView) findViewById(R.id.navigation_drawer_about);
-        mDrawerLayout = (ScrollView) findViewById(R.id.navigation_drawer_layout);
+        mDrawerLayout = (ScrollView) findViewById(R.id.navigation_drawer);
         mDrawerRegion = (TextView) findViewById(R.id.navigation_drawer_region);
         mDrawerTournaments = (TextView) findViewById(R.id.navigation_drawer_tournaments);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
 
@@ -64,10 +65,8 @@ abstract class BaseActivity extends Activity implements Heartbeat {
 
 
     private void initializeNavigationDrawer() {
-        mActionBar.setDisplayHomeAsUpEnabled(true);
-
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, R.drawable.icon_drawer,
-                R.string.open_drawer, R.string.close_drawer) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.open_drawer,
+                R.string.close_drawer) {
             @Override
             public void onDrawerClosed(final View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -106,6 +105,11 @@ abstract class BaseActivity extends Activity implements Heartbeat {
                 TournamentsActivity.start(BaseActivity.this);
             }
         });
+    }
+
+
+    private void initializeToolbar() {
+        setSupportActionBar(mToolbar);
     }
 
 
@@ -154,8 +158,8 @@ abstract class BaseActivity extends Activity implements Heartbeat {
         super.onCreate(savedInstanceState);
         mIsAlive = true;
         setContentView(getContentView());
-        mActionBar = getActionBar();
         findViews();
+        initializeToolbar();
         initializeNavigationDrawer();
     }
 
@@ -182,13 +186,13 @@ abstract class BaseActivity extends Activity implements Heartbeat {
 
 
     protected void onDrawerClosed() {
-        mActionBar.setTitle(getTitle());
+        mToolbar.setTitle(getTitle());
         invalidateOptionsMenu();
     }
 
 
     protected void onDrawerOpened() {
-        mActionBar.setTitle(R.string.gar_pr);
+        mToolbar.setTitle(R.string.gar_pr);
         invalidateOptionsMenu();
     }
 

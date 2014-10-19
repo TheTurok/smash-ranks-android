@@ -8,7 +8,7 @@
         android:allowBackup="true"
         android:label="@string/gar_pr"
         android:name=".App"
-        android:theme="@style/theme">
+        android:theme="@style/app_theme">
 
         <activity
             android:label="@string/gar_pr"

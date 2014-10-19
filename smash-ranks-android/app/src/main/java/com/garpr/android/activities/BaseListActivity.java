@@ -127,9 +127,6 @@ abstract class BaseListActivity extends BaseActivity implements
         mErrorView.setText(getErrorText());
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setScrollableView(mListView);
-        mRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_light,
-                android.R.color.holo_orange_dark, android.R.color.holo_red_light,
-                android.R.color.holo_red_dark);
     }
 
 

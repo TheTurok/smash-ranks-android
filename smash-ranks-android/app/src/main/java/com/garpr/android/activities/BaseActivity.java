@@ -25,7 +25,9 @@ import com.garpr.android.misc.Heartbeat;
  * All Activities should extend from this base class, as it greatly reduces the otherwise
  * necessary boilerplate.
  */
-abstract class BaseActivity extends ActionBarActivity implements Heartbeat {
+abstract class BaseActivity extends ActionBarActivity implements
+        Heartbeat,
+        Toolbar.OnMenuItemClickListener {
 
 
     private ActionBarDrawerToggle mDrawerToggle;
@@ -126,6 +128,7 @@ abstract class BaseActivity extends ActionBarActivity implements Heartbeat {
 
     private void initializeToolbar() {
         setSupportActionBar(mToolbar);
+        mToolbar.setOnMenuItemClickListener(this);
     }
 
 
@@ -209,6 +212,12 @@ abstract class BaseActivity extends ActionBarActivity implements Heartbeat {
     protected void onDrawerOpened() {
         mToolbar.setTitle(R.string.gar_pr);
         invalidateOptionsMenu();
+    }
+
+
+    @Override
+    public boolean onMenuItemClick(final MenuItem menuItem) {
+        return onOptionsItemSelected(menuItem);
     }
 
 

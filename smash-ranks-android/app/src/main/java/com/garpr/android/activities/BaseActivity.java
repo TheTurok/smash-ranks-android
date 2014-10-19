@@ -84,14 +84,15 @@ abstract class BaseActivity extends ActionBarActivity implements Heartbeat {
         mDrawerToggle.setDrawerIndicatorEnabled(showDrawerIndicator());
         mDrawer.setDrawerListener(mDrawerToggle);
 
-        mDrawerRegion.setOnClickListener(new View.OnClickListener() {
+        mDrawerAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 closeDrawer();
+                AboutActivity.start(BaseActivity.this);
             }
         });
 
-        mDrawerAbout.setOnClickListener(new View.OnClickListener() {
+        mDrawerRegion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 closeDrawer();

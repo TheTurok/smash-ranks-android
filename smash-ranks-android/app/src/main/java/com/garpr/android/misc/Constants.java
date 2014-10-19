@@ -4,6 +4,7 @@ package com.garpr.android.misc;
 public final class Constants {
 
 
+    public static final String ABOUT_URL = "http://www.garpr.com/#/about";
     public static final String DATE = "date";
     public static final String GAME = "game";
     public static final String ID = "id";

@@ -21,6 +21,16 @@
         </activity>
 
         <activity
+            android:label="@string/about"
+            android:launchMode="singleTop"
+            android:name=".activities.AboutActivity"
+            android:parentActivityName=".activities.RankingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.RankingsActivity" />
+        </activity>
+
+        <activity
             android:label="@string/player"
             android:launchMode="singleTop"
             android:name=".activities.PlayerActivity"

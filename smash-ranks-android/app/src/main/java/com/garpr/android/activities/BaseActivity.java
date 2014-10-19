@@ -82,7 +82,13 @@ abstract class BaseActivity extends ActionBarActivity implements Heartbeat {
             }
         };
 
-        mDrawerToggle.setDrawerIndicatorEnabled(showDrawerIndicator());
+        if (showDrawerIndicator()) {
+            mDrawerToggle.setDrawerIndicatorEnabled(true);
+        } else {
+            mDrawerToggle.setDrawerIndicatorEnabled(false);
+            mToolbar.setNavigationIcon(R.drawable.icon_back);
+        }
+
         mDrawerVersion.setText(App.getVersionName());
         mDrawer.setDrawerListener(mDrawerToggle);
 

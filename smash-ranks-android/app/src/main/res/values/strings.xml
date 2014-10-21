@@ -6,6 +6,7 @@
     <string name="alphabetical_order">Alphabetical Order</string>
     <string name="austin">Austin</string>
     <string name="berkeley">Berkeley</string>
+    <string name="change_region">Change region</string>
     <string name="close_drawer">Close Drawer</string>
     <string name="error">Error</string>
     <string name="error_fetching_matches">Error fetching matches!</string>

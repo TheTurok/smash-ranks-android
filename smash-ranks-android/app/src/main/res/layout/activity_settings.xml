@@ -13,7 +13,6 @@
             <LinearLayout
                 android:divider="@drawable/divider"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/root_padding"
                 android:layout_width="match_parent"
                 android:orientation="vertical"
                 android:showDividers="middle">
@@ -28,7 +27,7 @@
                     <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
-                        android:text="@string/region"
+                        android:text="@string/change_region"
                         android:textSize="20sp" />
                     <TextView
                         android:id="@+id/activity_settings_region_name"
@@ -41,6 +40,7 @@
                     android:gravity="center"
                     android:id="@+id/activity_settings_version"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/root_padding"
                     android:layout_width="match_parent"
                     android:padding="@dimen/root_padding"
                     android:textSize="12sp"

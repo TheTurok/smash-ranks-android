@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    style="@style/root.no_padding">
+    <include
+        layout="@layout/toolbar" />
+    <android.support.v4.widget.DrawerLayout
+        style="@style/drawer_layout">
+        <ScrollView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+            <LinearLayout
+                android:divider="@drawable/divider"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/root_padding"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:showDividers="middle">
+                <LinearLayout
+                    android:background="?android:attr/selectableItemBackground"
+                    android:id="@+id/activity_settings_region"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:minHeight="@dimen/list_item_height"
+                    android:orientation="vertical"
+                    android:padding="@dimen/root_padding">
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/region"
+                        android:textSize="20sp" />
+                    <TextView
+                        android:id="@+id/activity_settings_region_name"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:textSize="16sp"
+                        tools:text="@string/norcal" />
+                </LinearLayout>
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/activity_settings_version"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:padding="@dimen/root_padding"
+                    android:textSize="12sp"
+                    tools:text="v1.1" />
+            </LinearLayout>
+        </ScrollView>
+        <include
+            layout="@layout/navigation_drawer" />
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>

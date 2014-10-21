@@ -1,0 +1,65 @@
+package com.garpr.android.activities;
+
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.garpr.android.App;
+import com.garpr.android.R;
+
+
+public class SettingsActivity extends BaseActivity {
+
+
+    private LinearLayout mRegion;
+    private TextView mRegionName;
+    private TextView mVersion;
+
+
+
+
+    public static void start(final Activity activity) {
+        final Intent intent = new Intent(activity, SettingsActivity.class);
+        activity.startActivity(intent);
+    }
+
+
+    private void findViews() {
+        mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
+        mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
+        mVersion = (TextView) findViewById(R.id.activity_settings_version);
+    }
+
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_settings;
+    }
+
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        findViews();
+        prepareViews();
+    }
+
+
+    private void prepareViews() {
+        mRegion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                // open popup menu
+            }
+        });
+
+        mRegionName.setText(App.getRegion());
+        mVersion.setText(App.getVersionName());
+    }
+
+
+}

@@ -22,6 +22,7 @@ public final class Constants {
     public static final String RANKING = "ranking";
     public static final String RANKINGS = "rankings";
     public static final String RATING = "rating";
+    public static final String REGIONS = "regions";
     public static final String RESULT = "result";
     public static final String TIME = "time";
     public static final String TOURNAMENT = "tournament";

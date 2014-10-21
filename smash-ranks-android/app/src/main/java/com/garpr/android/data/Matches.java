@@ -148,7 +148,7 @@ public final class Matches {
                 Log.d(TAG, "Read in " + matches.size() + " Match objects from JSON response");
 
                 if (matches.isEmpty()) {
-                    getFromJSON(this, new Exception("Player " + mPlayerId + " has no matches!"));
+                    getFromJSON(this, new Exception("Player " + mPlayerId + " has no matches"));
                 } else {
                     if (isAlive()) {
                         response(matches);

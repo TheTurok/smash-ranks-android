@@ -55,7 +55,7 @@ public final class Tournaments {
 
     static void createTable(final SQLiteDatabase database) {
         Log.d(TAG, "Creating " + getTableName() + " database table");
-        final String sql = "CREATE TABLE " + getTableName() + " ("
+        final String sql = "CREATE TABLE IF NOT EXISTS " + getTableName() + " ("
                 + Constants.ID + " TEXT NOT NULL, "
                 + Constants.JSON + " TEXT NOT NULL, "
                 + "PRIMARY KEY (" + Constants.ID + "));";

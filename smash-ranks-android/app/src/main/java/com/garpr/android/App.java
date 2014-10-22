@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.garpr.android.data.Database;
-import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 
 
@@ -41,13 +40,6 @@ public final class App extends Application {
             // this should never happen
             throw new RuntimeException(e);
         }
-    }
-
-
-    public static String getRegion() {
-        // At some point in the future, the region will be determined programmatically, as we'd
-        // like to support more than just norcal.
-        return Constants.NORCAL;
     }
 
 

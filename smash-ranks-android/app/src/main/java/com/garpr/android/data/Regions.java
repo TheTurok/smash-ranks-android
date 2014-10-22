@@ -24,7 +24,7 @@ public final class Regions {
 
 
     public static void get(final RegionsCallback callback) {
-        final String url = Network.makeUrl(Constants.REGIONS);
+        final String url = Network.makeRegionFreeUrl(Constants.REGIONS);
         Network.sendRequest(url, callback);
     }
 

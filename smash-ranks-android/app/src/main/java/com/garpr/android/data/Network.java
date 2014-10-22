@@ -23,6 +23,11 @@ final class Network {
     }
 
 
+    static String makeRegionFreeUrl(final String suffix) {
+        return BASE_URL + '/' + suffix;
+    }
+
+
     @SuppressWarnings("unchecked")
     static void sendRequest(final String url, final Callback callback) {
         final Heartbeat heartbeat = callback.getHeartbeat();

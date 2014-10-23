@@ -37,6 +37,7 @@ abstract class BaseActivity extends ActionBarActivity implements
     private ScrollView mDrawerLayout;
     private String mSubtitle;
     private TextView mDrawerAbout;
+    private TextView mDrawerRankings;
     private TextView mDrawerSettings;
     private TextView mDrawerTournaments;
     private Toolbar mToolbar;
@@ -53,6 +54,7 @@ abstract class BaseActivity extends ActionBarActivity implements
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerAbout = (TextView) findViewById(R.id.navigation_drawer_about);
         mDrawerLayout = (ScrollView) findViewById(R.id.navigation_drawer);
+        mDrawerRankings = (TextView) findViewById(R.id.navigation_drawer_rankings);
         mDrawerSettings = (TextView) findViewById(R.id.navigation_drawer_settings);
         mDrawerTournaments = (TextView) findViewById(R.id.navigation_drawer_tournaments);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -108,11 +110,18 @@ abstract class BaseActivity extends ActionBarActivity implements
             }
         });
 
+        mDrawerRankings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                closeDrawer();
+            }
+        });
+
         mDrawerSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 closeDrawer();
-                SettingsActivity.start(BaseActivity.this);
+                SettingsActivity.startForResult(BaseActivity.this);
             }
         });
 

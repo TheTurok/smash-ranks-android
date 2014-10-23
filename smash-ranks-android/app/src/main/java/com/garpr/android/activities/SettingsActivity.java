@@ -21,6 +21,8 @@ import com.garpr.android.R;
 import com.garpr.android.data.Regions;
 import com.garpr.android.data.Regions.RegionsCallback;
 import com.garpr.android.data.Settings;
+import com.garpr.android.misc.RequestCodes;
+import com.garpr.android.misc.ResultCodes;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,9 +45,9 @@ public class SettingsActivity extends BaseActivity {
 
 
 
-    public static void start(final Activity activity) {
+    public static void startForResult(final Activity activity) {
         final Intent intent = new Intent(activity, SettingsActivity.class);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, RequestCodes.REQUEST_DEFAULT);
     }
 
 
@@ -54,27 +56,26 @@ public class SettingsActivity extends BaseActivity {
         dialog.setMessage(getString(R.string.fetching_regions));
         dialog.show();
 
-        final Editor editor = Settings.editPreferences(CNAME);
+        final Editor editor = Settings.edit(CNAME);
         editor.putLong(KEY_LAST_REGIONS_FETCH, System.currentTimeMillis());
         editor.apply();
 
         final RegionsCallback callback = new RegionsCallback(this) {
             @Override
             public void error(final Exception e) {
-                dialog.dismiss();
                 Log.e(TAG, "Exception when fetching regions", e);
+                dialog.dismiss();
                 showError();
             }
 
 
             @Override
             public void response(final ArrayList<String> list) {
-                dialog.dismiss();
-
                 mRegions = new HashSet<String>(list);
                 editor.putStringSet(KEY_REGIONS, mRegions);
                 editor.apply();
 
+                dialog.dismiss();
                 showRegions();
             }
         };
@@ -118,10 +119,11 @@ public class SettingsActivity extends BaseActivity {
 
 
     private void showAvailableRegions() {
-        final SharedPreferences sPrefs = Settings.getPreferences(CNAME);
+        final SharedPreferences sPrefs = Settings.get(CNAME);
         final long lastRegionsFetch = sPrefs.getLong(KEY_LAST_REGIONS_FETCH, 0L);
         final long timeSinceFetch = System.currentTimeMillis() - lastRegionsFetch;
 
+        // only fetch regions once a day, the calculation below is 1 day in milliseconds
         if (timeSinceFetch > 60L * 60L * 24L * 1000L) {
             fetchRegions();
         } else {
@@ -153,6 +155,7 @@ public class SettingsActivity extends BaseActivity {
                         final String region = adapter.getItem(which);
                         Settings.setRegion(region);
                         mRegionName.setText(region);
+                        setResult(ResultCodes.REGION_UPDATED);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

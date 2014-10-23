@@ -95,6 +95,8 @@ public class RankingsActivity extends BaseListActivity implements
                     break;
                 }
             }
+        } else if (resultCode == ResultCodes.REGION_UPDATED) {
+            fetchRankings();
         }
     }
 

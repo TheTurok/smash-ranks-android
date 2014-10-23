@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.garpr.android.App;
 import com.garpr.android.misc.Constants;
@@ -13,37 +14,38 @@ import com.garpr.android.misc.Constants;
 public final class Settings {
 
 
+    private static final String CNAME = Settings.class.getCanonicalName();
     private static final String KEY_REGION = "KEY_REGION";
-    private static final String NAME = Settings.class.getCanonicalName();
+    private static final String TAG = Settings.class.getSimpleName();
 
     private static String sRegion;
 
 
 
 
-    public static Editor editPreferences() {
-        return editPreferences(NAME);
+    public static Editor edit() {
+        return edit(CNAME);
     }
 
 
-    public static Editor editPreferences(final String name) {
-        return getPreferences(name).edit();
+    public static Editor edit(final String name) {
+        return get(name).edit();
     }
 
 
-    public static SharedPreferences getPreferences() {
-        return getPreferences(NAME);
+    public static SharedPreferences get() {
+        return get(CNAME);
     }
 
 
-    public static SharedPreferences getPreferences(final String name) {
+    public static SharedPreferences get(final String name) {
         return App.getContext().getSharedPreferences(name, Context.MODE_PRIVATE);
     }
 
 
     public static String getRegion() {
         if (TextUtils.isEmpty(sRegion)) {
-            sRegion = getPreferences().getString(KEY_REGION, null);
+            sRegion = get().getString(KEY_REGION, null);
 
             if (TextUtils.isEmpty(sRegion)) {
                 setRegion(Constants.NORCAL);
@@ -55,9 +57,10 @@ public final class Settings {
 
 
     public static void setRegion(final String region) {
+        Log.d(TAG, "Region changed from \"" + sRegion + "\" to \"" + region + "\"");
         sRegion = region;
-
-        final Editor editor = editPreferences();
+        Database.onRegionChanged();
+        final Editor editor = edit();
         editor.putString(KEY_REGION, sRegion);
         editor.apply();
     }

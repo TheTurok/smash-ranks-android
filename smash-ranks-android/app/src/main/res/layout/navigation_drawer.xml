@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/navigation_drawer">
+    android:background="?attr/colorPrimaryDark"
+    android:fillViewport="true"
+    android:id="@id/navigation_drawer"
+    android:layout_gravity="start"
+    android:layout_height="match_parent"
+    android:layout_width="@dimen/navigation_drawer_width">
     <LinearLayout
         android:divider="@drawable/divider"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:showDividers="middle">
+        <TextView
+            android:id="@+id/navigation_drawer_rankings"
+            android:text="@string/rankings"
+            style="@style/navigation_drawer_item" />
         <TextView
             android:id="@+id/navigation_drawer_tournaments"
             android:text="@string/tournaments"

@@ -99,7 +99,7 @@ public final class Tournaments {
 
 
     private static String getTableName() {
-        return TAG;
+        return TAG + '_' + Settings.getRegion();
     }
 
 

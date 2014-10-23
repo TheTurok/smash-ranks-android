@@ -4,6 +4,7 @@
     <color name="black">#000000</color>
     <color name="cyan">#00FFFF</color>
     <color name="magenta">#FF00FF</color>
+    <color name="overlay">#66000000</color>
     <color name="yellow">#FFFF00</color>
 
 </resources>

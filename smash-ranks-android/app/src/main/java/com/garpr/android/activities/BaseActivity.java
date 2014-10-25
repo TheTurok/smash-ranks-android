@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +34,6 @@ abstract class BaseActivity extends ActionBarActivity implements
     private boolean mIsAlive;
     private DrawerLayout mDrawer;
     private ScrollView mDrawerLayout;
-    private String mSubtitle;
     private TextView mDrawerAbout;
     private TextView mDrawerRankings;
     private TextView mDrawerSettings;
@@ -66,6 +64,11 @@ abstract class BaseActivity extends ActionBarActivity implements
 
     protected int getOptionsMenu() {
         return 0;
+    }
+
+
+    protected Toolbar getToolbar() {
+        return mToolbar;
     }
 
 
@@ -213,17 +216,12 @@ abstract class BaseActivity extends ActionBarActivity implements
 
 
     protected void onDrawerClosed() {
-        mToolbar.setTitle(getTitle());
 
-        if (!TextUtils.isEmpty(mSubtitle)) {
-            mToolbar.setSubtitle(mSubtitle);
-        }
     }
 
 
     protected void onDrawerOpened() {
-        mToolbar.setTitle(R.string.gar_pr);
-        mToolbar.setSubtitle(null);
+
     }
 
 
@@ -261,12 +259,6 @@ abstract class BaseActivity extends ActionBarActivity implements
 
     protected boolean showDrawerIndicator() {
         return true;
-    }
-
-
-    protected void setSubtitle(final String subtitle) {
-        mSubtitle = subtitle;
-        mToolbar.setSubtitle(subtitle);
     }
 
 

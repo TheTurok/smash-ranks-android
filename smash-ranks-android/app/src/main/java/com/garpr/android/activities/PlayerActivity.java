@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +107,9 @@ public class PlayerActivity extends BaseListActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(mPlayer.getName());
-        setSubtitle(getString(R.string.rank_x, mPlayer.getRank()));
+
+        final Toolbar toolbar = getToolbar();
+        toolbar.setSubtitle(getString(R.string.rank_x, mPlayer.getRank()));
 
         if (mPlayer.hasMatches()) {
             final ArrayList<Match> matches = mPlayer.getMatches();

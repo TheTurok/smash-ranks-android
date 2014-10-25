@@ -4,11 +4,11 @@ package com.garpr.android.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.garpr.android.App;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.Utils;
 
 
 public final class Settings {
@@ -44,10 +44,10 @@ public final class Settings {
 
 
     public static String getRegion() {
-        if (TextUtils.isEmpty(sRegion)) {
+        if (!Utils.validStrings(sRegion)) {
             sRegion = get().getString(KEY_REGION, null);
 
-            if (TextUtils.isEmpty(sRegion)) {
+            if (!Utils.validStrings(sRegion)) {
                 setRegion(Constants.NORCAL);
             }
         }

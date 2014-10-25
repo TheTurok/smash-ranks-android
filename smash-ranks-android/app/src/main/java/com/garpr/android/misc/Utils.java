@@ -1,11 +1,13 @@
 package com.garpr.android.misc;
 
 
+import android.text.TextUtils;
+
 import java.io.Closeable;
 import java.io.IOException;
 
 
-public class Utils {
+public final class Utils {
 
 
     /**
@@ -25,6 +27,32 @@ public class Utils {
                 }
             }
         }
+    }
+
+
+    /**
+     * Checks a collection of {@link CharSequence} objects to see if any single one of them is
+     * null, empty, or just whitespace.
+     *
+     * @param sequences
+     * The collection of {@link CharSequence} objects to check.
+     *
+     * @return
+     * Returns false if any single one of the given {@link CharSequence} objects is null, empty,
+     * or just whitespace.
+     */
+    public static boolean validStrings(final CharSequence... sequences) {
+        if (sequences == null || sequences.length == 0) {
+            return false;
+        }
+
+        for (final CharSequence sequence : sequences) {
+            if (TextUtils.isEmpty(sequence) || TextUtils.getTrimmedLength(sequence) == 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

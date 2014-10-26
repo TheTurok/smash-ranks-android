@@ -381,6 +381,10 @@ public class PlayerActivity extends BaseListActivity implements
                     final String name = match.mMatch.getOpponentName().toLowerCase();
 
                     if (name.contains(query)) {
+                        // So we've now found a match with an opponent name that matches what the
+                        // user typed into the search field. Now let's find its corresponding
+                        // Tournament ListItem.
+
                         ListItem tournament = null;
 
                         for (int j = i - 1; tournament == null; --j) {
@@ -391,6 +395,7 @@ public class PlayerActivity extends BaseListActivity implements
                             }
                         }
 
+                        // make sure we haven't already added this tournament to the list
                         if (!listItems.contains(tournament)) {
                             listItems.add(tournament);
                         }

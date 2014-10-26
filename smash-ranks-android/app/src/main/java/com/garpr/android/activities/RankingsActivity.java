@@ -45,6 +45,8 @@ public class RankingsActivity extends BaseListActivity implements
     private RankingsFilter mFilter;
 
 
+
+
     private void fetchRankings() {
         setLoading(true);
 

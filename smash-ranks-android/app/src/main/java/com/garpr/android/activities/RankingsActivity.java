@@ -88,6 +88,13 @@ public class RankingsActivity extends BaseListActivity implements
 
 
     @Override
+    protected View getSelectedDrawerView(final TextView about, final TextView rankings,
+            final TextView settings, final TextView tournaments) {
+        return rankings;
+    }
+
+
+    @Override
     protected void onActivityResult(final int requestCode, final int resultCode,
             final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

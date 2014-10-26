@@ -100,6 +100,13 @@ public class SettingsActivity extends BaseActivity {
 
 
     @Override
+    protected View getSelectedDrawerView(final TextView about, final TextView rankings,
+            final TextView settings, final TextView tournaments) {
+        return settings;
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViews();

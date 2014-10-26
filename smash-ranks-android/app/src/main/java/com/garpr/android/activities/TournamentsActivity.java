@@ -65,6 +65,13 @@ public class TournamentsActivity extends BaseListActivity {
 
 
     @Override
+    protected View getSelectedDrawerView(final TextView about, final TextView rankings,
+            final TextView settings, final TextView tournaments) {
+        return tournaments;
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fetchTournaments();

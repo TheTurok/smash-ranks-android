@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -67,6 +68,12 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
+    protected View getSelectedDrawerView(final TextView about, final TextView rankings,
+            final TextView settings, final TextView tournaments) {
+        return null;
+    }
+
+
     protected Toolbar getToolbar() {
         return mToolbar;
     }
@@ -117,6 +124,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             @Override
             public void onClick(final View v) {
                 closeDrawer();
+                // TODO
             }
         });
 
@@ -135,6 +143,13 @@ abstract class BaseActivity extends ActionBarActivity implements
                 TournamentsActivity.start(BaseActivity.this);
             }
         });
+
+        final View view = getSelectedDrawerView(mDrawerAbout, mDrawerRankings, mDrawerSettings,
+                mDrawerTournaments);
+
+        if (view != null) {
+            // TODO
+        }
     }
 
 

@@ -5,11 +5,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -27,7 +32,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class PlayerActivity extends BaseListActivity {
+public class PlayerActivity extends BaseListActivity implements
+        MenuItemCompat.OnActionExpandListener,
+        SearchView.OnQueryTextListener {
 
 
     private static final String CNAME = PlayerActivity.class.getCanonicalName();
@@ -35,6 +42,10 @@ public class PlayerActivity extends BaseListActivity {
     private static final String TAG = PlayerActivity.class.getSimpleName();
 
     private ArrayList<ListItem> mListItems;
+    private ArrayList<ListItem> mListItemsShown;
+    private boolean mSetSearchItemVisible;
+    private MatchesFilter mFilter;
+    private MenuItem mSearchItem;
     private Player mPlayer;
 
 
@@ -65,6 +76,7 @@ public class PlayerActivity extends BaseListActivity {
         }
 
         mListItems.trimToSize();
+        mListItemsShown = mListItems;
     }
 
 
@@ -104,6 +116,12 @@ public class PlayerActivity extends BaseListActivity {
 
 
     @Override
+    protected int getOptionsMenu() {
+        return R.menu.activity_player;
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(mPlayer.getName());
@@ -123,6 +141,66 @@ public class PlayerActivity extends BaseListActivity {
 
 
     @Override
+    protected void onDrawerClosed() {
+        if (!isLoading()) {
+            mSearchItem.setVisible(true);
+        }
+    }
+
+
+    @Override
+    protected void onDrawerOpened() {
+        MenuItemCompat.collapseActionView(mSearchItem);
+        mSearchItem.setVisible(false);
+    }
+
+
+    @Override
+    public boolean onMenuItemActionCollapse(final MenuItem item) {
+        mListItemsShown = mListItems;
+        notifyDataSetChanged();
+        return true;
+    }
+
+
+    @Override
+    public boolean onMenuItemActionExpand(final MenuItem item) {
+        return true;
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        mSearchItem = menu.findItem(R.id.activity_player_menu_search);
+        MenuItemCompat.setOnActionExpandListener(mSearchItem, this);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
+        searchView.setQueryHint(getString(R.string.search_matches));
+        searchView.setOnQueryTextListener(this);
+
+        if (mSetSearchItemVisible) {
+            mSearchItem.setVisible(true);
+            mSetSearchItemVisible = false;
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onQueryTextChange(final String newText) {
+        mFilter.filter(newText);
+        return false;
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(final String query) {
+        return false;
+    }
+
+
+    @Override
     public void onRefresh() {
         super.onRefresh();
 
@@ -135,6 +213,21 @@ public class PlayerActivity extends BaseListActivity {
     @Override
     protected void readIntentData(final Intent intent) {
         mPlayer = intent.getParcelableExtra(EXTRA_PLAYER);
+    }
+
+
+    @Override
+    protected void setAdapter(final BaseListAdapter adapter) {
+        super.setAdapter(adapter);
+        mFilter = new MatchesFilter();
+
+        // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
+
+        if (mSearchItem == null) {
+            mSetSearchItemVisible = true;
+        } else {
+            mSearchItem.setVisible(true);
+        }
     }
 
 
@@ -169,6 +262,38 @@ public class PlayerActivity extends BaseListActivity {
         }
 
 
+        @Override
+        public boolean equals(final Object o) {
+            final boolean isEqual;
+
+            if (this == o) {
+                isEqual = true;
+            } else if (o instanceof ListItem) {
+                final ListItem li = (ListItem) o;
+
+                if (isTypeMatch() && li.isTypeMatch()) {
+                    isEqual = mMatch.equals(li.mMatch);
+                } else {
+                    isEqual = mTournament.equals(li.mTournament);
+                }
+            } else {
+                isEqual = false;
+            }
+
+            return isEqual;
+        }
+
+
+        private boolean isTypeMatch() {
+            return mListType == LIST_TYPE_MATCH;
+        }
+
+
+        private boolean isTypeTournament() {
+            return mListType == LIST_TYPE_TOURNAMENT;
+        }
+
+
     }
 
 
@@ -188,21 +313,21 @@ public class PlayerActivity extends BaseListActivity {
 
         @Override
         public int getItemCount() {
-            return mListItems.size();
+            return mListItemsShown.size();
         }
 
 
         @Override
         public int getItemViewType(final int position) {
-            return mListItems.get(position).mListType;
+            return mListItemsShown.get(position).mListType;
         }
 
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-            final ListItem listItem = mListItems.get(position);
+            final ListItem listItem = mListItemsShown.get(position);
 
-            if (listItem.mListType == ListItem.LIST_TYPE_MATCH) {
+            if (listItem.isTypeMatch()) {
                 final Match match = listItem.mMatch;
                 final MatchViewHolder viewHolder = (MatchViewHolder) holder;
                 viewHolder.mOpponent.setText(match.getOpponentName());
@@ -235,6 +360,59 @@ public class PlayerActivity extends BaseListActivity {
             }
 
             return holder;
+        }
+
+
+    }
+
+
+    private final class MatchesFilter extends Filter {
+
+
+        @Override
+        protected FilterResults performFiltering(final CharSequence constraint) {
+            final ArrayList<ListItem> listItems = new ArrayList<ListItem>(mListItems.size());
+            final String query = constraint.toString().trim().toLowerCase();
+
+            for (int i = 0; i < mListItems.size(); ++i) {
+                final ListItem match = mListItems.get(i);
+
+                if (match.isTypeMatch()) {
+                    final String name = match.mMatch.getOpponentName().toLowerCase();
+
+                    if (name.contains(query)) {
+                        ListItem tournament = null;
+
+                        for (int j = i - 1; tournament == null; --j) {
+                            final ListItem li = mListItems.get(j);
+
+                            if (li.isTypeTournament()) {
+                                tournament = li;
+                            }
+                        }
+
+                        if (!listItems.contains(tournament)) {
+                            listItems.add(tournament);
+                        }
+
+                        listItems.add(match);
+                    }
+                }
+            }
+
+            final FilterResults results = new FilterResults();
+            results.count = listItems.size();
+            results.values = listItems;
+
+            return results;
+        }
+
+
+        @Override
+        @SuppressWarnings("unchecked")
+        protected void publishResults(final CharSequence constraint, final FilterResults results) {
+            mListItemsShown = (ArrayList<ListItem>) results.values;
+            notifyDataSetChanged();
         }
 
 

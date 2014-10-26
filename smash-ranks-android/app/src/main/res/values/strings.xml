@@ -31,6 +31,7 @@
     <string name="region">Region</string>
     <string name="regions">Regions</string>
     <string name="search">Search</string>
+    <string name="search_matches">Search matches…</string>
     <string name="search_players">Search players…</string>
     <string name="select_a_region">Select a region</string>
     <string name="settings">Settings</string>

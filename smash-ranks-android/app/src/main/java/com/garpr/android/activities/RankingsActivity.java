@@ -216,7 +216,6 @@ public class RankingsActivity extends BaseListActivity implements
         super.onRefresh();
 
         if (!isLoading()) {
-            invalidateOptionsMenu();
             Players.clear();
             fetchRankings();
         }

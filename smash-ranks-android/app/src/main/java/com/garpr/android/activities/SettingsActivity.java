@@ -11,7 +11,9 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -144,8 +146,26 @@ public class SettingsActivity extends BaseActivity {
 
 
     private void showRegions() {
+        final String region = Settings.getRegion();
+
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.select_dialog_singlechoice);
+                android.R.layout.select_dialog_singlechoice) {
+            @Override
+            public View getView(final int position, final View convertView,
+                    final ViewGroup parent) {
+                final CheckedTextView view = (CheckedTextView) super.getView(position, convertView, parent);
+                final String item = getItem(position);
+
+                if (region.equals(item)) {
+                    view.setChecked(true);
+                } else {
+                    view.setChecked(false);
+                }
+
+                return view;
+            }
+        };
+
         adapter.addAll(mRegions);
 
         new AlertDialog.Builder(this)

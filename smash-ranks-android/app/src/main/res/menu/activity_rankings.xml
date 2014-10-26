@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:compat="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/icon_search"
+        android:icon="@drawable/ic_search"
         android:id="@+id/activity_rankings_menu_search"
         android:title="@string/search"
         android:visible="false"
         compat:actionViewClass="android.support.v7.widget.SearchView"
         compat:showAsAction="collapseActionView|ifRoom" />
     <item
-        android:icon="@drawable/icon_sort"
+        android:icon="@drawable/ic_sort"
         android:id="@+id/activity_rankings_menu_sort"
         android:title="@string/sort"
         android:visible="false"

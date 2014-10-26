@@ -93,7 +93,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             mDrawerToggle.setDrawerIndicatorEnabled(true);
         } else {
             mDrawerToggle.setDrawerIndicatorEnabled(false);
-            mToolbar.setNavigationIcon(R.drawable.icon_back);
+            mToolbar.setNavigationIcon(R.drawable.ic_back);
 
             mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override

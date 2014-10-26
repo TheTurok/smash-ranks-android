@@ -43,7 +43,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:paddingLeft">@dimen/root_padding</item>
         <item name="android:paddingRight">@dimen/root_padding</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="root">

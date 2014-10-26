@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -36,14 +35,14 @@ public class RankingsActivity extends BaseListActivity implements
 
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
+    private boolean mSetSearchItemVisible;
+    private boolean mSetSortItemVisible;
     private Comparator<Player> mSort;
     private MenuItem mSearchItem;
     private MenuItem mSortItem;
     private MenuItem mSortAlphabetical;
     private MenuItem mSortRank;
     private RankingsFilter mFilter;
-
-
 
 
     private void fetchRankings() {
@@ -183,6 +182,16 @@ public class RankingsActivity extends BaseListActivity implements
         mSortAlphabetical = menu.findItem(R.id.activity_rankings_menu_sort_alphabetical);
         mSortRank = menu.findItem(R.id.activity_rankings_menu_sort_rank);
 
+        if (mSetSearchItemVisible) {
+            mSearchItem.setVisible(true);
+            mSetSearchItemVisible = false;
+        }
+
+        if (mSetSortItemVisible) {
+            mSortItem.setVisible(true);
+            mSetSortItemVisible = false;
+        }
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -216,8 +225,16 @@ public class RankingsActivity extends BaseListActivity implements
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
         mFilter = new RankingsFilter();
-        mSearchItem.setVisible(true);
-        mSortItem.setVisible(true);
+
+        // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
+
+        if (mSearchItem == null || mSortItem == null) {
+            mSetSearchItemVisible = true;
+            mSetSortItemVisible = true;
+        } else {
+            mSearchItem.setVisible(true);
+            mSortItem.setVisible(true);
+        }
     }
 
 

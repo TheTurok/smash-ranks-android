@@ -3,6 +3,9 @@ package com.garpr.android.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -13,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -148,7 +150,7 @@ abstract class BaseActivity extends ActionBarActivity implements
                 mDrawerTournaments);
 
         if (view != null) {
-            // TODO
+            view.setBackgroundColor(getResources().getColor(R.color.overlay_bright));
         }
     }
 

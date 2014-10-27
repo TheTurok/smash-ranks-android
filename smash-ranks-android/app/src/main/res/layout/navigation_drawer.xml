@@ -23,7 +23,7 @@
                 android:src="@drawable/navigation_drawer_banner"
                 tools:ignore="ContentDescription" />
             <View
-                android:background="@color/overlay"
+                android:background="@color/overlay_dark"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent" />
         </FrameLayout>

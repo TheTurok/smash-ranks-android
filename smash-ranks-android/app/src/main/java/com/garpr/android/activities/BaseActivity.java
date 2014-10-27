@@ -124,7 +124,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             @Override
             public void onClick(final View v) {
                 closeDrawer();
-                // TODO
+                RankingsActivity.start(BaseActivity.this);
             }
         });
 

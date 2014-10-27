@@ -1,8 +1,10 @@
 package com.garpr.android.activities;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -45,6 +47,13 @@ public class RankingsActivity extends BaseListActivity implements
     private RankingsFilter mFilter;
 
 
+
+
+    public static void start(final Activity activity) {
+        final Intent intent = new Intent(activity, RankingsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
+    }
 
 
     private void fetchRankings() {

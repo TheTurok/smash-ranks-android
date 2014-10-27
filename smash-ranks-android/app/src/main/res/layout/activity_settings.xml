@@ -17,34 +17,23 @@
                 android:orientation="vertical"
                 android:showDividers="middle">
                 <LinearLayout
-                    android:background="?attr/selectableItemBackground"
                     android:id="@+id/activity_settings_region"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:minHeight="@dimen/list_item_height"
-                    android:orientation="vertical"
-                    android:padding="@dimen/root_padding">
+                    style="@style/settings_container">
                     <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
                         android:text="@string/change_region"
-                        android:textSize="20sp" />
+                        style="@style/settings_title" />
                     <TextView
                         android:id="@+id/activity_settings_region_name"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:textSize="16sp"
-                        tools:text="@string/norcal" />
+                        tools:text="@string/norcal"
+                        style="@style/settings_subtitle" />
                 </LinearLayout>
-                <TextView
-                    android:gravity="center"
-                    android:id="@+id/activity_settings_version"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/root_padding"
-                    android:layout_width="match_parent"
-                    android:padding="@dimen/root_padding"
-                    android:textSize="12sp"
-                    tools:text="v1.1" />
+                <LinearLayout
+                    android:id="@+id/activity_settings_clear_cache"
+                    style="@style/settings_container">
+                    <TextView
+                        android:text="@string/clear_cache"
+                        style="@style/settings_title" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

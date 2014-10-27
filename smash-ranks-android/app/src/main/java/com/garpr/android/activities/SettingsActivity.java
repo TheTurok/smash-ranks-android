@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,10 +40,10 @@ public class SettingsActivity extends BaseActivity {
     private static final String KEY_REGIONS = "KEY_REGIONS";
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
+    private LinearLayout mClearCache;
     private LinearLayout mRegion;
     private Set<String> mRegions;
     private TextView mRegionName;
-    private TextView mVersion;
 
 
 
@@ -87,9 +88,9 @@ public class SettingsActivity extends BaseActivity {
 
 
     private void findViews() {
+        mClearCache = (LinearLayout) findViewById(R.id.activity_settings_clear_cache);
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
-        mVersion = (TextView) findViewById(R.id.activity_settings_version);
     }
 
 
@@ -115,6 +116,9 @@ public class SettingsActivity extends BaseActivity {
 
 
     private void prepareViews() {
+        final Toolbar toolbar = getToolbar();
+        toolbar.setSubtitle(getString(R.string.version_x, App.getVersionName()));
+
         mRegion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -123,7 +127,6 @@ public class SettingsActivity extends BaseActivity {
         });
 
         mRegionName.setText(Settings.getRegion());
-        mVersion.setText(App.getVersionName());
     }
 
 

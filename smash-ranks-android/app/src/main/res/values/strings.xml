@@ -8,6 +8,7 @@
     <string name="berkeley">Berkeley</string>
     <string name="cancel">Cancel</string>
     <string name="change_region">Change region</string>
+    <string name="clear_cache">Clear cache</string>
     <string name="close_drawer">Close Drawer</string>
     <string name="error">Error</string>
     <string name="error_fetching_matches">Error fetching matches!</string>
@@ -39,6 +40,7 @@
     <string name="texas">Texas</string>
     <string name="tournament">Tournament</string>
     <string name="tournaments">Tournaments</string>
+    <string name="version_x">Version %s</string>
     <string name="win">Win</string>
 
 </resources>

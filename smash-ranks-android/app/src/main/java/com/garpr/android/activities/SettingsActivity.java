@@ -36,10 +36,13 @@ public class SettingsActivity extends BaseActivity {
 
 
     private static final String CNAME = SettingsActivity.class.getCanonicalName();
+    private static final String KEY_CACHE_WAS_CLEARED = "KEY_CACHE_WAS_CLEARED";
     private static final String KEY_LAST_REGIONS_FETCH = "KEY_LAST_REGIONS_FETCH";
     private static final String KEY_REGIONS = "KEY_REGIONS";
+    private static final String KEY_SHOWING_REGIONS_DIALOG = "KEY_SHOWING_REGIONS_DIALOG";
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
+    private AlertDialog mRegionDialog;
     private LinearLayout mClearCache;
     private LinearLayout mRegion;
     private Set<String> mRegions;
@@ -79,7 +82,7 @@ public class SettingsActivity extends BaseActivity {
                 editor.apply();
 
                 dialog.dismiss();
-                showRegions();
+                showRegionsDialog();
             }
         };
 
@@ -112,12 +115,37 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         findViews();
         prepareViews();
+
+        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            readSavedInstanceState(savedInstanceState);
+        }
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (!mClearCache.isEnabled()) {
+            outState.putBoolean(KEY_CACHE_WAS_CLEARED, true);
+        }
+
+        if (mRegionDialog != null && mRegionDialog.isShowing()) {
+            outState.putBoolean(KEY_SHOWING_REGIONS_DIALOG, true);
+        }
     }
 
 
     private void prepareViews() {
         final Toolbar toolbar = getToolbar();
         toolbar.setSubtitle(getString(R.string.version_x, App.getVersionName()));
+
+        mClearCache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                showClearCacheDialog();
+            }
+        });
 
         mRegion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +155,19 @@ public class SettingsActivity extends BaseActivity {
         });
 
         mRegionName.setText(Settings.getRegion());
+    }
+
+
+    private void readSavedInstanceState(final Bundle savedInstanceState) {
+        if (savedInstanceState.getBoolean(KEY_SHOWING_REGIONS_DIALOG)) {
+            final SharedPreferences sPrefs = Settings.get(CNAME);
+            mRegions = sPrefs.getStringSet(KEY_REGIONS, null);
+            showRegionsDialog();
+        }
+
+        if (savedInstanceState.getBoolean(KEY_CACHE_WAS_CLEARED)) {
+            mClearCache.setEnabled(false);
+        }
     }
 
 
@@ -144,9 +185,14 @@ public class SettingsActivity extends BaseActivity {
             if (mRegions == null || mRegions.isEmpty()) {
                 fetchRegions();
             } else {
-                showRegions();
+                showRegionsDialog();
             }
         }
+    }
+
+
+    private void showClearCacheDialog() {
+        // TODO
     }
 
 
@@ -155,15 +201,14 @@ public class SettingsActivity extends BaseActivity {
     }
 
 
-    private void showRegions() {
-        final String region = Settings.getRegion();
-
+    private void showRegionsDialog() {
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.select_dialog_singlechoice) {
             @Override
             public View getView(final int position, final View convertView,
                     final ViewGroup parent) {
                 final CheckedTextView view = (CheckedTextView) super.getView(position, convertView, parent);
+                final String region = Settings.getRegion();
                 final String item = getItem(position);
 
                 if (region.equals(item)) {
@@ -178,24 +223,28 @@ public class SettingsActivity extends BaseActivity {
 
         adapter.addAll(mRegions);
 
-        new AlertDialog.Builder(this)
-                .setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        final String region = adapter.getItem(which);
-                        Settings.setRegion(region);
-                        mRegionName.setText(region);
-                        setResult(ResultCodes.REGION_UPDATED);
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setTitle(R.string.select_a_region)
-                .show();
+        if (mRegionDialog == null) {
+            mRegionDialog = new AlertDialog.Builder(this)
+                    .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            final String region = adapter.getItem(which);
+                            Settings.setRegion(region);
+                            mRegionName.setText(region);
+                            setResult(ResultCodes.REGION_UPDATED);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setTitle(R.string.select_a_region)
+                    .create();
+        }
+
+        mRegionDialog.show();
     }
 
 

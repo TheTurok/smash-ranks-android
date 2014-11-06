@@ -12,7 +12,7 @@ import com.garpr.android.misc.Heartbeat;
 final class Network {
 
 
-    private static final String BASE_URL = "http://www.garpr.com:5100";
+    private static final String BASE_URL = "http://api.garpr.com";
     private static final String TAG = Network.class.getSimpleName();
 
 

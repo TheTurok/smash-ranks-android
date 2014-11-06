@@ -50,6 +50,10 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="navigation_drawer">
+        <item name="android:layout_gravity">left</item>
+    </style>
+
     <style name="navigation_drawer_item.rankings">
         <item name="android:drawableLeft">@drawable/ic_people</item>
     </style>

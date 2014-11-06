@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="app_theme" parent="Theme.AppCompat">
+    <style name="app_theme" parent="base_theme">
+
+    </style>
+
+    <style name="base_theme" parent="Theme.AppCompat">
         <item name="android:windowActionBar">false</item>
         <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="toolbar_theme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+
     </style>
 
 </resources>

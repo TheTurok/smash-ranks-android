@@ -4,9 +4,9 @@
     android:background="?attr/colorPrimary"
     android:fillViewport="true"
     android:id="@id/navigation_drawer"
-    android:layout_gravity="start"
     android:layout_height="match_parent"
-    android:layout_width="@dimen/navigation_drawer_width">
+    android:layout_width="@dimen/navigation_drawer_width"
+    style="@style/navigation_drawer">
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"

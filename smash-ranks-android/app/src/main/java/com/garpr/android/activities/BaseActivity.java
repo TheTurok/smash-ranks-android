@@ -3,9 +3,8 @@ package com.garpr.android.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -16,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -35,8 +35,8 @@ abstract class BaseActivity extends ActionBarActivity implements
 
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean mIsAlive;
-    private DrawerLayout mDrawer;
-    private ScrollView mDrawerLayout;
+    private DrawerLayout mDrawerLayout;
+    private ScrollView mDrawerContents;
     private TextView mDrawerAbout;
     private TextView mDrawerRankings;
     private TextView mDrawerSettings;
@@ -47,14 +47,14 @@ abstract class BaseActivity extends ActionBarActivity implements
 
 
     protected void closeDrawer() {
-        mDrawer.closeDrawer(mDrawerLayout);
+        mDrawerLayout.closeDrawer(mDrawerContents);
     }
 
 
     private void findViews() {
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerAbout = (TextView) findViewById(R.id.navigation_drawer_about);
-        mDrawerLayout = (ScrollView) findViewById(R.id.navigation_drawer);
+        mDrawerContents = (ScrollView) findViewById(R.id.navigation_drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerRankings = (TextView) findViewById(R.id.navigation_drawer_rankings);
         mDrawerSettings = (TextView) findViewById(R.id.navigation_drawer_settings);
         mDrawerTournaments = (TextView) findViewById(R.id.navigation_drawer_tournaments);
@@ -82,8 +82,8 @@ abstract class BaseActivity extends ActionBarActivity implements
 
 
     private void initializeNavigationDrawer() {
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.open_drawer,
-                R.string.close_drawer) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
+                R.string.open_drawer, R.string.close_drawer) {
             @Override
             public void onDrawerClosed(final View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -98,6 +98,21 @@ abstract class BaseActivity extends ActionBarActivity implements
             }
         };
 
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            final Resources res = getResources();
+            final int statusBarHeightResId = res.getIdentifier("status_bar_height", "dimen", "android");
+
+            if (statusBarHeightResId > 0) {
+                final int statusBarHeight = res.getDimensionPixelSize(statusBarHeightResId);
+                final ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mDrawerContents.getLayoutParams();
+                params.topMargin = -statusBarHeight;
+            }
+
+            mDrawerLayout.setStatusBarBackground(R.color.gray_dark);
+        }
+
         if (showDrawerIndicator()) {
             mDrawerToggle.setDrawerIndicatorEnabled(true);
         } else {
@@ -111,8 +126,6 @@ abstract class BaseActivity extends ActionBarActivity implements
                 }
             });
         }
-
-        mDrawer.setDrawerListener(mDrawerToggle);
 
         mDrawerAbout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,7 +186,7 @@ abstract class BaseActivity extends ActionBarActivity implements
 
 
     protected boolean isDrawerOpen() {
-        return mDrawer.isDrawerOpen(mDrawerLayout);
+        return mDrawerLayout.isDrawerOpen(mDrawerContents);
     }
 
 

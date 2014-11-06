@@ -25,7 +25,7 @@ public final class Matches {
 
 
     public static void get(final MatchesCallback callback) {
-        final String suffix = Constants.MATCHES + '?' + Constants.PLAYER + '=' + callback.mPlayerId;
+        final String suffix = Constants.MATCHES + '/' + callback.mPlayerId;
         final String url = Network.makeUrl(suffix);
         Network.sendRequest(url, callback);
     }

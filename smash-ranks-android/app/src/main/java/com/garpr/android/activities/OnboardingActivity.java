@@ -36,6 +36,7 @@ public class OnboardingActivity extends BaseActivity {
 
             case R.id.activity_onboarding_menu_next:
                 RankingsActivity.start(this);
+                finish();
                 break;
 
             default:

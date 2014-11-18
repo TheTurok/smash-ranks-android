@@ -6,4 +6,5 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:minHeight="?attr/actionBarSize"
-    app:theme="@style/toolbar_theme" />
+    app:theme="@style/toolbar_theme"
+    style="@style/toolbar" />

@@ -211,6 +211,12 @@ public class PlayerActivity extends BaseListActivity implements
 
 
     @Override
+    public void onRegionChanged(final String region) {
+        RankingsActivity.start(this);
+    }
+
+
+    @Override
     protected void readIntentData(final Intent intent) {
         mPlayer = intent.getParcelableExtra(EXTRA_PLAYER);
     }

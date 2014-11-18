@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
+import com.garpr.android.data.OnRegionChangedListener;
+import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Heartbeat;
 
 
@@ -30,6 +32,7 @@ import com.garpr.android.misc.Heartbeat;
  */
 abstract class BaseActivity extends ActionBarActivity implements
         Heartbeat,
+        OnRegionChangedListener,
         Toolbar.OnMenuItemClickListener {
 
 
@@ -190,6 +193,21 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
+    protected boolean isNavigationDrawerEnabled() {
+        return true;
+    }
+
+
+    protected boolean isToolbarEnabled() {
+        return true;
+    }
+
+
+    protected boolean listenForRegionChanges() {
+        return false;
+    }
+
+
     /**
      * This method's code taken from the Android documentation:
      * https://developer.android.com/training/implementing-navigation/ancestral.html
@@ -220,17 +238,29 @@ abstract class BaseActivity extends ActionBarActivity implements
         mIsAlive = true;
         setContentView(getContentView());
         findViews();
-        initializeToolbar();
-        initializeNavigationDrawer();
+
+        if (isToolbarEnabled()) {
+            initializeToolbar();
+
+            if (isNavigationDrawerEnabled()) {
+                initializeNavigationDrawer();
+            }
+        }
+
+        if (listenForRegionChanges()) {
+            Settings.addRegionListener(this);
+        }
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        final int menuResId = getOptionsMenu();
+        if (isToolbarEnabled()) {
+            final int menuResId = getOptionsMenu();
 
-        if (menuResId != 0) {
-            mToolbar.inflateMenu(menuResId);
+            if (menuResId != 0) {
+                mToolbar.inflateMenu(menuResId);
+            }
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -242,6 +272,10 @@ abstract class BaseActivity extends ActionBarActivity implements
         super.onDestroy();
         mIsAlive = false;
         App.cancelNetworkRequests(this);
+
+        if (listenForRegionChanges()) {
+            Settings.removeRegionListener(this);
+        }
     }
 
 
@@ -263,7 +297,7 @@ abstract class BaseActivity extends ActionBarActivity implements
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (isNavigationDrawerEnabled() && mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -283,7 +317,16 @@ abstract class BaseActivity extends ActionBarActivity implements
     @Override
     protected void onPostCreate(final Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
+
+        if (isNavigationDrawerEnabled()) {
+            mDrawerToggle.syncState();
+        }
+    }
+
+
+    @Override
+    public void onRegionChanged(final String region) {
+
     }
 
 

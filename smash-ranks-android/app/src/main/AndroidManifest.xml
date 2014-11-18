@@ -13,12 +13,7 @@
         <activity
             android:label="@string/gar_pr"
             android:launchMode="singleTop"
-            android:name=".activities.RankingsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".activities.RankingsActivity" />
 
         <activity
             android:label="@string/about"
@@ -28,6 +23,17 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.RankingsActivity" />
+        </activity>
+
+        <activity
+            android:label=""
+            android:launchMode="singleTop"
+            android:name=".activities.OnboardingActivity">
+            <intent-filter
+                android:label="@string/gar_pr">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity

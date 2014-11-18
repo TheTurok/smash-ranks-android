@@ -18,9 +18,11 @@
     <string name="error_fetching_tournaments">Error fetching tournaments!</string>
     <string name="fetching_regions">Fetching regions…</string>
     <string name="gar_pr">GAR PR</string>
+    <string name="go">Go!</string>
     <string name="hello_world">Hello, World!</string>
     <string name="lose">Lose</string>
     <string name="newengland">New England</string>
+    <string name="next">Next</string>
     <string name="norcal">Norcal</string>
     <string name="ok">OK</string>
     <string name="open_drawer">Open Drawer</string>
@@ -31,6 +33,7 @@
     <string name="rank_x">Rank %d</string>
     <string name="region">Region</string>
     <string name="regions">Regions</string>
+    <string name="save">Save</string>
     <string name="search">Search</string>
     <string name="search_matches">Search matches…</string>
     <string name="search_players">Search players…</string>

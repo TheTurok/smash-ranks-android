@@ -26,11 +26,10 @@
         </activity>
 
         <activity
-            android:label=""
+            android:label="@string/gar_pr"
             android:launchMode="singleTop"
             android:name=".activities.OnboardingActivity">
-            <intent-filter
-                android:label="@string/gar_pr">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

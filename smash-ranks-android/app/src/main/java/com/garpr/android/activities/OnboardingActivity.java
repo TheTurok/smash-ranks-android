@@ -1,6 +1,7 @@
 package com.garpr.android.activities;
 
 
+import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.garpr.android.R;
@@ -24,6 +25,13 @@ public class OnboardingActivity extends BaseActivity {
     @Override
     protected int getOptionsMenu() {
         return R.menu.activity_onboarding;
+    }
+
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setTitle("");
     }
 
 

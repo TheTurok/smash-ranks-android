@@ -9,7 +9,8 @@ import android.util.Log;
 import com.garpr.android.App;
 
 
-public final class Database extends SQLiteOpenHelper {
+public final class Database extends SQLiteOpenHelper implements
+        OnRegionChangedListener {
 
 
     private static final String TAG = Database.class.getSimpleName();
@@ -24,7 +25,7 @@ public final class Database extends SQLiteOpenHelper {
         final String packageName = context.getPackageName();
         final int version = App.getVersionCode();
         sDatabase = new Database(context, packageName, version);
-        Settings.getRegion();
+        Settings.addRegionListener(sDatabase);
     }
 
 
@@ -38,14 +39,6 @@ public final class Database extends SQLiteOpenHelper {
     }
 
 
-    static void onRegionChanged() {
-        final SQLiteDatabase database = writeTo();
-        Players.createTable(database);
-        Tournaments.createTable(database);
-        database.close();
-    }
-
-
     private Database(final Context context, final String name, final int version) {
         super(context, name, null, version);
     }
@@ -53,7 +46,18 @@ public final class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
-        // this method intentionally left blank
+        Players.createTable(db);
+        Tournaments.createTable(db);
+        db.close();
+    }
+
+
+    @Override
+    public void onRegionChanged(final String region) {
+        final SQLiteDatabase database = writeTo();
+        Players.createTable(database);
+        Tournaments.createTable(database);
+        database.close();
     }
 
 

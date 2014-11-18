@@ -48,7 +48,6 @@ public final class Database extends SQLiteOpenHelper implements
     public void onCreate(final SQLiteDatabase db) {
         Players.createTable(db);
         Tournaments.createTable(db);
-        db.close();
     }
 
 

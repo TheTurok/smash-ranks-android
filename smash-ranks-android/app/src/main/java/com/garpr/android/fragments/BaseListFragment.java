@@ -27,35 +27,13 @@ abstract class BaseListFragment extends BaseFragment implements
 
 
 
-    private FadeAnimator animate(FadeAnimator animator, final View view, final boolean fadeIn) {
-        if (animator != null) {
-            animator.cancelIfRunning();
-        }
-
-        final int visibility = view.getVisibility();
-
-        if ((fadeIn && visibility == View.VISIBLE) || (!fadeIn && visibility == View.GONE)) {
-            return animator;
-        }
-
-        if (fadeIn) {
-            animator = FadeAnimator.fadeIn(view);
-        } else {
-            animator = FadeAnimator.fadeOut(view);
-        }
-
-        animator.start();
-        return animator;
-    }
-
-
     private void animateError(final boolean fadeIn) {
-        mErrorAnimator = animate(mErrorAnimator, mErrorView, fadeIn);
+        mErrorAnimator = FadeAnimator.animate(mErrorAnimator, mErrorView, fadeIn);
     }
 
 
     private void animateList(final boolean fadeIn) {
-        mListAnimator = animate(mListAnimator, mRecyclerView, fadeIn);
+        mListAnimator = FadeAnimator.animate(mListAnimator, mRecyclerView, fadeIn);
     }
 
 
@@ -70,6 +48,11 @@ abstract class BaseListFragment extends BaseFragment implements
     @Override
     protected int getContentView() {
         return R.layout.fragment_base_list;
+    }
+
+
+    protected String getErrorText() {
+        return getString(R.string.error_);
     }
 
 

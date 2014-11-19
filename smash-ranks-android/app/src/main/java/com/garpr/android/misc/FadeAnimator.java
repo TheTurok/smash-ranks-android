@@ -19,13 +19,25 @@ public class FadeAnimator implements AnimatorListener, AnimatorUpdateListener {
 
 
 
-    public static FadeAnimator fadeIn(final View view) {
-        return new FadeAnimator(view, true);
-    }
+    public static FadeAnimator animate(FadeAnimator animator, final View view, final boolean fadeIn) {
+        if (animator != null) {
+            animator.cancelIfRunning();
+        }
 
+        final int visibility = view.getVisibility();
 
-    public static FadeAnimator fadeOut(final View view) {
-        return new FadeAnimator(view, false);
+        if ((fadeIn && visibility == View.VISIBLE) || (!fadeIn && visibility == View.GONE)) {
+            return animator;
+        }
+
+        if (fadeIn) {
+            animator = new FadeAnimator(view, true);
+        } else {
+            animator = new FadeAnimator(view, false);
+        }
+
+        animator.start();
+        return animator;
     }
 
 
@@ -48,7 +60,7 @@ public class FadeAnimator implements AnimatorListener, AnimatorUpdateListener {
     }
 
 
-    public void cancelIfRunning() {
+    private void cancelIfRunning() {
         if (mAnimator.isRunning()) {
             mAnimator.cancel();
         }

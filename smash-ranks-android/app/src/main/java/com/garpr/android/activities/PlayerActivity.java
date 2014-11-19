@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -356,12 +357,13 @@ public class PlayerActivity extends BaseListActivity implements
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
             final RecyclerView.ViewHolder holder;
+            final LayoutInflater inflater = getLayoutInflater();
 
             if (viewType == ListItem.LIST_TYPE_MATCH) {
-                final View view = mInflater.inflate(R.layout.model_match, parent, false);
+                final View view = inflater.inflate(R.layout.model_match, parent, false);
                 holder = new MatchViewHolder(view);
             } else {
-                final View view = mInflater.inflate(R.layout.separator_tournament, parent, false);
+                final View view = inflater.inflate(R.layout.separator_tournament, parent, false);
                 holder = new TournamentViewHolder(view);
             }
 

@@ -14,6 +14,11 @@ public abstract class BaseFragment extends Fragment {
     protected abstract int getContentView();
 
 
+    protected LayoutInflater getLayoutInflater() {
+        return getActivity().getLayoutInflater();
+    }
+
+
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
             final Bundle savedInstanceState) {

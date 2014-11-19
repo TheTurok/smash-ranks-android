@@ -4,11 +4,11 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.IntentCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -288,7 +288,8 @@ public class RankingsActivity extends BaseListActivity implements
 
         @Override
         public ViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
-            final View view = mInflater.inflate(R.layout.model_player, parent, false);
+            final LayoutInflater inflater = getLayoutInflater();
+            final View view = inflater.inflate(R.layout.model_player, parent, false);
             view.setOnClickListener(this);
             return new ViewHolder(view);
         }

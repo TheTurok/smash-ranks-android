@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -110,7 +111,8 @@ public class TournamentsActivity extends BaseListActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-            final View view = mInflater.inflate(R.layout.model_tournament, parent, false);
+            final LayoutInflater inflater = getLayoutInflater();
+            final View view = inflater.inflate(R.layout.model_tournament, parent, false);
             return new ViewHolder(view);
         }
 

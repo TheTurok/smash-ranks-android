@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -62,7 +61,7 @@ abstract class BaseListActivity extends BaseActivity implements
     }
 
 
-    private void findViews() {
+    protected void findViews() {
         mErrorView = (TextView) findViewById(R.id.activity_base_list_error);
         mRecyclerView = (RecyclerView) findViewById(R.id.activity_base_list_list);
         mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_base_list_refresh);
@@ -112,7 +111,7 @@ abstract class BaseListActivity extends BaseActivity implements
     }
 
 
-    private void prepareViews() {
+    protected void prepareViews() {
         mErrorView.setText(getErrorText());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRefreshLayout.setOnRefreshListener(this);
@@ -141,9 +140,9 @@ abstract class BaseListActivity extends BaseActivity implements
     }
 
 
-    protected void setLoading(final boolean loading) {
-        mRefreshLayout.setRefreshing(loading);
-        mIsLoading = loading;
+    protected void setLoading(final boolean isLoading) {
+        mIsLoading = isLoading;
+        mRefreshLayout.setRefreshing(mIsLoading);
     }
 
 
@@ -151,14 +150,6 @@ abstract class BaseListActivity extends BaseActivity implements
 
     protected abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
             RecyclerView.Adapter<T> implements View.OnClickListener {
-
-
-        protected final LayoutInflater mInflater;
-
-
-        protected BaseListAdapter() {
-            mInflater = getLayoutInflater();
-        }
 
 
         @Override

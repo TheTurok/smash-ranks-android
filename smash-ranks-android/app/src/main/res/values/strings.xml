@@ -11,6 +11,7 @@
     <string name="clear_cache">Clear cache</string>
     <string name="close_drawer">Close Drawer</string>
     <string name="error">Error</string>
+    <string name="error_">Error!</string>
     <string name="error_fetching_matches">Error fetching matches!</string>
     <string name="error_fetching_x_matches">Error fetching %s\'s matches!</string>
     <string name="error_fetching_rankings">Error fetching rankings!</string>
@@ -18,7 +19,8 @@
     <string name="error_fetching_tournaments">Error fetching tournaments!</string>
     <string name="fetching_regions">Fetching regions…</string>
     <string name="gar_pr">GAR PR</string>
-    <string name="go">Go!</string>
+    <string name="go">Go</string>
+    <string name="go_">Go!</string>
     <string name="hello_world">Hello, World!</string>
     <string name="lose">Lose</string>
     <string name="newengland">New England</string>

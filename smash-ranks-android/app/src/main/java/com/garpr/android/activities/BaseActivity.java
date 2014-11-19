@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
-import com.garpr.android.data.OnRegionChangedListener;
+import com.garpr.android.misc.OnRegionChangedListener;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Heartbeat;
 

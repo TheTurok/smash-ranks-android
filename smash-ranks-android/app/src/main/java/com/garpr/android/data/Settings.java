@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.garpr.android.App;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.OnRegionChangedListener;
 import com.garpr.android.misc.Utils;
 
 import java.lang.ref.WeakReference;

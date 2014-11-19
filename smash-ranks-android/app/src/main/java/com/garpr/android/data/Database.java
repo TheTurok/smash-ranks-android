@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.garpr.android.App;
+import com.garpr.android.misc.OnRegionChangedListener;
 
 
 public final class Database extends SQLiteOpenHelper implements

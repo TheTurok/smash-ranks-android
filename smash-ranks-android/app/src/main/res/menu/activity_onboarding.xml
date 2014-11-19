@@ -5,13 +5,13 @@
         android:enabled="true"
         android:icon="@drawable/ic_sort"
         android:id="@+id/activity_onboarding_menu_next"
-        android:title="@string/next"
+        android:title="@string/next_"
         compat:showAsAction="ifRoom|withText" />
     <item
         android:enabled="false"
         android:icon="@drawable/ic_sort"
         android:id="@+id/activity_onboarding_menu_go"
-        android:title="@string/go"
+        android:title="@string/go_"
         android:visible="false"
         compat:showAsAction="ifRoom|withText" />
 </menu>

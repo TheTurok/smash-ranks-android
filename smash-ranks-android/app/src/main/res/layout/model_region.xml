@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center_vertical"
+    android:id="@+id/model_region_name"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/root_padding_fourth"
+    android:layout_marginTop="@dimen/root_padding_fourth"
+    android:layout_width="match_parent"
+    android:lineSpacingExtra="2dp"
+    android:maxLines="3"
+    android:minHeight="@dimen/list_item_height"
+    android:paddingLeft="@dimen/root_padding"
+    android:paddingRight="@dimen/root_padding"
+    android:textSize="24sp"
+    tools:text="@string/norcal"/>

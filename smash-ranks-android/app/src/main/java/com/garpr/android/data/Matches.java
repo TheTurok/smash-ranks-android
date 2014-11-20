@@ -4,7 +4,6 @@ package com.garpr.android.data;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
-import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Match;
@@ -31,41 +30,6 @@ public final class Matches {
     }
 
 
-    private static void getFromJSON(final MatchesCallback callback, final Exception e) {
-        if (callback.isAlive()) {
-            final int jsonFileResId = getJSONFileResIdForPlayer(callback.mPlayerId);
-
-            if (jsonFileResId == Integer.MIN_VALUE) {
-                Log.d(TAG, "Match JSON file unavailable for " + callback.mPlayerId);
-                callback.error(e);
-            } else {
-                Log.d(TAG, "Grabbing match for " + callback.mPlayerId + " from JSON");
-                final AsyncReadMatchesFile task = new AsyncReadMatchesFile(callback, jsonFileResId);
-                task.execute();
-            }
-        } else {
-            Log.d(TAG, "Canceled grabbing match for " + callback.mPlayerId + " from JSON");
-        }
-    }
-
-
-    private static int getJSONFileResIdForPlayer(final String playerId) {
-        final int jsonFileResId;
-
-        if (playerId.equals("53c646848ab65f6d52f2e09a")) {
-            jsonFileResId = R.raw.matches_pewpewu;
-        } else if (playerId.equals("53c647868ab65f6d5b15a46e")) {
-            jsonFileResId = R.raw.matches_silentspectre;
-        } else if (playerId.equals("53c647f08ab65f6d5b15a483")) {
-            jsonFileResId = R.raw.matches_bizzarroflame;
-        } else {
-            jsonFileResId = Integer.MIN_VALUE;
-        }
-
-        return jsonFileResId;
-    }
-
-
     private static ArrayList<Match> parseJSON(final JSONObject json) throws JSONException {
         final JSONArray matchesJSON = json.getJSONArray(Constants.MATCHES);
         final int matchesLength = matchesJSON.length();
@@ -88,38 +52,6 @@ public final class Matches {
 
 
 
-    private static class AsyncReadMatchesFile extends AsyncReadFile<Match> {
-
-
-        private static final String TAG = AsyncReadMatchesFile.class.getSimpleName();
-
-        private final int mJSONFileResId;
-
-
-        private AsyncReadMatchesFile(final MatchesCallback callback, final int jsonFileResId) {
-            super(callback);
-            mJSONFileResId = jsonFileResId;
-        }
-
-
-        @Override
-        int getRawResourceId() {
-            return mJSONFileResId;
-        }
-
-
-        @Override
-        ArrayList<Match> parseJSON(final JSONObject json) throws JSONException {
-            final ArrayList<Match> matches = Matches.parseJSON(json);
-            Log.d(TAG, "Read in " + matches.size() + " Match objects from the JSON file");
-
-            return matches;
-        }
-
-
-    }
-
-
     public static abstract class MatchesCallback extends Callback<Match> {
 
 
@@ -137,7 +69,10 @@ public final class Matches {
         @Override
         public final void onErrorResponse(final VolleyError error) {
             Log.e(TAG, "Exception when downloading matches", error);
-            getFromJSON(this, error);
+
+            if (isAlive()) {
+                error(error);
+            }
         }
 
 
@@ -148,7 +83,12 @@ public final class Matches {
                 Log.d(TAG, "Read in " + matches.size() + " Match objects from JSON response");
 
                 if (matches.isEmpty()) {
-                    getFromJSON(this, new Exception("Player " + mPlayerId + " has no matches"));
+                    final JSONException e = new JSONException("No matches grabbed from JSON response for Player " + mPlayerId);
+                    Log.e(TAG, "No matches available for Player " + mPlayerId, e);
+
+                    if (isAlive()) {
+                        error(e);
+                    }
                 } else {
                     if (isAlive()) {
                         response(matches);
@@ -158,7 +98,7 @@ public final class Matches {
                 }
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when parsing matches JSON response", e);
-                getFromJSON(this, e);
+                error(e);
             }
         }
 

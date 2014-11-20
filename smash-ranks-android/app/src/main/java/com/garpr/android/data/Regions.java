@@ -1,12 +1,16 @@
 package com.garpr.android.data;
 
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
-import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.models.Region;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,31 +27,79 @@ public final class Regions {
 
 
 
-    public static void get(final RegionsCallback callback) {
-        final String url = Network.makeRegionFreeUrl(Constants.REGIONS);
-        Network.sendRequest(url, callback);
+    public static void clear() {
+        final SQLiteDatabase database = Database.writeTo();
+        clear(database);
+        database.close();
     }
 
 
-    private static void getFromJSON(final RegionsCallback callback) {
+    static void clear(final SQLiteDatabase database) {
+        dropTable(database);
+        createTable(database);
+    }
+
+
+    private static ContentValues createContentValues(final Region region) {
+        final JSONObject regionJSON = region.toJSON();
+        final String regionString = regionJSON.toString();
+
+        final ContentValues values = new ContentValues();
+        values.put(Constants.ID, region.getId());
+        values.put(Constants.JSON, regionString);
+
+        return values;
+    }
+
+
+    static void createTable(final SQLiteDatabase database) {
+        Log.d(TAG, "Creating " + getTableName() + " database table");
+        final String sql = "CREATE TABLE IF NOT EXISTS " + getTableName() + " ("
+                + Constants.ID + " TEXT NOT NULL, "
+                + Constants.JSON + " TEXT NOT NULL, "
+                + "PRIMARY KEY (" + Constants.ID + "));";
+        database.execSQL(sql);
+    }
+
+
+    static void dropTable(final SQLiteDatabase database) {
+        Log.d(TAG, "Dropping " + getTableName() + " database table");
+        final String sql = "DROP TABLE IF EXISTS " + getTableName() + ";";
+        database.execSQL(sql);
+    }
+
+
+    public static void get(final RegionsCallback callback) {
+        final AsyncReadRegionsDatabase task = new AsyncReadRegionsDatabase(callback);
+        task.execute();
+    }
+
+
+    private static void getFromNetwork(final RegionsCallback callback) {
         if (callback.isAlive()) {
-            Log.d(TAG, "Grabbing regions from JSON");
-            final AsyncReadRegionsFile task = new AsyncReadRegionsFile(callback);
-            task.execute();
+            Log.d(TAG, "Grabbing regions from network");
+            final String url = Network.makeRegionFreeUrl(Constants.REGIONS);
+            Network.sendRequest(url, callback);
         } else {
-            Log.d(TAG, "Canceled grabbing regions from JSON");
+            Log.d(TAG, "Canceled grabbing regions from network");
         }
     }
 
 
-    private static ArrayList<String> parseJSON(final JSONObject json) throws JSONException {
+    private static String getTableName() {
+        return TAG + '_' + Settings.getRegion();
+    }
+
+
+    private static ArrayList<Region> parseJSON(final JSONObject json) throws JSONException {
         final JSONArray regionsJSON = json.getJSONArray(Constants.REGIONS);
         final int regionsLength = regionsJSON.length();
-        final ArrayList<String> regions = new ArrayList<String>(regionsLength);
+        final ArrayList<Region> regions = new ArrayList<Region>(regionsLength);
 
         for (int i = 0; i < regionsLength; ++i) {
             try {
-                final String region = regionsJSON.getString(i);
+                final JSONObject regionJSON = regionsJSON.getJSONObject(i);
+                final Region region = new Region(regionJSON);
                 regions.add(region);
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when grabbing region at index " + i, e);
@@ -59,38 +111,100 @@ public final class Regions {
     }
 
 
+    private static void save(final ArrayList<Region> regions) {
+        final AsyncSaveRegionsDatabase task = new AsyncSaveRegionsDatabase(regions);
+        task.execute();
+    }
 
 
-    private static class AsyncReadRegionsFile extends AsyncReadFile<String> {
 
 
-        private static final String TAG = AsyncReadRegionsFile.class.getSimpleName();
+    private static final class AsyncReadRegionsDatabase extends AsyncReadDatabase<Region> {
 
 
-        private AsyncReadRegionsFile(final RegionsCallback callback) {
+        private static final String TAG = AsyncReadRegionsDatabase.class.getSimpleName();
+
+
+        private AsyncReadRegionsDatabase(final RegionsCallback callback) {
             super(callback);
         }
 
 
         @Override
-        int getRawResourceId() {
-            return R.raw.regions;
+        ArrayList<Region> buildResults(final Cursor cursor) throws JSONException {
+            final ArrayList<Region> regions = new ArrayList<Region>();
+            final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
+
+            do {
+                final String regionString = cursor.getString(jsonIndex);
+                final JSONObject regionJSON = new JSONObject(regionString);
+                final Region region = new Region(regionJSON);
+                regions.add(region);
+
+                cursor.moveToNext();
+            } while (!cursor.isAfterLast());
+
+            Log.d(TAG, "Read in " + regions.size() + " Region objects from the database");
+
+            return regions;
         }
 
 
         @Override
-        ArrayList<String> parseJSON(final JSONObject json) throws JSONException {
-            final ArrayList<String> regions = Regions.parseJSON(json);
-            Log.d(TAG, "Read in " + regions.size() + " regions from the JSON file");
+        void getFromNetwork(final Callback<Region> callback) {
+            Regions.getFromNetwork((RegionsCallback) callback);
+        }
 
-            return regions;
+
+        @Override
+        Cursor query(final SQLiteDatabase database) {
+            final String[] columns = { Constants.JSON };
+            return database.query(getTableName(), columns, null, null, null, null, null);
         }
 
 
     }
 
 
-    public static abstract class RegionsCallback extends Callback<String> {
+    private static final class AsyncSaveRegionsDatabase extends AsyncTask<Void, Void, Void> {
+
+
+        private static final String TAG = AsyncSaveRegionsDatabase.class.getSimpleName();
+
+        private final ArrayList<Region> mRegions;
+
+
+        private AsyncSaveRegionsDatabase(final ArrayList<Region> regions) {
+            mRegions = regions;
+        }
+
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            final SQLiteDatabase database = Database.writeTo();
+            clear(database);
+
+            database.beginTransaction();
+
+            for (final Region region : mRegions) {
+                final ContentValues values = createContentValues(region);
+                database.insert(getTableName(), null, values);
+            }
+
+            database.setTransactionSuccessful();
+            database.endTransaction();
+            database.close();
+
+            Log.d(TAG, "Saved " + mRegions.size() + " Region objects to the database");
+
+            return null;
+        }
+
+
+    }
+
+
+    public static abstract class RegionsCallback extends Callback<Region> {
 
 
         private static final String TAG = RegionsCallback.class.getSimpleName();
@@ -104,19 +218,29 @@ public final class Regions {
         @Override
         public final void onErrorResponse(final VolleyError error) {
             Log.e(TAG, "Exception when downloading regions", error);
-            getFromJSON(this);
+
+            if (isAlive()) {
+                error(error);
+            }
         }
 
 
         @Override
         public final void onResponse(final JSONObject json) {
             try {
-                final ArrayList<String> regions = Regions.parseJSON(json);
+                final ArrayList<Region> regions = Regions.parseJSON(json);
                 Log.d(TAG, "Read in " + regions.size() + " regions from JSON response");
 
                 if (regions.isEmpty()) {
-                    getFromJSON(this);
+                    final JSONException e = new JSONException("No regions grabbed from JSON response");
+                    Log.e(TAG, "No regions available", e);
+
+                    if (isAlive()) {
+                        error(e);
+                    }
                 } else {
+                    save(regions);
+
                     if (isAlive()) {
                         response(regions);
                     } else {
@@ -125,14 +249,14 @@ public final class Regions {
                 }
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when parsing regions JSON response", e);
-                getFromJSON(this);
+                error(e);
             }
         }
 
 
         @Override
-        public final void response(final String item) {
-            final ArrayList<String> list = new ArrayList<String>(1);
+        public final void response(final Region item) {
+            final ArrayList<Region> list = new ArrayList<Region>(1);
             list.add(item);
             response(list);
         }

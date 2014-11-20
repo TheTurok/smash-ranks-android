@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
-import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Player;
@@ -73,17 +72,6 @@ public final class Players {
     public static void get(final PlayersCallback callback) {
         final AsyncReadPlayersDatabase task = new AsyncReadPlayersDatabase(callback);
         task.execute();
-    }
-
-
-    private static void getFromJSON(final PlayersCallback callback) {
-        if (callback.isAlive()) {
-            Log.d(TAG, "Grabbing players from JSON");
-            final AsyncReadPlayersFile task = new AsyncReadPlayersFile(callback);
-            task.execute();
-        } else {
-            Log.d(TAG, "Canceled grabbing players from JSON");
-        }
     }
 
 
@@ -188,35 +176,6 @@ public final class Players {
     }
 
 
-    private static final class AsyncReadPlayersFile extends AsyncReadFile<Player> {
-
-
-        private static final String TAG = AsyncReadPlayersFile.class.getSimpleName();
-
-
-        private AsyncReadPlayersFile(final PlayersCallback callback) {
-            super(callback);
-        }
-
-
-        @Override
-        int getRawResourceId() {
-            return R.raw.players;
-        }
-
-
-        @Override
-        ArrayList<Player> parseJSON(final JSONObject json) throws JSONException {
-            final ArrayList<Player> players = Players.parseJSON(json);
-            Log.d(TAG, "Read in " + players.size() + " Player objects from the JSON file");
-
-            return players;
-        }
-
-
-    }
-
-
     private static final class AsyncSavePlayersDatabase extends AsyncTask<Void, Void, Void> {
 
 
@@ -269,7 +228,10 @@ public final class Players {
         @Override
         public final void onErrorResponse(final VolleyError error) {
             Log.e(TAG, "Exception when downloading players", error);
-            getFromJSON(this);
+
+            if (isAlive()) {
+                error(error);
+            }
         }
 
 
@@ -280,7 +242,12 @@ public final class Players {
                 Log.d(TAG, "Read in " + players.size() + " Player objects from JSON response");
 
                 if (players.isEmpty()) {
-                    getFromJSON(this);
+                    final JSONException e = new JSONException("No players grabbed from JSON response");
+                    Log.e(TAG, "No players available", e);
+
+                    if (isAlive()) {
+                        error(e);
+                    }
                 } else {
                     save(players);
 
@@ -292,7 +259,7 @@ public final class Players {
                 }
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when parsing rankings JSON response", e);
-                getFromJSON(this);
+                error(e);
             }
         }
 

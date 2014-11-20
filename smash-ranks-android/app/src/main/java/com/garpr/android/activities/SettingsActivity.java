@@ -25,9 +25,9 @@ import com.garpr.android.data.Regions.RegionsCallback;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.misc.ResultCodes;
+import com.garpr.android.models.Region;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -66,6 +66,9 @@ public class SettingsActivity extends BaseActivity {
         editor.putLong(KEY_LAST_REGIONS_FETCH, System.currentTimeMillis());
         editor.apply();
 
+        // TODO
+        // replace this whole method, this should be moved into a fragment
+
         final RegionsCallback callback = new RegionsCallback(this) {
             @Override
             public void error(final Exception e) {
@@ -76,13 +79,8 @@ public class SettingsActivity extends BaseActivity {
 
 
             @Override
-            public void response(final ArrayList<String> list) {
-                mRegions = new HashSet<String>(list);
-                editor.putStringSet(KEY_REGIONS, mRegions);
-                editor.apply();
-
+            public void response(final ArrayList<Region> list) {
                 dialog.dismiss();
-                showRegionsDialog();
             }
         };
 

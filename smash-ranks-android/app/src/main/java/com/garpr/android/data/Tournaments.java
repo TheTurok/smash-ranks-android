@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
-import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Tournament;
@@ -76,17 +75,6 @@ public final class Tournaments {
     }
 
 
-    private static void getFromJSON(final TournamentsCallback callback) {
-        if (callback.isAlive()) {
-            Log.d(TAG, "Grabbing tournaments from JSON");
-            final AsyncReadTournamentsFile task = new AsyncReadTournamentsFile(callback);
-            task.execute();
-        } else {
-            Log.d(TAG, "Canceled grabbing tournaments from JSON");
-        }
-    }
-
-
     private static void getFromNetwork(final TournamentsCallback callback) {
         if (callback.isAlive()) {
             Log.d(TAG, "Grabbing tournaments from network");
@@ -137,7 +125,7 @@ public final class Tournaments {
         private static final String TAG = AsyncReadTournamentsDatabase.class.getSimpleName();
 
 
-        private AsyncReadTournamentsDatabase(final Callback<Tournament> callback) {
+        private AsyncReadTournamentsDatabase(final TournamentsCallback callback) {
             super(callback);
         }
 
@@ -172,35 +160,6 @@ public final class Tournaments {
         Cursor query(final SQLiteDatabase database) {
             final String[] columns = { Constants.JSON };
             return database.query(getTableName(), columns, null, null, null, null, null);
-        }
-
-
-    }
-
-
-    private static final class AsyncReadTournamentsFile extends AsyncReadFile<Tournament> {
-
-
-        private static final String TAG = AsyncReadTournamentsFile.class.getSimpleName();
-
-
-        private AsyncReadTournamentsFile(final TournamentsCallback callback) {
-            super(callback);
-        }
-
-
-        @Override
-        int getRawResourceId() {
-            return R.raw.tournaments;
-        }
-
-
-        @Override
-        ArrayList<Tournament> parseJSON(final JSONObject json) throws JSONException {
-            final ArrayList<Tournament> tournaments = Tournaments.parseJSON(json);
-            Log.d(TAG, "Read in " + tournaments.size() + " Tournament objects from the JSON file");
-
-            return tournaments;
         }
 
 
@@ -259,7 +218,10 @@ public final class Tournaments {
         @Override
         public final void onErrorResponse(final VolleyError error) {
             Log.e(TAG, "Exception when downloading tournaments!", error);
-            getFromJSON(this);
+
+            if (isAlive()) {
+                error(error);
+            }
         }
 
 
@@ -270,7 +232,12 @@ public final class Tournaments {
                 Log.d(TAG, "Read in " + tournaments.size() + " Tournament objects from JSON response");
 
                 if (tournaments.isEmpty()) {
-                    getFromJSON(this);
+                    final JSONException e = new JSONException("No tournaments grabbed from JSON response");
+                    Log.e(TAG, "No tournaments available", e);
+
+                    if (isAlive()) {
+                        error(e);
+                    }
                 } else {
                     save(tournaments);
 
@@ -282,7 +249,7 @@ public final class Tournaments {
                 }
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when parsing tournaments JSON response", e);
-                getFromJSON(this);
+                error(e);
             }
         }
 

@@ -72,7 +72,7 @@ abstract class BaseListFragment extends BaseFragment implements
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        readArguments();
+        readArguments(getArguments());
         findViews();
         prepareViews();
     }
@@ -97,7 +97,7 @@ abstract class BaseListFragment extends BaseFragment implements
     }
 
 
-    protected void readArguments() {
+    protected void readArguments(final Bundle arguments) {
         // this method intentionally left blank (children can override)
     }
 

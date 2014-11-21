@@ -151,7 +151,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             @Override
             public void onClick(final View v) {
                 closeDrawer();
-                SettingsActivity.startForResult(BaseActivity.this);
+                SettingsActivity.start(BaseActivity.this);
             }
         });
 

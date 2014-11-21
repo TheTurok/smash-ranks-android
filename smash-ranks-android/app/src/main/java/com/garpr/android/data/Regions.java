@@ -87,7 +87,7 @@ public final class Regions {
 
 
     private static String getTableName() {
-        return TAG + '_' + Settings.getRegion();
+        return TAG;
     }
 
 

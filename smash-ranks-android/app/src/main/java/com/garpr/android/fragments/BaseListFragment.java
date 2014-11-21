@@ -3,6 +3,7 @@ package com.garpr.android.fragments;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -89,7 +90,10 @@ abstract class BaseListFragment extends BaseFragment implements
 
 
     protected void prepareViews() {
-        // this method intentionally left blank (children can override)
+        mErrorView.setText(getErrorText());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRefreshLayout.setOnRefreshListener(this);
+        mRefreshLayout.setRecyclerView(mRecyclerView);
     }
 
 
@@ -110,6 +114,13 @@ abstract class BaseListFragment extends BaseFragment implements
     protected void setLoading(final boolean isLoading) {
         mIsLoading = isLoading;
         mRefreshLayout.setRefreshing(mIsLoading);
+    }
+
+
+    protected void showError() {
+        setLoading(false);
+        animateList(false);
+        animateError(true);
     }
 
 

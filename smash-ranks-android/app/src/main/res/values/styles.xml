@@ -20,20 +20,30 @@
     </style>
 
     <style name="list_item_root">
+        <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/root_padding_fourth</item>
+        <item name="android:layout_marginTop">@dimen/root_padding_fourth</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:minHeight">@dimen/list_item_height</item>
-        <item name="android:paddingLeft">@dimen/root_padding_fourth</item>
-        <item name="android:paddingRight">@dimen/root_padding_fourth</item>
+        <item name="android:paddingLeft">@dimen/root_padding</item>
+        <item name="android:paddingRight">@dimen/root_padding</item>
     </style>
 
     <style name="list_item_root.separator">
         <item name="android:minHeight">@dimen/list_item_separator_height</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="list_item_root.text">
+        <item name="android:ellipsize">end</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="navigation_drawer_item">

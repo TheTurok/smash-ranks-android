@@ -9,7 +9,9 @@ import android.content.res.Resources;
 import android.view.View;
 
 
-public class FadeAnimator implements AnimatorListener, AnimatorUpdateListener {
+public final class FadeAnimator implements
+        AnimatorListener,
+        AnimatorUpdateListener {
 
 
     private final boolean mFadeIn;
@@ -20,8 +22,8 @@ public class FadeAnimator implements AnimatorListener, AnimatorUpdateListener {
 
 
     public static FadeAnimator animate(FadeAnimator animator, final View view, final boolean fadeIn) {
-        if (animator != null) {
-            animator.cancelIfRunning();
+        if (animator != null && animator.mAnimator.isRunning()) {
+            animator.mAnimator.cancel();
         }
 
         final int visibility = view.getVisibility();
@@ -36,7 +38,7 @@ public class FadeAnimator implements AnimatorListener, AnimatorUpdateListener {
             animator = new FadeAnimator(view, false);
         }
 
-        animator.start();
+        animator.mAnimator.start();
         return animator;
     }
 
@@ -60,16 +62,9 @@ public class FadeAnimator implements AnimatorListener, AnimatorUpdateListener {
     }
 
 
-    private void cancelIfRunning() {
-        if (mAnimator.isRunning()) {
-            mAnimator.cancel();
-        }
-    }
-
-
     @Override
     public void onAnimationCancel(final Animator animation) {
-
+        // this method intentionally left blank
     }
 
 
@@ -83,7 +78,7 @@ public class FadeAnimator implements AnimatorListener, AnimatorUpdateListener {
 
     @Override
     public void onAnimationRepeat(final Animator animation) {
-
+        // this method intentionally left blank
     }
 
 
@@ -99,11 +94,6 @@ public class FadeAnimator implements AnimatorListener, AnimatorUpdateListener {
     public void onAnimationUpdate(final ValueAnimator animation) {
         final float alpha = (Float) animation.getAnimatedValue();
         mView.setAlpha(alpha);
-    }
-
-
-    public void start() {
-        mAnimator.start();
     }
 
 

@@ -21,7 +21,7 @@ import android.widget.AbsListView;
  * <p/>
  * Maybe at a future date Google will fix this issue with a new version of the support library...
  */
-public class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
+public final class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
 
 
     private RecyclerView mRecyclerView;

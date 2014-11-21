@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-import com.garpr.android.fragments.RegionsFragment;
+import com.garpr.android.fragments.CheckableRegionsFragment;
 
 
 public class RegionsActivity extends BaseFragmentActivity {
@@ -19,7 +19,13 @@ public class RegionsActivity extends BaseFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return RegionsFragment.create();
+        return CheckableRegionsFragment.create();
+    }
+
+
+    @Override
+    protected boolean showDrawerIndicator() {
+        return false;
     }
 
 

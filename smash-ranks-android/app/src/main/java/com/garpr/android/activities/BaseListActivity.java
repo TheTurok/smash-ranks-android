@@ -98,14 +98,7 @@ abstract class BaseListActivity extends BaseActivity implements
 
 
     protected void readIntentData(final Intent intent) {
-        // this method intentionally left blank, override to perform custom actions
-    }
-
-
-    protected void showError() {
-        setLoading(false);
-        animateList(false);
-        animateError(true);
+        // this method intentionally left blank (children can override)
     }
 
 
@@ -121,6 +114,13 @@ abstract class BaseListActivity extends BaseActivity implements
     protected void setLoading(final boolean isLoading) {
         mIsLoading = isLoading;
         mRefreshLayout.setRefreshing(mIsLoading);
+    }
+
+
+    protected void showError() {
+        setLoading(false);
+        animateList(false);
+        animateError(true);
     }
 
 

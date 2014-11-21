@@ -10,7 +10,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
-abstract class Callback<T> implements Response.ErrorListener, Response.Listener<JSONObject> {
+abstract class Callback<T> implements
+        Response.ErrorListener,
+        Response.Listener<JSONObject> {
 
 
     private final WeakReference<Heartbeat> mHeartbeat;

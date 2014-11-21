@@ -22,6 +22,7 @@ import com.garpr.android.data.Players.PlayersCallback;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
 import com.garpr.android.models.Player;
+import com.garpr.android.models.Region;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -117,8 +118,6 @@ public class RankingsActivity extends BaseListActivity implements
                     break;
                 }
             }
-        } else if (resultCode == ResultCodes.REGION_UPDATED) {
-            fetchRankings();
         }
     }
 
@@ -235,6 +234,12 @@ public class RankingsActivity extends BaseListActivity implements
             Players.clear();
             fetchRankings();
         }
+    }
+
+
+    @Override
+    public void onRegionChanged(final Region region) {
+        fetchRankings();
     }
 
 

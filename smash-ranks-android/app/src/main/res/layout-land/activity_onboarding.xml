@@ -42,8 +42,8 @@
             android:background="@drawable/divider"
             android:layout_height="match_parent"
             android:layout_width="1dp" />
-        <FrameLayout
-            android:id="@+id/activity_onboarding_content"
+        <com.garpr.android.misc.NonSwipeableViewPager
+            android:id="@+id/activity_onboarding_pager"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_width="0dp" />

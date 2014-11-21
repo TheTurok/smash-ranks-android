@@ -14,6 +14,7 @@
     <string name="error_">Error!</string>
     <string name="error_fetching_matches">Error fetching matches!</string>
     <string name="error_fetching_x_matches">Error fetching %s\'s matches!</string>
+    <string name="error_fetching_players">Error fetching players!</string>
     <string name="error_fetching_rankings">Error fetching rankings!</string>
     <string name="error_fetching_regions">Error fetching regions!</string>
     <string name="error_fetching_tournaments">Error fetching tournaments!</string>

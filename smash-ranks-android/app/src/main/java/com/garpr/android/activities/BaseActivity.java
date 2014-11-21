@@ -24,6 +24,7 @@ import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.OnRegionChangedListener;
+import com.garpr.android.models.Region;
 
 
 /**
@@ -280,12 +281,12 @@ abstract class BaseActivity extends ActionBarActivity implements
 
 
     protected void onDrawerClosed() {
-
+        // this method intentionally left blank (children can override)
     }
 
 
     protected void onDrawerOpened() {
-
+        // this method intentionally left blank (children can override)
     }
 
 
@@ -325,8 +326,8 @@ abstract class BaseActivity extends ActionBarActivity implements
 
 
     @Override
-    public void onRegionChanged(final String region) {
-
+    public void onRegionChanged(final Region region) {
+        // this method intentionally left blank (children can override)
     }
 
 

@@ -7,9 +7,11 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.garpr.android.App;
-import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.OnRegionChangedListener;
-import com.garpr.android.misc.Utils;
+import com.garpr.android.models.Region;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
@@ -23,7 +25,7 @@ public final class Settings {
     private static final String TAG = Settings.class.getSimpleName();
 
     private static LinkedList<WeakReference<OnRegionChangedListener>> sRegionListeners;
-    private static String sRegion;
+    private static Region sRegion;
 
 
 
@@ -59,12 +61,16 @@ public final class Settings {
     }
 
 
-    public static String getRegion() {
-        if (!Utils.validStrings(sRegion)) {
-            sRegion = get().getString(KEY_REGION, null);
+    public static Region getRegion() {
+        if (sRegion == null) {
+            final String regionString = get().getString(KEY_REGION, null);
 
-            if (!Utils.validStrings(sRegion)) {
-                setRegion(Constants.NORCAL, false);
+            try {
+                final JSONObject regionJSON = new JSONObject(regionString);
+                sRegion = new Region(regionJSON);
+            } catch (final JSONException e) {
+                // this should never happen
+                throw new RuntimeException(e);
             }
         }
 
@@ -94,42 +100,36 @@ public final class Settings {
     }
 
 
-    private static void setRegion(final String region, final boolean notify) {
+    public static void setRegion(final Region region) {
+        final JSONObject regionJSON = region.toJSON();
+        final String regionString = regionJSON.toString();
+
         final Editor editor = edit();
-        editor.putString(KEY_REGION, region);
+        editor.putString(KEY_REGION, regionString);
         editor.apply();
 
-        if (notify) {
-            Log.d(TAG, "Region changed from \"" + sRegion + "\" to \"" + region + "\"");
+        Log.d(TAG, "Region changed from \"" + sRegion + "\" to \"" + region + "\"");
 
-            if (sRegionListeners == null || sRegionListeners.isEmpty()) {
-                Log.d(TAG, "There are no region listeners");
-                return;
+        if (sRegionListeners == null || sRegionListeners.isEmpty()) {
+            Log.d(TAG, "There are no region listeners");
+            return;
+        }
+
+        for (int i = 0; i < sRegionListeners.size(); ) {
+            final WeakReference<OnRegionChangedListener> r = sRegionListeners.get(i);
+            final OnRegionChangedListener l = r.get();
+
+            if (l == null) {
+                Log.d(TAG, "Dead " + OnRegionChangedListener.class.getSimpleName() +
+                        " listener found at index " + i);
+                sRegionListeners.remove(i);
+            } else {
+                l.onRegionChanged(region);
+                ++i;
             }
-
-            for (int i = 0; i < sRegionListeners.size(); ) {
-                final WeakReference<OnRegionChangedListener> r = sRegionListeners.get(i);
-                final OnRegionChangedListener l = r.get();
-
-                if (l == null) {
-                    Log.d(TAG, "Dead " + OnRegionChangedListener.class.getSimpleName() +
-                            " listener found at index " + i);
-                    sRegionListeners.remove(i);
-                } else {
-                    l.onRegionChanged(region);
-                    ++i;
-                }
-            }
-        } else {
-            Log.d(TAG, "Region is \"" + region + "\"");
         }
 
         sRegion = region;
-    }
-
-
-    public static void setRegion(final String region) {
-        setRegion(region, true);
     }
 
 

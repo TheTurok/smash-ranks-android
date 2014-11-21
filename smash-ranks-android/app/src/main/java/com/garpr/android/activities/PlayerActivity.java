@@ -27,6 +27,7 @@ import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
+import com.garpr.android.models.Region;
 import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
@@ -212,7 +213,7 @@ public class PlayerActivity extends BaseListActivity implements
 
 
     @Override
-    public void onRegionChanged(final String region) {
+    public void onRegionChanged(final Region region) {
         RankingsActivity.start(this);
     }
 

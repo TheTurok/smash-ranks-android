@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.garpr.android.App;
 import com.garpr.android.misc.OnRegionChangedListener;
+import com.garpr.android.models.Region;
 
 
 public final class Database extends SQLiteOpenHelper implements
@@ -47,13 +48,12 @@ public final class Database extends SQLiteOpenHelper implements
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
-        Players.createTable(db);
-        Tournaments.createTable(db);
+        Regions.createTable(db);
     }
 
 
     @Override
-    public void onRegionChanged(final String region) {
+    public void onRegionChanged(final Region region) {
         final SQLiteDatabase database = writeTo();
         Players.createTable(database);
         Tournaments.createTable(database);

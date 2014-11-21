@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
-import com.garpr.android.data.Settings;
+import com.garpr.android.data.User;
 import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.models.Region;
 
@@ -92,7 +92,7 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
-        final Region region = Settings.getRegion();
+        final Region region = User.getRegion();
         mRegionName.setText(region.getName());
 
         mVersion.setText(getString(R.string.version_x, App.getVersionName()));

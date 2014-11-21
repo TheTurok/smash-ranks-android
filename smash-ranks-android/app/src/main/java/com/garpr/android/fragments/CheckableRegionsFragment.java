@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
 import com.garpr.android.R;
-import com.garpr.android.data.Settings;
+import com.garpr.android.data.User;
 import com.garpr.android.models.Region;
 
 
@@ -31,7 +31,7 @@ public class CheckableRegionsFragment extends BaseRegionsFragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final Region region = Settings.getRegion();
+        final Region region = User.getRegion();
         setSelectedRegion(region);
     }
 

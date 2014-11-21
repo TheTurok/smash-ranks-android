@@ -87,7 +87,7 @@ public final class Players {
 
 
     private static String getTableName() {
-        return TAG + '_' + Settings.getRegion().getName();
+        return TAG + '_' + User.getRegion().getName();
     }
 
 

@@ -8,15 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.garpr.android.App;
-import com.garpr.android.data.Settings;
+import com.garpr.android.data.User;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.OnRegionChangedListener;
+import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
 
 public abstract class BaseFragment extends Fragment implements
         Heartbeat,
-        OnRegionChangedListener {
+        OnRegionChangedListener,
+        User.OnUserDataChangedListener {
 
 
     private boolean mIsAlive;
@@ -38,7 +40,7 @@ public abstract class BaseFragment extends Fragment implements
     }
 
 
-    protected boolean listenForRegionChanges() {
+    protected boolean listenForUserChanges() {
         return false;
     }
 
@@ -47,8 +49,8 @@ public abstract class BaseFragment extends Fragment implements
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (listenForRegionChanges()) {
-            Settings.addRegionListener(this);
+        if (listenForUserChanges()) {
+            User.addListener(this);
         }
     }
 
@@ -68,9 +70,15 @@ public abstract class BaseFragment extends Fragment implements
         mIsAlive = false;
         App.cancelNetworkRequests(this);
 
-        if (listenForRegionChanges()) {
-            Settings.removeRegionListener(this);
+        if (listenForUserChanges()) {
+            User.removeListener(this);
         }
+    }
+
+
+    @Override
+    public void onPlayerChanged(final Player player) {
+        // this method intentionally left blank (children can override)
     }
 
 

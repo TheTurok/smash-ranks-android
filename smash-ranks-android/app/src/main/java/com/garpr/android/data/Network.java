@@ -19,7 +19,7 @@ final class Network {
 
 
     static String makeUrl(final String suffix) {
-        return BASE_URL + '/' + Settings.getRegion().getName() + '/' + suffix;
+        return BASE_URL + '/' + User.getRegion().getName() + '/' + suffix;
     }
 
 

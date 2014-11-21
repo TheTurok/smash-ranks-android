@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import com.garpr.android.R;
 import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
-import com.garpr.android.fragments.SimpleRegionsFragment;
+import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.misc.NonSwipeableViewPager;
 import com.garpr.android.misc.OnItemSelectedListener;
 import com.garpr.android.models.Player;
@@ -26,7 +26,7 @@ public class OnboardingActivity extends BaseActivity implements
 
     private NonSwipeableViewPager mViewPager;
     private PlayersFragment mPlayersFragment;
-    private SimpleRegionsFragment mRegionsFragment;
+    private RegionsFragment mRegionsFragment;
 
 
 
@@ -157,7 +157,7 @@ public class OnboardingActivity extends BaseActivity implements
             switch (position) {
                 case ONBOARDING_FRAGMENT_REGION:
                     if (mRegionsFragment == null) {
-                        mRegionsFragment = SimpleRegionsFragment.create();
+                        mRegionsFragment = RegionsFragment.create();
                     }
 
                     fragment = mRegionsFragment;

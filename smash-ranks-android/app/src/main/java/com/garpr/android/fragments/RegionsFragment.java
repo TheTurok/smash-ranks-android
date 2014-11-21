@@ -5,11 +5,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Regions;
 import com.garpr.android.data.Regions.RegionsCallback;
+import com.garpr.android.data.User;
 import com.garpr.android.misc.OnItemSelectedListener;
 import com.garpr.android.models.Region;
 
@@ -17,10 +21,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-abstract class BaseRegionsFragment extends BaseListFragment {
+public class RegionsFragment extends BaseListFragment {
 
 
-    private static final String TAG = BaseRegionsFragment.class.getSimpleName();
+    private static final String TAG = RegionsFragment.class.getSimpleName();
 
     private ArrayList<Region> mRegions;
     private OnItemSelectedListener mListener;
@@ -29,7 +33,9 @@ abstract class BaseRegionsFragment extends BaseListFragment {
 
 
 
-    protected abstract BaseRegionsAdapter createAdapter();
+    public static RegionsFragment create() {
+        return new RegionsFragment();
+    }
 
 
     private void fetchRegions() {
@@ -47,7 +53,7 @@ abstract class BaseRegionsFragment extends BaseListFragment {
             public void response(final ArrayList<Region> list) {
                 Collections.sort(list, Region.ALPHABETICAL_ORDER);
                 mRegions = list;
-                setAdapter(createAdapter());
+                setAdapter(new RegionsAdapter());
             }
         };
 
@@ -66,14 +72,10 @@ abstract class BaseRegionsFragment extends BaseListFragment {
     }
 
 
-    protected Region getRegion(final int index) {
-        return mRegions.get(index);
-    }
-
-
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mSelectedRegion = User.getRegion();
         fetchRegions();
     }
 
@@ -88,8 +90,9 @@ abstract class BaseRegionsFragment extends BaseListFragment {
     @Override
     protected void onItemClick(final View view, final int position) {
         mSelectedRegion = mRegions.get(position);
-        onRegionSelected(view);
         mListener.onItemSelected();
+
+        ((CheckedTextView) view).setChecked(true);
     }
 
 
@@ -104,23 +107,53 @@ abstract class BaseRegionsFragment extends BaseListFragment {
     }
 
 
-    protected abstract void onRegionSelected(final View view);
 
 
-    protected void setSelectedRegion(final Region region) {
-        mSelectedRegion = region;
-    }
-
-
-
-
-    protected abstract class BaseRegionsAdapter<T extends RecyclerView.ViewHolder> extends
-            BaseListAdapter<T> {
+    private final class RegionsAdapter extends BaseListAdapter<ViewHolder> {
 
 
         @Override
         public int getItemCount() {
             return mRegions.size();
+        }
+
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+            final Region region = mRegions.get(position);
+            holder.mName.setText(region.getName());
+
+            final Region sRegion = getSelectedRegion();
+
+            if (sRegion != null && (region == sRegion || region.equals(sRegion))) {
+                holder.mName.setChecked(true);
+            } else {
+                holder.mName.setChecked(false);
+            }
+        }
+
+
+        @Override
+        public ViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
+            final LayoutInflater inflater = getLayoutInflater();
+            final View view = inflater.inflate(R.layout.model_checkable, parent, false);
+            view.setOnClickListener(this);
+            return new ViewHolder(view);
+        }
+
+
+    }
+
+
+    private final static class ViewHolder extends RecyclerView.ViewHolder {
+
+
+        private final CheckedTextView mName;
+
+
+        private ViewHolder(final View view) {
+            super(view);
+            mName = (CheckedTextView) view.findViewById(R.id.model_checkable_name);
         }
 
 

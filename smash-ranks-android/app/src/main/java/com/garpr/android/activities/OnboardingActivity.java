@@ -23,7 +23,7 @@ public class OnboardingActivity extends BaseActivity implements
 
     private static final int ONBOARDING_FRAGMENT_COUNT = 2;
     private static final int ONBOARDING_FRAGMENT_PLAYERS = 1;
-    private static final int ONBOARDING_FRAGMENT_REGION = 0;
+    private static final int ONBOARDING_FRAGMENT_REGIONS = 0;
 
     private MenuItem mGo;
     private MenuItem mNext;
@@ -69,8 +69,10 @@ public class OnboardingActivity extends BaseActivity implements
 
     private void nextOnboardingStep() {
         switch (mViewPager.getCurrentItem()) {
-            case ONBOARDING_FRAGMENT_REGION:
+            case ONBOARDING_FRAGMENT_REGIONS:
                 mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
+                mNext.setVisible(false);
+                mGo.setVisible(true);
                 break;
 
             default:
@@ -86,6 +88,11 @@ public class OnboardingActivity extends BaseActivity implements
             super.onBackPressed();
         } else {
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
+
+            if (mGo.isVisible()) {
+                mGo.setVisible(false);
+                mNext.setVisible(true);
+            }
         }
     }
 
@@ -102,8 +109,18 @@ public class OnboardingActivity extends BaseActivity implements
 
     @Override
     public void onItemSelected() {
-        if (mViewPager.getCurrentItem() == ONBOARDING_FRAGMENT_REGION) {
-            regionSelected();
+        switch (mViewPager.getCurrentItem()) {
+            case ONBOARDING_FRAGMENT_REGIONS:
+                mNext.setEnabled(true);
+                break;
+
+            case ONBOARDING_FRAGMENT_PLAYERS:
+                mGo.setEnabled(true);
+                break;
+
+            default:
+                // this should never happen
+                throw new RuntimeException();
         }
     }
 
@@ -140,11 +157,6 @@ public class OnboardingActivity extends BaseActivity implements
     }
 
 
-    private void regionSelected() {
-        mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
-    }
-
-
 
 
     private final class OnboardingFragmentAdapter extends FragmentPagerAdapter {
@@ -166,7 +178,7 @@ public class OnboardingActivity extends BaseActivity implements
             final Fragment fragment;
 
             switch (position) {
-                case ONBOARDING_FRAGMENT_REGION:
+                case ONBOARDING_FRAGMENT_REGIONS:
                     if (mRegionsFragment == null) {
                         mRegionsFragment = RegionsFragment.create(false);
                     }

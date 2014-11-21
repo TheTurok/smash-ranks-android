@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:compat="http://schemas.android.com/apk/res-auto">
     <item
-        android:enabled="true"
+        android:enabled="false"
         android:icon="@drawable/ic_sort"
         android:id="@+id/activity_onboarding_menu_next"
         android:title="@string/next_"

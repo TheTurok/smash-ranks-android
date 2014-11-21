@@ -10,14 +10,12 @@ import android.view.ViewGroup;
 import com.garpr.android.App;
 import com.garpr.android.data.User;
 import com.garpr.android.misc.Heartbeat;
-import com.garpr.android.misc.OnRegionChangedListener;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
 
 public abstract class BaseFragment extends Fragment implements
         Heartbeat,
-        OnRegionChangedListener,
         User.OnUserDataChangedListener {
 
 

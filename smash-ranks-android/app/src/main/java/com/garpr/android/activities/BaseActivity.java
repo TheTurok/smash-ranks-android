@@ -23,7 +23,6 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.User;
 import com.garpr.android.misc.Heartbeat;
-import com.garpr.android.misc.OnRegionChangedListener;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
@@ -34,7 +33,6 @@ import com.garpr.android.models.Region;
  */
 abstract class BaseActivity extends ActionBarActivity implements
         Heartbeat,
-        OnRegionChangedListener,
         Toolbar.OnMenuItemClickListener,
         User.OnUserDataChangedListener {
 

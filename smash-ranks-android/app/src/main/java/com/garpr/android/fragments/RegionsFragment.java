@@ -24,17 +24,26 @@ import java.util.Collections;
 public class RegionsFragment extends BaseListFragment {
 
 
+    private static final String KEY_LOAD_USER_REGION = "KEY_LOAD_USER_REGION";
     private static final String TAG = RegionsFragment.class.getSimpleName();
 
+
     private ArrayList<Region> mRegions;
+    private boolean mLoadUserRegion;
     private OnItemSelectedListener mListener;
     private Region mSelectedRegion;
 
 
 
 
-    public static RegionsFragment create() {
-        return new RegionsFragment();
+    public static RegionsFragment create(final boolean loadUserRegion) {
+        final Bundle arguments = new Bundle();
+        arguments.putBoolean(KEY_LOAD_USER_REGION, loadUserRegion);
+
+        final RegionsFragment fragment = new RegionsFragment();
+        fragment.setArguments(arguments);
+
+        return fragment;
     }
 
 
@@ -75,7 +84,11 @@ public class RegionsFragment extends BaseListFragment {
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mSelectedRegion = User.getRegion();
+
+        if (mLoadUserRegion) {
+            mSelectedRegion = User.getRegion();
+        }
+
         fetchRegions();
     }
 
@@ -103,6 +116,17 @@ public class RegionsFragment extends BaseListFragment {
         if (!isLoading()) {
             Regions.clear();
             fetchRegions();
+        }
+    }
+
+
+    @Override
+    protected void readArguments(final Bundle arguments) {
+        if (arguments == null || arguments.isEmpty()) {
+            // this should never happen
+            throw new RuntimeException();
+        } else {
+            mLoadUserRegion = arguments.getBoolean(KEY_LOAD_USER_REGION, true);
         }
     }
 

@@ -19,7 +19,7 @@ public class RegionsActivity extends BaseFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return RegionsFragment.create();
+        return RegionsFragment.create(true);
     }
 
 

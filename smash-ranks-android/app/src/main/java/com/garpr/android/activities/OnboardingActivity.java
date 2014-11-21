@@ -157,7 +157,7 @@ public class OnboardingActivity extends BaseActivity implements
             switch (position) {
                 case ONBOARDING_FRAGMENT_REGION:
                     if (mRegionsFragment == null) {
-                        mRegionsFragment = RegionsFragment.create();
+                        mRegionsFragment = RegionsFragment.create(false);
                     }
 
                     fragment = mRegionsFragment;

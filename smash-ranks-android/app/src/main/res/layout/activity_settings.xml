@@ -28,13 +28,6 @@
                         style="@style/settings_subtitle" />
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/activity_settings_clear_cache"
-                    style="@style/settings_container">
-                    <TextView
-                        android:text="@string/clear_cache"
-                        style="@style/settings_title" />
-                </LinearLayout>
-                <LinearLayout
                     style="@style/settings_container">
                     <TextView
                         android:id="@+id/activity_settings_version"

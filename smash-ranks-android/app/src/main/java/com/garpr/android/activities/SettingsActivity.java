@@ -17,9 +17,6 @@ import com.garpr.android.models.Region;
 public class SettingsActivity extends BaseActivity {
 
 
-    private static final String KEY_CACHE_WAS_CLEARED = "KEY_CACHE_WAS_CLEARED";
-
-    private LinearLayout mClearCache;
     private LinearLayout mRegion;
     private TextView mRegionName;
     private TextView mVersion;
@@ -34,7 +31,6 @@ public class SettingsActivity extends BaseActivity {
 
 
     private void findViews() {
-        mClearCache = (LinearLayout) findViewById(R.id.activity_settings_clear_cache);
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
         mVersion = (TextView) findViewById(R.id.activity_settings_version);
@@ -59,31 +55,10 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         findViews();
         prepareViews();
-
-        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
-            readSavedInstanceState(savedInstanceState);
-        }
-    }
-
-
-    @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        if (!mClearCache.isEnabled()) {
-            outState.putBoolean(KEY_CACHE_WAS_CLEARED, true);
-        }
     }
 
 
     private void prepareViews() {
-        mClearCache.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                showClearCacheDialog();
-            }
-        });
-
         mRegion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -95,18 +70,6 @@ public class SettingsActivity extends BaseActivity {
         mRegionName.setText(region.getName());
 
         mVersion.setText(getString(R.string.version_x, App.getVersionName()));
-    }
-
-
-    private void readSavedInstanceState(final Bundle savedInstanceState) {
-        if (savedInstanceState.getBoolean(KEY_CACHE_WAS_CLEARED)) {
-            mClearCache.setEnabled(false);
-        }
-    }
-
-
-    private void showClearCacheDialog() {
-        // TODO
     }
 
 

@@ -4,6 +4,7 @@ package com.garpr.android.activities;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.garpr.android.R;
@@ -24,6 +25,8 @@ public class OnboardingActivity extends BaseActivity implements
     private static final int ONBOARDING_FRAGMENT_PLAYERS = 1;
     private static final int ONBOARDING_FRAGMENT_REGION = 0;
 
+    private MenuItem mGo;
+    private MenuItem mNext;
     private NonSwipeableViewPager mViewPager;
     private PlayersFragment mPlayersFragment;
     private RegionsFragment mRegionsFragment;
@@ -121,6 +124,14 @@ public class OnboardingActivity extends BaseActivity implements
         }
 
         return true;
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        mGo = menu.findItem(R.id.activity_onboarding_menu_go);
+        mNext = menu.findItem(R.id.activity_onboarding_menu_next);
+        return super.onPrepareOptionsMenu(menu);
     }
 
 

@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.User;
-import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.models.Region;
 
 
@@ -28,9 +27,9 @@ public class SettingsActivity extends BaseActivity {
 
 
 
-    public static void startForResult(final Activity activity) {
+    public static void start(final Activity activity) {
         final Intent intent = new Intent(activity, SettingsActivity.class);
-        activity.startActivityForResult(intent, RequestCodes.REQUEST_DEFAULT);
+        activity.startActivity(intent);
     }
 
 

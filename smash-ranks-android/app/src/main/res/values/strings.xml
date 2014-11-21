@@ -5,6 +5,7 @@
     <string name="x_against_y">%1$s against %2$s</string>
     <string name="alphabetical_order">Alphabetical Order</string>
     <string name="austin">Austin</string>
+    <string name="back">Back</string>
     <string name="berkeley">Berkeley</string>
     <string name="cancel">Cancel</string>
     <string name="change_region">Change region</string>
@@ -22,19 +23,27 @@
     <string name="gar_pr">GAR PR</string>
     <string name="go">Go</string>
     <string name="go_">Go!</string>
+    <string name="hello">Hello</string>
+    <string name="hello_">Hello!</string>
     <string name="hello_world">Hello, World!</string>
     <string name="lose">Lose</string>
+    <string name="loss">Loss</string>
+    <string name="lost">Lost</string>
     <string name="newengland">New England</string>
     <string name="next">Next</string>
     <string name="next_">Next!</string>
     <string name="norcal">Norcal</string>
     <string name="ok">OK</string>
+    <string name="okay">Okay</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="player">Player</string>
     <string name="players">Players</string>
+    <string name="quit">Quit</string>
+    <string name="ranking">Ranking</string>
     <string name="rankings">Rankings</string>
     <string name="rank_order">Rank Order</string>
     <string name="rank_x">Rank %d</string>
+    <string name="refresh">Refresh</string>
     <string name="region">Region</string>
     <string name="regions">Regions</string>
     <string name="save">Save</string>
@@ -44,10 +53,14 @@
     <string name="select_a_region">Select a region</string>
     <string name="settings">Settings</string>
     <string name="sort">Sort</string>
+    <string name="sync">Sync</string>
     <string name="texas">Texas</string>
     <string name="tournament">Tournament</string>
     <string name="tournaments">Tournaments</string>
     <string name="version_x">Version %s</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcome_">Welcome!</string>
     <string name="win">Win</string>
+    <string name="won">Won</string>
 
 </resources>

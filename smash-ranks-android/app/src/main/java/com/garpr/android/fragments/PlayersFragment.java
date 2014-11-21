@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.garpr.android.R;
 import com.garpr.android.misc.OnItemSelectedListener;
+import com.garpr.android.models.Player;
 
 
 public class PlayersFragment extends BaseListFragment {
@@ -18,7 +19,7 @@ public class PlayersFragment extends BaseListFragment {
 
 //    private ArrayList<Player> mPlayers;
     private OnItemSelectedListener mListener;
-//    private Player mSelectedPlayer;
+    private Player mSelectedPlayer;
 
 
 
@@ -54,6 +55,11 @@ public class PlayersFragment extends BaseListFragment {
     @Override
     protected String getErrorText() {
         return getString(R.string.error_fetching_players);
+    }
+
+
+    public Player getSelectedPlayer() {
+        return mSelectedPlayer;
     }
 
 

@@ -7,10 +7,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.MenuItem;
 
 import com.garpr.android.R;
+import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.SimpleRegionsFragment;
 import com.garpr.android.misc.NonSwipeableViewPager;
 import com.garpr.android.misc.OnItemSelectedListener;
+import com.garpr.android.models.Player;
+import com.garpr.android.models.Region;
 
 
 public class OnboardingActivity extends BaseActivity implements
@@ -33,6 +36,16 @@ public class OnboardingActivity extends BaseActivity implements
     }
 
 
+    private void finishOnboarding() {
+        final Player player = mPlayersFragment.getSelectedPlayer();
+        final Region region = mRegionsFragment.getSelectedRegion();
+        User.setInitialData(player, region);
+
+        RankingsActivity.start(this);
+        finish();
+    }
+
+
     @Override
     protected boolean isNavigationDrawerEnabled() {
         return false;
@@ -51,6 +64,29 @@ public class OnboardingActivity extends BaseActivity implements
     }
 
 
+    private void nextOnboardingStep() {
+        switch (mViewPager.getCurrentItem()) {
+            case ONBOARDING_FRAGMENT_REGION:
+                mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
+                break;
+
+            default:
+                // this should never happen
+                throw new RuntimeException();
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (mViewPager == null || mViewPager.getCurrentItem() == 0) {
+            super.onBackPressed();
+        } else {
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
+        }
+    }
+
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +99,9 @@ public class OnboardingActivity extends BaseActivity implements
 
     @Override
     public void onItemSelected() {
-        // TODO
+        if (mViewPager.getCurrentItem() == ONBOARDING_FRAGMENT_REGION) {
+            regionSelected();
+        }
     }
 
 
@@ -71,13 +109,11 @@ public class OnboardingActivity extends BaseActivity implements
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_onboarding_menu_go:
-                // TODO
+                finishOnboarding();
                 break;
 
             case R.id.activity_onboarding_menu_next:
-                // TODO
-                RankingsActivity.start(this);
-                finish();
+                nextOnboardingStep();
                 break;
 
             default:
@@ -90,6 +126,11 @@ public class OnboardingActivity extends BaseActivity implements
 
     private void prepareViews() {
         mViewPager.setAdapter(new OnboardingFragmentAdapter());
+    }
+
+
+    private void regionSelected() {
+        mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
     }
 
 

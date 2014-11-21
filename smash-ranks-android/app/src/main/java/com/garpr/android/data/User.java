@@ -120,6 +120,14 @@ public final class User {
     }
 
 
+    public static void setInitialData(final Player player, final Region region) {
+        sUser = new User();
+        sUser.mPlayer = player;
+        sUser.mRegion = region;
+        saveUser();
+    }
+
+
     public static void setPlayer(final Player player) {
         if (!getUser().mPlayer.equals(player)) {
             Log.d(TAG, "Player changed from " + sUser.mPlayer + " to " + player);

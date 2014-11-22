@@ -203,7 +203,7 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
-    protected boolean listenForUserChanges() {
+    protected boolean listenForRegionChanges() {
         return false;
     }
 
@@ -247,7 +247,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             }
         }
 
-        if (listenForUserChanges()) {
+        if (listenForRegionChanges()) {
             Settings.addRegionListener(this);
         }
     }
@@ -273,7 +273,7 @@ abstract class BaseActivity extends ActionBarActivity implements
         mIsAlive = false;
         App.cancelNetworkRequests(this);
 
-        if (listenForUserChanges()) {
+        if (listenForRegionChanges()) {
             Settings.removeRegionListener(this);
         }
     }

@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:compat="http://schemas.android.com/apk/res-auto">
+    xmlns:compat="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <item
         android:enabled="false"
-        android:icon="@drawable/ic_sort"
         android:id="@+id/activity_onboarding_menu_next"
         android:title="@string/next_"
-        compat:showAsAction="ifRoom|withText" />
+        compat:showAsAction="always|withText"
+        tools:ignore="AlwaysShowAction" />
+    <item
+        android:id="@+id/activity_onboarding_menu_skip"
+        android:title="@string/skip_"
+        android:visible="false"
+        compat:showAsAction="always|withText"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:enabled="false"
-        android:icon="@drawable/ic_sort"
         android:id="@+id/activity_onboarding_menu_go"
         android:title="@string/go_"
         android:visible="false"
-        compat:showAsAction="ifRoom|withText" />
+        compat:showAsAction="always|withText"
+        tools:ignore="AlwaysShowAction" />
 </menu>

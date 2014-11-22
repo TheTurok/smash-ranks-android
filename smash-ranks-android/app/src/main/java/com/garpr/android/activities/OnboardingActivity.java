@@ -27,6 +27,7 @@ public class OnboardingActivity extends BaseActivity implements
 
     private MenuItem mGo;
     private MenuItem mNext;
+    private MenuItem mSkip;
     private NonSwipeableViewPager mViewPager;
     private PlayersFragment mPlayersFragment;
     private RegionsFragment mRegionsFragment;
@@ -40,6 +41,8 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     private void finishOnboarding() {
+        // note that at this point, it's possible for the user to have hit the skip button, and
+        // therefore will not have selected a specific Player (so it'll be null here)
         final Player player = mPlayersFragment.getSelectedPlayer();
         final Region region = mRegionsFragment.getSelectedRegion();
         User.setInitialData(player, region);
@@ -72,6 +75,7 @@ public class OnboardingActivity extends BaseActivity implements
             case ONBOARDING_FRAGMENT_REGIONS:
                 mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
                 mNext.setVisible(false);
+                mSkip.setVisible(true);
                 mGo.setVisible(true);
                 break;
 
@@ -93,6 +97,7 @@ public class OnboardingActivity extends BaseActivity implements
                     mPlayersFragment.clearSelectedPlayer();
                     mGo.setVisible(false);
                     mGo.setEnabled(false);
+                    mSkip.setVisible(false);
                     mNext.setVisible(true);
                     break;
 
@@ -136,6 +141,7 @@ public class OnboardingActivity extends BaseActivity implements
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_onboarding_menu_go:
+            case R.id.activity_onboarding_menu_skip:
                 finishOnboarding();
                 break;
 
@@ -155,6 +161,7 @@ public class OnboardingActivity extends BaseActivity implements
     public boolean onPrepareOptionsMenu(final Menu menu) {
         mGo = menu.findItem(R.id.activity_onboarding_menu_go);
         mNext = menu.findItem(R.id.activity_onboarding_menu_next);
+        mSkip = menu.findItem(R.id.activity_onboarding_menu_skip);
         return super.onPrepareOptionsMenu(menu);
     }
 

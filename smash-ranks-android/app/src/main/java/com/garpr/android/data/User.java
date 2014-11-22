@@ -106,20 +106,31 @@ public final class User {
 
     private static void saveUser() {
         final User user = getUser();
+        final Editor editor = Settings.edit(CNAME);
 
-        final JSONObject playerJSON = user.mPlayer.toJSON();
-        final String playerString = playerJSON.toString();
+        if (user.mPlayer != null) {
+            final JSONObject playerJSON = user.mPlayer.toJSON();
+            final String playerString = playerJSON.toString();
+            editor.putString(KEY_PLAYER, playerString);
+        }
 
         final JSONObject regionJSON = user.mRegion.toJSON();
         final String regionString = regionJSON.toString();
-
-        final Editor editor = Settings.edit(CNAME);
-        editor.putString(KEY_PLAYER, playerString);
         editor.putString(KEY_REGION, regionString);
+
         editor.apply();
     }
 
 
+    /**
+     * Once the user has finished onboarding, this method must be called.
+     *
+     * @param player
+     * Can be null in order to allow the user to skip the player selection phase of onboarding
+     *
+     * @param region
+     * The {@link Region} that the user is active in.
+     */
     public static void setInitialData(final Player player, final Region region) {
         sUser = new User();
         sUser.mPlayer = player;
@@ -129,7 +140,12 @@ public final class User {
 
 
     public static void setPlayer(final Player player) {
-        if (!getUser().mPlayer.equals(player)) {
+        final User user = getUser();
+
+        // it's possible for the user's Player to be null at this point, as they may have skipped
+        // the player selection phase of onboarding
+
+        if (user.mPlayer == null || !user.mPlayer.equals(player)) {
             Log.d(TAG, "Player changed from " + sUser.mPlayer + " to " + player);
             sUser.mPlayer = player;
             saveUser();

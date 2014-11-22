@@ -30,31 +30,36 @@ public class Player implements Parcelable {
 
 
     public Player(final JSONObject json) throws JSONException {
-        rating = (float) json.getDouble(Constants.RATING);
-        rank = json.getInt(Constants.RANK);
         id = json.getString(Constants.ID);
         name = json.getString(Constants.NAME);
 
-        if (json.has(Constants.MATCHES)) {
-            final JSONArray matchesJSON = json.getJSONArray(Constants.MATCHES);
-            final int matchesLength = matchesJSON.length();
-            matches = new ArrayList<Match>(matchesLength);
+        if (json.has(Constants.RATING) && json.has(Constants.RANK)) {
+            setCompetitionValues(json);
 
-            for (int i = 0; i < matchesLength; ++i) {
-                try {
-                    final JSONObject matchJSON = matchesJSON.getJSONObject(i);
-                    final Match match = new Match(matchJSON);
-                    matches.add(match);
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Exception when building Match at index " + i, e);
+            if (json.has(Constants.MATCHES)) {
+                final JSONArray matchesJSON = json.getJSONArray(Constants.MATCHES);
+                final int matchesLength = matchesJSON.length();
+                matches = new ArrayList<Match>(matchesLength);
+
+                for (int i = 0; i < matchesLength; ++i) {
+                    try {
+                        final JSONObject matchJSON = matchesJSON.getJSONObject(i);
+                        final Match match = new Match(matchJSON);
+                        matches.add(match);
+                    } catch (final JSONException e) {
+                        Log.e(TAG, "Exception when building Match at index " + i, e);
+                    }
+                }
+
+                if (matches.isEmpty()) {
+                    matches = null;
+                } else {
+                    matches.trimToSize();
                 }
             }
-
-            if (matches.isEmpty()) {
-                matches = null;
-            } else {
-                matches.trimToSize();
-            }
+        } else {
+            rating = Float.MIN_VALUE;
+            rank = Integer.MIN_VALUE;
         }
     }
 
@@ -110,8 +115,19 @@ public class Player implements Parcelable {
     }
 
 
+    public boolean hasCompetitionValues() {
+        return rank != Integer.MIN_VALUE && rating != Float.MIN_VALUE;
+    }
+
+
     public boolean hasMatches() {
         return matches != null && !matches.isEmpty();
+    }
+
+
+    public void setCompetitionValues(final JSONObject json) throws JSONException {
+        rating = (float) json.getDouble(Constants.RATING);
+        rank = json.getInt(Constants.RANK);
     }
 
 
@@ -125,18 +141,21 @@ public class Player implements Parcelable {
             final JSONObject json = new JSONObject();
             json.put(Constants.ID, id);
             json.put(Constants.NAME, name);
-            json.put(Constants.RANK, rank);
-            json.put(Constants.RATING, rating);
 
-            if (hasMatches()) {
-                final JSONArray matchesJSON = new JSONArray();
+            if (hasCompetitionValues()) {
+                json.put(Constants.RANK, rank);
+                json.put(Constants.RATING, rating);
 
-                for (final Match match : matches) {
-                    final JSONObject matchJSON = match.toJSON();
-                    matchesJSON.put(matchJSON);
+                if (hasMatches()) {
+                    final JSONArray matchesJSON = new JSONArray();
+
+                    for (final Match match : matches) {
+                        final JSONObject matchJSON = match.toJSON();
+                        matchesJSON.put(matchJSON);
+                    }
+
+                    json.put(Constants.MATCHES, matchesJSON);
                 }
-
-                json.put(Constants.MATCHES, matchesJSON);
             }
 
             return json;

@@ -26,6 +26,13 @@ public final class User {
 
 
 
+    public static boolean areWeInTheUsersRegion() {
+        final Region usersRegion = getRegion();
+        final Region settingsRegion = Settings.getRegion();
+        return usersRegion.equals(settingsRegion);
+    }
+
+
     public static Player getPlayer() {
         return getUser().mPlayer;
     }

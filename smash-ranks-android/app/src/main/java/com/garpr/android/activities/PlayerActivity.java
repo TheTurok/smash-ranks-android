@@ -4,6 +4,7 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,7 @@ import com.garpr.android.R;
 import com.garpr.android.data.Matches;
 import com.garpr.android.data.Matches.MatchesCallback;
 import com.garpr.android.data.Players;
+import com.garpr.android.data.User;
 import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
@@ -45,6 +47,7 @@ public class PlayerActivity extends BaseListActivity implements
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
+    private boolean mInUsersRegion;
     private boolean mSetSearchItemVisible;
     private MatchesFilter mFilter;
     private MenuItem mSearchItem;
@@ -130,6 +133,8 @@ public class PlayerActivity extends BaseListActivity implements
 
         final Toolbar toolbar = getToolbar();
         toolbar.setSubtitle(getString(R.string.rank_x, mPlayer.getRank()));
+
+        mInUsersRegion = User.areWeInTheUsersRegion();
 
         if (mPlayer.hasMatches()) {
             final ArrayList<Match> matches = mPlayer.getMatches();
@@ -344,6 +349,17 @@ public class PlayerActivity extends BaseListActivity implements
                     viewHolder.mOpponent.setTextColor(mColorWin);
                 } else {
                     viewHolder.mOpponent.setTextColor(mColorLose);
+                }
+
+                if (mInUsersRegion) {
+                    final String opponentId = match.getOpponentId();
+                    final Player player = User.getPlayer();
+
+                    if (opponentId.equals(player.getId())) {
+                        viewHolder.mOpponent.setTypeface(Typeface.DEFAULT_BOLD);
+                    } else {
+                        viewHolder.mOpponent.setTypeface(Typeface.DEFAULT);
+                    }
                 }
             } else {
                 final Tournament tournament = listItem.mTournament;

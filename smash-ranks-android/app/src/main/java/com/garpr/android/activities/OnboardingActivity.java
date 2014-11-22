@@ -87,11 +87,18 @@ public class OnboardingActivity extends BaseActivity implements
         if (mViewPager == null || mViewPager.getCurrentItem() == 0) {
             super.onBackPressed();
         } else {
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
+            switch (mViewPager.getCurrentItem()) {
+                case ONBOARDING_FRAGMENT_PLAYERS:
+                    mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
+                    mPlayersFragment.clearSelectedPlayer();
+                    mGo.setVisible(false);
+                    mGo.setEnabled(false);
+                    mNext.setVisible(true);
+                    break;
 
-            if (mGo.isVisible()) {
-                mGo.setVisible(false);
-                mNext.setVisible(true);
+                default:
+                    // this should never happen
+                    throw new RuntimeException();
             }
         }
     }

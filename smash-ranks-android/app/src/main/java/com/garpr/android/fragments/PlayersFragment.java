@@ -29,6 +29,11 @@ public class PlayersFragment extends BaseListFragment {
     }
 
 
+    public void clearSelectedPlayer() {
+        mSelectedPlayer = null;
+    }
+
+
     private void fetchRegions() {
         setLoading(true);
 

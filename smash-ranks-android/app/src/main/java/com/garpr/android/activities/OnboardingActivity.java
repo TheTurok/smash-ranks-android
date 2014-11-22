@@ -45,7 +45,7 @@ public class OnboardingActivity extends BaseActivity implements
         // therefore will not have selected a specific Player (so it'll be null here)
         final Player player = mPlayersFragment.getSelectedPlayer();
         final Region region = mRegionsFragment.getSelectedRegion();
-        User.setInitialData(player, region);
+        User.setData(player, region);
 
         RankingsActivity.start(this);
         finish();

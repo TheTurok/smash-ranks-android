@@ -21,9 +21,8 @@ import android.widget.TextView;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
-import com.garpr.android.data.User;
+import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Heartbeat;
-import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
 
@@ -33,8 +32,8 @@ import com.garpr.android.models.Region;
  */
 abstract class BaseActivity extends ActionBarActivity implements
         Heartbeat,
-        Toolbar.OnMenuItemClickListener,
-        User.OnUserDataChangedListener {
+        Settings.OnRegionChangedListener,
+        Toolbar.OnMenuItemClickListener {
 
 
     private ActionBarDrawerToggle mDrawerToggle;
@@ -249,7 +248,7 @@ abstract class BaseActivity extends ActionBarActivity implements
         }
 
         if (listenForUserChanges()) {
-            User.addListener(this);
+            Settings.addRegionListener(this);
         }
     }
 
@@ -275,7 +274,7 @@ abstract class BaseActivity extends ActionBarActivity implements
         App.cancelNetworkRequests(this);
 
         if (listenForUserChanges()) {
-            User.removeListener(this);
+            Settings.removeRegionListener(this);
         }
     }
 
@@ -312,12 +311,6 @@ abstract class BaseActivity extends ActionBarActivity implements
         }
 
         return true;
-    }
-
-
-    @Override
-    public void onPlayerChanged(final Player player) {
-        // this method intentionally left blank (children can override)
     }
 
 

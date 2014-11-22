@@ -13,7 +13,7 @@ import android.widget.CheckedTextView;
 import com.garpr.android.R;
 import com.garpr.android.data.Regions;
 import com.garpr.android.data.Regions.RegionsCallback;
-import com.garpr.android.data.User;
+import com.garpr.android.data.Settings;
 import com.garpr.android.misc.OnItemSelectedListener;
 import com.garpr.android.models.Region;
 
@@ -86,7 +86,7 @@ public class RegionsFragment extends BaseListFragment {
         super.onActivityCreated(savedInstanceState);
 
         if (mLoadUserRegion) {
-            mSelectedRegion = User.getRegion();
+            mSelectedRegion = Settings.getRegion();
         }
 
         fetchRegions();

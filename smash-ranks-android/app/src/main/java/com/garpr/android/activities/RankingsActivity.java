@@ -3,6 +3,7 @@ package com.garpr.android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.garpr.android.R;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.Players.PlayersCallback;
+import com.garpr.android.data.User;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
 import com.garpr.android.models.Player;
@@ -38,6 +40,7 @@ public class RankingsActivity extends BaseListActivity implements
 
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
+    private boolean mInUsersRegion;
     private boolean mSetSearchItemVisible;
     private boolean mSetSortItemVisible;
     private Comparator<Player> mSort;
@@ -125,6 +128,7 @@ public class RankingsActivity extends BaseListActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mInUsersRegion = User.areWeInTheUsersRegion();
         fetchRankings();
     }
 
@@ -239,6 +243,7 @@ public class RankingsActivity extends BaseListActivity implements
 
     @Override
     public void onRegionChanged(final Region region) {
+        mInUsersRegion = User.areWeInTheUsersRegion();
         fetchRankings();
     }
 
@@ -288,6 +293,14 @@ public class RankingsActivity extends BaseListActivity implements
             holder.mName.setText(player.getName());
             holder.mRank.setText(String.valueOf(player.getRank()));
             holder.mRating.setText(String.format("%.3f", player.getRating()));
+
+            if (mInUsersRegion) {
+                if (player.equals(User.getPlayer())) {
+                    holder.mName.setTypeface(Typeface.DEFAULT_BOLD);
+                } else {
+                    holder.mName.setTypeface(Typeface.DEFAULT);
+                }
+            }
         }
 
 

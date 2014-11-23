@@ -167,7 +167,7 @@ public class RegionsFragment extends BaseListFragment {
     }
 
 
-    private final static class ViewHolder extends RecyclerView.ViewHolder {
+    private static final class ViewHolder extends RecyclerView.ViewHolder {
 
 
         private final CheckedTextView mName;

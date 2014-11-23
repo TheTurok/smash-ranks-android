@@ -2,7 +2,6 @@ package com.garpr.android.fragments;
 
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,13 +72,6 @@ public class PlayersFragment extends BaseListFragment {
 
     public Player getSelectedPlayer() {
         return mSelectedPlayer;
-    }
-
-
-    @Override
-    public void onActivityCreated(final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        fetchPlayers();
     }
 
 

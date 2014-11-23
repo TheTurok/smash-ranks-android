@@ -90,18 +90,21 @@ public final class User {
     }
 
 
-    /**
-     * Once the user has finished onboarding, this method must be called.
-     *
-     * @param player
-     * Can be null in order to allow the user to skip the player selection phase of onboarding
-     *
-     * @param region
-     * The {@link Region} that the user is active in.
-     */
-    public static void setData(final Player player, final Region region) {
-        sUser = new User();
+    public static void setPlayer(final Player player) {
+        if (sUser == null) {
+            sUser = new User();
+        }
+
         sUser.mPlayer = player;
+        saveUser();
+    }
+
+
+    public static void setRegion(final Region region) {
+        if (sUser == null) {
+            sUser = new User();
+        }
+
         sUser.mRegion = region;
         saveUser();
     }

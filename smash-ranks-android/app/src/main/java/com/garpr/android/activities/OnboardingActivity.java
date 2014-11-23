@@ -47,11 +47,11 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     private void finishOnboarding() {
-        // note that at this point, it's possible for the user to have hit the skip button, and
-        // therefore will not have selected a specific Player (so it'll be null here)
         final Player player = mPlayersFragment.getSelectedPlayer();
-        final Region region = mRegionsFragment.getSelectedRegion();
-        User.setData(player, region);
+
+        if (player != null) {
+            User.setPlayer(player);
+        }
 
         RankingsActivity.start(this);
         finish();
@@ -79,7 +79,11 @@ public class OnboardingActivity extends BaseActivity implements
     private void nextOnboardingStep() {
         switch (mViewPager.getCurrentItem()) {
             case ONBOARDING_FRAGMENT_REGIONS:
+                final Region region = mRegionsFragment.getSelectedRegion();
+                User.setRegion(region);
+
                 mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
+                mPlayersFragment.onRefresh();
                 mNext.setVisible(false);
                 mSkip.setVisible(true);
                 mGo.setVisible(true);

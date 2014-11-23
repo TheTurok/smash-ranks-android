@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
@@ -122,14 +123,23 @@ public class PlayersFragment extends BaseListFragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            // TODO
+            final Player player = mPlayers.get(position);
+            holder.mName.setText(player.getName());
+
+            if (player.equals(mSelectedPlayer)) {
+                holder.mName.setChecked(true);
+            } else {
+                holder.mName.setChecked(false);
+            }
         }
 
 
         @Override
         public ViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
-            // TODO
-            return null;
+            final LayoutInflater inflater = getLayoutInflater();
+            final View view = inflater.inflate(R.layout.model_checkable, parent, false);
+            view.setOnClickListener(this);
+            return new ViewHolder(view);
         }
 
 

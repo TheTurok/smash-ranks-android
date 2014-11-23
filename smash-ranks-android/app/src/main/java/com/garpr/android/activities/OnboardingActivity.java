@@ -91,7 +91,7 @@ public class OnboardingActivity extends BaseActivity implements
                 User.setRegion(region);
 
                 mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
-                mPlayersFragment.onRefresh();
+                mPlayersFragment.refresh();
                 mNext.setVisible(false);
                 mSkip.setVisible(true);
                 mGo.setVisible(true);

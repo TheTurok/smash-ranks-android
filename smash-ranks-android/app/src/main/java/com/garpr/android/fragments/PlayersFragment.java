@@ -96,9 +96,14 @@ public class PlayersFragment extends BaseListFragment {
         super.onRefresh();
 
         if (!isLoading()) {
-            Players.clear();
-            fetchPlayers();
+            refresh();
         }
+    }
+
+
+    public void refresh() {
+        Players.clear();
+        fetchPlayers();
     }
 
 

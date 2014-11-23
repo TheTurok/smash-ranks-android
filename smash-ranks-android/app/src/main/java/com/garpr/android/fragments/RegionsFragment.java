@@ -147,7 +147,7 @@ public class RegionsFragment extends BaseListFragment {
             final Region region = mRegions.get(position);
             holder.mName.setText(region.getName());
 
-            if (mSelectedRegion != null && region.equals(mSelectedRegion)) {
+            if (region.equals(mSelectedRegion)) {
                 holder.mName.setChecked(true);
             } else {
                 holder.mName.setChecked(false);

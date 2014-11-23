@@ -35,6 +35,12 @@ public class OnboardingActivity extends BaseActivity implements
 
 
 
+    private void createFragments() {
+        mPlayersFragment = PlayersFragment.create();
+        mRegionsFragment = RegionsFragment.create(false);
+    }
+
+
     private void findViews() {
         mViewPager = (NonSwipeableViewPager) findViewById(R.id.activity_onboarding_pager);
     }
@@ -113,8 +119,8 @@ public class OnboardingActivity extends BaseActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("");
-
         findViews();
+        createFragments();
         prepareViews();
     }
 
@@ -193,18 +199,10 @@ public class OnboardingActivity extends BaseActivity implements
 
             switch (position) {
                 case ONBOARDING_FRAGMENT_REGIONS:
-                    if (mRegionsFragment == null) {
-                        mRegionsFragment = RegionsFragment.create(false);
-                    }
-
                     fragment = mRegionsFragment;
                     break;
 
                 case ONBOARDING_FRAGMENT_PLAYERS:
-                    if (mPlayersFragment == null) {
-                        mPlayersFragment = PlayersFragment.create();
-                    }
-
                     fragment = mPlayersFragment;
                     break;
 

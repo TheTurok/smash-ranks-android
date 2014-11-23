@@ -84,7 +84,7 @@ public class RankingsActivity extends BaseListActivity implements
             }
         };
 
-        Players.get(callback);
+        Players.getRankings(callback);
     }
 
 

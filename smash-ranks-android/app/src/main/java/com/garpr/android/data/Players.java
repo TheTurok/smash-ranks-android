@@ -69,19 +69,73 @@ public final class Players {
     }
 
 
-    public static void get(final PlayersCallback callback) {
+    public static void getAll(final PlayersCallback callback) {
         final AsyncReadPlayersDatabase task = new AsyncReadPlayersDatabase(callback);
         task.execute();
     }
 
 
-    private static void getFromNetwork(final PlayersCallback callback) {
+    public static void getRankings(final PlayersCallback callback) {
+        final PlayersCallback callbackWrapper0 = new PlayersCallback(callback.getHeartbeat()) {
+            @Override
+            public void error(final Exception e) {
+                callback.error(e);
+            }
+
+
+            @Override
+            public void response(final ArrayList<Player> list) {
+                if (isAlive()) {
+                    if (playersHaveRankings(list)) {
+                        Log.d(TAG, "Found rankings in the list of players");
+                        stripListOfRankinglessPlayers(list);
+                        callback.response(list);
+                    } else {
+                        Log.d(TAG, "Rankings were not found in the list of players");
+
+                        final RankingsCallback callbackWrapper1 = new RankingsCallback(getHeartbeat()) {
+                            @Override
+                            public void error(final Exception e) {
+                                callback.error(e);
+                            }
+
+
+                            @Override
+                            public void response(final ArrayList<Player> list) {
+                                callback.response(list);
+                            }
+                        };
+
+                        getRankingsFromNetwork(callbackWrapper1);
+                    }
+                } else {
+                    Log.d(TAG, "Rankings callback wrapper can't continue (the listener is dead)");
+                }
+            }
+        };
+
+        getAll(callbackWrapper0);
+    }
+
+
+    private static void getPlayersFromNetwork(final PlayersCallback callback) {
         if (callback.isAlive()) {
             Log.d(TAG, "Grabbing players from network");
-            final String url = Network.makeUrl(Constants.RANKINGS);
+            final String url = Network.makeUrl(Constants.PLAYERS);
             Network.sendRequest(url, callback);
         } else {
             Log.d(TAG, "Canceled grabbing players from network");
+        }
+    }
+
+
+    private static void getRankingsFromNetwork(final RankingsCallback callback) {
+        if (callback.isAlive()) {
+            Log.d(TAG, "Grabbing rankings from network");
+            final String url = Network.makeUrl(Constants.RANKINGS);
+            Network.sendRequest(url, callback);
+        } else {
+            Log.d(TAG, "Canceled grabbing rankings from network");
         }
     }
 
@@ -111,9 +165,18 @@ public final class Players {
     }
 
 
-    private static void save(final ArrayList<Player> players) {
-        final AsyncSavePlayersDatabase task = new AsyncSavePlayersDatabase(players);
-        task.execute();
+    private static boolean playersHaveRankings(final ArrayList<Player> list) {
+        boolean playersHaveRankings = false;
+
+        for (int i = 0; i < list.size() && !playersHaveRankings; ++i) {
+            final Player player = list.get(i);
+
+            if (player.hasCompetitionValues()) {
+                playersHaveRankings = true;
+            }
+        }
+
+        return playersHaveRankings;
     }
 
 
@@ -124,6 +187,31 @@ public final class Players {
         final String[] whereArgs = { player.getId() };
         database.update(getTableName(), values, whereClause, whereArgs);
         database.close();
+    }
+
+
+    private static void savePlayers(final ArrayList<Player> players) {
+        final AsyncSavePlayersDatabase task = new AsyncSavePlayersDatabase(players);
+        task.execute();
+    }
+
+
+    private static void saveRankings(final ArrayList<Player> players) {
+        final AsyncSaveRankingsDatabase task = new AsyncSaveRankingsDatabase(players);
+        task.execute();
+    }
+
+
+    private static void stripListOfRankinglessPlayers(final ArrayList<Player> players) {
+        for (int i = 0; i < players.size(); ) {
+            final Player player = players.get(i);
+
+            if (player.hasCompetitionValues()) {
+                ++i;
+            } else {
+                players.remove(i);
+            }
+        }
     }
 
 
@@ -162,7 +250,7 @@ public final class Players {
 
         @Override
         void getFromNetwork(final Callback<Player> callback) {
-            Players.getFromNetwork((PlayersCallback) callback);
+            Players.getPlayersFromNetwork((PlayersCallback) callback);
         }
 
 
@@ -214,6 +302,45 @@ public final class Players {
     }
 
 
+    private static class AsyncSaveRankingsDatabase extends AsyncTask<Void, Void, Void> {
+
+
+        private static final String TAG = AsyncSaveRankingsDatabase.class.getSimpleName();
+
+        private final ArrayList<Player> mPlayers;
+
+
+        private AsyncSaveRankingsDatabase(final ArrayList<Player> players) {
+            mPlayers = players;
+        }
+
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            final SQLiteDatabase database = Database.writeTo();
+            database.beginTransaction();
+
+            final String whereClause = Constants.ID + " = ?";
+
+            for (final Player player : mPlayers) {
+                final ContentValues values = createContentValues(player);
+                final String[] whereArgs = { player.getId() };
+                database.update(getTableName(), values, whereClause, whereArgs);
+            }
+
+            database.setTransactionSuccessful();
+            database.endTransaction();
+            database.close();
+
+            Log.d(TAG, "Saved " + mPlayers.size() + " rankings to the database");
+
+            return null;
+        }
+
+
+    }
+
+
     public static abstract class PlayersCallback extends Callback<Player> {
 
 
@@ -239,22 +366,85 @@ public final class Players {
         public final void onResponse(final JSONObject json) {
             try {
                 final ArrayList<Player> players = Players.parseJSON(json);
-                Log.d(TAG, "Read in " + players.size() + " Player objects from JSON response");
+                Log.d(TAG, "Read in " + players.size() + " Player objects from players JSON response");
 
                 if (players.isEmpty()) {
-                    final JSONException e = new JSONException("No players grabbed from JSON response");
+                    final JSONException e = new JSONException("No players grabbed from players JSON response");
                     Log.e(TAG, "No players available", e);
 
                     if (isAlive()) {
                         error(e);
                     }
                 } else {
-                    save(players);
+                    savePlayers(players);
 
                     if (isAlive()) {
                         response(players);
                     } else {
                         Log.d(TAG, "Players response canceled because the listener is dead");
+                    }
+                }
+            } catch (final JSONException e) {
+                Log.e(TAG, "Exception when parsing players JSON response", e);
+                error(e);
+            }
+        }
+
+
+        @Override
+        public final void response(final Player item) {
+            final ArrayList<Player> list = new ArrayList<Player>(1);
+            list.add(item);
+            response(list);
+        }
+
+
+    }
+
+
+
+
+    private static abstract class RankingsCallback extends Callback<Player> {
+
+
+        private static final String TAG = RankingsCallback.class.getSimpleName();
+
+
+        private RankingsCallback(final Heartbeat heartbeat) {
+            super(heartbeat);
+        }
+
+
+        @Override
+        public final void onErrorResponse(final VolleyError error) {
+            Log.e(TAG, "Exception when downloading rankings", error);
+
+            if (isAlive()) {
+                error(error);
+            }
+        }
+
+
+        @Override
+        public final void onResponse(final JSONObject response) {
+            try {
+                final ArrayList<Player> rankings = Players.parseJSON(response);
+                Log.d(TAG, "Read in " + rankings.size() + " Player objects from rankings JSON response");
+
+                if (rankings.isEmpty()) {
+                    final JSONException e = new JSONException("No players grabbed from rankings JSON response");
+                    Log.e(TAG, "No players available", e);
+
+                    if (isAlive()) {
+                        error(e);
+                    }
+                } else {
+                    saveRankings(rankings);
+
+                    if (isAlive()) {
+                        response(rankings);
+                    } else {
+                        Log.d(TAG, "Rankings response canceled because the listener is dead");
                     }
                 }
             } catch (final JSONException e) {

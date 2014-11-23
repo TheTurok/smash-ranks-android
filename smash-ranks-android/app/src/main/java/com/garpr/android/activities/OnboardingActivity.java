@@ -1,6 +1,8 @@
 package com.garpr.android.activities;
 
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -8,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.garpr.android.R;
+import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
@@ -24,6 +27,8 @@ public class OnboardingActivity extends BaseActivity implements
     private static final int ONBOARDING_FRAGMENT_COUNT = 2;
     private static final int ONBOARDING_FRAGMENT_PLAYERS = 1;
     private static final int ONBOARDING_FRAGMENT_REGIONS = 0;
+    private static final String CNAME = OnboardingActivity.class.getCanonicalName();
+    private static final String KEY_ONBOARDING_COMPLETE = "KEY_ONBOARDING_COMPLETE";
 
     private MenuItem mGo;
     private MenuItem mNext;
@@ -53,8 +58,11 @@ public class OnboardingActivity extends BaseActivity implements
             User.setPlayer(player);
         }
 
+        final Editor editor = Settings.edit(CNAME);
+        editor.putBoolean(KEY_ONBOARDING_COMPLETE, true);
+        editor.apply();
+
         RankingsActivity.start(this);
-        finish();
     }
 
 
@@ -119,13 +127,24 @@ public class OnboardingActivity extends BaseActivity implements
     }
 
 
+    private boolean onboardingCompleted() {
+        final SharedPreferences sPreferences = Settings.get(CNAME);
+        return sPreferences.getBoolean(KEY_ONBOARDING_COMPLETE, false);
+    }
+
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("");
-        findViews();
-        createFragments();
-        prepareViews();
+
+        if (onboardingCompleted()) {
+            RankingsActivity.start(this);
+        } else {
+            findViews();
+            createFragments();
+            prepareViews();
+        }
     }
 
 

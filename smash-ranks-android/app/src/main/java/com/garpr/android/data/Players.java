@@ -141,18 +141,28 @@ public final class Players {
 
 
     private static String getTableName() {
-        return TAG + '_' + Settings.getRegion().getName();
+        return TAG + '_' + Settings.getRegion().getId();
     }
 
 
     private static ArrayList<Player> parseJSON(final JSONObject json) throws JSONException {
-        final JSONArray rankingsJSON = json.getJSONArray(Constants.RANKING);
-        final int rankingsLength = rankingsJSON.length();
-        final ArrayList<Player> players = new ArrayList<Player>(rankingsLength);
+        final JSONArray playersJSON;
 
-        for (int i = 0; i < rankingsLength; ++i) {
+        if (json.has(Constants.PLAYERS)) {
+            playersJSON = json.getJSONArray(Constants.PLAYERS);
+        } else if (json.has(Constants.RANKING)) {
+            playersJSON = json.getJSONArray(Constants.RANKING);
+        } else {
+            throw new JSONException("Neither " + Constants.PLAYERS + " nor " + Constants.RANKING
+                    + " exists in the JSON");
+        }
+
+        final int playersLength = playersJSON.length();
+        final ArrayList<Player> players = new ArrayList<Player>(playersLength);
+
+        for (int i = 0; i < playersLength; ++i) {
             try {
-                final JSONObject playerJSON = rankingsJSON.getJSONObject(i);
+                final JSONObject playerJSON = playersJSON.getJSONObject(i);
                 final Player player = new Player(playerJSON);
                 players.add(player);
             } catch (final JSONException e) {

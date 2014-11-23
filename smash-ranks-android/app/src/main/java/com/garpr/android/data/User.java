@@ -107,6 +107,8 @@ public final class User {
 
         sUser.mRegion = region;
         saveUser();
+
+        Settings.setRegion(region, false);
     }
 
 

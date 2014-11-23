@@ -132,27 +132,38 @@ public final class Settings {
     }
 
 
-    public static void setRegion(final Region region) {
-        if (!region.equals(sRegion)) {
-            saveRegion(region);
+    static void setRegion(final Region region, final boolean notifyListeners) {
+        if (region.equals(sRegion)) {
+            return;
+        }
 
-            if (sRegionListeners == null || sRegionListeners.isEmpty()) {
-                Log.d(TAG, "Region was changed but there are no listeners");
-                return;
-            }
+        saveRegion(region);
 
-            for (int i = 0; i < sRegionListeners.size(); ) {
-                final WeakReference<OnRegionChangedListener> r = sRegionListeners.get(i);
-                final OnRegionChangedListener l = r.get();
+        if (!notifyListeners) {
+            return;
+        }
 
-                if (l == null) {
-                    sRegionListeners.remove(i);
-                } else {
-                    l.onRegionChanged(sRegion);
-                    ++i;
-                }
+        if (sRegionListeners == null || sRegionListeners.isEmpty()) {
+            Log.d(TAG, "Region was changed but there are no listeners");
+            return;
+        }
+
+        for (int i = 0; i < sRegionListeners.size(); ) {
+            final WeakReference<OnRegionChangedListener> r = sRegionListeners.get(i);
+            final OnRegionChangedListener l = r.get();
+
+            if (l == null) {
+                sRegionListeners.remove(i);
+            } else {
+                l.onRegionChanged(sRegion);
+                ++i;
             }
         }
+    }
+
+
+    public static void setRegion(final Region region) {
+        setRegion(region, true);
     }
 
 

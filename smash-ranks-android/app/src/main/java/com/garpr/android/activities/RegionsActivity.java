@@ -5,10 +5,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
+import com.garpr.android.data.Settings;
 import com.garpr.android.fragments.RegionsFragment;
+import com.garpr.android.misc.OnItemSelectedListener;
 
 
-public class RegionsActivity extends BaseFragmentActivity {
+public class RegionsActivity extends BaseFragmentActivity implements
+        OnItemSelectedListener {
+
+
+    private RegionsFragment mRegionsFragment;
+
+
 
 
     public static void start(final Activity activity) {
@@ -19,7 +27,14 @@ public class RegionsActivity extends BaseFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return RegionsFragment.create(true);
+        mRegionsFragment = RegionsFragment.create(true);
+        return mRegionsFragment;
+    }
+
+
+    @Override
+    public void onItemSelected() {
+        Settings.setRegion(mRegionsFragment.getSelectedRegion());
     }
 
 

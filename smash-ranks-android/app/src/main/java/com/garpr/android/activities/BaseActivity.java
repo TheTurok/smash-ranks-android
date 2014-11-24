@@ -290,8 +290,8 @@ abstract class BaseActivity extends ActionBarActivity implements
 
 
     @Override
-    public boolean onMenuItemClick(final MenuItem menuItem) {
-        return onOptionsItemSelected(menuItem);
+    public boolean onMenuItemClick(final MenuItem item) {
+        return onOptionsItemSelected(item);
     }
 
 

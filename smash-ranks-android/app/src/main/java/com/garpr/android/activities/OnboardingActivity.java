@@ -6,8 +6,6 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
@@ -15,13 +13,13 @@ import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.misc.NonSwipeableViewPager;
-import com.garpr.android.misc.OnItemSelectedListener;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
 
 public class OnboardingActivity extends BaseActivity implements
-        OnItemSelectedListener {
+        PlayersFragment.Listeners,
+        RegionsFragment.Listener {
 
 
     private static final int ONBOARDING_FRAGMENT_COUNT = 2;
@@ -30,9 +28,6 @@ public class OnboardingActivity extends BaseActivity implements
     private static final String CNAME = OnboardingActivity.class.getCanonicalName();
     private static final String KEY_ONBOARDING_COMPLETE = "KEY_ONBOARDING_COMPLETE";
 
-    private MenuItem mGo;
-    private MenuItem mNext;
-    private MenuItem mSkip;
     private NonSwipeableViewPager mViewPager;
     private PlayersFragment mPlayersFragment;
     private RegionsFragment mRegionsFragment;
@@ -42,7 +37,7 @@ public class OnboardingActivity extends BaseActivity implements
 
     private void createFragments() {
         mPlayersFragment = PlayersFragment.create();
-        mRegionsFragment = RegionsFragment.create(false);
+        mRegionsFragment = RegionsFragment.create(false, true);
     }
 
 
@@ -73,14 +68,14 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     @Override
-    protected int getContentView() {
-        return R.layout.activity_onboarding;
+    protected boolean isToolbarEnabled() {
+        return false;
     }
 
 
     @Override
-    protected int getOptionsMenu() {
-        return R.menu.activity_onboarding;
+    protected int getContentView() {
+        return R.layout.activity_onboarding;
     }
 
 
@@ -92,9 +87,6 @@ public class OnboardingActivity extends BaseActivity implements
 
                 mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
                 mPlayersFragment.refresh();
-                mNext.setVisible(false);
-                mSkip.setVisible(true);
-                mGo.setVisible(true);
                 break;
 
             default:
@@ -113,10 +105,6 @@ public class OnboardingActivity extends BaseActivity implements
                 case ONBOARDING_FRAGMENT_PLAYERS:
                     mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
                     mPlayersFragment.clearSelectedPlayer();
-                    mGo.setVisible(false);
-                    mGo.setEnabled(false);
-                    mSkip.setVisible(false);
-                    mNext.setVisible(true);
                     break;
 
                 default:
@@ -136,7 +124,6 @@ public class OnboardingActivity extends BaseActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("");
 
         if (onboardingCompleted()) {
             RankingsActivity.start(this);
@@ -149,57 +136,26 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     @Override
-    public void onItemSelected() {
-        switch (mViewPager.getCurrentItem()) {
-            case ONBOARDING_FRAGMENT_REGIONS:
-                mNext.setEnabled(true);
-                break;
-
-            case ONBOARDING_FRAGMENT_PLAYERS:
-                mGo.setEnabled(true);
-                break;
-
-            default:
-                // this should never happen
-                throw new RuntimeException();
-        }
+    public void onGoClick() {
+        finishOnboarding();
     }
 
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.activity_onboarding_menu_go:
-            case R.id.activity_onboarding_menu_skip:
-                finishOnboarding();
-                break;
-
-            case R.id.activity_onboarding_menu_next:
-                nextOnboardingStep();
-                break;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-        return true;
+    public void onNextClick() {
+        nextOnboardingStep();
     }
 
 
     @Override
-    public boolean onPrepareOptionsMenu(final Menu menu) {
-        mGo = menu.findItem(R.id.activity_onboarding_menu_go);
-        mNext = menu.findItem(R.id.activity_onboarding_menu_next);
-        mSkip = menu.findItem(R.id.activity_onboarding_menu_skip);
-        return super.onPrepareOptionsMenu(menu);
+    public void onSkipClick() {
+        finishOnboarding();
     }
 
 
     private void prepareViews() {
         mViewPager.setAdapter(new OnboardingFragmentAdapter());
     }
-
-
 
 
     private final class OnboardingFragmentAdapter extends FragmentPagerAdapter {

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:compat="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/ic_search"
+        android:id="@+id/fragment_players_menu_search"
+        android:title="@string/search"
+        android:visible="false"
+        compat:actionViewClass="android.support.v7.widget.SearchView"
+        compat:showAsAction="collapseActionView|ifRoom" />
+    <item
+        android:id="@+id/fragment_players_menu_skip"
+        android:title="@string/skip_"
+        android:visible="false"
+        compat:showAsAction="ifRoom|withText" />
+    <item
+        android:enabled="false"
+        android:id="@+id/fragment_players_menu_go"
+        android:title="@string/go_"
+        android:visible="false"
+        compat:showAsAction="ifRoom|withText" />
+</menu>

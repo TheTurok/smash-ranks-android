@@ -7,12 +7,10 @@ import android.support.v4.app.Fragment;
 
 import com.garpr.android.data.Settings;
 import com.garpr.android.fragments.RegionsFragment;
-import com.garpr.android.misc.OnItemSelectedListener;
 import com.garpr.android.models.Region;
 
 
-public class RegionsActivity extends BaseFragmentActivity implements
-        OnItemSelectedListener {
+public class RegionsActivity extends BaseFragmentActivity {
 
 
     private RegionsFragment mRegionsFragment;
@@ -28,7 +26,7 @@ public class RegionsActivity extends BaseFragmentActivity implements
 
     @Override
     protected Fragment createFragment() {
-        mRegionsFragment = RegionsFragment.create(true);
+        mRegionsFragment = RegionsFragment.create(true, false);
         return mRegionsFragment;
     }
 
@@ -41,12 +39,6 @@ public class RegionsActivity extends BaseFragmentActivity implements
         }
 
         super.finish();
-    }
-
-
-    @Override
-    public void onItemSelected() {
-        // this method intentionally left blank
     }
 
 

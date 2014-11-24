@@ -3,25 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     style="@style/root.no_padding">
-    <RelativeLayout
+    <TextView
+        android:gravity="center"
+        android:id="@+id/activity_onboarding_title"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-        <android.support.v7.widget.Toolbar
-            android:id="@id/toolbar"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:minHeight="?attr/actionBarSize" />
-        <TextView
-            android:gravity="center"
-            android:id="@+id/activity_onboarding_title"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/root_padding_double"
-            android:layout_width="wrap_content"
-            android:padding="@dimen/root_padding"
-            android:text="@string/gar_pr"
-            android:textSize="32sp" />
-    </RelativeLayout>
+        android:layout_marginTop="@dimen/root_padding"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/root_padding"
+        android:text="@string/gar_pr"
+        android:textSize="32sp" />
     <ImageView
         android:id="@+id/activity_onboarding_orb"
         android:layout_gravity="center"
@@ -31,11 +22,8 @@
         android:scaleType="centerInside"
         android:src="@drawable/smash_orb"
         tools:ignore="ContentDescription" />
-    <View
-        android:background="@drawable/divider"
-        android:layout_height="1dp"
-        android:layout_width="match_parent" />
     <com.garpr.android.misc.NonSwipeableViewPager
+        android:background="?attr/colorPrimaryDark"
         android:id="@+id/activity_onboarding_pager"
         android:layout_height="0dp"
         android:layout_weight="1"

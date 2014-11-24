@@ -1,51 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
     style="@style/root.no_padding">
-    <android.support.v7.widget.Toolbar
-        android:id="@id/toolbar"
+    <RelativeLayout
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize" />
-    <LinearLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="horizontal">
-        <RelativeLayout
-            android:layout_gravity="center"
+        android:layout_width="wrap_content">
+        <TextView
+            android:gravity="center"
+            android:id="@+id/activity_onboarding_title"
+            android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content">
-            <TextView
-                android:gravity="center"
-                android:id="@+id/activity_onboarding_title"
-                android:layout_centerHorizontal="true"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/root_padding_double"
-                android:layout_marginLeft="@dimen/root_padding_double"
-                android:layout_marginRight="@dimen/root_padding_double"
-                android:layout_width="wrap_content"
-                android:paddingLeft="@dimen/root_padding_double"
-                android:paddingRight="@dimen/root_padding_double"
-                android:text="@string/gar_pr"
-                android:textSize="32sp" />
-            <ImageView
-                android:id="@+id/activity_onboarding_orb"
-                android:layout_below="@id/activity_onboarding_title"
-                android:layout_centerHorizontal="true"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:scaleType="centerInside"
-                android:src="@drawable/smash_orb"
-                tools:ignore="ContentDescription" />
-        </RelativeLayout>
-        <View
-            android:background="@drawable/divider"
-            android:layout_height="match_parent"
-            android:layout_width="1dp" />
-        <com.garpr.android.misc.NonSwipeableViewPager
-            android:id="@+id/activity_onboarding_pager"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-    </LinearLayout>
-</RelativeLayout>
+            android:layout_marginBottom="@dimen/root_padding_double"
+            android:layout_marginLeft="@dimen/root_padding_double"
+            android:layout_marginRight="@dimen/root_padding_double"
+            android:layout_width="wrap_content"
+            android:paddingLeft="@dimen/root_padding_double"
+            android:paddingRight="@dimen/root_padding_double"
+            android:text="@string/gar_pr"
+            android:textSize="32sp" />
+        <ImageView
+            android:id="@+id/activity_onboarding_orb"
+            android:layout_below="@id/activity_onboarding_title"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:scaleType="centerInside"
+            android:src="@drawable/smash_orb"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
+    <com.garpr.android.misc.NonSwipeableViewPager
+        android:background="?attr/colorPrimaryDark"
+        android:id="@+id/activity_onboarding_pager"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_width="0dp" />
+</LinearLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:checkMark="@drawable/checkbox"
     android:id="@+id/model_checkable_name"
     tools:text="Hungrybox"
     style="@style/list_item_root.text" />

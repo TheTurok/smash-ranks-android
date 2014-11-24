@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import com.garpr.android.data.Settings;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.misc.OnItemSelectedListener;
+import com.garpr.android.models.Region;
 
 
 public class RegionsActivity extends BaseFragmentActivity implements
@@ -33,8 +34,19 @@ public class RegionsActivity extends BaseFragmentActivity implements
 
 
     @Override
+    public void finish() {
+        if (mRegionsFragment != null) {
+            final Region region = mRegionsFragment.getSelectedRegion();
+            Settings.setRegion(region);
+        }
+
+        super.finish();
+    }
+
+
+    @Override
     public void onItemSelected() {
-        Settings.setRegion(mRegionsFragment.getSelectedRegion());
+        // this method intentionally left blank
     }
 
 

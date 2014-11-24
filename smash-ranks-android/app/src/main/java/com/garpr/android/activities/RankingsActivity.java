@@ -48,6 +48,7 @@ public class RankingsActivity extends BaseListActivity implements
     private MenuItem mSortItem;
     private MenuItem mSortAlphabetical;
     private MenuItem mSortRank;
+    private Player mUserPlayer;
     private RankingsFilter mFilter;
 
 
@@ -135,6 +136,7 @@ public class RankingsActivity extends BaseListActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mInUsersRegion = User.areWeInTheUsersRegion();
+        mUserPlayer = User.getPlayer();
         fetchRankings();
     }
 
@@ -300,8 +302,8 @@ public class RankingsActivity extends BaseListActivity implements
             holder.mRank.setText(String.valueOf(player.getRank()));
             holder.mRating.setText(String.format("%.3f", player.getRating()));
 
-            if (mInUsersRegion) {
-                if (player.equals(User.getPlayer())) {
+            if (mInUsersRegion && mUserPlayer != null) {
+                if (player.equals(mUserPlayer)) {
                     holder.mName.setTypeface(Typeface.DEFAULT_BOLD);
                 } else {
                     holder.mName.setTypeface(Typeface.DEFAULT);

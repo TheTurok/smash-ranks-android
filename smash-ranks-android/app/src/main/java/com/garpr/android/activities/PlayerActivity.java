@@ -52,6 +52,7 @@ public class PlayerActivity extends BaseListActivity implements
     private MatchesFilter mFilter;
     private MenuItem mSearchItem;
     private Player mPlayer;
+    private Player mUserPlayer;
 
 
 
@@ -135,6 +136,7 @@ public class PlayerActivity extends BaseListActivity implements
         toolbar.setSubtitle(getString(R.string.rank_x, mPlayer.getRank()));
 
         mInUsersRegion = User.areWeInTheUsersRegion();
+        mUserPlayer = User.getPlayer();
 
         if (mPlayer.hasMatches()) {
             final ArrayList<Match> matches = mPlayer.getMatches();
@@ -351,11 +353,10 @@ public class PlayerActivity extends BaseListActivity implements
                     viewHolder.mOpponent.setTextColor(mColorLose);
                 }
 
-                if (mInUsersRegion) {
+                if (mInUsersRegion && mUserPlayer != null) {
                     final String opponentId = match.getOpponentId();
-                    final Player player = User.getPlayer();
 
-                    if (opponentId.equals(player.getId())) {
+                    if (opponentId.equals(mUserPlayer.getId())) {
                         viewHolder.mOpponent.setTypeface(Typeface.DEFAULT_BOLD);
                     } else {
                         viewHolder.mOpponent.setTypeface(Typeface.DEFAULT);

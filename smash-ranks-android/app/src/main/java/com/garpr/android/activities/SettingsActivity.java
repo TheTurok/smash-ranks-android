@@ -51,10 +51,22 @@ public class SettingsActivity extends BaseActivity {
 
 
     @Override
+    protected boolean listenForRegionChanges() {
+        return true;
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViews();
         prepareViews();
+    }
+
+
+    @Override
+    public void onRegionChanged(final Region region) {
+        mRegionName.setText(region.getName());
     }
 
 

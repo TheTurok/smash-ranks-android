@@ -135,7 +135,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
     @Override
     protected void onItemClick(final View view, final int position) {
         mSelectedRegion = mRegions.get(position);
-        ((CheckedTextView) view).setChecked(true);
+        notifyDatasetChanged();
 
         if (mShowToolbar) {
             findToolbarItems();

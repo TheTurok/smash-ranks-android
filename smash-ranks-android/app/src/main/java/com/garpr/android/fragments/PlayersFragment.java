@@ -119,7 +119,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     @Override
     protected void onItemClick(final View view, final int position) {
         mSelectedPlayer = mPlayers.get(position);
-        ((CheckedTextView) view).setChecked(true);
+        notifyDatasetChanged();
 
         findToolbarItems();
         mGo.setEnabled(true);

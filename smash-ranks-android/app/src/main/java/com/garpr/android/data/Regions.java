@@ -2,7 +2,6 @@ package com.garpr.android.data;
 
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -106,44 +105,20 @@ public final class Regions {
     private static final class AsyncReadRegionsDatabase extends AsyncReadDatabase<Region> {
 
 
-        private static final String TAG = AsyncReadRegionsDatabase.class.getSimpleName();
-
-
         private AsyncReadRegionsDatabase(final RegionsCallback callback) {
-            super(callback);
+            super(callback, getTableName());
         }
 
 
         @Override
-        ArrayList<Region> buildResults(final Cursor cursor) throws JSONException {
-            final ArrayList<Region> regions = new ArrayList<Region>();
-            final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
-
-            do {
-                final String regionString = cursor.getString(jsonIndex);
-                final JSONObject regionJSON = new JSONObject(regionString);
-                final Region region = new Region(regionJSON);
-                regions.add(region);
-
-                cursor.moveToNext();
-            } while (!cursor.isAfterLast());
-
-            Log.d(TAG, "Read in " + regions.size() + " Region objects from the database");
-
-            return regions;
+        Region createItem(final JSONObject json) throws JSONException {
+            return new Region(json);
         }
 
 
         @Override
         void getFromNetwork(final Callback<Region> callback) {
             Regions.getFromNetwork((RegionsCallback) callback);
-        }
-
-
-        @Override
-        Cursor query(final SQLiteDatabase database) {
-            final String[] columns = { Constants.JSON };
-            return database.query(getTableName(), columns, null, null, null, null, null);
         }
 
 

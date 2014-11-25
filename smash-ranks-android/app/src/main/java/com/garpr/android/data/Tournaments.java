@@ -2,7 +2,6 @@ package com.garpr.android.data;
 
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -106,44 +105,20 @@ public final class Tournaments {
     private static final class AsyncReadTournamentsDatabase extends AsyncReadDatabase<Tournament> {
 
 
-        private static final String TAG = AsyncReadTournamentsDatabase.class.getSimpleName();
-
-
         private AsyncReadTournamentsDatabase(final TournamentsCallback callback) {
-            super(callback);
+            super(callback, getTableName());
         }
 
 
         @Override
-        ArrayList<Tournament> buildResults(final Cursor cursor) throws JSONException {
-            final ArrayList<Tournament> tournaments = new ArrayList<Tournament>();
-            final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
-
-            do {
-                final String tournamentString = cursor.getString(jsonIndex);
-                final JSONObject tournamentJSON = new JSONObject(tournamentString);
-                final Tournament tournament = new Tournament(tournamentJSON);
-                tournaments.add(tournament);
-
-                cursor.moveToNext();
-            } while (!cursor.isAfterLast());
-
-            Log.d(TAG, "Read in " + tournaments.size() + " Tournament objects from the database");
-
-            return tournaments;
+        Tournament createItem(final JSONObject json) throws JSONException {
+            return new Tournament(json);
         }
 
 
         @Override
         void getFromNetwork(final Callback<Tournament> callback) {
             Tournaments.getFromNetwork((TournamentsCallback) callback);
-        }
-
-
-        @Override
-        Cursor query(final SQLiteDatabase database) {
-            final String[] columns = { Constants.JSON };
-            return database.query(getTableName(), columns, null, null, null, null, null);
         }
 
 

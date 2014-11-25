@@ -2,7 +2,6 @@ package com.garpr.android.data;
 
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -214,44 +213,20 @@ public final class Players {
     private static final class AsyncReadPlayersDatabase extends AsyncReadDatabase<Player> {
 
 
-        private static final String TAG = AsyncReadPlayersDatabase.class.getSimpleName();
-
-
         private AsyncReadPlayersDatabase(final PlayersCallback callback) {
-            super(callback);
+            super(callback, getTableName());
         }
 
 
         @Override
-        ArrayList<Player> buildResults(final Cursor cursor) throws JSONException {
-            final ArrayList<Player> players = new ArrayList<Player>();
-            final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
-
-            do {
-                final String playerString = cursor.getString(jsonIndex);
-                final JSONObject playerJSON = new JSONObject(playerString);
-                final Player player = new Player(playerJSON);
-                players.add(player);
-
-                cursor.moveToNext();
-            } while (!cursor.isAfterLast());
-
-            Log.d(TAG, "Read in " + players.size() + " Player objects from the database");
-
-            return players;
+        Player createItem(final JSONObject json) throws JSONException {
+            return new Player(json);
         }
 
 
         @Override
         void getFromNetwork(final Callback<Player> callback) {
             Players.getPlayersFromNetwork((PlayersCallback) callback);
-        }
-
-
-        @Override
-        Cursor query(final SQLiteDatabase database) {
-            final String[] columns = { Constants.JSON };
-            return database.query(getTableName(), columns, null, null, null, null, null);
         }
 
 

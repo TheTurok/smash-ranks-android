@@ -33,6 +33,7 @@ public class OnboardingActivity extends BaseActivity implements
     private AlertDialog mSkipDialog;
     private NonSwipeableViewPager mViewPager;
     private PlayersFragment mPlayersFragment;
+    private Region mSelectedRegion;
     private RegionsFragment mRegionsFragment;
 
 
@@ -86,10 +87,14 @@ public class OnboardingActivity extends BaseActivity implements
         switch (mViewPager.getCurrentItem()) {
             case ONBOARDING_FRAGMENT_REGIONS:
                 final Region region = mRegionsFragment.getSelectedRegion();
-                User.setRegion(region);
+
+                if (!region.equals(mSelectedRegion)) {
+                    mSelectedRegion = region;
+                    User.setRegion(mSelectedRegion);
+                    mPlayersFragment.refresh();
+                }
 
                 mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
-                mPlayersFragment.refresh();
                 break;
 
             default:

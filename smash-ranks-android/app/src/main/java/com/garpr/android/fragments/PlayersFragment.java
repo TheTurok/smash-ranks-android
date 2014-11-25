@@ -198,6 +198,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     public void refresh() {
+        mSelectedPlayer = null;
         Players.clear();
         fetchPlayers();
     }

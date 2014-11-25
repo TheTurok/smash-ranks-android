@@ -35,8 +35,9 @@ public final class Regions {
 
 
     static void clear(final SQLiteDatabase database) {
-        dropTable(database);
-        createTable(database);
+        final String tableName = getTableName();
+        Database.dropTable(database, tableName);
+        Database.createTable(database, tableName);
     }
 
 
@@ -49,23 +50,6 @@ public final class Regions {
         values.put(Constants.JSON, regionString);
 
         return values;
-    }
-
-
-    static void createTable(final SQLiteDatabase database) {
-        Log.d(TAG, "Creating " + getTableName() + " database table");
-        final String sql = "CREATE TABLE IF NOT EXISTS " + getTableName() + " ("
-                + Constants.ID + " TEXT NOT NULL, "
-                + Constants.JSON + " TEXT NOT NULL, "
-                + "PRIMARY KEY (" + Constants.ID + "));";
-        database.execSQL(sql);
-    }
-
-
-    static void dropTable(final SQLiteDatabase database) {
-        Log.d(TAG, "Dropping " + getTableName() + " database table");
-        final String sql = "DROP TABLE IF EXISTS " + getTableName() + ";";
-        database.execSQL(sql);
     }
 
 
@@ -86,7 +70,7 @@ public final class Regions {
     }
 
 
-    private static String getTableName() {
+    static String getTableName() {
         return TAG;
     }
 

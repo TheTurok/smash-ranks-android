@@ -35,8 +35,9 @@ public final class Players {
 
 
     static void clear(final SQLiteDatabase database) {
-        dropTable(database);
-        createTable(database);
+        final String tableName = getTableName();
+        Database.dropTable(database, tableName);
+        Database.createTable(database, tableName);
     }
 
 
@@ -49,23 +50,6 @@ public final class Players {
         values.put(Constants.JSON, playerString);
 
         return values;
-    }
-
-
-    static void createTable(final SQLiteDatabase database) {
-        Log.d(TAG, "Creating " + getTableName() + " database table");
-        final String sql = "CREATE TABLE IF NOT EXISTS " + getTableName() + " ("
-                + Constants.ID + " TEXT NOT NULL, "
-                + Constants.JSON + " TEXT NOT NULL, "
-                + "PRIMARY KEY (" + Constants.ID + "));";
-        database.execSQL(sql);
-    }
-
-
-    static void dropTable(final SQLiteDatabase database) {
-        Log.d(TAG, "Dropping " + getTableName() + " database table");
-        final String sql = "DROP TABLE IF EXISTS " + getTableName() + ";";
-        database.execSQL(sql);
     }
 
 
@@ -140,7 +124,7 @@ public final class Players {
     }
 
 
-    private static String getTableName() {
+    static String getTableName() {
         return TAG + '_' + Settings.getRegion().getId();
     }
 

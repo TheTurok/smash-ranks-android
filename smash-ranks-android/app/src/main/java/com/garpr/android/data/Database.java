@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.garpr.android.App;
+import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Region;
 
 
@@ -30,6 +31,24 @@ public final class Database extends SQLiteOpenHelper implements
     }
 
 
+    static void createTable(final SQLiteDatabase database, final String tableName) {
+        Log.d(TAG, "Creating \"" + tableName + "\" database table");
+        final String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " ("
+                + Constants.ID + " TEXT NOT NULL, "
+                + Constants.JSON + " TEXT NOT NULL, "
+                + "PRIMARY KEY (" + Constants.ID + "));";
+
+        database.execSQL(sql);
+    }
+
+
+    static void dropTable(final SQLiteDatabase database, final String tableName) {
+        Log.d(TAG, "Dropping \"" + tableName + "\" database table");
+        final String sql = "DROP TABLE IF EXISTS " + tableName + ";";
+        database.execSQL(sql);
+    }
+
+
     static SQLiteDatabase readFrom() {
         return sDatabase.getReadableDatabase();
     }
@@ -47,15 +66,15 @@ public final class Database extends SQLiteOpenHelper implements
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
-        Regions.createTable(db);
+        createTable(db, Regions.getTableName());
     }
 
 
     @Override
     public void onRegionChanged(final Region region) {
         final SQLiteDatabase database = writeTo();
-        Players.createTable(database);
-        Tournaments.createTable(database);
+        createTable(database, Players.getTableName());
+        createTable(database, Tournaments.getTableName());
         database.close();
     }
 

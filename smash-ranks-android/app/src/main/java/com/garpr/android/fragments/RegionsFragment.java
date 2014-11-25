@@ -125,7 +125,10 @@ public class RegionsFragment extends BaseListToolbarFragment {
     @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
-        mListener = (Listener) activity;
+
+        if (activity instanceof Listener) {
+            mListener = (Listener) activity;
+        }
     }
 
 
@@ -147,7 +150,9 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
         switch (item.getItemId()) {
             case R.id.fragment_regions_menu_next:
-                mListener.onNextClick();
+                if (mShowToolbar) {
+                    mListener.onNextClick();
+                }
                 break;
 
             default:

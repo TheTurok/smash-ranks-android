@@ -1,6 +1,8 @@
 package com.garpr.android.activities;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ public class OnboardingActivity extends BaseActivity implements
     private static final String CNAME = OnboardingActivity.class.getCanonicalName();
     private static final String KEY_ONBOARDING_COMPLETE = "KEY_ONBOARDING_COMPLETE";
 
+    private AlertDialog mSkipDialog;
     private NonSwipeableViewPager mViewPager;
     private PlayersFragment mPlayersFragment;
     private RegionsFragment mRegionsFragment;
@@ -149,7 +152,26 @@ public class OnboardingActivity extends BaseActivity implements
 
     @Override
     public void onSkipClick() {
-        finishOnboarding();
+        if (mSkipDialog == null) {
+            mSkipDialog = new AlertDialog.Builder(this)
+                    .setMessage(R.string.are_you_sure_you_dont_want_to_select_your_tag)
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            dialog.dismiss();
+                            finishOnboarding();
+                        }
+                    })
+                    .create();
+        }
+
+        mSkipDialog.show();
     }
 
 

@@ -4,6 +4,7 @@
     <string name="about">About</string>
     <string name="x_against_y">%1$s against %2$s</string>
     <string name="alphabetical_order">Alphabetical Order</string>
+    <string name="are_you_sure_you_dont_want_to_select_your_tag">Are you sure that you don\'t want to select your tag?</string>
     <string name="austin">Austin</string>
     <string name="back">Back</string>
     <string name="berkeley">Berkeley</string>
@@ -65,5 +66,6 @@
     <string name="welcome_">Welcome!</string>
     <string name="win">Win</string>
     <string name="won">Won</string>
+    <string name="yes">Yes</string>
 
 </resources>

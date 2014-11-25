@@ -88,6 +88,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
             MenuItemCompat.setOnActionExpandListener(mSearch, this);
             final SearchView searchView = (SearchView) mSearch.getActionView();
             searchView.setOnQueryTextListener(this);
+            searchView.setQueryHint(getString(R.string.search_players));
         }
     }
 

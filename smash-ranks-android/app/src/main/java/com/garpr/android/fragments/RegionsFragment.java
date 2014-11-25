@@ -180,7 +180,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
         final Toolbar toolbar = getToolbar();
 
         if (mShowToolbar) {
-            toolbar.setTitle(R.string.select_a_region);
+            toolbar.setTitle(R.string.select_your_region);
         } else {
             toolbar.setVisibility(View.GONE);
         }

@@ -4,6 +4,7 @@ package com.garpr.android.data;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
@@ -59,8 +60,12 @@ public final class User {
 
         try {
             final String playerString = sPreferences.getString(KEY_PLAYER, null);
-            final JSONObject playerJSON = new JSONObject(playerString);
-            sUser.mPlayer = new Player(playerJSON);
+
+            if (Utils.validStrings(playerString)) {
+            // remember that it's possible for the user to not have set a player
+                final JSONObject playerJSON = new JSONObject(playerString);
+                sUser.mPlayer = new Player(playerJSON);
+            }
 
             final String regionString = sPreferences.getString(KEY_REGION, null);
             final JSONObject regionJSON = new JSONObject(regionString);

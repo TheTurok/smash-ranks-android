@@ -22,15 +22,6 @@ public final class Database extends SQLiteOpenHelper implements
 
 
 
-    public static void initialize() {
-        final Context context = App.getContext();
-        final String packageName = context.getPackageName();
-        final int version = App.getVersionCode();
-        sDatabase = new Database(context, packageName, version);
-        Settings.addRegionListener(sDatabase);
-    }
-
-
     static void createTable(final SQLiteDatabase database, final String tableName) {
         Log.d(TAG, "Creating \"" + tableName + "\" database table");
         final String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " ("
@@ -46,6 +37,15 @@ public final class Database extends SQLiteOpenHelper implements
         Log.d(TAG, "Dropping \"" + tableName + "\" database table");
         final String sql = "DROP TABLE IF EXISTS " + tableName + ";";
         database.execSQL(sql);
+    }
+
+
+    public static void initialize() {
+        final Context context = App.getContext();
+        final String packageName = context.getPackageName();
+        final int version = App.getVersionCode();
+        sDatabase = new Database(context, packageName, version);
+        Settings.addRegionListener(sDatabase);
     }
 
 

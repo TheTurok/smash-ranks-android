@@ -81,7 +81,7 @@ public class SettingsActivity extends BaseActivity {
         final Region region = Settings.getRegion();
         mRegionName.setText(region.getName());
 
-        mVersion.setText(getString(R.string.version_x, App.getVersionName()));
+        mVersion.setText(getString(R.string.version_x_y, App.getVersionName(), App.getVersionCode()));
     }
 
 

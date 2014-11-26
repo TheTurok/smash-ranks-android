@@ -64,6 +64,14 @@ local.properties
 
 
 #################
+## Fabric
+#################
+
+crashlytics.properties
+crashlytics-build.properties
+
+
+#################
 ## JetBrains
 #################
 

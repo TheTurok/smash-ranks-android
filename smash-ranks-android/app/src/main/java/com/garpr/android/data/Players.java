@@ -3,7 +3,6 @@ package com.garpr.android.data;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
@@ -233,77 +232,50 @@ public final class Players {
     }
 
 
-    private static final class AsyncSavePlayersDatabase extends AsyncTask<Void, Void, Void> {
-
-
-        private static final String TAG = AsyncSavePlayersDatabase.class.getSimpleName();
-
-        private final ArrayList<Player> mPlayers;
+    private static final class AsyncSavePlayersDatabase extends AsyncSaveDatabase<Player> {
 
 
         private AsyncSavePlayersDatabase(final ArrayList<Player> players) {
-            mPlayers = players;
+            super(players, getTableName());
         }
 
 
         @Override
-        protected Void doInBackground(final Void... params) {
-            final SQLiteDatabase database = Database.writeTo();
-            clear(database);
+        void clear(final SQLiteDatabase database) {
+            Players.clear(database);
+        }
 
-            database.beginTransaction();
 
-            for (final Player player : mPlayers) {
-                final ContentValues values = createContentValues(player);
-                database.insert(getTableName(), null, values);
-            }
-
-            database.setTransactionSuccessful();
-            database.endTransaction();
-            database.close();
-
-            Log.d(TAG, "Saved " + mPlayers.size() + " Player objects to the database");
-
-            return null;
+        @Override
+        void transact(final String tableName, final Player item, final SQLiteDatabase database) {
+            final ContentValues values = createContentValues(item);
+            database.insert(tableName, null, values);
         }
 
 
     }
 
 
-    private static class AsyncSaveRankingsDatabase extends AsyncTask<Void, Void, Void> {
-
-
-        private static final String TAG = AsyncSaveRankingsDatabase.class.getSimpleName();
-
-        private final ArrayList<Player> mPlayers;
+    private static class AsyncSaveRankingsDatabase extends AsyncSaveDatabase<Player> {
 
 
         private AsyncSaveRankingsDatabase(final ArrayList<Player> players) {
-            mPlayers = players;
+            super(players, getTableName());
         }
 
 
         @Override
-        protected Void doInBackground(final Void... params) {
-            final SQLiteDatabase database = Database.writeTo();
-            database.beginTransaction();
+        void clear(final SQLiteDatabase database) {
+            Players.clear(database);
+        }
 
+
+        @Override
+        void transact(final String tableName, final Player item, final SQLiteDatabase database) {
+            final ContentValues values = createContentValues(item);
             final String whereClause = Constants.ID + " = ?";
-
-            for (final Player player : mPlayers) {
-                final ContentValues values = createContentValues(player);
-                final String[] whereArgs = { player.getId() };
-                database.update(getTableName(), values, whereClause, whereArgs);
-            }
-
-            database.setTransactionSuccessful();
-            database.endTransaction();
-            database.close();
-
-            Log.d(TAG, "Saved " + mPlayers.size() + " rankings to the database");
-
-            return null;
+            final String[] whereArgs = { item.getId() };
+            database.update(tableName, values, whereClause, whereArgs);
         }
 
 

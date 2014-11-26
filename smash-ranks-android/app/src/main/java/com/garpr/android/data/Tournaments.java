@@ -3,7 +3,6 @@ package com.garpr.android.data;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
@@ -125,38 +124,25 @@ public final class Tournaments {
     }
 
 
-    private static final class AsyncSaveTournamentsDatabase extends AsyncTask<Void, Void, Void> {
-
-
-        private static final String TAG = AsyncSaveTournamentsDatabase.class.getSimpleName();
-
-        private final ArrayList<Tournament> mTournaments;
+    private static final class AsyncSaveTournamentsDatabase extends AsyncSaveDatabase<Tournament> {
 
 
         private AsyncSaveTournamentsDatabase(final ArrayList<Tournament> tournaments) {
-            mTournaments = tournaments;
+            super(tournaments, getTableName());
         }
 
 
         @Override
-        protected Void doInBackground(final Void... params) {
-            final SQLiteDatabase database = Database.writeTo();
-            clear(database);
+        void clear(final SQLiteDatabase database) {
+            Tournaments.clear(database);
+        }
 
-            database.beginTransaction();
 
-            for (final Tournament tournament : mTournaments) {
-                final ContentValues values = createContentValues(tournament);
-                database.insert(getTableName(), null, values);
-            }
-
-            database.setTransactionSuccessful();
-            database.endTransaction();
-            database.close();
-
-            Log.d(TAG, "Saved " + mTournaments.size() + " Tournament objects to the database");
-
-            return null;
+        @Override
+        void transact(final String tableName, final Tournament item,
+                final SQLiteDatabase database) {
+            final ContentValues values = createContentValues(item);
+            database.insert(tableName, null, values);
         }
 
 

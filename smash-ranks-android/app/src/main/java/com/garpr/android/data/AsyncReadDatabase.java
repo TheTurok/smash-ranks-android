@@ -33,7 +33,9 @@ abstract class AsyncReadDatabase<T> extends AsyncTask<Void, Void, ArrayList<T>> 
 
     @Override
     protected final ArrayList<T> doInBackground(final Void... params) {
-        final SQLiteDatabase database = Database.readFrom();
+        final SQLiteDatabase database = Database.writeTo();
+        Database.createTable(database, mTableName);
+
         final String[] columns = { Constants.JSON };
         final Cursor cursor = database.query(mTableName, columns, null, null, null, null, null);
         cursor.moveToFirst();

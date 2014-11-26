@@ -3,7 +3,6 @@ package com.garpr.android.data;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
@@ -125,38 +124,24 @@ public final class Regions {
     }
 
 
-    private static final class AsyncSaveRegionsDatabase extends AsyncTask<Void, Void, Void> {
-
-
-        private static final String TAG = AsyncSaveRegionsDatabase.class.getSimpleName();
-
-        private final ArrayList<Region> mRegions;
+    private static final class AsyncSaveRegionsDatabase extends AsyncSaveDatabase<Region> {
 
 
         private AsyncSaveRegionsDatabase(final ArrayList<Region> regions) {
-            mRegions = regions;
+            super(regions, getTableName());
         }
 
 
         @Override
-        protected Void doInBackground(final Void... params) {
-            final SQLiteDatabase database = Database.writeTo();
-            clear(database);
+        void clear(final SQLiteDatabase database) {
+            Regions.clear(database);
+        }
 
-            database.beginTransaction();
 
-            for (final Region region : mRegions) {
-                final ContentValues values = createContentValues(region);
-                database.insert(getTableName(), null, values);
-            }
-
-            database.setTransactionSuccessful();
-            database.endTransaction();
-            database.close();
-
-            Log.d(TAG, "Saved " + mRegions.size() + " Region objects to the database");
-
-            return null;
+        @Override
+        void transact(final String tableName, final Region item, final SQLiteDatabase database) {
+            final ContentValues values = createContentValues(item);
+            database.insert(tableName, null, values);
         }
 
 

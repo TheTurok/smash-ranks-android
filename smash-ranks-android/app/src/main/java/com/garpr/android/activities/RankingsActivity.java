@@ -329,7 +329,7 @@ public class RankingsActivity extends BaseListActivity implements
 
         @Override
         protected FilterResults performFiltering(final CharSequence constraint) {
-            final ArrayList<Player> playersList = new ArrayList<Player>(mPlayers.size());
+            final ArrayList<Player> playersList = new ArrayList<>(mPlayers.size());
             final String query = constraint.toString().trim().toLowerCase();
 
             for (final Player player : mPlayers) {

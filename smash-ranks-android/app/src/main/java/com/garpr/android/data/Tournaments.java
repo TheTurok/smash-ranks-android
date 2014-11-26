@@ -77,7 +77,7 @@ public final class Tournaments {
     private static ArrayList<Tournament> parseJSON(final JSONObject json) throws JSONException {
         final JSONArray tournamentsJSON = json.getJSONArray(Constants.TOURNAMENTS);
         final int tournamentsLength = tournamentsJSON.length();
-        final ArrayList<Tournament> tournaments = new ArrayList<Tournament>(tournamentsLength);
+        final ArrayList<Tournament> tournaments = new ArrayList<>(tournamentsLength);
 
         for (int i = 0; i < tournamentsLength; ++i) {
             try {
@@ -215,7 +215,7 @@ public final class Tournaments {
 
         @Override
         public final void response(final Tournament item) {
-            final ArrayList<Tournament> list = new ArrayList<Tournament>(1);
+            final ArrayList<Tournament> list = new ArrayList<>(1);
             list.add(item);
             response(list);
         }

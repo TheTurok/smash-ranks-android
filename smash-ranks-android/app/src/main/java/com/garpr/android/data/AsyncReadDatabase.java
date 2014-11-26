@@ -42,7 +42,7 @@ abstract class AsyncReadDatabase<T> extends AsyncTask<Void, Void, ArrayList<T>> 
 
         if (!cursor.isAfterLast()) {
             try {
-                result = new ArrayList<T>();
+                result = new ArrayList<>();
                 final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
 
                 do {

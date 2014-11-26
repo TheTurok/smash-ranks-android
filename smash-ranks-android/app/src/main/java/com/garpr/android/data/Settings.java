@@ -32,7 +32,7 @@ public final class Settings {
 
     public static void addRegionListener(final OnRegionChangedListener listener) {
         if (sRegionListeners == null) {
-            sRegionListeners = new LinkedList<WeakReference<OnRegionChangedListener>>();
+            sRegionListeners = new LinkedList<>();
         } else {
             for (int i = 0; i < sRegionListeners.size(); ) {
                 final WeakReference<OnRegionChangedListener> r = sRegionListeners.get(i);
@@ -47,7 +47,7 @@ public final class Settings {
             }
         }
 
-        final WeakReference<OnRegionChangedListener> reference = new WeakReference<OnRegionChangedListener>(listener);
+        final WeakReference<OnRegionChangedListener> reference = new WeakReference<>(listener);
 
         if (!sRegionListeners.contains(reference)) {
             sRegionListeners.add(reference);

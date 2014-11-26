@@ -77,7 +77,7 @@ public final class Regions {
     private static ArrayList<Region> parseJSON(final JSONObject json) throws JSONException {
         final JSONArray regionsJSON = json.getJSONArray(Constants.REGIONS);
         final int regionsLength = regionsJSON.length();
-        final ArrayList<Region> regions = new ArrayList<Region>(regionsLength);
+        final ArrayList<Region> regions = new ArrayList<>(regionsLength);
 
         for (int i = 0; i < regionsLength; ++i) {
             try {
@@ -215,7 +215,7 @@ public final class Regions {
 
         @Override
         public final void response(final Region item) {
-            final ArrayList<Region> list = new ArrayList<Region>(1);
+            final ArrayList<Region> list = new ArrayList<>(1);
             list.add(item);
             response(list);
         }

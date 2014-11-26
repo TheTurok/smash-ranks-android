@@ -65,7 +65,7 @@ public class PlayerActivity extends BaseListActivity implements
 
 
     private void createListItems(final ArrayList<Match> matches) {
-        mListItems = new ArrayList<ListItem>();
+        mListItems = new ArrayList<>();
         Tournament lastTournament = null;
 
         for (final Match match : matches) {
@@ -397,7 +397,7 @@ public class PlayerActivity extends BaseListActivity implements
 
         @Override
         protected FilterResults performFiltering(final CharSequence constraint) {
-            final ArrayList<ListItem> listItems = new ArrayList<ListItem>(mListItems.size());
+            final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
             final String query = constraint.toString().trim().toLowerCase();
 
             for (int i = 0; i < mListItems.size(); ++i) {

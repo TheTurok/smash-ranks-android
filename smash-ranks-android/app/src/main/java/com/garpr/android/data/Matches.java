@@ -33,7 +33,7 @@ public final class Matches {
     private static ArrayList<Match> parseJSON(final JSONObject json) throws JSONException {
         final JSONArray matchesJSON = json.getJSONArray(Constants.MATCHES);
         final int matchesLength = matchesJSON.length();
-        final ArrayList<Match> matches = new ArrayList<Match>(matchesLength);
+        final ArrayList<Match> matches = new ArrayList<>(matchesLength);
 
         for (int i = 0; i < matchesLength; ++i) {
             try {
@@ -105,7 +105,7 @@ public final class Matches {
 
         @Override
         public final void response(final Match item) {
-            final ArrayList<Match> list = new ArrayList<Match>(1);
+            final ArrayList<Match> list = new ArrayList<>(1);
             list.add(item);
             response(list);
         }

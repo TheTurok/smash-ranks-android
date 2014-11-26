@@ -141,7 +141,7 @@ public final class Players {
         }
 
         final int playersLength = playersJSON.length();
-        final ArrayList<Player> players = new ArrayList<Player>(playersLength);
+        final ArrayList<Player> players = new ArrayList<>(playersLength);
 
         for (int i = 0; i < playersLength; ++i) {
             try {
@@ -362,7 +362,7 @@ public final class Players {
 
         @Override
         public final void response(final Player item) {
-            final ArrayList<Player> list = new ArrayList<Player>(1);
+            final ArrayList<Player> list = new ArrayList<>(1);
             list.add(item);
             response(list);
         }
@@ -425,7 +425,7 @@ public final class Players {
 
         @Override
         public final void response(final Player item) {
-            final ArrayList<Player> list = new ArrayList<Player>(1);
+            final ArrayList<Player> list = new ArrayList<>(1);
             list.add(item);
             response(list);
         }

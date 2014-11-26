@@ -21,7 +21,7 @@ abstract class Callback<T> implements
 
 
     Callback(final Heartbeat heartbeat) {
-        mHeartbeat = new WeakReference<Heartbeat>(heartbeat);
+        mHeartbeat = new WeakReference<>(heartbeat);
     }
 
 

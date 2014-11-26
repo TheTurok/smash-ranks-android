@@ -39,7 +39,7 @@ public class Player implements Parcelable {
             if (json.has(Constants.MATCHES)) {
                 final JSONArray matchesJSON = json.getJSONArray(Constants.MATCHES);
                 final int matchesLength = matchesJSON.length();
-                matches = new ArrayList<Match>(matchesLength);
+                matches = new ArrayList<>(matchesLength);
 
                 for (int i = 0; i < matchesLength; ++i) {
                     try {

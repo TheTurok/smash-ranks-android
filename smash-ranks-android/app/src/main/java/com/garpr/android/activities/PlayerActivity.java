@@ -214,6 +214,7 @@ public class PlayerActivity extends BaseListActivity implements
         super.onRefresh();
 
         if (!isLoading()) {
+            MenuItemCompat.collapseActionView(mSearchItem);
             fetchMatches();
         }
     }

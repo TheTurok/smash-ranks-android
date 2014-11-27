@@ -91,6 +91,10 @@
         <item name="android:padding">@dimen/root_padding</item>
     </style>
 
+    <style name="settings_container.disabled">
+        <item name="android:alpha">0.6</item>
+    </style>
+
     <style name="settings_subtitle" parent="settings_text">
         <item name="android:textSize">16sp</item>
     </style>

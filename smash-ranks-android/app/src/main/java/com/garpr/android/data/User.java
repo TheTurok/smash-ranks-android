@@ -53,6 +53,11 @@ public final class User {
     }
 
 
+    public static boolean hasPlayer() {
+        return getPlayer() != null;
+    }
+
+
     private static void loadUser() {
         sUser = new User();
 

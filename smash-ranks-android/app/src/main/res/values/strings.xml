@@ -51,6 +51,7 @@
     <string name="search">Search</string>
     <string name="search_matches">Search matches…</string>
     <string name="search_players">Search players…</string>
+    <string name="selected_tag">Selected tag</string>
     <string name="select_your_region">Select your region</string>
     <string name="select_your_tag">Select your tag</string>
     <string name="settings">Settings</string>

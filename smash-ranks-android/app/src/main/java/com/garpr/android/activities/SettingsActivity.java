@@ -11,13 +11,17 @@ import android.widget.TextView;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
+import com.garpr.android.data.User;
+import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
 
 public class SettingsActivity extends BaseActivity {
 
 
+    private LinearLayout mPlayer;
     private LinearLayout mRegion;
+    private TextView mPlayerName;
     private TextView mRegionName;
     private TextView mVersion;
 
@@ -31,6 +35,8 @@ public class SettingsActivity extends BaseActivity {
 
 
     private void findViews() {
+        mPlayer = (LinearLayout) findViewById(R.id.activity_settings_player);
+        mPlayerName = (TextView) findViewById(R.id.activity_settings_player_name);
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
         mVersion = (TextView) findViewById(R.id.activity_settings_version);
@@ -80,6 +86,12 @@ public class SettingsActivity extends BaseActivity {
 
         final Region region = Settings.getRegion();
         mRegionName.setText(region.getName());
+
+        if (User.hasPlayer()) {
+            final Player player = User.getPlayer();
+            mPlayerName.setText(player.getName());
+            mPlayer.setVisibility(View.VISIBLE);
+        }
 
         mVersion.setText(getString(R.string.x_y, App.getVersionName(), App.getVersionCode()));
     }

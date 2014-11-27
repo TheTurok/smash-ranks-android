@@ -28,7 +28,20 @@
                         style="@style/settings_subtitle" />
                 </LinearLayout>
                 <LinearLayout
-                    style="@style/settings_container">
+                    android:id="@+id/activity_settings_player"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    style="@style/settings_container.disabled">
+                    <TextView
+                        android:text="@string/selected_tag"
+                        style="@style/settings_title" />
+                    <TextView
+                        android:id="@+id/activity_settings_player_name"
+                        tools:text="Charles"
+                        style="@style/settings_subtitle" />
+                </LinearLayout>
+                <LinearLayout
+                    style="@style/settings_container.disabled">
                     <TextView
                         android:id="@+id/activity_settings"
                         android:text="@string/version"

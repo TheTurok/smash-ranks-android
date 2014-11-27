@@ -30,9 +30,13 @@
                 <LinearLayout
                     style="@style/settings_container">
                     <TextView
-                        android:id="@+id/activity_settings_version"
-                        tools:text="Version 1.0"
+                        android:id="@+id/activity_settings"
+                        android:text="@string/version"
                         style="@style/settings_title" />
+                    <TextView
+                        android:id="@+id/activity_settings_version"
+                        tools:text="1.0 (1)"
+                        style="@style/settings_subtitle" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

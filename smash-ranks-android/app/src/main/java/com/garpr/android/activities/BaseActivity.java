@@ -212,7 +212,7 @@ abstract class BaseActivity extends ActionBarActivity implements
      * This method's code was taken from the Android documentation:
      * https://developer.android.com/training/implementing-navigation/ancestral.html
      */
-    private void navigateUp() {
+    protected void navigateUp() {
         final Intent upIntent = NavUtils.getParentActivityIntent(this);
 
         if (NavUtils.shouldUpRecreateTask(this, upIntent)) {

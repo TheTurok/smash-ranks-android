@@ -33,12 +33,23 @@ public class RegionsActivity extends BaseFragmentActivity {
 
     @Override
     public void finish() {
+        saveRegion();
+        super.finish();
+    }
+
+
+    @Override
+    protected void navigateUp() {
+        saveRegion();
+        super.navigateUp();
+    }
+
+
+    private void saveRegion() {
         if (mRegionsFragment != null) {
             final Region region = mRegionsFragment.getSelectedRegion();
             Settings.setRegion(region);
         }
-
-        super.finish();
     }
 
 

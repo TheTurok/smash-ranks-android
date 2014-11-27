@@ -113,7 +113,16 @@ abstract class BaseListActivity extends BaseActivity implements
 
     protected void setLoading(final boolean isLoading) {
         mIsLoading = isLoading;
-        mRefreshLayout.setRefreshing(mIsLoading);
+
+        // normally we'd just do mRefreshLayout.setRefreshing(isLoading) here, but unfortunately
+        // there's a bug in the appcompat library that requires doing it this way:
+        // https://code.google.com/p/android/issues/detail?id=77712
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(isLoading);
+            }
+        });
     }
 
 

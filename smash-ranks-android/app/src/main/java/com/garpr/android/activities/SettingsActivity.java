@@ -30,6 +30,7 @@ public class SettingsActivity extends BaseActivity {
 
     public static void start(final Activity activity) {
         final Intent intent = new Intent(activity, SettingsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         activity.startActivity(intent);
     }
 

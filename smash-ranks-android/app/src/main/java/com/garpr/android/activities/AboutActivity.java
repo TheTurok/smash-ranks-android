@@ -24,6 +24,7 @@ public class AboutActivity extends BaseActivity {
 
     public static void start(final Activity activity) {
         final Intent intent = new Intent(activity, AboutActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         activity.startActivity(intent);
     }
 

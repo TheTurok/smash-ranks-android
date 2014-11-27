@@ -32,6 +32,7 @@ public class TournamentsActivity extends BaseListActivity {
 
     public static void start(final Activity activity) {
         final Intent intent = new Intent(activity, TournamentsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         activity.startActivity(intent);
     }
 

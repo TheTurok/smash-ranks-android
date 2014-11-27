@@ -184,6 +184,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         super.onRefresh();
 
         if (!isLoading()) {
+            MenuItemCompat.collapseActionView(mSearch);
             refresh();
         }
     }

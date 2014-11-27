@@ -243,6 +243,7 @@ public class RankingsActivity extends BaseListActivity implements
         super.onRefresh();
 
         if (!isLoading()) {
+            MenuItemCompat.collapseActionView(mSearchItem);
             Players.clear();
             fetchRankings();
         }

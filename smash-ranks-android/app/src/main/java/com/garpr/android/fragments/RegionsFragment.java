@@ -27,6 +27,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     private static final String KEY_LOAD_USER_REGION = "KEY_LOAD_USER_REGION";
+    private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
     private static final String KEY_SHOW_TOOLBAR = "KEY_SHOW_TOOLBAR";
     private static final String TAG = RegionsFragment.class.getSimpleName();
 
@@ -114,7 +115,11 @@ public class RegionsFragment extends BaseListToolbarFragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (mLoadUserRegion) {
+        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mSelectedRegion = savedInstanceState.getParcelable(KEY_SELECTED_REGION);
+        }
+
+        if (mSelectedRegion == null && mLoadUserRegion) {
             mSelectedRegion = Settings.getRegion();
         }
 
@@ -175,6 +180,16 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (mSelectedRegion != null) {
+            outState.putParcelable(KEY_SELECTED_REGION, mSelectedRegion);
+        }
+    }
+
+
+    @Override
     protected void prepareViews() {
         super.prepareViews();
         final Toolbar toolbar = getToolbar();
@@ -199,6 +214,15 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
+    @Override
+    protected void setAdapter(final BaseListAdapter adapter) {
+        super.setAdapter(adapter);
+
+        if (mShowToolbar && mSelectedRegion != null) {
+            findToolbarItems();
+            mNext.setEnabled(true);
+        }
+    }
 
 
     private final class RegionsAdapter extends BaseListAdapter<ViewHolder> {

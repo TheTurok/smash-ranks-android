@@ -8,6 +8,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
@@ -31,7 +32,7 @@ public class OnboardingActivity extends BaseActivity implements
     private static final String KEY_ONBOARDING_COMPLETE = "KEY_ONBOARDING_COMPLETE";
 
     private AlertDialog mSkipDialog;
-    private NonSwipeableViewPager mViewPager;
+    private NonSwipeableViewPager mPager;
     private PlayersFragment mPlayersFragment;
     private Region mSelectedRegion;
     private RegionsFragment mRegionsFragment;
@@ -39,14 +40,8 @@ public class OnboardingActivity extends BaseActivity implements
 
 
 
-    private void createFragments() {
-        mPlayersFragment = PlayersFragment.create();
-        mRegionsFragment = RegionsFragment.create(false, true);
-    }
-
-
     private void findViews() {
-        mViewPager = (NonSwipeableViewPager) findViewById(R.id.activity_onboarding_pager);
+        mPager = (NonSwipeableViewPager) findViewById(R.id.activity_onboarding_pager);
     }
 
 
@@ -84,7 +79,7 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     private void nextOnboardingStep() {
-        switch (mViewPager.getCurrentItem()) {
+        switch (mPager.getCurrentItem()) {
             case ONBOARDING_FRAGMENT_REGIONS:
                 final Region region = mRegionsFragment.getSelectedRegion();
 
@@ -94,7 +89,7 @@ public class OnboardingActivity extends BaseActivity implements
                     mPlayersFragment.refresh();
                 }
 
-                mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
+                mPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
                 break;
 
             default:
@@ -106,12 +101,12 @@ public class OnboardingActivity extends BaseActivity implements
 
     @Override
     public void onBackPressed() {
-        if (mViewPager == null || mViewPager.getCurrentItem() == 0) {
+        if (mPager == null || mPager.getCurrentItem() == 0) {
             super.onBackPressed();
         } else {
-            switch (mViewPager.getCurrentItem()) {
+            switch (mPager.getCurrentItem()) {
                 case ONBOARDING_FRAGMENT_PLAYERS:
-                    mViewPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
+                    mPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
                     mPlayersFragment.clearSelectedPlayer();
                     break;
 
@@ -137,7 +132,6 @@ public class OnboardingActivity extends BaseActivity implements
             RankingsActivity.start(this);
         } else {
             findViews();
-            createFragments();
             prepareViews();
         }
     }
@@ -181,7 +175,7 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     private void prepareViews() {
-        mViewPager.setAdapter(new OnboardingFragmentAdapter());
+        mPager.setAdapter(new OnboardingFragmentAdapter());
     }
 
 
@@ -205,11 +199,11 @@ public class OnboardingActivity extends BaseActivity implements
 
             switch (position) {
                 case ONBOARDING_FRAGMENT_REGIONS:
-                    fragment = mRegionsFragment;
+                    fragment = RegionsFragment.create(false, true);
                     break;
 
                 case ONBOARDING_FRAGMENT_PLAYERS:
-                    fragment = mPlayersFragment;
+                    fragment = PlayersFragment.create();
                     break;
 
                 default:
@@ -218,6 +212,24 @@ public class OnboardingActivity extends BaseActivity implements
             }
 
             return fragment;
+        }
+
+
+        @Override
+        public Object instantiateItem(final ViewGroup container, final int position) {
+            final Object item = super.instantiateItem(container, position);
+
+            switch (position) {
+                case ONBOARDING_FRAGMENT_PLAYERS:
+                    mPlayersFragment = (PlayersFragment) item;
+                    break;
+
+                case ONBOARDING_FRAGMENT_REGIONS:
+                    mRegionsFragment = (RegionsFragment) item;
+                    break;
+            }
+
+            return item;
         }
 
 

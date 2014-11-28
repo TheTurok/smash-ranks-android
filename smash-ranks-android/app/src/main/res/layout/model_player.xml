@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
+    tools:ignore="Overdraw"
     style="@style/list_item_root">
     <TextView
         android:gravity="center"

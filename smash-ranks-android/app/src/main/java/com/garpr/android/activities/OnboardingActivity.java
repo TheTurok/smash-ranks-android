@@ -30,6 +30,7 @@ public class OnboardingActivity extends BaseActivity implements
     private static final int ONBOARDING_FRAGMENT_REGIONS = 0;
     private static final String CNAME = OnboardingActivity.class.getCanonicalName();
     private static final String KEY_ONBOARDING_COMPLETE = "KEY_ONBOARDING_COMPLETE";
+    private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
 
     private AlertDialog mSkipDialog;
     private NonSwipeableViewPager mPager;
@@ -146,6 +147,26 @@ public class OnboardingActivity extends BaseActivity implements
     @Override
     public void onNextClick() {
         nextOnboardingStep();
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mSelectedRegion = savedInstanceState.getParcelable(KEY_SELECTED_REGION);
+        }
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (mSelectedRegion != null) {
+            outState.putParcelable(KEY_SELECTED_REGION, mSelectedRegion);
+        }
     }
 
 

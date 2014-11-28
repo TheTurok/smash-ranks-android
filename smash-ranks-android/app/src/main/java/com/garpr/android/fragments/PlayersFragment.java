@@ -2,6 +2,7 @@ package com.garpr.android.fragments;
 
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -29,6 +30,8 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         SearchView.OnQueryTextListener {
 
 
+    private static final String KEY_PLAYERS = "KEY_PLAYERS";
+    private static final String KEY_SELECTED_PLAYER = "KEY_SELECTED_PLAYER";
     private static final String TAG = PlayersFragment.class.getSimpleName();
 
     private ArrayList<Player> mPlayers;
@@ -66,10 +69,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
             @Override
             public void response(final ArrayList<Player> list) {
-                Collections.sort(list, Player.ALPHABETICAL_ORDER);
-                mPlayers = list;
-                mPlayersShown = list;
-                setAdapter(new PlayersAdapter());
+                setList(list);
             }
         };
 
@@ -107,6 +107,26 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
     public Player getSelectedPlayer() {
         return mSelectedPlayer;
+    }
+
+
+    @Override
+    public void onActivityCreated(final Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            final ArrayList<Player> list = savedInstanceState.getParcelableArrayList(KEY_PLAYERS);
+
+            if (list != null && !list.isEmpty()) {
+                mSelectedPlayer = savedInstanceState.getParcelable(KEY_SELECTED_PLAYER);
+                setList(list);
+
+                if (mSelectedPlayer != null) {
+                    findToolbarItems();
+                    mGo.setEnabled(true);
+                }
+            }
+        }
     }
 
 
@@ -185,7 +205,22 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
         if (!isLoading()) {
             MenuItemCompat.collapseActionView(mSearch);
+            Players.clear();
             refresh();
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (mPlayers != null && !mPlayers.isEmpty()) {
+            outState.putParcelableArrayList(KEY_PLAYERS, mPlayers);
+        }
+
+        if (mSelectedPlayer != null) {
+            outState.putParcelable(KEY_SELECTED_PLAYER, mSelectedPlayer);
         }
     }
 
@@ -201,7 +236,6 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
     public void refresh() {
         mSelectedPlayer = null;
-        Players.clear();
         fetchPlayers();
     }
 
@@ -215,6 +249,14 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         mGo.setVisible(true);
         mSearch.setVisible(true);
         mSkip.setVisible(true);
+    }
+
+
+    private void setList(final ArrayList<Player> list) {
+        Collections.sort(list, Player.ALPHABETICAL_ORDER);
+        mPlayers = list;
+        mPlayersShown = list;
+        setAdapter(new PlayersAdapter());
     }
 
 

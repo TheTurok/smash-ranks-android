@@ -54,6 +54,23 @@ public final class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
     }
 
 
+    /**
+     * Normally we'd just use {@link #setRefreshing(boolean)} instead, but there's a bug with that:
+     * https://code.google.com/p/android/issues/detail?id=77712 hopefully in a future version of
+     * the appcompat library, we can get rid of this work around.
+     */
+    public void postSetRefreshing(final boolean isLoading) {
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                setRefreshing(isLoading);
+            }
+        };
+
+        post(runnable);
+    }
+
+
     public void setRecyclerView(final RecyclerView recyclerView) {
         mRecyclerView = recyclerView;
     }

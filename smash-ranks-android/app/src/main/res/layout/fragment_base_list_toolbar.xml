@@ -26,7 +26,7 @@
         </FrameLayout>
     </com.garpr.android.misc.FlexibleSwipeRefreshLayout>
     <android.support.v7.widget.Toolbar
-        android:background="?attr/colorPrimary"
+        android:background="@color/bg_toolbar"
         app:theme="@style/toolbar_theme"
         style="@style/toolbar" />
 </LinearLayout>

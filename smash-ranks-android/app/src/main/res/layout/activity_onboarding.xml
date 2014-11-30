@@ -23,7 +23,7 @@
         android:src="@drawable/smash_orb"
         tools:ignore="ContentDescription" />
     <com.garpr.android.misc.NonSwipeableViewPager
-        android:background="?attr/colorPrimaryDark"
+        android:background="@color/bg_material_dark"
         android:id="@+id/activity_onboarding_pager"
         android:layout_height="0dp"
         android:layout_weight="1"

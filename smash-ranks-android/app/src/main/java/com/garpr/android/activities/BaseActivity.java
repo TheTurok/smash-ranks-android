@@ -125,7 +125,7 @@ abstract class BaseActivity extends ActionBarActivity implements
                 mDrawerOverlay.setVisibility(View.VISIBLE);
             }
 
-            mDrawerLayout.setStatusBarBackground(R.color.gray_dark);
+            mDrawerLayout.setStatusBarBackground(R.color.bg_statusbar);
         }
 
         if (User.hasPlayer()) {

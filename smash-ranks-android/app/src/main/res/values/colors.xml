@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="bg_material">#37474F</color>
+    <color name="bg_material_dark">#242F35</color>
+    <color name="bg_statusbar">#414B51</color>
+    <color name="bg_toolbar">#46555C</color>
     <color name="black">#000000</color>
     <color name="blue">#0000FF</color>
     <color name="cyan">#00FFFF</color>

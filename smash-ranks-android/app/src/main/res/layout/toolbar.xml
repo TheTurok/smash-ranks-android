@@ -2,7 +2,8 @@
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorPrimary"
+    android:background="@color/bg_toolbar"
+    android:elevation="@dimen/root_padding_fourth"
     app:theme="@style/toolbar_theme"
-    tools:ignore="Overdraw"
+    tools:ignore="Overdraw, UnusedAttribute"
     style="@style/toolbar" />

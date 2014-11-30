@@ -2,10 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/bg_material"
+    android:elevation="@dimen/root_padding_fourth"
     android:id="@id/navigation_drawer"
     android:layout_height="match_parent"
     android:layout_width="@dimen/navigation_drawer_width"
-    tools:ignore="Overdraw"
+    tools:ignore="Overdraw,UnusedAttribute"
     style="@style/navigation_drawer">
     <ScrollView
         android:fillViewport="true"

@@ -135,17 +135,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             mDrawerUserName.setVisibility(View.GONE);
         }
 
-        final Region userRegion = User.getRegion();
-        final Region settingsRegion = Settings.getRegion();
-        final String regionText;
-
-        if (userRegion.equals(settingsRegion)) {
-            regionText = userRegion.getName();
-        } else {
-            regionText = getString(R.string.x_viewing_y, userRegion.getName(), settingsRegion.getName());
-        }
-
-        mDrawerUserRegion.setText(regionText);
+        updateDrawerRegion();
 
         if (showDrawerIndicator()) {
             mDrawerToggle.setDrawerIndicatorEnabled(true);
@@ -234,11 +224,6 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
-    protected boolean listenForRegionChanges() {
-        return false;
-    }
-
-
     /**
      * This method's code was taken from the Android documentation:
      * https://developer.android.com/training/implementing-navigation/ancestral.html
@@ -278,9 +263,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             }
         }
 
-        if (listenForRegionChanges()) {
-            Settings.addRegionListener(this);
-        }
+        Settings.addRegionListener(this);
     }
 
 
@@ -303,10 +286,7 @@ abstract class BaseActivity extends ActionBarActivity implements
         super.onDestroy();
         mIsAlive = false;
         App.cancelNetworkRequests(this);
-
-        if (listenForRegionChanges()) {
-            Settings.removeRegionListener(this);
-        }
+        Settings.removeRegionListener(this);
     }
 
 
@@ -357,12 +337,29 @@ abstract class BaseActivity extends ActionBarActivity implements
 
     @Override
     public void onRegionChanged(final Region region) {
-        // this method intentionally left blank (children can override)
+        if (isNavigationDrawerEnabled()) {
+            updateDrawerRegion();
+        }
     }
 
 
     protected boolean showDrawerIndicator() {
         return true;
+    }
+
+
+    private void updateDrawerRegion() {
+        final Region userRegion = User.getRegion();
+        final Region settingsRegion = Settings.getRegion();
+        final String regionText;
+
+        if (userRegion.equals(settingsRegion)) {
+            regionText = userRegion.getName();
+        } else {
+            regionText = getString(R.string.x_viewing_y, userRegion.getName(), settingsRegion.getName());
+        }
+
+        mDrawerUserRegion.setText(regionText);
     }
 
 

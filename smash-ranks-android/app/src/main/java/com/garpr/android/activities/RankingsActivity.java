@@ -109,12 +109,6 @@ public class RankingsActivity extends BaseListActivity implements
 
 
     @Override
-    protected boolean listenForRegionChanges() {
-        return true;
-    }
-
-
-    @Override
     protected void onActivityResult(final int requestCode, final int resultCode,
             final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -252,6 +246,7 @@ public class RankingsActivity extends BaseListActivity implements
 
     @Override
     public void onRegionChanged(final Region region) {
+        super.onRegionChanged(region);
         mInUsersRegion = User.areWeInTheUsersRegion();
         fetchRankings();
     }

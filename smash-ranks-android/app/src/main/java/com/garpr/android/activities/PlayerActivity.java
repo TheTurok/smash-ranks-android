@@ -222,6 +222,7 @@ public class PlayerActivity extends BaseListActivity implements
 
     @Override
     public void onRegionChanged(final Region region) {
+        super.onRegionChanged(region);
         RankingsActivity.start(this);
     }
 

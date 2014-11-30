@@ -34,6 +34,7 @@ public class TournamentsActivity extends BaseListActivity implements
 
     private ArrayList<Tournament> mTournaments;
     private ArrayList<Tournament> mTournamentsShown;
+    private boolean mSetSearchItemVisible;
     private MenuItem mSearchItem;
     private TournamentsFilter mFilter;
 
@@ -135,6 +136,11 @@ public class TournamentsActivity extends BaseListActivity implements
         searchView.setQueryHint(getString(R.string.search_tournaments));
         searchView.setOnQueryTextListener(this);
 
+        if (mSetSearchItemVisible) {
+            mSearchItem.setVisible(true);
+            mSetSearchItemVisible = true;
+        }
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -168,6 +174,14 @@ public class TournamentsActivity extends BaseListActivity implements
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
         mFilter = new TournamentsFilter();
+
+        // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
+
+        if (mSearchItem == null) {
+            mSetSearchItemVisible = true;
+        } else {
+            mSearchItem.setVisible(true);
+        }
     }
 
 

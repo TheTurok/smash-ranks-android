@@ -5,6 +5,10 @@
 
     </style>
 
+    <style name="app_theme.no_toolbar">
+
+    </style>
+
     <style name="base_theme" parent="Theme.AppCompat">
         <item name="android:textColor">@color/white</item>
         <item name="android:windowActionBar">false</item>

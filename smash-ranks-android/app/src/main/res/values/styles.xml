@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="drawer_layout" parent="root.no_padding">
         <item name="android:id">@id/drawer_layout</item>
@@ -50,6 +50,7 @@
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:drawablePadding">@dimen/root_padding</item>
         <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-medium</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_height">@dimen/list_item_height</item>
         <item name="android:layout_width">match_parent</item>
@@ -57,15 +58,23 @@
         <item name="android:paddingLeft">@dimen/root_padding</item>
         <item name="android:paddingRight">@dimen/root_padding</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="navigation_drawer">
         <item name="android:layout_gravity">left</item>
     </style>
 
+    <style name="navigation_drawer_item.about">
+        <item name="android:drawableLeft">@drawable/ic_about</item>
+    </style>
+
     <style name="navigation_drawer_item.rankings">
         <item name="android:drawableLeft">@drawable/ic_people</item>
+    </style>
+
+    <style name="navigation_drawer_item.settings">
+        <item name="android:drawableLeft">@drawable/ic_settings</item>
     </style>
 
     <style name="navigation_drawer_item.tournaments">
@@ -108,6 +117,13 @@
 
     <style name="settings_title" parent="settings_text">
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="singleline">
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="toolbar">

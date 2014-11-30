@@ -1,53 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/colorPrimary"
-    android:fillViewport="true"
     android:id="@id/navigation_drawer"
     android:layout_height="match_parent"
     android:layout_width="@dimen/navigation_drawer_width"
     tools:ignore="Overdraw"
     style="@style/navigation_drawer">
-    <LinearLayout
+    <ScrollView
+        android:fillViewport="true"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+            <FrameLayout
+                android:layout_height="@dimen/navigation_drawer_banner_height"
+                android:layout_width="match_parent">
+                <ImageView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/navigation_drawer_banner"
+                    tools:ignore="ContentDescription" />
+                <View
+                    android:background="@color/overlay_dark"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent" />
+                <LinearLayout
+                    android:layout_gravity="bottom"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/root_padding_half"
+                    android:layout_marginLeft="@dimen/root_padding"
+                    android:layout_marginRight="@dimen/root_padding"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:fontFamily="sans-serif-medium"
+                        android:id="@+id/navigation_drawer_user_name"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:textIsSelectable="true"
+                        tools:ignore="UnusedAttribute"
+                        tools:text="Charles"
+                        style="@style/singleline" />
+                    <TextView
+                        android:id="@+id/navigation_drawer_user_region"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:textIsSelectable="true"
+                        tools:text="Norcal"
+                        style="@style/singleline" />
+                </LinearLayout>
+            </FrameLayout>
+            <include
+                layout="@layout/divider" />
+            <TextView
+                android:id="@+id/navigation_drawer_rankings"
+                android:text="@string/rankings"
+                style="@style/navigation_drawer_item.rankings" />
+            <TextView
+                android:id="@+id/navigation_drawer_tournaments"
+                android:text="@string/tournaments"
+                style="@style/navigation_drawer_item.tournaments" />
+            <include
+                 layout="@layout/divider_and_padding" />
+            <TextView
+                android:id="@+id/navigation_drawer_settings"
+                android:text="@string/settings"
+                style="@style/navigation_drawer_item.settings" />
+            <TextView
+                android:id="@+id/navigation_drawer_about"
+                android:text="@string/about"
+                style="@style/navigation_drawer_item.about" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- the below view's height is changed dynamically within BaseActivity -->
+    <View
+        android:background="@color/overlay_dark"
+        android:id="@+id/navigation_drawer_overlay"
+        android:layout_height="24dp"
         android:layout_width="match_parent"
-        android:orientation="vertical">
-        <FrameLayout
-            android:layout_height="@dimen/navigation_drawer_banner_height"
-            android:layout_marginBottom="@dimen/root_padding_half"
-            android:layout_width="match_parent">
-            <ImageView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/navigation_drawer_banner"
-                tools:ignore="ContentDescription" />
-            <View
-                android:background="@color/overlay_dark"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent" />
-        </FrameLayout>
-        <TextView
-            android:id="@+id/navigation_drawer_rankings"
-            android:text="@string/rankings"
-            style="@style/navigation_drawer_item.rankings" />
-        <TextView
-            android:id="@+id/navigation_drawer_tournaments"
-            android:text="@string/tournaments"
-            style="@style/navigation_drawer_item.tournaments" />
-        <View
-            android:background="@drawable/divider"
-            android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/root_padding_half"
-            android:layout_marginTop="@dimen/root_padding_half"
-            android:layout_width="match_parent" />
-        <TextView
-            android:id="@+id/navigation_drawer_settings"
-            android:text="@string/settings"
-            style="@style/navigation_drawer_item" />
-        <TextView
-            android:id="@+id/navigation_drawer_about"
-            android:text="@string/about"
-            style="@style/navigation_drawer_item" />
-    </LinearLayout>
-</ScrollView>
+        android:visibility="gone"
+        tools:visibility="visible" />
+</FrameLayout>

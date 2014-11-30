@@ -16,13 +16,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
+import com.garpr.android.data.User;
 import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
 
@@ -39,12 +41,15 @@ abstract class BaseActivity extends ActionBarActivity implements
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean mIsAlive;
     private DrawerLayout mDrawerLayout;
-    private ScrollView mDrawerContents;
+    private FrameLayout mDrawerContents;
     private TextView mDrawerAbout;
     private TextView mDrawerRankings;
     private TextView mDrawerSettings;
     private TextView mDrawerTournaments;
+    private TextView mDrawerUserName;
+    private TextView mDrawerUserRegion;
     private Toolbar mToolbar;
+    private View mDrawerOverlay;
 
 
 
@@ -56,11 +61,14 @@ abstract class BaseActivity extends ActionBarActivity implements
 
     private void findViews() {
         mDrawerAbout = (TextView) findViewById(R.id.navigation_drawer_about);
-        mDrawerContents = (ScrollView) findViewById(R.id.navigation_drawer);
+        mDrawerContents = (FrameLayout) findViewById(R.id.navigation_drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerOverlay = findViewById(R.id.navigation_drawer_overlay);
         mDrawerRankings = (TextView) findViewById(R.id.navigation_drawer_rankings);
         mDrawerSettings = (TextView) findViewById(R.id.navigation_drawer_settings);
         mDrawerTournaments = (TextView) findViewById(R.id.navigation_drawer_tournaments);
+        mDrawerUserName = (TextView) findViewById(R.id.navigation_drawer_user_name);
+        mDrawerUserRegion = (TextView) findViewById(R.id.navigation_drawer_user_region);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
@@ -109,12 +117,35 @@ abstract class BaseActivity extends ActionBarActivity implements
 
             if (statusBarHeightResId > 0) {
                 final int statusBarHeight = res.getDimensionPixelSize(statusBarHeightResId);
-                final ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mDrawerContents.getLayoutParams();
-                params.topMargin = -statusBarHeight;
+                final ViewGroup.MarginLayoutParams p0 = (ViewGroup.MarginLayoutParams) mDrawerContents.getLayoutParams();
+                p0.topMargin = -statusBarHeight;
+
+                final ViewGroup.LayoutParams p1 = mDrawerOverlay.getLayoutParams();
+                p1.height = statusBarHeight;
+                mDrawerOverlay.setVisibility(View.VISIBLE);
             }
 
             mDrawerLayout.setStatusBarBackground(R.color.gray_dark);
         }
+
+        if (User.hasPlayer()) {
+            final Player player = User.getPlayer();
+            mDrawerUserName.setText(player.getName());
+        } else {
+            mDrawerUserName.setVisibility(View.GONE);
+        }
+
+        final Region userRegion = User.getRegion();
+        final Region settingsRegion = Settings.getRegion();
+        final String regionText;
+
+        if (userRegion.equals(settingsRegion)) {
+            regionText = userRegion.getName();
+        } else {
+            regionText = getString(R.string.x_viewing_y, userRegion.getName(), settingsRegion.getName());
+        }
+
+        mDrawerUserRegion.setText(regionText);
 
         if (showDrawerIndicator()) {
             mDrawerToggle.setDrawerIndicatorEnabled(true);

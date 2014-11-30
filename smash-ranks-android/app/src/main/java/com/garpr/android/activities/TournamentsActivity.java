@@ -122,6 +122,7 @@ public class TournamentsActivity extends BaseListActivity {
 
 
     public static final class ViewHolder extends RecyclerView.ViewHolder {
+    private static final class ViewHolder extends RecyclerView.ViewHolder {
 
 
         private final TextView mName;

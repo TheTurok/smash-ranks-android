@@ -4,11 +4,16 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -20,12 +25,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class TournamentsActivity extends BaseListActivity {
+public class TournamentsActivity extends BaseListActivity implements
+        MenuItemCompat.OnActionExpandListener,
+        SearchView.OnQueryTextListener {
 
 
     private static final String TAG = TournamentsActivity.class.getSimpleName();
 
     private ArrayList<Tournament> mTournaments;
+    private ArrayList<Tournament> mTournamentsShown;
+    private MenuItem mSearchItem;
+    private TournamentsFilter mFilter;
 
 
 
@@ -52,6 +62,7 @@ public class TournamentsActivity extends BaseListActivity {
             public void response(final ArrayList<Tournament> list) {
                 Collections.sort(list, Tournament.DATE_ORDER);
                 mTournaments = list;
+                mTournamentsShown = list;
                 setAdapter(new TournamentAdapter());
             }
         };
@@ -63,6 +74,12 @@ public class TournamentsActivity extends BaseListActivity {
     @Override
     protected String getErrorText() {
         return getString(R.string.error_fetching_tournaments);
+    }
+
+
+    @Override
+    protected int getOptionsMenu() {
+        return R.menu.activity_tournaments;
     }
 
 
@@ -81,13 +98,76 @@ public class TournamentsActivity extends BaseListActivity {
 
 
     @Override
+    protected void onDrawerClosed() {
+        if (!isLoading()) {
+            mSearchItem.setVisible(true);
+        }
+    }
+
+
+    @Override
+    protected void onDrawerOpened() {
+        MenuItemCompat.collapseActionView(mSearchItem);
+        mSearchItem.setVisible(false);
+    }
+
+
+    @Override
+    public boolean onMenuItemActionCollapse(final MenuItem item) {
+        mTournamentsShown = mTournaments;
+        notifyDataSetChanged();
+        return true;
+    }
+
+
+    @Override
+    public boolean onMenuItemActionExpand(final MenuItem item) {
+        return true;
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        mSearchItem = menu.findItem(R.id.activity_tournaments_menu_search);
+        MenuItemCompat.setOnActionExpandListener(mSearchItem, this);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
+        searchView.setQueryHint(getString(R.string.search_tournaments));
+        searchView.setOnQueryTextListener(this);
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onQueryTextChange(final String newText) {
+        mFilter.filter(newText);
+        return false;
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(final String query) {
+        return false;
+    }
+
+
+    @Override
     public void onRefresh() {
         super.onRefresh();
 
         if (!isLoading()) {
+            MenuItemCompat.collapseActionView(mSearchItem);
             Tournaments.clear();
             fetchTournaments();
         }
+    }
+
+
+    @Override
+    protected void setAdapter(final BaseListAdapter adapter) {
+        super.setAdapter(adapter);
+        mFilter = new TournamentsFilter();
     }
 
 
@@ -98,13 +178,13 @@ public class TournamentsActivity extends BaseListActivity {
 
         @Override
         public int getItemCount() {
-            return mTournaments.size();
+            return mTournamentsShown.size();
         }
 
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            final Tournament tournament = mTournaments.get(position);
+            final Tournament tournament = mTournamentsShown.get(position);
             holder.mDate.setText(tournament.getDate());
             holder.mName.setText(tournament.getName());
         }
@@ -121,7 +201,41 @@ public class TournamentsActivity extends BaseListActivity {
     }
 
 
-    public static final class ViewHolder extends RecyclerView.ViewHolder {
+    private final class TournamentsFilter extends Filter {
+
+
+        @Override
+        protected FilterResults performFiltering(final CharSequence constraint) {
+            final ArrayList<Tournament> tournamentsList = new ArrayList<>(mTournaments.size());
+            final String query = constraint.toString().trim().toLowerCase();
+
+            for (final Tournament tournament : mTournaments) {
+                final String name = tournament.getName().toLowerCase();
+
+                if (name.contains(query)) {
+                    tournamentsList.add(tournament);
+                }
+            }
+
+            final FilterResults results = new FilterResults();
+            results.count = tournamentsList.size();
+            results.values = tournamentsList;
+
+            return results;
+        }
+
+
+        @Override
+        @SuppressWarnings("unchecked")
+        protected void publishResults(final CharSequence constraint, final FilterResults results) {
+            mTournamentsShown = (ArrayList<Tournament>) results.values;
+            notifyDataSetChanged();
+        }
+
+
+    }
+
+
     private static final class ViewHolder extends RecyclerView.ViewHolder {
 
 

@@ -56,7 +56,7 @@ abstract class BaseListToolbarFragment extends BaseListFragment implements
 
 
     @Override
-    public boolean onMenuItemClick(final MenuItem item) {
+    public final boolean onMenuItemClick(final MenuItem item) {
         return onOptionsItemSelected(item);
     }
 

@@ -19,6 +19,8 @@ import com.garpr.android.models.Region;
 public class SettingsActivity extends BaseActivity {
 
 
+    private static final String TAG = SettingsActivity.class.getSimpleName();
+
     private LinearLayout mPlayer;
     private LinearLayout mRegion;
     private TextView mPlayerName;
@@ -41,6 +43,12 @@ public class SettingsActivity extends BaseActivity {
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
         mVersion = (TextView) findViewById(R.id.activity_settings_version);
+    }
+
+
+    @Override
+    protected String getActivityName() {
+        return TAG;
     }
 
 

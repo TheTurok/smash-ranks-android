@@ -13,6 +13,8 @@ import com.garpr.android.models.Region;
 public class RegionsActivity extends BaseFragmentActivity {
 
 
+    private static final String TAG = RegionsActivity.class.getSimpleName();
+
     private RegionsFragment mRegionsFragment;
 
 
@@ -35,6 +37,12 @@ public class RegionsActivity extends BaseFragmentActivity {
     public void finish() {
         saveRegion();
         super.finish();
+    }
+
+
+    @Override
+    protected String getActivityName() {
+        return TAG;
     }
 
 

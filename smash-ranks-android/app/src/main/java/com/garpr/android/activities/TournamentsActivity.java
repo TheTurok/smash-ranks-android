@@ -73,6 +73,12 @@ public class TournamentsActivity extends BaseListActivity implements
 
 
     @Override
+    protected String getActivityName() {
+        return TAG;
+    }
+
+
+    @Override
     protected String getErrorText() {
         return getString(R.string.error_fetching_tournaments);
     }

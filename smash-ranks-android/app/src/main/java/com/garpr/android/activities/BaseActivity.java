@@ -73,6 +73,9 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
+    protected abstract String getActivityName();
+
+
     protected abstract int getContentView();
 
 

@@ -31,6 +31,7 @@ public class OnboardingActivity extends BaseActivity implements
     private static final String CNAME = OnboardingActivity.class.getCanonicalName();
     private static final String KEY_ONBOARDING_COMPLETE = "KEY_ONBOARDING_COMPLETE";
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
+    private static final String TAG = OnboardingActivity.class.getSimpleName();
 
     private AlertDialog mSkipDialog;
     private NonSwipeableViewPager mPager;
@@ -62,6 +63,18 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     @Override
+    protected String getActivityName() {
+        return TAG;
+    }
+
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_onboarding;
+    }
+
+
+    @Override
     protected boolean isNavigationDrawerEnabled() {
         return false;
     }
@@ -70,12 +83,6 @@ public class OnboardingActivity extends BaseActivity implements
     @Override
     protected boolean isToolbarEnabled() {
         return false;
-    }
-
-
-    @Override
-    protected int getContentView() {
-        return R.layout.activity_onboarding;
     }
 
 

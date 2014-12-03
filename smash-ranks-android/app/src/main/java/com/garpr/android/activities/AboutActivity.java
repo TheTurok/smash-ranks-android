@@ -17,6 +17,8 @@ import com.garpr.android.misc.Constants;
 public class AboutActivity extends BaseActivity {
 
 
+    private static final String TAG = AboutActivity.class.getSimpleName();
+
     private WebView mWebView;
 
 
@@ -31,6 +33,12 @@ public class AboutActivity extends BaseActivity {
 
     private void findViews() {
         mWebView = (WebView) findViewById(R.id.activity_about_webview);
+    }
+
+
+    @Override
+    protected String getActivityName() {
+        return TAG;
     }
 
 

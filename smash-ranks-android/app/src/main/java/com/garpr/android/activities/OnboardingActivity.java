@@ -15,9 +15,12 @@ import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
+import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.NonSwipeableViewPager;
+import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 
 public class OnboardingActivity extends BaseActivity implements
@@ -148,6 +151,12 @@ public class OnboardingActivity extends BaseActivity implements
     @Override
     public void onGoClick() {
         finishOnboarding();
+    }
+
+
+    @Override
+    protected void onGooglePlayServicesUnavailable(final GooglePlayServicesUnavailableException e) {
+        GooglePlayServicesUtil.getErrorDialog(e.getErrorCode(), this, RequestCodes.REQUEST_DEFAULT);
     }
 
 

@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,8 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
+import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
@@ -37,6 +40,8 @@ abstract class BaseActivity extends ActionBarActivity implements
         Settings.OnRegionChangedListener,
         Toolbar.OnMenuItemClickListener {
 
+
+    private static final String TAG = BaseActivity.class.getSimpleName();
 
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean mIsAlive;
@@ -303,6 +308,11 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
+    protected void onGooglePlayServicesUnavailable(final GooglePlayServicesUnavailableException e) {
+        // this method intentionally left blank (children can override)
+    }
+
+
     @Override
     public final boolean onMenuItemClick(final MenuItem item) {
         return onOptionsItemSelected(item);
@@ -334,6 +344,13 @@ abstract class BaseActivity extends ActionBarActivity implements
 
         if (isNavigationDrawerEnabled()) {
             mDrawerToggle.syncState();
+        }
+
+        try {
+            Analytics.report(getActivityName()).sendScreenView();
+        } catch (final GooglePlayServicesUnavailableException e) {
+            Log.e(TAG, "Unable to report screen view to analytics", e);
+            onGooglePlayServicesUnavailable(e);
         }
     }
 

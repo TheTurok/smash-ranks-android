@@ -132,20 +132,20 @@ public final class Settings {
     }
 
 
-    static void setRegion(final Region region, final boolean notifyListeners) {
+    static boolean setRegion(final Region region, final boolean notifyListeners) {
         if (region.equals(sRegion)) {
-            return;
+            return false;
         }
 
         saveRegion(region);
 
         if (!notifyListeners) {
-            return;
+            return true;
         }
 
         if (sRegionListeners == null || sRegionListeners.isEmpty()) {
             Log.d(TAG, "Region was changed but there are no listeners");
-            return;
+            return true;
         }
 
         for (int i = 0; i < sRegionListeners.size(); ) {
@@ -159,11 +159,13 @@ public final class Settings {
                 ++i;
             }
         }
+
+        return true;
     }
 
 
-    public static void setRegion(final Region region) {
-        setRegion(region, true);
+    public static boolean setRegion(final Region region) {
+        return setRegion(region, true);
     }
 
 

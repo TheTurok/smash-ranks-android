@@ -308,11 +308,6 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
-    protected void onGooglePlayServicesUnavailable(final GooglePlayServicesUnavailableException e) {
-        // this method intentionally left blank (children can override)
-    }
-
-
     @Override
     public final boolean onMenuItemClick(final MenuItem item) {
         return onOptionsItemSelected(item);
@@ -349,8 +344,7 @@ abstract class BaseActivity extends ActionBarActivity implements
         try {
             Analytics.report(getActivityName()).sendScreenView();
         } catch (final GooglePlayServicesUnavailableException e) {
-            Log.e(TAG, "Unable to report screen view to analytics", e);
-            onGooglePlayServicesUnavailable(e);
+            Log.w(TAG, "Unable to report screen view to analytics", e);
         }
     }
 

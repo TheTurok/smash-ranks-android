@@ -57,7 +57,7 @@ public final class Analytics {
         final int code = getGooglePlayServicesConnectionCode();
 
         if (code != ConnectionResult.SUCCESS) {
-            throw new GooglePlayServicesUnavailableException(code);
+            throw GooglePlayServicesUnavailableException.from(code);
         }
     }
 

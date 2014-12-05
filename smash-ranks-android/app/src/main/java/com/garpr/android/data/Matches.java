@@ -98,7 +98,10 @@ public final class Matches {
                 }
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when parsing matches JSON response", e);
-                error(e);
+
+                if (isAlive()) {
+                    error(e);
+                }
             }
         }
 
@@ -107,7 +110,10 @@ public final class Matches {
         public final void response(final Match item) {
             final ArrayList<Match> list = new ArrayList<>(1);
             list.add(item);
-            response(list);
+
+            if (isAlive()) {
+                response(list);
+            }
         }
 
 

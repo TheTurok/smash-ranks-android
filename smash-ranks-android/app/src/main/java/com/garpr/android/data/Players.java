@@ -332,7 +332,10 @@ public final class Players {
                 }
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when parsing players JSON response", e);
-                error(e);
+
+                if (isAlive()) {
+                    error(e);
+                }
             }
         }
 
@@ -341,7 +344,10 @@ public final class Players {
         public final void response(final Player item) {
             final ArrayList<Player> list = new ArrayList<>(1);
             list.add(item);
-            response(list);
+
+            if (isAlive()) {
+                response(list);
+            }
         }
 
 
@@ -395,7 +401,10 @@ public final class Players {
                 }
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when parsing rankings JSON response", e);
-                error(e);
+
+                if (isAlive()) {
+                    error(e);
+                }
             }
         }
 
@@ -404,7 +413,10 @@ public final class Players {
         public final void response(final Player item) {
             final ArrayList<Player> list = new ArrayList<>(1);
             list.add(item);
-            response(list);
+
+            if (isAlive()) {
+                response(list);
+            }
         }
 
 

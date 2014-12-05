@@ -194,7 +194,10 @@ public final class Tournaments {
                 }
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when parsing tournaments JSON response", e);
-                error(e);
+
+                if (isAlive()) {
+                    error(e);
+                }
             }
         }
 
@@ -203,7 +206,10 @@ public final class Tournaments {
         public final void response(final Tournament item) {
             final ArrayList<Tournament> list = new ArrayList<>(1);
             list.add(item);
-            response(list);
+
+            if (isAlive()) {
+                response(list);
+            }
         }
 
 

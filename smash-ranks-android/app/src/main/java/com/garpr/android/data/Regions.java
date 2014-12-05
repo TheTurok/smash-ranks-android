@@ -193,7 +193,10 @@ public final class Regions {
                 }
             } catch (final JSONException e) {
                 Log.e(TAG, "Exception when parsing regions JSON response", e);
-                error(e);
+
+                if (isAlive()) {
+                    error(e);
+                }
             }
         }
 
@@ -202,7 +205,10 @@ public final class Regions {
         public final void response(final Region item) {
             final ArrayList<Region> list = new ArrayList<>(1);
             list.add(item);
-            response(list);
+
+            if (isAlive()) {
+                response(list);
+            }
         }
 
 

@@ -323,14 +323,18 @@ public class PlayerActivity extends BaseListActivity implements
     private final class MatchesAdapter extends BaseListAdapter {
 
 
+        private final int mBgHighlight;
+        private final int mBgTransparent;
         private final int mColorLose;
         private final int mColorWin;
 
 
         private MatchesAdapter() {
             final Resources resources = getResources();
-            mColorLose = resources.getColor(android.R.color.holo_red_light);
-            mColorWin = resources.getColor(android.R.color.holo_green_light);
+            mBgHighlight = resources.getColor(R.color.overlay_bright);
+            mBgTransparent = resources.getColor(R.color.transparent);
+            mColorLose = resources.getColor(R.color.lose_pink);
+            mColorWin = resources.getColor(R.color.win_green);
         }
 
 
@@ -365,9 +369,9 @@ public class PlayerActivity extends BaseListActivity implements
                     final String opponentId = match.getOpponentId();
 
                     if (opponentId.equals(mUserPlayer.getId())) {
-                        viewHolder.mOpponent.setTypeface(Typeface.DEFAULT_BOLD);
+                        viewHolder.mOpponent.setBackgroundColor(mBgHighlight);
                     } else {
-                        viewHolder.mOpponent.setTypeface(Typeface.DEFAULT);
+                        viewHolder.mOpponent.setBackgroundColor(mBgTransparent);
                     }
                 }
             } else {

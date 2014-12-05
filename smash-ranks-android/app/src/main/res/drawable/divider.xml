@@ -4,5 +4,5 @@
     <size
         android:height="1dp" />
     <solid
-        android:color="@color/bg_material_dark" />
+        android:color="@color/black" />
 </shape>

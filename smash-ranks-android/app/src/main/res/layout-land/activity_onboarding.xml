@@ -31,7 +31,7 @@
             tools:ignore="ContentDescription" />
     </RelativeLayout>
     <com.garpr.android.misc.NonSwipeableViewPager
-        android:background="@color/bg_material_dark"
+        android:background="@color/black"
         android:id="@+id/activity_onboarding_pager"
         android:layout_height="match_parent"
         android:layout_weight="1"

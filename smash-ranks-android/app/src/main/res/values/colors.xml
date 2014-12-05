@@ -3,19 +3,22 @@
 
     <color name="bg_material">#37474F</color>
     <color name="bg_material_dark">#242F35</color>
-    <color name="bg_statusbar">#414B51</color>
-    <color name="bg_toolbar">#46555C</color>
+    <color name="bg_statusbar">#263238</color>
+    <color name="bg_toolbar">#37474F</color>
+    <color name="bg_window">#303030</color>
     <color name="black">#000000</color>
     <color name="blue">#0000FF</color>
     <color name="cyan">#00FFFF</color>
     <color name="gray_dark">#212121</color>
     <color name="green">#00FF00</color>
+    <color name="lose_pink">#EC407A</color>
     <color name="magenta">#FF00FF</color>
     <color name="overlay_bright">#33FFFFFF</color>
-    <color name="overlay_dark">#55000000</color>
+    <color name="overlay_dark">#88000000</color>
     <color name="red">#FF0000</color>
     <color name="transparent">#00000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="win_green">#66BB6A</color>
     <color name="yellow">#FFFF00</color>
 
 </resources>

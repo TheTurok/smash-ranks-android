@@ -204,6 +204,8 @@ public final class Players {
                 players.remove(i);
             }
         }
+
+        players.trimToSize();
     }
 
 

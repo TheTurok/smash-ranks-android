@@ -79,7 +79,7 @@ public final class Matches {
         @Override
         public final void onResponse(final JSONObject json) {
             try {
-                final ArrayList<Match> matches = Matches.parseJSON(json);
+                final ArrayList<Match> matches = parseJSON(json);
                 Log.d(TAG, "Read in " + matches.size() + " Match objects from JSON response");
 
                 if (matches.isEmpty()) {

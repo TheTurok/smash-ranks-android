@@ -173,7 +173,7 @@ public final class Tournaments {
         @Override
         public final void onResponse(final JSONObject json) {
             try {
-                final ArrayList<Tournament> tournaments = Tournaments.parseJSON(json);
+                final ArrayList<Tournament> tournaments = parseJSON(json);
                 Log.d(TAG, "Read in " + tournaments.size() + " Tournament objects from JSON response");
 
                 if (tournaments.isEmpty()) {

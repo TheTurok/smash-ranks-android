@@ -227,7 +227,7 @@ public final class Players {
 
         @Override
         void getFromNetwork(final Callback<Player> callback) {
-            Players.getPlayersFromNetwork((PlayersCallback) callback);
+            getPlayersFromNetwork((PlayersCallback) callback);
         }
 
 
@@ -261,8 +261,12 @@ public final class Players {
     private static class AsyncSaveRankingsDatabase extends AsyncSaveDatabase<Player> {
 
 
+        private final String mWhereClause;
+
+
         private AsyncSaveRankingsDatabase(final ArrayList<Player> players) {
             super(players, getTableName());
+            mWhereClause = Constants.ID + " = ?";
         }
 
 
@@ -275,9 +279,8 @@ public final class Players {
         @Override
         void transact(final String tableName, final Player item, final SQLiteDatabase database) {
             final ContentValues values = createContentValues(item);
-            final String whereClause = Constants.ID + " = ?";
             final String[] whereArgs = { item.getId() };
-            database.update(tableName, values, whereClause, whereArgs);
+            database.update(tableName, values, mWhereClause, whereArgs);
         }
 
 
@@ -308,7 +311,7 @@ public final class Players {
         @Override
         public final void onResponse(final JSONObject json) {
             try {
-                final ArrayList<Player> players = Players.parseJSON(json);
+                final ArrayList<Player> players = parseJSON(json);
                 Log.d(TAG, "Read in " + players.size() + " Player objects from players JSON response");
 
                 if (players.isEmpty()) {
@@ -371,7 +374,7 @@ public final class Players {
         @Override
         public final void onResponse(final JSONObject response) {
             try {
-                final ArrayList<Player> rankings = Players.parseJSON(response);
+                final ArrayList<Player> rankings = parseJSON(response);
                 Log.d(TAG, "Read in " + rankings.size() + " Player objects from rankings JSON response");
 
                 if (rankings.isEmpty()) {

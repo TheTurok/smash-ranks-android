@@ -84,7 +84,7 @@ public final class Regions {
                 final Region region = new Region(regionJSON);
                 regions.add(region);
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when grabbing region at index " + i, e);
+                Log.e(TAG, "Exception when building Region at index " + i, e);
             }
         }
 
@@ -172,7 +172,7 @@ public final class Regions {
         @Override
         public final void onResponse(final JSONObject json) {
             try {
-                final ArrayList<Region> regions = Regions.parseJSON(json);
+                final ArrayList<Region> regions = parseJSON(json);
                 Log.d(TAG, "Read in " + regions.size() + " regions from JSON response");
 
                 if (regions.isEmpty()) {

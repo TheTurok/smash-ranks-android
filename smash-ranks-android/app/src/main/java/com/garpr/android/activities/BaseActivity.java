@@ -357,6 +357,16 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (isNavigationDrawerEnabled()) {
+            updateDrawerRegion();
+        }
+    }
+
+
     protected boolean showDrawerIndicator() {
         return true;
     }

@@ -27,6 +27,7 @@
     <string name="hello">Hello</string>
     <string name="hello_">Hello!</string>
     <string name="hello_world">Hello, World!</string>
+    <string name="lets_go">Let\'s go!</string>
     <string name="lose">Lose</string>
     <string name="loss">Loss</string>
     <string name="lost">Lost</string>
@@ -72,5 +73,6 @@
     <string name="x_y">%1$s (%2$d)</string>
     <string name="x_viewing_y">%1$s (viewing %2$s)</string>
     <string name="yes">Yes</string>
+    <string name="youre_x_from_y_ready">You\'re %1$s from %2$s. Ready?</string>
 
 </resources>

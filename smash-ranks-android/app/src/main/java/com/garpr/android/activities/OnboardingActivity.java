@@ -37,6 +37,7 @@ public class OnboardingActivity extends BaseActivity implements
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
     private static final String TAG = OnboardingActivity.class.getSimpleName();
 
+    private AlertDialog mGoDialog;
     private AlertDialog mSkipDialog;
     private NonSwipeableViewPager mPager;
     private PlayersFragment mPlayersFragment;
@@ -169,7 +170,28 @@ public class OnboardingActivity extends BaseActivity implements
 
     @Override
     public void onGoClick() {
-        finishOnboarding(true);
+        if (mGoDialog == null) {
+            mGoDialog = new AlertDialog.Builder(this)
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton(R.string.lets_go, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            dialog.dismiss();
+                            finishOnboarding(true);
+                        }
+                    })
+                    .create();
+        }
+
+        final Player player = mPlayersFragment.getSelectedPlayer();
+        mGoDialog.setMessage(getString(R.string.youre_x_from_y_ready, player.getName(),
+                mSelectedRegion.getName()));
+        mGoDialog.show();
     }
 
 

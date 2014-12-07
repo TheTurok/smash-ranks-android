@@ -58,6 +58,7 @@ public class OnboardingActivity extends BaseActivity implements
         editor.apply();
 
         RankingsActivity.start(this);
+        finish();
     }
 
 

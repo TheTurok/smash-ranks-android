@@ -20,7 +20,8 @@
             android:paddingLeft="@dimen/root_padding_double"
             android:paddingRight="@dimen/root_padding_double"
             android:text="@string/gar_pr"
-            android:textSize="32sp" />
+            android:textSize="32sp"
+            tools:ignore="UnusedAttribute" />
         <ImageView
             android:id="@+id/activity_onboarding_orb"
             android:layout_below="@id/activity_onboarding_title"

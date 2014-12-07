@@ -12,9 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:textSize="14sp"
+        tools:ignore="RelativeOverlap"
         tools:text="1" />
     <TextView
-        android:gravity="end|right"
         android:id="@+id/model_player_rating"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -22,7 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:textSize="14sp"
-        tools:text="30.102" />
+        tools:text="30.102"
+        style="@style/gravity_end" />
     <TextView
         android:ellipsize="end"
         android:gravity="center_vertical"

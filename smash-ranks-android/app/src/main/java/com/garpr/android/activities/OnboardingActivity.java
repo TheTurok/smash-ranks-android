@@ -202,10 +202,11 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     @Override
+    @SuppressWarnings("NullableProblems")
     protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+        if (!savedInstanceState.isEmpty()) {
             mSelectedRegion = savedInstanceState.getParcelable(KEY_SELECTED_REGION);
         }
     }

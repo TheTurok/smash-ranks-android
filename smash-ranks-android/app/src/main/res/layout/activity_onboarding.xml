@@ -13,7 +13,8 @@
         android:layout_width="wrap_content"
         android:padding="@dimen/root_padding"
         android:text="@string/gar_pr"
-        android:textSize="32sp" />
+        android:textSize="32sp"
+        tools:ignore="UnusedAttribute" />
     <ImageView
         android:id="@+id/activity_onboarding_orb"
         android:layout_gravity="center"

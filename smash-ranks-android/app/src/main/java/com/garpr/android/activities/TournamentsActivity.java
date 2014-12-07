@@ -19,6 +19,9 @@ import android.widget.TextView;
 import com.garpr.android.R;
 import com.garpr.android.data.Tournaments;
 import com.garpr.android.data.Tournaments.TournamentsCallback;
+import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
@@ -56,6 +59,12 @@ public class TournamentsActivity extends BaseListActivity implements
             public void error(final Exception e) {
                 Log.e(TAG, "Exception when retrieving tournaments!", e);
                 showError();
+
+                try {
+                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.TOURNAMENTS);
+                } catch (final GooglePlayServicesUnavailableException gpsue) {
+                    Log.w(TAG, "Unable to report tournaments exception to analytics", gpsue);
+                }
             }
 
 

@@ -21,6 +21,9 @@ import com.garpr.android.R;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.Players.PlayersCallback;
 import com.garpr.android.data.User;
+import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
 import com.garpr.android.models.Player;
@@ -67,8 +70,14 @@ public class RankingsActivity extends BaseListActivity implements
         final PlayersCallback callback = new PlayersCallback(this) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when retrieving players!", e);
+                Log.e(TAG, "Exception when retrieving rankings!", e);
                 showError();
+
+                try {
+                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
+                } catch (final GooglePlayServicesUnavailableException gpsue) {
+                    Log.w(TAG, "Unable to report rankings exception to analytics", gpsue);
+                }
             }
 
 

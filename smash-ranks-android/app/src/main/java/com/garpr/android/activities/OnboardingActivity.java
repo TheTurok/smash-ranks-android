@@ -22,7 +22,7 @@ import com.garpr.android.models.Region;
 
 public class OnboardingActivity extends BaseActivity implements
         PlayersFragment.Listeners,
-        RegionsFragment.Listener {
+        RegionsFragment.ToolbarClickListener {
 
 
     private static final int ONBOARDING_FRAGMENT_COUNT = 2;
@@ -138,6 +138,7 @@ public class OnboardingActivity extends BaseActivity implements
 
         if (onboardingCompleted()) {
             RankingsActivity.start(this);
+            finish();
         } else {
             findViews();
             prepareViews();

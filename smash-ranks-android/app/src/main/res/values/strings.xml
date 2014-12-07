@@ -48,6 +48,7 @@
     <string name="region">Region</string>
     <string name="regions">Regions</string>
     <string name="save">Save</string>
+    <string name="save_">Save!</string>
     <string name="search">Search</string>
     <string name="search_matches">Search matches…</string>
     <string name="search_players">Search players…</string>

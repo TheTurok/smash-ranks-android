@@ -17,6 +17,9 @@ import com.garpr.android.R;
 import com.garpr.android.data.Regions;
 import com.garpr.android.data.Regions.RegionsCallback;
 import com.garpr.android.data.Settings;
+import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.models.Region;
 
 import java.util.ArrayList;
@@ -35,9 +38,10 @@ public class RegionsFragment extends BaseListToolbarFragment {
     private ArrayList<Region> mRegions;
     private boolean mLoadUserRegion;
     private boolean mShowToolbar;
-    private Listener mListener;
     private MenuItem mNext;
     private Region mSelectedRegion;
+    private RegionClickListener mRegionClickListener;
+    private ToolbarClickListener mToolbarClickListener;
 
 
 
@@ -62,6 +66,12 @@ public class RegionsFragment extends BaseListToolbarFragment {
             public void error(final Exception e) {
                 Log.e(TAG, "Exception when retrieving regions!", e);
                 showError();
+
+                try {
+                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.REGIONS);
+                } catch (final GooglePlayServicesUnavailableException gpsue) {
+                    Log.w(TAG, "Unable to report regions exception to analytics", gpsue);
+                }
             }
 
 
@@ -131,8 +141,12 @@ public class RegionsFragment extends BaseListToolbarFragment {
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
 
-        if (activity instanceof Listener) {
-            mListener = (Listener) activity;
+        if (activity instanceof RegionClickListener) {
+            mRegionClickListener = (RegionClickListener) activity;
+        }
+
+        if (activity instanceof ToolbarClickListener) {
+            mToolbarClickListener = (ToolbarClickListener) activity;
         }
     }
 
@@ -141,6 +155,10 @@ public class RegionsFragment extends BaseListToolbarFragment {
     protected void onItemClick(final View view, final int position) {
         mSelectedRegion = mRegions.get(position);
         notifyDatasetChanged();
+
+        if (mRegionClickListener != null) {
+            mRegionClickListener.onRegionClick(mSelectedRegion);
+        }
 
         if (mShowToolbar) {
             findToolbarItems();
@@ -155,9 +173,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
         switch (item.getItemId()) {
             case R.id.fragment_regions_menu_next:
-                if (mShowToolbar) {
-                    mListener.onNextClick();
-                }
+                mToolbarClickListener.onNextClick();
                 break;
 
             default:
@@ -274,7 +290,16 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
-    public interface Listener {
+    public interface RegionClickListener {
+
+
+        public void onRegionClick(final Region region);
+
+
+    }
+
+
+    public interface ToolbarClickListener {
 
 
         public void onNextClick();

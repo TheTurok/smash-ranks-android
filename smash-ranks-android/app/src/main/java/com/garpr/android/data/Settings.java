@@ -24,16 +24,19 @@ public final class Settings {
     private static final String KEY_REGION = "KEY_REGION";
     private static final String TAG = Settings.class.getSimpleName();
 
-    private static LinkedList<WeakReference<OnRegionChangedListener>> sRegionListeners;
+    private static final LinkedList<WeakReference<OnRegionChangedListener>> sRegionListeners;
     private static Region sRegion;
 
 
 
 
-    public static void addRegionListener(final OnRegionChangedListener listener) {
-        if (sRegionListeners == null) {
-            sRegionListeners = new LinkedList<>();
-        } else {
+    static {
+        sRegionListeners = new LinkedList<>();
+    }
+
+
+    public static synchronized void addRegionListener(final OnRegionChangedListener listener) {
+        if (!sRegionListeners.isEmpty()) {
             for (int i = 0; i < sRegionListeners.size(); ) {
                 final WeakReference<OnRegionChangedListener> r = sRegionListeners.get(i);
                 final OnRegionChangedListener l = r.get();
@@ -49,8 +52,14 @@ public final class Settings {
 
         final WeakReference<OnRegionChangedListener> reference = new WeakReference<>(listener);
 
-        if (!sRegionListeners.contains(reference)) {
+        if (sRegionListeners.contains(reference)) {
+            Log.d(TAG, "Went to add a RegionListener but it already exists at index "
+                    + sRegionListeners.indexOf(reference) + ". There are "
+                    + sRegionListeners.size() + " listener(s).");
+        } else {
             sRegionListeners.add(reference);
+            Log.d(TAG, "Added RegionListener at index " + sRegionListeners.indexOf(reference)
+                    + ". There are now " + sRegionListeners.size() + " listener(s).");
         }
     }
 
@@ -75,12 +84,14 @@ public final class Settings {
     }
 
 
-    public static Region getRegion() {
+    public static synchronized Region getRegion() {
         if (sRegion == null) {
-            Log.d(TAG, "Region is null, reading it in from JSON");
+            Log.d(TAG, "Region is null, going to try reading it in from SharedPreferences");
             final String regionString = get().getString(KEY_REGION, null);
 
             if (Utils.validStrings(regionString)) {
+                Log.d(TAG, "Read in region from SharedPreferences: " + regionString);
+
                 try {
                     final JSONObject regionJSON = new JSONObject(regionString);
                     sRegion = new Region(regionJSON);
@@ -89,6 +100,7 @@ public final class Settings {
                     throw new RuntimeException(e);
                 }
             } else {
+                Log.d(TAG, "Region doesn't exist in SharedPreferences");
                 sRegion = User.getRegion();
                 saveRegion(sRegion);
             }
@@ -98,22 +110,46 @@ public final class Settings {
     }
 
 
-    public static void removeRegionListener(final OnRegionChangedListener listener) {
-        if (sRegionListeners == null || sRegionListeners.isEmpty()) {
-            return;
+    private static synchronized void notifyRegionListeners() {
+        if (sRegionListeners.isEmpty()) {
+            Log.d(TAG, "Region was changed but there are no listeners");
+        } else {
+            for (int i = 0; i < sRegionListeners.size(); ) {
+                final WeakReference<OnRegionChangedListener> r = sRegionListeners.get(i);
+                final OnRegionChangedListener l = r.get();
+
+                if (l == null) {
+                    sRegionListeners.remove(i);
+                    Log.d(TAG, "Removing dead RegionListener at index " + i + ". There are now "
+                            + sRegionListeners.size() + " listener(s).");
+                } else {
+                    l.onRegionChanged(sRegion);
+                    ++i;
+                }
+            }
         }
+    }
 
-        for (int i = 0; i < sRegionListeners.size(); ) {
-            final WeakReference<OnRegionChangedListener> r = sRegionListeners.get(i);
-            final OnRegionChangedListener l = r.get();
 
-            if (l == null) {
-                sRegionListeners.remove(i);
-            } else if (l == listener) {
-                Log.d(TAG, "Removing dead RegionListener at index " + i);
-                sRegionListeners.remove(i);
-            } else {
-                ++i;
+    public static synchronized void removeRegionListener(final OnRegionChangedListener listener) {
+        if (sRegionListeners.isEmpty()) {
+            Log.d(TAG, "Went to remove a RegionListener but there are none");
+        } else {
+            for (int i = 0; i < sRegionListeners.size(); ) {
+                final WeakReference<OnRegionChangedListener> r = sRegionListeners.get(i);
+                final OnRegionChangedListener l = r.get();
+
+                if (l == null) {
+                    Log.d(TAG, "Removing dead RegionListener at index " + i + ". There are now "
+                            + sRegionListeners.size() + " listener(s).");
+                    sRegionListeners.remove(i);
+                } else if (l == listener) {
+                    Log.d(TAG, "Removing RegionListener at index " + i + ". There are now " +
+                            sRegionListeners.size() + " listener(s).");
+                    sRegionListeners.remove(i);
+                } else {
+                    ++i;
+                }
             }
         }
     }
@@ -132,40 +168,21 @@ public final class Settings {
     }
 
 
-    static boolean setRegion(final Region region, final boolean notifyListeners) {
+    static void setRegion(final Region region, final boolean notifyListeners) {
         if (region.equals(sRegion)) {
-            return false;
+            return;
         }
 
         saveRegion(region);
 
-        if (!notifyListeners) {
-            return true;
+        if (notifyListeners) {
+            notifyRegionListeners();
         }
-
-        if (sRegionListeners == null || sRegionListeners.isEmpty()) {
-            Log.d(TAG, "Region was changed but there are no listeners");
-            return true;
-        }
-
-        for (int i = 0; i < sRegionListeners.size(); ) {
-            final WeakReference<OnRegionChangedListener> r = sRegionListeners.get(i);
-            final OnRegionChangedListener l = r.get();
-
-            if (l == null) {
-                sRegionListeners.remove(i);
-            } else {
-                l.onRegionChanged(sRegion);
-                ++i;
-            }
-        }
-
-        return true;
     }
 
 
-    public static boolean setRegion(final Region region) {
-        return setRegion(region, true);
+    public static void setRegion(final Region region) {
+        setRegion(region, true);
     }
 
 

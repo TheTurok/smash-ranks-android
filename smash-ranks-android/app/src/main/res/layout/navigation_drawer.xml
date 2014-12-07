@@ -59,6 +59,7 @@
                 layout="@layout/divider" />
             <TextView
                 android:id="@+id/navigation_drawer_rankings"
+                android:layout_marginTop="@dimen/root_padding_half"
                 android:text="@string/rankings"
                 style="@style/navigation_drawer_item.rankings" />
             <TextView

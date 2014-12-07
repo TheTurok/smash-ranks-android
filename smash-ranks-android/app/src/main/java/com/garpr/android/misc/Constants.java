@@ -8,6 +8,7 @@ public final class Constants {
     public static final String DATE = "date";
     public static final String DEBUG = "debug";
     public static final String DISPLAY_NAME = "display_name";
+    public static final String EXCEPTION = "exception";
     public static final String FALSE = "false";
     public static final String GAME = "game";
     public static final String ID = "id";
@@ -15,7 +16,9 @@ public final class Constants {
     public static final String LOSE = "lose";
     public static final String MATCH = "match";
     public static final String MATCHES = "matches";
+    public static final String MESSAGE = "message";
     public static final String NAME = "name";
+    public static final String NETWORK_EXCEPTION = "network_exception";
     public static final String NORCAL = "norcal";
     public static final String OPPONENT_ID = "opponent_id";
     public static final String OPPONENT_NAME = "opponent_name";

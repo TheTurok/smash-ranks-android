@@ -271,12 +271,6 @@ public final class Players {
 
 
         @Override
-        void clear(final SQLiteDatabase database) {
-            Players.clear(database);
-        }
-
-
-        @Override
         void transact(final String tableName, final Player item, final SQLiteDatabase database) {
             final ContentValues values = createContentValues(item);
             final String[] whereArgs = { item.getId() };

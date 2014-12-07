@@ -19,6 +19,9 @@ import android.widget.Filter;
 import com.garpr.android.R;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.Players.PlayersCallback;
+import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.models.Player;
 
 import java.util.ArrayList;
@@ -64,6 +67,12 @@ public class PlayersFragment extends BaseListToolbarFragment implements
             public void error(final Exception e) {
                 Log.e(TAG, "Exception when retrieving players!", e);
                 showError();
+
+                try {
+                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.PLAYERS);
+                } catch (final GooglePlayServicesUnavailableException gpsue) {
+                    Log.w(TAG, "Unable to report players exception to analytics", gpsue);
+                }
             }
 
 

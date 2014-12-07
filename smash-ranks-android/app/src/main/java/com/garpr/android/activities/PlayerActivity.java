@@ -4,7 +4,6 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +23,9 @@ import com.garpr.android.data.Matches;
 import com.garpr.android.data.Matches.MatchesCallback;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.User;
+import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
@@ -94,6 +96,12 @@ public class PlayerActivity extends BaseListActivity implements
             public void error(final Exception e) {
                 Log.e(TAG, "Exception when fetching matches for " + mPlayer.toString(), e);
                 showError();
+
+                try {
+                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.MATCHES);
+                } catch (final GooglePlayServicesUnavailableException gpsue) {
+                    Log.w(TAG, "Unable to report matches exception to analytics", gpsue);
+                }
             }
 
 

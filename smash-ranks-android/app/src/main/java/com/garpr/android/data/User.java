@@ -58,7 +58,7 @@ public final class User {
     }
 
 
-    private static void loadUser() {
+    private static synchronized void loadUser() {
         sUser = new User();
 
         final SharedPreferences sPreferences = Settings.get(CNAME);
@@ -100,7 +100,7 @@ public final class User {
     }
 
 
-    public static void setPlayer(final Player player) {
+    public static synchronized void setPlayer(final Player player) {
         if (sUser == null) {
             sUser = new User();
         }
@@ -110,7 +110,7 @@ public final class User {
     }
 
 
-    public static void setRegion(final Region region) {
+    public static synchronized void setRegion(final Region region) {
         if (sUser == null) {
             sUser = new User();
         }

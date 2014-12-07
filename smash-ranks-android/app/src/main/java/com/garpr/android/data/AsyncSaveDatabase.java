@@ -25,7 +25,9 @@ abstract class AsyncSaveDatabase<T> extends AsyncTask<Void, Void, Void> {
     }
 
 
-    abstract void clear(final SQLiteDatabase database);
+    void clear(final SQLiteDatabase database) {
+        // this method intentionally left blank (children can override)
+    }
 
 
     @Override

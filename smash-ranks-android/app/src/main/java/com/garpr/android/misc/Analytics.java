@@ -90,6 +90,15 @@ public final class Analytics {
         }
 
 
+        private void putExtra(final String key, final String value) {
+            if (extras == null) {
+                extras = new HashMap<>();
+            }
+
+            extras.put(key, value);
+        }
+
+
         private void send(final Map<String, String> params) throws GooglePlayServicesUnavailableException {
             final Tracker tracker = getTracker();
             tracker.setScreenName(name);
@@ -132,16 +141,30 @@ public final class Analytics {
         }
 
 
-        public Event set(final String key, final String value) {
+        public Event setExtra(final Exception e) {
+            String message;
+
+            if (e == null) {
+                message = "exception is null";
+            } else {
+                message = e.getMessage();
+
+                if (!Utils.validStrings(message)) {
+                    message = "exception message is null / blank";
+                }
+            }
+
+            putExtra(Constants.MESSAGE, message);
+            return this;
+        }
+
+
+        public Event setExtra(final String key, final String value) {
             if (!Utils.validStrings(key, value)) {
                 throw new IllegalArgumentException("key / value parameters are malformed");
             }
 
-            if (extras == null) {
-                extras = new HashMap<>();
-            }
-
-            extras.put(key, value);
+            putExtra(key, value);
             return this;
         }
 

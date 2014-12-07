@@ -50,9 +50,12 @@ public class PlayerActivity extends BaseListActivity implements
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
     private boolean mInUsersRegion;
-    private boolean mSetSearchItemVisible;
+    private boolean mSetMenuItemsVisible;
     private MatchesFilter mFilter;
     private MenuItem mSearchItem;
+    private MenuItem mShowAll;
+    private MenuItem mShowLoses;
+    private MenuItem mShowWins;
     private Player mPlayer;
     private Player mUserPlayer;
 
@@ -193,17 +196,45 @@ public class PlayerActivity extends BaseListActivity implements
 
 
     @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.activity_player_menu_show_all:
+                // TODO
+                break;
+
+            case R.id.activity_player_menu_show_loses:
+                showLoses();
+                break;
+
+            case R.id.activity_player_menu_show_wins:
+                // TODO
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
+
+    @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         mSearchItem = menu.findItem(R.id.activity_player_menu_search);
+        mShowAll = menu.findItem(R.id.activity_player_menu_show_all);
+        mShowLoses = menu.findItem(R.id.activity_player_menu_show_loses);
+        mShowWins = menu.findItem(R.id.activity_player_menu_show_wins);
         MenuItemCompat.setOnActionExpandListener(mSearchItem, this);
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
         searchView.setQueryHint(getString(R.string.search_matches));
         searchView.setOnQueryTextListener(this);
 
-        if (mSetSearchItemVisible) {
+        if (mSetMenuItemsVisible) {
             mSearchItem.setVisible(true);
-            mSetSearchItemVisible = false;
+            mShowLoses.setVisible(true);
+            mShowWins.setVisible(true);
+            mSetMenuItemsVisible = false;
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -254,10 +285,12 @@ public class PlayerActivity extends BaseListActivity implements
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
-        if (mSearchItem == null) {
-            mSetSearchItemVisible = true;
+        if (mSearchItem == null || mShowAll == null || mShowLoses == null || mShowWins == null) {
+            mSetMenuItemsVisible = true;
         } else {
             mSearchItem.setVisible(true);
+            mShowLoses.setVisible(true);
+            mShowWins.setVisible(true);
         }
     }
 
@@ -265,6 +298,37 @@ public class PlayerActivity extends BaseListActivity implements
     @Override
     protected boolean showDrawerIndicator() {
         return false;
+    }
+
+
+    private void showLoses() {
+        final ArrayList<ListItem> listItems = new ArrayList<>(mListItemsShown.size());
+
+        for (int i = 0; i < mListItemsShown.size(); ++i) {
+            final ListItem listItem = mListItemsShown.get(i);
+
+            if (listItem.isTypeMatch() && listItem.mMatch.isLose()) {
+                ListItem tournament = null;
+
+                for (int j = i - 1; tournament == null; --j) {
+                    final ListItem li = mListItemsShown.get(j);
+
+                    if (li.isTypeTournament()) {
+                        tournament = li;
+                    }
+                }
+
+                // make sure we haven't already added this tournament to the list
+                if (!listItems.contains(tournament)) {
+                    listItems.add(tournament);
+                }
+
+                listItems.add(listItem);
+            }
+        }
+
+        mListItemsShown = listItems;
+        notifyDataSetChanged();
     }
 
 

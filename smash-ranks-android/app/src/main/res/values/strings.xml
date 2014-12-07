@@ -60,6 +60,9 @@
     <string name="settings">Settings</string>
     <string name="skip">Skip</string>
     <string name="skip_">Skip!</string>
+    <string name="show_all">Show All</string>
+    <string name="show_loses">Show Loses</string>
+    <string name="show_wins">Show Wins</string>
     <string name="sort">Sort</string>
     <string name="sync">Sync</string>
     <string name="texas">Texas</string>

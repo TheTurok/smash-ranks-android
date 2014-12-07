@@ -44,8 +44,7 @@ public class RankingsActivity extends BaseListActivity implements
     private ArrayList<Player> mPlayers;
     private ArrayList<Player> mPlayersShown;
     private boolean mInUsersRegion;
-    private boolean mSetSearchItemVisible;
-    private boolean mSetSortItemVisible;
+    private boolean mSetMenuItemsVisible;
     private Comparator<Player> mSort;
     private MenuItem mSearchItem;
     private MenuItem mSortItem;
@@ -220,14 +219,10 @@ public class RankingsActivity extends BaseListActivity implements
         mSortAlphabetical = menu.findItem(R.id.activity_rankings_menu_sort_alphabetical);
         mSortRank = menu.findItem(R.id.activity_rankings_menu_sort_rank);
 
-        if (mSetSearchItemVisible) {
+        if (mSetMenuItemsVisible) {
             mSearchItem.setVisible(true);
-            mSetSearchItemVisible = false;
-        }
-
-        if (mSetSortItemVisible) {
             mSortItem.setVisible(true);
-            mSetSortItemVisible = false;
+            mSetMenuItemsVisible = false;
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -275,8 +270,7 @@ public class RankingsActivity extends BaseListActivity implements
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
         if (mSearchItem == null || mSortItem == null) {
-            mSetSearchItemVisible = true;
-            mSetSortItemVisible = true;
+            mSetMenuItemsVisible = true;
         } else {
             mSearchItem.setVisible(true);
             mSortItem.setVisible(true);

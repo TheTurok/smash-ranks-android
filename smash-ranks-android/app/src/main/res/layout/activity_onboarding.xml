@@ -4,6 +4,7 @@
     android:orientation="vertical"
     style="@style/root.no_padding">
     <TextView
+        android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:id="@+id/activity_onboarding_title"
         android:layout_gravity="center"

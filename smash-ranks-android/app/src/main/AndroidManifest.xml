@@ -11,7 +11,9 @@
         android:icon="@drawable/launcher"
         android:label="@string/gar_pr"
         android:name=".App"
-        android:theme="@style/app_theme">
+        android:supportsRtl="true"
+        android:theme="@style/app_theme"
+        tools:ignore="UnusedAttribute">
 
         <activity
             android:label="@string/about"

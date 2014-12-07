@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    style="@style/list_item_root.separator">
+    android:layout_height="40dp"
+    android:layout_width="match_parent">
+    <View
+        android:background="@drawable/divider_bright"
+        android:id="@+id/separator_tournament_divider"
+        android:layout_alignParentBottom="true"
+        android:layout_height="1dp"
+        android:layout_marginTop="2dp"
+        android:layout_width="match_parent" />
     <TextView
-        android:gravity="center"
         android:id="@+id/separator_tournament_date"
+        android:layout_above="@id/separator_tournament_divider"
         android:layout_height="wrap_content"
-        android:layout_weight="25"
-        android:layout_width="0dp"
-        android:textAllCaps="true"
-        android:textSize="12sp"
+        android:layout_marginLeft="@dimen/root_padding"
+        android:layout_marginStart="@dimen/root_padding"
+        android:layout_width="80dp"
+        android:textSize="14sp"
         tools:text="10/10/14" />
     <TextView
-        android:ellipsize="end"
-        android:gravity="center_vertical"
         android:id="@+id/separator_tournament_name"
+        android:layout_above="@id/separator_tournament_divider"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/root_padding_fourth"
-        android:layout_marginLeft="@dimen/root_padding_half"
-        android:layout_marginRight="@dimen/root_padding_half"
-        android:layout_marginTop="@dimen/root_padding_fourth"
-        android:layout_weight="75"
-        android:layout_width="0dp"
-        android:lineSpacingExtra="2dp"
-        android:maxLines="3"
+        android:layout_marginEnd="@dimen/root_padding"
+        android:layout_marginRight="@dimen/root_padding"
+        android:layout_toEndOf="@id/separator_tournament_date"
+        android:layout_toRightOf="@id/separator_tournament_date"
+        android:layout_width="wrap_content"
         android:textAllCaps="true"
         android:textSize="14sp"
-        tools:text="The Big House 4" />
-</LinearLayout>
+        tools:ignore="RelativeOverlap"
+        tools:text="The Big House 4"
+        style="@style/singleline" />
+</RelativeLayout>

@@ -47,10 +47,9 @@ public class OnboardingActivity extends BaseActivity implements
     }
 
 
-    private void finishOnboarding() {
-        final Player player = mPlayersFragment.getSelectedPlayer();
-
-        if (player != null) {
+    private void finishOnboarding(final boolean savePlayer) {
+        if (savePlayer) {
+            final Player player = mPlayersFragment.getSelectedPlayer();
             User.setPlayer(player);
         }
 
@@ -148,7 +147,7 @@ public class OnboardingActivity extends BaseActivity implements
 
     @Override
     public void onGoClick() {
-        finishOnboarding();
+        finishOnboarding(true);
     }
 
 
@@ -193,7 +192,7 @@ public class OnboardingActivity extends BaseActivity implements
                         @Override
                         public void onClick(final DialogInterface dialog, final int which) {
                             dialog.dismiss();
-                            finishOnboarding();
+                            finishOnboarding(false);
                         }
                     })
                     .create();

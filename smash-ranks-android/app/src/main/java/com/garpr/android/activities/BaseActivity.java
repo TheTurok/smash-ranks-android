@@ -222,6 +222,11 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
+    protected boolean isDrawerVisible() {
+        return mDrawerLayout.isDrawerVisible(mDrawerContents);
+    }
+
+
     protected boolean isNavigationDrawerEnabled() {
         return true;
     }
@@ -245,6 +250,16 @@ abstract class BaseActivity extends ActionBarActivity implements
                     .startActivities();
         } else {
             NavUtils.navigateUpTo(this, upIntent);
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (isNavigationDrawerEnabled() && isDrawerVisible()) {
+            closeDrawer();
+        } else {
+            super.onBackPressed();
         }
     }
 

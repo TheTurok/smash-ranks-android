@@ -5,6 +5,7 @@ public final class Constants {
 
 
     public static final String ABOUT_URL = "http://www.garpr.com/#/about";
+    public static final String COMPLETED = "completed";
     public static final String DATE = "date";
     public static final String DEBUG = "debug";
     public static final String DISPLAY_NAME = "display_name";
@@ -20,6 +21,7 @@ public final class Constants {
     public static final String NAME = "name";
     public static final String NETWORK_EXCEPTION = "network_exception";
     public static final String NORCAL = "norcal";
+    public static final String ONBOARDING = "onboarding";
     public static final String OPPONENT_ID = "opponent_id";
     public static final String OPPONENT_NAME = "opponent_name";
     public static final String PLAYER = "player";
@@ -33,6 +35,7 @@ public final class Constants {
     public static final String REGIONS = "regions";
     public static final String RESULT = "result";
     public static final String SETTINGS = "settings";
+    public static final String SKIPPED = "skipped";
     public static final String TIME = "time";
     public static final String TOURNAMENT = "tournament";
     public static final String TOURNAMENTS = "tournaments";

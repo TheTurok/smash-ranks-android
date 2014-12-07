@@ -8,6 +8,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.garpr.android.R;
@@ -15,6 +16,9 @@ import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
+import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.NonSwipeableViewPager;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
@@ -51,6 +55,23 @@ public class OnboardingActivity extends BaseActivity implements
         if (savePlayer) {
             final Player player = mPlayersFragment.getSelectedPlayer();
             User.setPlayer(player);
+
+            try {
+                Analytics.report(TAG)
+                        .setExtra(Constants.PLAYER, player.getName())
+                        .setExtra(Constants.REGION, mSelectedRegion.getName())
+                        .sendEvent(Constants.ONBOARDING, Constants.COMPLETED);
+            } catch (final GooglePlayServicesUnavailableException e) {
+                Log.w(TAG, "Unable to report onboarding completion to analytics", e);
+            }
+        } else {
+            try {
+                Analytics.report(TAG)
+                        .setExtra(Constants.REGION, mSelectedRegion.getName())
+                        .sendEvent(Constants.ONBOARDING, Constants.SKIPPED);
+            } catch (final GooglePlayServicesUnavailableException e) {
+                Log.w(TAG, "Unable to report onboarding skip to analytics", e);
+            }
         }
 
         final Editor editor = Settings.edit(CNAME);

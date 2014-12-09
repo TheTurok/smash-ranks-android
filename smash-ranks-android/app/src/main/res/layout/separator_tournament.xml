@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="40dp"
+    android:layout_height="42dp"
     android:layout_width="match_parent">
     <View
         android:background="@drawable/divider_bright"
@@ -13,20 +13,27 @@
     <TextView
         android:id="@+id/separator_tournament_date"
         android:layout_above="@id/separator_tournament_divider"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/root_padding"
-        android:layout_marginStart="@dimen/root_padding"
-        android:layout_width="80dp"
-        android:textSize="14sp"
-        tools:text="10/10/14" />
-    <TextView
-        android:id="@+id/separator_tournament_name"
-        android:layout_above="@id/separator_tournament_divider"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/root_padding"
         android:layout_marginRight="@dimen/root_padding"
-        android:layout_toEndOf="@id/separator_tournament_date"
-        android:layout_toRightOf="@id/separator_tournament_date"
+        android:layout_width="80dp"
+        android:textSize="14sp"
+        tools:text="10/10/14"
+        style="@style/gravity_end" />
+    <TextView
+        android:id="@+id/separator_tournament_name"
+        android:layout_above="@id/separator_tournament_divider"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/root_padding_fourth"
+        android:layout_marginLeft="@dimen/root_padding"
+        android:layout_marginRight="@dimen/root_padding_fourth"
+        android:layout_marginStart="@dimen/root_padding"
+        android:layout_toLeftOf="@id/separator_tournament_date"
+        android:layout_toStartOf="@id/separator_tournament_date"
         android:layout_width="wrap_content"
         android:textAllCaps="true"
         android:textSize="14sp"

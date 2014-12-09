@@ -4,5 +4,6 @@
     android:allowParallelSyncs="false"
     android:contentAuthority="com.garpr.android.data.sync.SyncProvider"
     android:isAlwaysSyncable="true"
+    android:syncable="true"
     android:supportsUploading="false"
-    android:userVisible="false" />
+    android:userVisible="true" />

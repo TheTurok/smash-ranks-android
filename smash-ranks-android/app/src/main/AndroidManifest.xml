@@ -90,7 +90,7 @@
         </activity>
 
         <provider
-            android:authorities="com.garpr.android.data.sync.SyncProvider"
+            android:authorities=".data.sync.SyncProvider"
             android:exported="false"
             android:name=".data.sync.SyncProvider"
             android:syncable="true" />

@@ -32,6 +32,7 @@ import com.garpr.android.misc.ResultData;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
+import com.garpr.android.models.Result;
 import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
@@ -170,6 +171,9 @@ public class PlayerActivity extends BaseListActivity implements
     protected void onDrawerClosed() {
         if (!isLoading()) {
             mSearchItem.setVisible(true);
+            mShowAll.setVisible(true);
+            mShowLoses.setVisible(true);
+            mShowWins.setVisible(true);
         }
     }
 
@@ -178,6 +182,9 @@ public class PlayerActivity extends BaseListActivity implements
     protected void onDrawerOpened() {
         MenuItemCompat.collapseActionView(mSearchItem);
         mSearchItem.setVisible(false);
+        mShowAll.setVisible(false);
+        mShowLoses.setVisible(false);
+        mShowWins.setVisible(false);
     }
 
 
@@ -199,15 +206,25 @@ public class PlayerActivity extends BaseListActivity implements
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_player_menu_show_all:
-                // TODO
+                mShowAll.setEnabled(false);
+                mShowLoses.setEnabled(true);
+                mShowWins.setEnabled(true);
+                mListItemsShown = mListItems;
+                notifyDataSetChanged();
                 break;
 
             case R.id.activity_player_menu_show_loses:
-                showLoses();
+                mShowAll.setEnabled(true);
+                mShowLoses.setEnabled(false);
+                mShowWins.setEnabled(true);
+                show(Result.LOSE);
                 break;
 
             case R.id.activity_player_menu_show_wins:
-                // TODO
+                mShowAll.setEnabled(true);
+                mShowLoses.setEnabled(true);
+                mShowWins.setEnabled(false);
+                show(Result.WIN);
                 break;
 
             default:
@@ -232,6 +249,7 @@ public class PlayerActivity extends BaseListActivity implements
 
         if (mSetMenuItemsVisible) {
             mSearchItem.setVisible(true);
+            mShowAll.setVisible(true);
             mShowLoses.setVisible(true);
             mShowWins.setVisible(true);
             mSetMenuItemsVisible = false;
@@ -289,6 +307,7 @@ public class PlayerActivity extends BaseListActivity implements
             mSetMenuItemsVisible = true;
         } else {
             mSearchItem.setVisible(true);
+            mShowAll.setVisible(true);
             mShowLoses.setVisible(true);
             mShowWins.setVisible(true);
         }
@@ -301,17 +320,17 @@ public class PlayerActivity extends BaseListActivity implements
     }
 
 
-    private void showLoses() {
-        final ArrayList<ListItem> listItems = new ArrayList<>(mListItemsShown.size());
+    private void show(final Result result) {
+        final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
 
-        for (int i = 0; i < mListItemsShown.size(); ++i) {
-            final ListItem listItem = mListItemsShown.get(i);
+        for (int i = 0; i < mListItems.size(); ++i) {
+            final ListItem listItem = mListItems.get(i);
 
-            if (listItem.isTypeMatch() && listItem.mMatch.isLose()) {
+            if (listItem.isTypeMatch() && listItem.mMatch.getResult() == result) {
                 ListItem tournament = null;
 
                 for (int j = i - 1; tournament == null; --j) {
-                    final ListItem li = mListItemsShown.get(j);
+                    final ListItem li = mListItems.get(j);
 
                     if (li.isTypeTournament()) {
                         tournament = li;

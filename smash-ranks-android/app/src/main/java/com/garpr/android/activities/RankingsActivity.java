@@ -21,6 +21,7 @@ import com.garpr.android.R;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.Players.PlayersCallback;
 import com.garpr.android.data.User;
+import com.garpr.android.data.sync.Sync;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
@@ -146,6 +147,9 @@ public class RankingsActivity extends BaseListActivity implements
         mInUsersRegion = User.areWeInTheUsersRegion();
         mUserPlayer = User.getPlayer();
         fetchRankings();
+
+        // prepares the app's data-syncing capabilities
+        Sync.setup();
     }
 
 

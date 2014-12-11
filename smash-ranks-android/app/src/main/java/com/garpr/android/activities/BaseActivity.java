@@ -27,6 +27,7 @@ import com.garpr.android.data.User;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.misc.Notifications;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
@@ -375,6 +376,7 @@ abstract class BaseActivity extends ActionBarActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        Notifications.clear();
 
         if (isNavigationDrawerEnabled()) {
             updateDrawerRegion();

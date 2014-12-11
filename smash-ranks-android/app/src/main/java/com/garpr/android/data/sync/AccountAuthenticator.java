@@ -9,7 +9,11 @@ import android.content.Context;
 import android.os.Bundle;
 
 
-public final class AccountAuthenticator extends AbstractAccountAuthenticator {
+/**
+ * This class's code taken entirely from BasicSyncAdapter.zip found here:
+ * https://developer.android.com/training/sync-adapters/creating-sync-adapter.html
+ */
+final class AccountAuthenticator extends AbstractAccountAuthenticator {
 
 
     private static final String TAG = AccountAuthenticator.class.getSimpleName();
@@ -47,20 +51,20 @@ public final class AccountAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle getAuthToken(final AccountAuthenticatorResponse response, final Account account,
             final String authTokenType, final Bundle options) throws NetworkErrorException {
-        throw new UnsupportedOperationException("attempted to run getAuthToken() in " + TAG);
+        throw new UnsupportedOperationException("attempted to use getAuthToken() in " + TAG);
     }
 
 
     @Override
     public String getAuthTokenLabel(final String authTokenType) {
-        throw new UnsupportedOperationException("attempted to run getAuthTokenLabel() in " + TAG);
+        throw new UnsupportedOperationException("attempted to use getAuthTokenLabel() in " + TAG);
     }
 
 
     @Override
     public Bundle hasFeatures(final AccountAuthenticatorResponse response, final Account account,
             final String[] features) throws NetworkErrorException {
-        throw new UnsupportedOperationException("attempted to run hasFeatures() in " + TAG);
+        throw new UnsupportedOperationException("attempted to use hasFeatures() in " + TAG);
     }
 
 
@@ -68,7 +72,7 @@ public final class AccountAuthenticator extends AbstractAccountAuthenticator {
     public Bundle updateCredentials(final AccountAuthenticatorResponse response,
             final Account account, final String authTokenType, final Bundle options)
             throws NetworkErrorException {
-        throw new UnsupportedOperationException("attempted to run updateCredentials in " + TAG);
+        throw new UnsupportedOperationException("attempted to use updateCredentials in " + TAG);
     }
 
 

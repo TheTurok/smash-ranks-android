@@ -49,6 +49,7 @@ public final class Analytics {
 
 
     public static Event report(final String name) throws GooglePlayServicesUnavailableException {
+        throwIfGooglePlayServicesAreUnavailable();
         return new Event(name);
     }
 

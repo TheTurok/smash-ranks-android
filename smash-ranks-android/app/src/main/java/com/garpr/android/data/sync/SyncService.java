@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.os.IBinder;
 
 
+ /**
+ * This class's code taken entirely from BasicSyncAdapter.zip found here:
+ * https://developer.android.com/training/sync-adapters/creating-sync-adapter.html
+ */
 public final class SyncService extends Service {
 
 

@@ -9,6 +9,11 @@ import android.net.Uri;
 
 /**
  * This is an intentionally blank ContentProvider that allows for us to use a {@link SyncAdapter}.
+ * Normally a developer would actually use a ContentProvider to store and manage their app's data,
+ * but they're really only truly useful in the case that the app can share its data out to other
+ * apps and / or the rest of the system.
+ *
+ * So for our purposes, it's best just to leave this thing all blank and unimplemented.
  */
 public final class SyncProvider extends ContentProvider {
 

@@ -15,6 +15,10 @@ import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 
 
+/**
+ * This class's code taken entirely from BasicSyncAdapter.zip found here:
+ * https://developer.android.com/training/sync-adapters/creating-sync-adapter.html
+ */
 public final class Sync {
 
 
@@ -25,21 +29,16 @@ public final class Sync {
 
 
 
-    private static Account createAccount() {
-        final Context context = App.getContext();
-        final String accountName = context.getString(R.string.gar_pr);
-        final String accountType = context.getPackageName();
-        return new Account(accountName, accountType);
-    }
-
-
     public static void setup() {
         boolean newAccount = false;
         final SharedPreferences sPreferences = Settings.get(CNAME);
         final boolean isSetupComplete = sPreferences.getBoolean(KEY_SETUP_COMPLETE, false);
 
-        final Account account = createAccount();
         final Context context = App.getContext();
+        final String accountName = context.getString(R.string.gar_pr);
+        final String accountType = context.getPackageName();
+        final Account account = new Account(accountName, accountType);
+
         final AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         final String packageName = context.getPackageName();
 

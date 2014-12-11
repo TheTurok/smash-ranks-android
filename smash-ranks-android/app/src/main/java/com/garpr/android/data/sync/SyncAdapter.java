@@ -19,6 +19,14 @@ import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import java.util.Date;
 
 
+/**
+ * This class's code is largely entirely from BasicSyncAdapter.zip found here:
+ * https://developer.android.com/training/sync-adapters/creating-sync-adapter.html
+ *
+ * So this class is definitely the heart of our syncing logic (it actually does the pull from the
+ * server). Note that the user is entirely free to disable this sync or even force a sync to occur
+ * by going into their device's Account & Sync settings and then going to "GAR PR".
+ */
 public final class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 

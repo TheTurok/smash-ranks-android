@@ -136,8 +136,10 @@ public class OnboardingActivity extends BaseActivity implements
         } else {
             switch (mPager.getCurrentItem()) {
                 case ONBOARDING_FRAGMENT_PLAYERS:
-                    mPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
-                    mPlayersFragment.clearSelectedPlayer();
+                    if (!mPlayersFragment.onBackPressed()) {
+                        mPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
+                        mPlayersFragment.clearSelectedPlayer();
+                    }
                     break;
 
                 default:

@@ -146,6 +146,18 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     }
 
 
+    public boolean onBackPressed() {
+        boolean actionConsumed = false;
+
+        if (mSearch != null && MenuItemCompat.isActionViewExpanded(mSearch)) {
+            MenuItemCompat.collapseActionView(mSearch);
+            actionConsumed = true;
+        }
+
+        return actionConsumed;
+    }
+
+
     @Override
     protected void onItemClick(final View view, final int position) {
         mSelectedPlayer = mPlayersShown.get(position);

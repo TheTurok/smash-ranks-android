@@ -60,10 +60,6 @@ public class RegionsActivity extends BaseFragmentActivity implements
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSelectedRegion = Settings.getRegion();
-
-        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
-            mSetSaveItemEnabled = savedInstanceState.getBoolean(KEY_ENABLE_SAVE_ITEM, false);
-        }
     }
 
 
@@ -98,6 +94,17 @@ public class RegionsActivity extends BaseFragmentActivity implements
     @Override
     public void onRegionClick(final Region region) {
         mSaveItem.setEnabled(!mSelectedRegion.equals(region));
+    }
+
+
+    @Override
+    @SuppressWarnings("NullableProblems")
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (!savedInstanceState.isEmpty()) {
+            mSetSaveItemEnabled = savedInstanceState.getBoolean(KEY_ENABLE_SAVE_ITEM, false);
+        }
     }
 
 

@@ -15,6 +15,7 @@ import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
+import com.garpr.android.misc.Notifications;
 
 import java.util.Date;
 
@@ -47,6 +48,7 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(final Account account, final Bundle extras, final String authority,
             final ContentProviderClient provider, final SyncResult syncResult) {
         reportSyncToAnalytics();
+        Notifications.showRankingsUpdated();
 
         // TODO
         // hit the GAR PR server and see if the user's regions have been updated more recently

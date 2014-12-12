@@ -11,13 +11,19 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.garpr.android.data.Players;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
+import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.Notifications;
+import com.garpr.android.models.Player;
 
+import java.util.ArrayList;
 import java.util.Date;
+
+import static com.garpr.android.data.Players.PlayersCallback;
 
 
 /**
@@ -28,12 +34,15 @@ import java.util.Date;
  * server). Note that the user is entirely free to disable this sync or even force a sync to occur
  * by going into their device's Account & Sync settings and then going to "GAR PR".
  */
-public final class SyncAdapter extends AbstractThreadedSyncAdapter {
+public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
+        Heartbeat {
 
 
     private static final String CNAME = SyncAdapter.class.getCanonicalName();
     private static final String KEY_LAST_SYNC = "KEY_LAST_SYNC";
     private static final String TAG = SyncAdapter.class.getSimpleName();
+
+    private boolean mIsAlive;
 
 
 
@@ -41,19 +50,57 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter {
     SyncAdapter(final Context context, final boolean autoInitialize,
             final boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
+        mIsAlive = true;
+    }
+
+
+    @Override
+    public boolean isAlive() {
+        return mIsAlive;
     }
 
 
     @Override
     public void onPerformSync(final Account account, final Bundle extras, final String authority,
             final ContentProviderClient provider, final SyncResult syncResult) {
-        reportSyncToAnalytics();
-        Notifications.showRankingsUpdated();
+        final long lastRosterUpdate = Settings.getMostRecentRosterUpdate();
 
         // TODO
-        // hit the GAR PR server and see if the user's regions have been updated more recently
-        // than ours. if so, download the user's region players / rankings and then display a
-        // notification to the user.
+        // none of this stuff currently works as I'd like it to (3 api calls / overwriting the DB
+        // for no reason...)
+
+        final PlayersCallback callback = new PlayersCallback(this) {
+            @Override
+            public void error(final Exception e) {
+                Log.e(TAG, "Exception when retrieving rankings when syncing!", e);
+
+                try {
+                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
+                } catch (final GooglePlayServicesUnavailableException gpsue) {
+                    Log.w(TAG, "Unable to report rankings exception when syncing to analytics", gpsue);
+                }
+            }
+
+
+            @Override
+            public void response(final ArrayList<Player> list) {
+                final long newRosterUpdate = Settings.getMostRecentRosterUpdate();
+
+                if (newRosterUpdate > lastRosterUpdate) {
+                    Notifications.showRankingsUpdated();
+                    reportSyncToAnalytics();
+                }
+            }
+        };
+
+        Players.getRankings(callback);
+    }
+
+
+    @Override
+    public void onSyncCanceled() {
+        mIsAlive = false;
+        super.onSyncCanceled();
     }
 
 

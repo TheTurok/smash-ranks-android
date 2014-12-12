@@ -18,7 +18,7 @@ import java.util.Date;
 public class Tournament implements Parcelable {
 
 
-    private static final SimpleDateFormat sTournamentDateFormat;
+    private static final SimpleDateFormat sDateFormat;
 
     private Date date;
     private String dateString;
@@ -29,7 +29,7 @@ public class Tournament implements Parcelable {
 
 
     static {
-        sTournamentDateFormat = new SimpleDateFormat(Constants.TOURNAMENT_DATE_FORMAT);
+        sDateFormat = new SimpleDateFormat(Constants.TOURNAMENT_DATE_FORMAT);
     }
 
 
@@ -45,7 +45,7 @@ public class Tournament implements Parcelable {
         }
 
         try {
-            date = sTournamentDateFormat.parse(dateString);
+            date = sDateFormat.parse(dateString);
         } catch (final ParseException e) {
             throw new JSONException("Couldn't parse the date: \"" + dateString + "\"");
         }
@@ -68,7 +68,7 @@ public class Tournament implements Parcelable {
         dateString = source.readString();
 
         try {
-            date = sTournamentDateFormat.parse(dateString);
+            date = sDateFormat.parse(dateString);
         } catch (final ParseException e) {
             throw new RuntimeException("Couldn't parse the date: \"" + dateString + "\"");
         }

@@ -67,31 +67,27 @@ public final class Players {
 
             @Override
             public void response(final ArrayList<Player> list) {
-                if (isAlive()) {
-                    if (playersHaveRankings(list)) {
-                        Log.d(TAG, "Found rankings in the list of players");
-                        stripListOfRankinglessPlayers(list);
-                        callback.response(list);
-                    } else {
-                        Log.d(TAG, "Rankings were not found in the list of players");
-
-                        final RankingsCallback callbackWrapper1 = new RankingsCallback(getHeartbeat()) {
-                            @Override
-                            public void error(final Exception e) {
-                                callback.error(e);
-                            }
-
-
-                            @Override
-                            public void response(final ArrayList<Player> list) {
-                                callback.response(list);
-                            }
-                        };
-
-                        getRankingsFromNetwork(callbackWrapper1);
-                    }
+                if (playersHaveRankings(list)) {
+                    Log.d(TAG, "Found rankings in the list of players");
+                    stripListOfRankinglessPlayers(list);
+                    callback.response(list);
                 } else {
-                    Log.d(TAG, "Rankings callback wrapper can't continue (the listener is dead)");
+                    Log.d(TAG, "Rankings were not found in the list of players");
+
+                    final RankingsCallback callbackWrapper1 = new RankingsCallback(getHeartbeat()) {
+                        @Override
+                        public void error(final Exception e) {
+                            callback.error(e);
+                        }
+
+
+                        @Override
+                        public void response(final ArrayList<Player> list) {
+                            callback.response(list);
+                        }
+                    };
+
+                    getRankingsFromNetwork(callbackWrapper1);
                 }
             }
         };
@@ -387,6 +383,10 @@ public final class Players {
                 } else {
                     saveRankings(rankings);
 
+                    // save the date of this roster to SharedPreferences
+                    final String dateString = response.getString(Constants.TIME);
+                    Settings.setMostRecentRosterUpdate(dateString);
+
                     if (isAlive()) {
                         response(rankings);
                     } else {
@@ -411,6 +411,41 @@ public final class Players {
             if (isAlive()) {
                 response(list);
             }
+        }
+
+
+    }
+
+
+    public static abstract class RosterUpdateCallback extends Callback<Player> {
+
+
+        public RosterUpdateCallback(final Heartbeat heartbeat) {
+            super(heartbeat);
+        }
+
+
+        @Override
+        public final void onErrorResponse(final VolleyError error) {
+
+        }
+
+
+        @Override
+        public final void onResponse(final JSONObject response) {
+
+        }
+
+
+        @Override
+        public final void response(final Player item) {
+            // this method intentionally left blank
+        }
+
+
+        @Override
+        public void response(final ArrayList<Player> list) {
+            // this method intentionally left blank
         }
 
 

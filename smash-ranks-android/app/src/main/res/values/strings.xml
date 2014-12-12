@@ -10,6 +10,7 @@
     <string name="berkeley">Berkeley</string>
     <string name="cancel">Cancel</string>
     <string name="change_region">Change region</string>
+    <string name="change_sync_settings">Change sync settings</string>
     <string name="clear_cache">Clear cache</string>
     <string name="close_drawer">Close Drawer</string>
     <string name="error">Error</string>

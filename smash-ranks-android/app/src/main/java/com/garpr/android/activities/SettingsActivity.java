@@ -15,6 +15,9 @@ import com.garpr.android.data.User;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
+import static android.provider.Settings.ACTION_SYNC_SETTINGS;
+import static android.provider.Settings.EXTRA_AUTHORITIES;
+
 
 public class SettingsActivity extends BaseActivity {
 
@@ -23,6 +26,7 @@ public class SettingsActivity extends BaseActivity {
 
     private LinearLayout mPlayer;
     private LinearLayout mRegion;
+    private LinearLayout mSync;
     private TextView mPlayerName;
     private TextView mRegionName;
     private TextView mVersion;
@@ -42,6 +46,7 @@ public class SettingsActivity extends BaseActivity {
         mPlayerName = (TextView) findViewById(R.id.activity_settings_player_name);
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
+        mSync = (LinearLayout) findViewById(R.id.activity_settings_sync);
         mVersion = (TextView) findViewById(R.id.activity_settings_version);
     }
 
@@ -90,6 +95,16 @@ public class SettingsActivity extends BaseActivity {
 
         final Region region = Settings.getRegion();
         mRegionName.setText(region.getName());
+
+        mSync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final Intent intent = new Intent(ACTION_SYNC_SETTINGS);
+                final String[] authorities = { getPackageName() };
+                intent.putExtra(EXTRA_AUTHORITIES, authorities);
+                startActivity(intent);
+            }
+        });
 
         if (User.hasPlayer()) {
             final Player player = User.getPlayer();

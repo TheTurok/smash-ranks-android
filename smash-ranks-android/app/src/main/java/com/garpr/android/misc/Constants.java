@@ -37,6 +37,7 @@ public final class Constants {
     public static final String REGION_CHANGE = "region_change";
     public static final String REGIONS = "regions";
     public static final String RESULT = "result";
+    public static final String ROSTER_DATE_FORMAT = "yyyy-MM-dd kk:mm:ss.SSSSSS";
     public static final String SETTINGS = "settings";
     public static final String SKIPPED = "skipped";
     public static final String SYNC = "sync";

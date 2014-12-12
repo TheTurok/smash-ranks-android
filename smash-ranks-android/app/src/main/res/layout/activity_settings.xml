@@ -28,6 +28,13 @@
                         style="@style/settings_subtitle" />
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/activity_settings_sync"
+                    style="@style/settings_container">
+                    <TextView
+                        android:text="@string/change_sync_settings"
+                        style="@style/settings_title" />
+                </LinearLayout>
+                <LinearLayout
                     android:id="@+id/activity_settings_player"
                     android:visibility="gone"
                     tools:visibility="visible"

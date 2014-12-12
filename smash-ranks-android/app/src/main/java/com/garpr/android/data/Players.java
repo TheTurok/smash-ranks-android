@@ -425,6 +425,7 @@ public final class Players {
                         error(e);
                     }
                 } else {
+                    parseRosterUpdate(response);
                     saveRankings(rankings);
 
                     if (isAlive()) {

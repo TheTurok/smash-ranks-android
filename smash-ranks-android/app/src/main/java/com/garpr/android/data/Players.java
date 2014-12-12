@@ -2,6 +2,7 @@ package com.garpr.android.data;
 
 
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -14,15 +15,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
+import static android.content.SharedPreferences.Editor;
 
 
 public final class Players {
 
 
+    private static final SimpleDateFormat sDateFormat;
+    private static final String CNAME = Players.class.getCanonicalName();
+    private static final String KEY_ROSTER_UPDATE = "KEY_ROSTER_UPDATE";
     private static final String TAG = Players.class.getSimpleName();
 
 
+
+
+    static {
+        sDateFormat = new SimpleDateFormat(Constants.ROSTER_DATE_FORMAT);
+    }
+
+
+    public static void checkForRosterUpdate(final RosterUpdateCallback callback) {
+        final String url = Network.makeUrl(Constants.RANKINGS);
+        Network.sendRequest(url, callback);
+    }
 
 
     public static void clear() {
@@ -54,6 +74,12 @@ public final class Players {
     public static void getAll(final PlayersCallback callback) {
         final AsyncReadPlayersDatabase task = new AsyncReadPlayersDatabase(callback);
         task.execute();
+    }
+
+
+    public static long getMostRecentRosterUpdate() {
+        final SharedPreferences sPreferences = Settings.get(CNAME);
+        return sPreferences.getLong(KEY_ROSTER_UPDATE, 0L);
     }
 
 
@@ -150,6 +176,24 @@ public final class Players {
 
         players.trimToSize();
         return players;
+    }
+
+
+    private static long parseRosterUpdate(final JSONObject json) throws JSONException {
+        final String dateString = json.getString(Constants.TIME);
+
+        try {
+            final Date date = sDateFormat.parse(dateString);
+            final long time = date.getTime();
+
+            final Editor editor = Settings.edit(CNAME);
+            editor.putLong(KEY_ROSTER_UPDATE, time);
+            editor.apply();
+        } catch (final ParseException e) {
+            throw new JSONException("Couldn't parse the date: \"" + dateString + "\"");
+        }
+
+        return getMostRecentRosterUpdate();
     }
 
 
@@ -383,10 +427,6 @@ public final class Players {
                 } else {
                     saveRankings(rankings);
 
-                    // save the date of this roster to SharedPreferences
-                    final String dateString = response.getString(Constants.TIME);
-                    Settings.setMostRecentRosterUpdate(dateString);
-
                     if (isAlive()) {
                         response(rankings);
                     } else {
@@ -420,20 +460,54 @@ public final class Players {
     public static abstract class RosterUpdateCallback extends Callback<Player> {
 
 
+        private static final String TAG = RosterUpdateCallback.class.getSimpleName();
+
+
         public RosterUpdateCallback(final Heartbeat heartbeat) {
             super(heartbeat);
+
         }
 
 
         @Override
         public final void onErrorResponse(final VolleyError error) {
+            Log.e(TAG, "Exception when downloading roster", error);
 
+            if (isAlive()) {
+                error(error);
+            }
         }
 
 
         @Override
         public final void onResponse(final JSONObject response) {
+            final long lastUpdate = getMostRecentRosterUpdate();
 
+            try {
+                final long currentUpdate = parseRosterUpdate(response);
+
+                if (currentUpdate > lastUpdate) {
+                    Log.d(TAG, "A new roster is available");
+
+
+
+                    if (isAlive()) {
+                        newRosterAvailable();
+                    }
+                } else {
+                    Log.d(TAG, "There is no new roster");
+
+                    if (isAlive()) {
+                        noNewRoster();
+                    }
+                }
+            } catch (final JSONException e) {
+                Log.e(TAG, "Exception when parsing roster JSON response", e);
+
+                if (isAlive()) {
+                    error(e);
+                }
+            }
         }
 
 
@@ -446,6 +520,16 @@ public final class Players {
         @Override
         public void response(final ArrayList<Player> list) {
             // this method intentionally left blank
+        }
+
+
+        public void newRosterAvailable() {
+            // this method intentionally left blank (children can override)
+        }
+
+
+        public void noNewRoster() {
+            // this method intentionally left blank (children can override)
         }
 
 

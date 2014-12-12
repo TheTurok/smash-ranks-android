@@ -7,7 +7,6 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.garpr.android.App;
-import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 
@@ -15,9 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 
 
@@ -25,12 +21,10 @@ public final class Settings {
 
 
     private static final String CNAME = Settings.class.getCanonicalName();
-    private static final String KEY_LAST_ROSTER_UPDATE = "KEY_LAST_ROSTER_UPDATE";
     private static final String KEY_REGION = "KEY_REGION";
     private static final String TAG = Settings.class.getSimpleName();
 
     private static final LinkedList<WeakReference<OnRegionChangedListener>> sRegionListeners;
-    private static final SimpleDateFormat sDateFormat;
     private static Region sRegion;
 
 
@@ -38,7 +32,6 @@ public final class Settings {
 
     static {
         sRegionListeners = new LinkedList<>();
-        sDateFormat = new SimpleDateFormat(Constants.ROSTER_DATE_FORMAT);
     }
 
 
@@ -89,11 +82,6 @@ public final class Settings {
     public static SharedPreferences get(final String name) {
         final Context context = App.getContext();
         return context.getSharedPreferences(name, Context.MODE_PRIVATE);
-    }
-
-
-    public static long getMostRecentRosterUpdate() {
-        return get().getLong(KEY_LAST_ROSTER_UPDATE, 0L);
     }
 
 
@@ -178,18 +166,6 @@ public final class Settings {
         final Editor editor = edit();
         editor.putString(KEY_REGION, regionString);
         editor.apply();
-    }
-
-
-    public static void setMostRecentRosterUpdate(final String dateString) {
-        try {
-            final Date date = sDateFormat.parse(dateString);
-            final long time = date.getTime();
-            edit().putLong(KEY_LAST_ROSTER_UPDATE, time).apply();
-        } catch (final ParseException e) {
-            Log.e(TAG, "Couldn't parse the date: \"" + dateString + "\"", e);
-            throw new RuntimeException(e);
-        }
     }
 
 

@@ -18,12 +18,10 @@ import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.Notifications;
-import com.garpr.android.models.Player;
 
-import java.util.ArrayList;
 import java.util.Date;
 
-import static com.garpr.android.data.Players.PlayersCallback;
+import static com.garpr.android.data.Players.RosterUpdateCallback;
 
 
 /**
@@ -63,16 +61,10 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
     @Override
     public void onPerformSync(final Account account, final Bundle extras, final String authority,
             final ContentProviderClient provider, final SyncResult syncResult) {
-        final long lastRosterUpdate = Settings.getMostRecentRosterUpdate();
-
-        // TODO
-        // none of this stuff currently works as I'd like it to (3 api calls / overwriting the DB
-        // for no reason...)
-
-        final PlayersCallback callback = new PlayersCallback(this) {
+        final RosterUpdateCallback callback = new RosterUpdateCallback(this) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when retrieving rankings when syncing!", e);
+                Log.e(TAG, "Exception when retrieving roster when syncing!", e);
 
                 try {
                     Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
@@ -83,17 +75,13 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
 
 
             @Override
-            public void response(final ArrayList<Player> list) {
-                final long newRosterUpdate = Settings.getMostRecentRosterUpdate();
-
-                if (newRosterUpdate > lastRosterUpdate) {
-                    Notifications.showRankingsUpdated();
-                    reportSyncToAnalytics();
-                }
+            public void newRosterAvailable() {
+                Notifications.showRankingsUpdated();
+                reportSyncToAnalytics();
             }
         };
 
-        Players.getRankings(callback);
+        Players.checkForRosterUpdate(callback);
     }
 
 

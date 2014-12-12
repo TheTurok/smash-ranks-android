@@ -489,8 +489,8 @@ public final class Players {
                     }
 
                     clear();
-                    savePlayers(list);
                     Tournaments.clear();
+                    savePlayers(list);
 
                     if (isAlive()) {
                         newRosterAvailable();

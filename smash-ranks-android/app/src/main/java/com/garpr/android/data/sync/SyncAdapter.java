@@ -45,26 +45,17 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
 
 
 
-    SyncAdapter(final Context context, final boolean autoInitialize,
-            final boolean allowParallelSyncs) {
-        super(context, autoInitialize, allowParallelSyncs);
+    SyncAdapter(final Context context, final boolean autoInitialize) {
+        super(context, autoInitialize, false);
         mIsAlive = true;
     }
 
 
-    @Override
-    public boolean isAlive() {
-        return mIsAlive;
-    }
-
-
-    @Override
-    public void onPerformSync(final Account account, final Bundle extras, final String authority,
-            final ContentProviderClient provider, final SyncResult syncResult) {
+    private void checkForRosterUpdate(final long lastSync) {
         final RosterUpdateCallback callback = new RosterUpdateCallback(this) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when retrieving roster when syncing!", e);
+                Log.e(TAG, "Exception when retrieving roster while syncing!", e);
 
                 try {
                     Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
@@ -77,11 +68,34 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
             @Override
             public void newRosterAvailable() {
                 Notifications.showRankingsUpdated();
-                reportSyncToAnalytics();
+                reportSyncToAnalytics(lastSync);
             }
         };
 
         Players.checkForRosterUpdate(callback);
+    }
+
+
+    @Override
+    public boolean isAlive() {
+        return mIsAlive;
+    }
+
+
+    @Override
+    public void onPerformSync(final Account account, final Bundle extras, final String authority,
+            final ContentProviderClient provider, final SyncResult syncResult) {
+        final SharedPreferences sPreferences = Settings.get(CNAME);
+        long lastSync = sPreferences.getLong(KEY_LAST_SYNC, 0L);
+
+        if (lastSync == 0L) {
+            lastSync = System.currentTimeMillis();
+            final Editor editor = sPreferences.edit();
+            editor.putLong(KEY_LAST_SYNC, lastSync);
+            editor.apply();
+        } else {
+            checkForRosterUpdate(lastSync);
+        }
     }
 
 
@@ -92,33 +106,22 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
     }
 
 
-    private void reportSyncToAnalytics() {
-        final SharedPreferences sPreferences = Settings.get(CNAME);
-        final long lastSync = sPreferences.getLong(KEY_LAST_SYNC, 0L);
+    private void reportSyncToAnalytics(final long lastSync) {
         final long now = System.currentTimeMillis();
         final Date timeAndDate = new Date(now);
         final String timeAndDateString = timeAndDate.toString();
 
-        if (lastSync == 0L) {
-            try {
-                Analytics.report(TAG).setExtra(Constants.TIME, timeAndDateString)
-                        .sendEvent(Constants.SYNC, Constants.FIRST_SYNC);
-            } catch (final GooglePlayServicesUnavailableException e) {
-                Log.w(TAG, "Unable to report first sync to analytics", e);
-            }
-        } else {
-            try {
-                final Date lastTimeAndDate = new Date(lastSync);
-                final String lastTimeAndDateString = lastTimeAndDate.toString();
-                Analytics.report(TAG).setExtra(Constants.LAST_SYNC, lastTimeAndDateString)
-                        .setExtra(Constants.TIME, timeAndDateString)
-                        .sendEvent(Constants.SYNC, Constants.PERIODIC_SYNC);
-            } catch (final GooglePlayServicesUnavailableException e) {
-                Log.w(TAG, "Unable to report sync to analytics", e);
-            }
+        try {
+            final Date lastTimeAndDate = new Date(lastSync);
+            final String lastTimeAndDateString = lastTimeAndDate.toString();
+            Analytics.report(TAG).setExtra(Constants.LAST_SYNC, lastTimeAndDateString)
+                    .setExtra(Constants.TIME, timeAndDateString)
+                    .sendEvent(Constants.SYNC, Constants.PERIODIC_SYNC);
+        } catch (final GooglePlayServicesUnavailableException e) {
+            Log.w(TAG, "Unable to report sync to analytics", e);
         }
 
-        final Editor editor = sPreferences.edit();
+        final Editor editor = Settings.edit(CNAME);
         editor.putLong(KEY_LAST_SYNC, now);
         editor.apply();
     }

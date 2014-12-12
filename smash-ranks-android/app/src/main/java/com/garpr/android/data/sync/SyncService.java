@@ -38,7 +38,7 @@ public final class SyncService extends Service {
         synchronized (sLock) {
             if (sAdapter == null) {
                 final Context context = getApplicationContext();
-                sAdapter = new SyncAdapter(context, true, false);
+                sAdapter = new SyncAdapter(context, true);
             }
         }
     }

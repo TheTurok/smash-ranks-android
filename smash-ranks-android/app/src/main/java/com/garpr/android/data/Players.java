@@ -469,6 +469,39 @@ public final class Players {
         }
 
 
+        private void getPlayersFromNetwork(final ArrayList<Player> rankings) {
+            final PlayersCallback callback = new PlayersCallback(getHeartbeat()) {
+                @Override
+                public void error(final Exception e) {
+                    RosterUpdateCallback.this.error(e);
+                }
+
+
+                @Override
+                public void response(final ArrayList<Player> list) {
+                    for (final Player player : list) {
+                        final int index = rankings.indexOf(player);
+
+                        if (index != -1) {
+                            final Player rank = list.get(index);
+                            list.set(index, rank);
+                        }
+                    }
+
+                    clear();
+                    savePlayers(list);
+                    Tournaments.clear();
+
+                    if (isAlive()) {
+                        newRosterAvailable();
+                    }
+                }
+            };
+
+            Players.getPlayersFromNetwork(callback);
+        }
+
+
         @Override
         public final void onErrorResponse(final VolleyError error) {
             Log.e(TAG, "Exception when downloading roster", error);
@@ -488,11 +521,13 @@ public final class Players {
 
                 if (currentUpdate > lastUpdate) {
                     Log.d(TAG, "A new roster is available");
+                    final ArrayList<Player> rankings = parseJSON(response);
 
-
-
-                    if (isAlive()) {
-                        newRosterAvailable();
+                    if (rankings.isEmpty()) {
+                        Log.d(TAG, "But the roster's players were empty??");
+                        error(new Exception("empty roster"));
+                    } else {
+                        getPlayersFromNetwork(rankings);
                     }
                 } else {
                     Log.d(TAG, "There is no new roster");

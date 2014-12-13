@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:defaultValue="@bool/sync_preferences_charging_default"
+        android:key="@string/sync_preferences_charging"
+        android:summaryOff="@string/will_sync_regardless_of_being_plugged_in_or_not"
+        android:summaryOn="@string/will_only_sync_if_plugged_in"
+        android:title="@string/only_sync_when_charging" />
+    <CheckBoxPreference
+        android:defaultValue="@bool/sync_preferences_wifi_default"
+        android:key="@string/sync_preferences_wifi"
+        android:summaryOff="@string/syncing_can_occur_on_any_data_connection"
+        android:summaryOn="@string/syncing_can_occur_only_when_connected_to_wifi"
+        android:title="@string/only_sync_on_wifi" />
+</PreferenceScreen>

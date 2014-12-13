@@ -489,7 +489,6 @@ public final class Players {
                         }
                     }
 
-                    clear();
                     Tournaments.clear();
                     savePlayers(list);
 

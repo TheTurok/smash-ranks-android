@@ -2,7 +2,6 @@ package com.garpr.android.data.sync;
 
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 
@@ -37,8 +36,7 @@ public final class SyncService extends Service {
 
         synchronized (sLock) {
             if (sAdapter == null) {
-                final Context context = getApplicationContext();
-                sAdapter = new SyncAdapter(context, true);
+                sAdapter = new SyncAdapter();
             }
         }
     }

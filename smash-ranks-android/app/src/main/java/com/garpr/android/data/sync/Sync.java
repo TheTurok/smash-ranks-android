@@ -29,10 +29,10 @@ public final class Sync {
         final String accountType = context.getPackageName();
         final Account account = new Account(accountName, accountType);
 
-        final AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
+        final AccountManager am = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         final String packageName = context.getPackageName();
 
-        if (accountManager.addAccountExplicitly(account, null, null)) {
+        if (am.addAccountExplicitly(account, null, null)) {
             Log.d(TAG, "Account manager is explicitly adding the account");
             ContentResolver.setIsSyncable(account, packageName, 1);
             ContentResolver.setSyncAutomatically(account, packageName, true);

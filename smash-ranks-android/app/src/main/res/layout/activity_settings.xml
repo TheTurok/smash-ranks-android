@@ -33,6 +33,10 @@
                     <TextView
                         android:text="@string/change_sync_settings"
                         style="@style/settings_title" />
+                    <TextView
+                        android:id="@+id/activity_settings_sync_status"
+                        tools:text="@string/syncing_is_enabled"
+                        style="@style/settings_subtitle" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/activity_settings_player"

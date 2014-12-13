@@ -4,6 +4,7 @@ package com.garpr.android.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.garpr.android.App;
@@ -82,6 +83,12 @@ public final class Settings {
     public static SharedPreferences get(final String name) {
         final Context context = App.getContext();
         return context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    }
+
+
+    public static SharedPreferences getDefault() {
+        final Context context = App.getContext();
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
 

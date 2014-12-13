@@ -1,7 +1,11 @@
 package com.garpr.android.activities;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +33,7 @@ public class SettingsActivity extends BaseActivity {
     private LinearLayout mSync;
     private TextView mPlayerName;
     private TextView mRegionName;
+    private TextView mSyncStatus;
     private TextView mVersion;
 
 
@@ -47,6 +52,7 @@ public class SettingsActivity extends BaseActivity {
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
         mSync = (LinearLayout) findViewById(R.id.activity_settings_sync);
+        mSyncStatus = (TextView) findViewById(R.id.activity_settings_sync_status);
         mVersion = (TextView) findViewById(R.id.activity_settings_version);
     }
 
@@ -85,6 +91,13 @@ public class SettingsActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateSyncStatus();
+    }
+
+
     private void prepareViews() {
         mRegion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +126,20 @@ public class SettingsActivity extends BaseActivity {
         }
 
         mVersion.setText(getString(R.string.x_y, App.getVersionName(), App.getVersionCode()));
+    }
+
+
+    private void updateSyncStatus() {
+        // this code was taken from Stack Overflow: http://stackoverflow.com/a/20098676/823952
+        final AccountManager am = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
+        final String packageName = getPackageName();
+        final Account account = am.getAccountsByType(packageName)[0];
+
+        if (ContentResolver.getSyncAutomatically(account, packageName)) {
+            mSyncStatus.setText(R.string.syncing_is_enabled);
+        } else {
+            mSyncStatus.setText(R.string.syncing_is_disabled);
+        }
     }
 
 

@@ -34,7 +34,8 @@
             android:label="@string/gar_pr"
             android:launchMode="singleTop"
             android:name=".activities.OnboardingActivity"
-            android:theme="@style/app_theme.no_toolbar">
+            android:theme="@style/app_theme.no_toolbar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

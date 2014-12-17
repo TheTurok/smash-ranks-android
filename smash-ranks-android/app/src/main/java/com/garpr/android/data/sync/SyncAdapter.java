@@ -20,16 +20,16 @@ import android.util.Log;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Players;
+import com.garpr.android.data.Players.RosterUpdateCallback;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Analytics.Event;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.Notifications;
 
 import java.util.Date;
-
-import static com.garpr.android.data.Players.RosterUpdateCallback;
 
 
 /**
@@ -60,8 +60,9 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
 
 
     private boolean canSync() {
+        final Context context = getContext();
+        final Resources res = context.getResources();
         final SharedPreferences sPreferences = Settings.getDefault();
-        final Resources res = App.getContext().getResources();
 
         final String keyCharging = res.getString(R.string.sync_preferences_charging);
         final boolean keyChargingDefault = res.getBoolean(R.bool.sync_preferences_charging_default);
@@ -86,7 +87,10 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
                 Log.e(TAG, "Exception when retrieving roster while syncing!", e);
 
                 try {
-                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
+                    final Event event = createAnalyticsEvent(lastSync);
+                    event.setExtra(e);
+                    event.setExtra(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
+                    sendAnalyticsEvent(event);
                 } catch (final GooglePlayServicesUnavailableException gpsue) {
                     Log.w(TAG, "Unable to report rankings exception when syncing to analytics", gpsue);
                 }
@@ -96,11 +100,50 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
             @Override
             public void newRosterAvailable() {
                 Notifications.showRankingsUpdated();
-                reportSyncToAnalytics(lastSync);
+
+                try {
+                    final Event event = createAnalyticsEvent(lastSync);
+                    event.setExtra(Constants.STATUS, Constants.NEW_ROSTER);
+                    sendAnalyticsEvent(event);
+                } catch (final GooglePlayServicesUnavailableException e) {
+                    Log.w(TAG, "Unable to report new roster when syncing to analytics", e);
+                }
+            }
+
+
+            @Override
+            public void noNewRoster() {
+                try {
+                    final Event event = createAnalyticsEvent(lastSync);
+                    event.setExtra(Constants.STATUS, Constants.SAME_ROSTER);
+                    sendAnalyticsEvent(event);
+                } catch (final GooglePlayServicesUnavailableException e) {
+                    Log.w(TAG, "Unable to report same roster when syncing to analytics", e);
+                }
             }
         };
 
         Players.checkForRosterUpdate(callback);
+    }
+
+
+    private Event createAnalyticsEvent(final long lastSync) throws GooglePlayServicesUnavailableException {
+        final Date lastTimeAndDate = new Date(lastSync);
+        final String lastTimeAndDateString = lastTimeAndDate.toString();
+
+        final long now = System.currentTimeMillis();
+        final Date timeAndDate = new Date(now);
+        final String timeAndDateString = timeAndDate.toString();
+
+        final Event event = Analytics.report(TAG)
+                .setExtra(Constants.LAST_SYNC, lastTimeAndDateString)
+                .setExtra(Constants.TIME, timeAndDateString);
+
+        final Editor editor = Settings.edit(CNAME);
+        editor.putLong(KEY_LAST_SYNC, now);
+        editor.apply();
+
+        return event;
     }
 
 
@@ -111,7 +154,7 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
 
 
     private boolean isCharging() {
-        final Context context = App.getContext();
+        final Context context = getContext();
         final IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         final Intent intent = context.registerReceiver(null, intentFilter);
 
@@ -125,7 +168,7 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
 
 
     private boolean isOnWifi() {
-        final Context context = App.getContext();
+        final Context context = getContext();
         final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return !ConnectivityManagerCompat.isActiveNetworkMetered(cm);
     }
@@ -162,24 +205,8 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
     }
 
 
-    private void reportSyncToAnalytics(final long lastSync) {
-        final long now = System.currentTimeMillis();
-        final Date timeAndDate = new Date(now);
-        final String timeAndDateString = timeAndDate.toString();
-
-        try {
-            final Date lastTimeAndDate = new Date(lastSync);
-            final String lastTimeAndDateString = lastTimeAndDate.toString();
-            Analytics.report(TAG).setExtra(Constants.LAST_SYNC, lastTimeAndDateString)
-                    .setExtra(Constants.TIME, timeAndDateString)
-                    .sendEvent(Constants.SYNC, Constants.PERIODIC_SYNC);
-        } catch (final GooglePlayServicesUnavailableException e) {
-            Log.w(TAG, "Unable to report sync to analytics", e);
-        }
-
-        final Editor editor = Settings.edit(CNAME);
-        editor.putLong(KEY_LAST_SYNC, now);
-        editor.apply();
+    private void sendAnalyticsEvent(final Event event) throws GooglePlayServicesUnavailableException {
+        event.sendEvent(Constants.SYNC, Constants.PERIODIC_SYNC);
     }
 
 

@@ -108,6 +108,7 @@
     </style>
 
     <style name="settings_subtitle" parent="settings_text">
+        <item name="android:layout_marginTop">2dp</item>
         <item name="android:textSize">16sp</item>
     </style>
 

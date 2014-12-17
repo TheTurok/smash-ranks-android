@@ -3,7 +3,7 @@ package com.garpr.android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -298,6 +299,17 @@ public class RankingsActivity extends BaseListActivity implements
     private final class RankingsAdapter extends BaseListAdapter<ViewHolder> {
 
 
+        private final int mBgHighlight;
+        private final int mBgTransparent;
+
+
+        private RankingsAdapter() {
+            final Resources resources = getResources();
+            mBgHighlight = resources.getColor(R.color.overlay_bright);
+            mBgTransparent = resources.getColor(R.color.transparent);
+        }
+
+
         @Override
         public int getItemCount() {
             return mPlayersShown.size();
@@ -313,9 +325,9 @@ public class RankingsActivity extends BaseListActivity implements
 
             if (mInUsersRegion && mUserPlayer != null) {
                 if (player.equals(mUserPlayer)) {
-                    holder.mName.setTypeface(Typeface.DEFAULT_BOLD);
+                    holder.mRoot.setBackgroundColor(mBgHighlight);
                 } else {
-                    holder.mName.setTypeface(Typeface.DEFAULT);
+                    holder.mRoot.setBackgroundColor(mBgTransparent);
                 }
             }
         }
@@ -371,6 +383,7 @@ public class RankingsActivity extends BaseListActivity implements
     private static final class ViewHolder extends RecyclerView.ViewHolder {
 
 
+        private final FrameLayout mRoot;
         private final TextView mName;
         private final TextView mRank;
         private final TextView mRating;
@@ -378,6 +391,7 @@ public class RankingsActivity extends BaseListActivity implements
 
         private ViewHolder(final View view) {
             super(view);
+            mRoot = (FrameLayout) view.findViewById(R.id.model_player_root);
             mRank = (TextView) view.findViewById(R.id.model_player_rank);
             mName = (TextView) view.findViewById(R.id.model_player_name);
             mRating = (TextView) view.findViewById(R.id.model_player_rating);

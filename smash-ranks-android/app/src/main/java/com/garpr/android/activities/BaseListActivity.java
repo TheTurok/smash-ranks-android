@@ -69,6 +69,13 @@ abstract class BaseListActivity extends BaseActivity implements
     }
 
 
+    protected void notifyItemChanged(final int position) {
+        if (mAdapter != null) {
+            mAdapter.notifyItemChanged(position);
+        }
+    }
+
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -16,6 +17,7 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
+import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
@@ -28,6 +30,7 @@ public class SettingsActivity extends BaseActivity {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
+    private LinearLayout mAuthor;
     private LinearLayout mPlayer;
     private LinearLayout mRegion;
     private LinearLayout mSync;
@@ -47,6 +50,7 @@ public class SettingsActivity extends BaseActivity {
 
 
     private void findViews() {
+        mAuthor = (LinearLayout) findViewById(R.id.activity_settings_author);
         mPlayer = (LinearLayout) findViewById(R.id.activity_settings_player);
         mPlayerName = (TextView) findViewById(R.id.activity_settings_player_name);
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
@@ -125,7 +129,16 @@ public class SettingsActivity extends BaseActivity {
             mPlayer.setVisibility(View.VISIBLE);
         }
 
-        mVersion.setText(getString(R.string.x_y, App.getVersionName(), App.getVersionCode()));
+        mVersion.setText(getString(R.string.x_build_y, App.getVersionName(), App.getVersionCode()));
+
+        mAuthor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(Constants.AUTHOR_URL));
+                startActivity(intent);
+            }
+        });
     }
 
 

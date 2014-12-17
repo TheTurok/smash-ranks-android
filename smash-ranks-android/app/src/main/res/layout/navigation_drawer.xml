@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/bg_window"
     android:elevation="@dimen/root_padding_fourth"
@@ -9,7 +9,7 @@
     tools:ignore="Overdraw,UnusedAttribute"
     style="@style/navigation_drawer">
     <ScrollView
-        android:fillViewport="true"
+        android:id="@+id/navigation_drawer_list"
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
         <LinearLayout
@@ -78,13 +78,20 @@
                 style="@style/navigation_drawer_item.about" />
         </LinearLayout>
     </ScrollView>
+    <View
+        android:id="@+id/navigation_drawer_buffer"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/navigation_drawer_list"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
 
     <!-- the below view's height is changed dynamically within BaseActivity -->
     <View
         android:background="@color/overlay_dark"
         android:id="@+id/navigation_drawer_overlay"
+        android:layout_alignParentTop="true"
         android:layout_height="24dp"
         android:layout_width="match_parent"
         android:visibility="gone"
         tools:visibility="visible" />
-</FrameLayout>
+</RelativeLayout>

@@ -161,7 +161,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     @Override
     protected void onItemClick(final View view, final int position) {
         mSelectedPlayer = mPlayersShown.get(position);
-        notifyDatasetChanged();
+        notifyDataSetChanged();
 
         findToolbarItems();
         mGo.setEnabled(true);
@@ -171,7 +171,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     @Override
     public boolean onMenuItemActionCollapse(final MenuItem item) {
         mPlayersShown = mPlayers;
-        notifyDatasetChanged();
+        notifyDataSetChanged();
         return true;
     }
 
@@ -238,10 +238,10 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
         if (mPlayers != null && !mPlayers.isEmpty()) {
             outState.putParcelableArrayList(KEY_PLAYERS, mPlayers);
-        }
 
-        if (mSelectedPlayer != null) {
-            outState.putParcelable(KEY_SELECTED_PLAYER, mSelectedPlayer);
+            if (mSelectedPlayer != null) {
+                outState.putParcelable(KEY_SELECTED_PLAYER, mSelectedPlayer);
+            }
         }
     }
 
@@ -345,7 +345,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         @SuppressWarnings("unchecked")
         protected void publishResults(final CharSequence constraint, final FilterResults results) {
             mPlayersShown = (ArrayList<Player>) results.values;
-            notifyDatasetChanged();
+            notifyDataSetChanged();
         }
 
 

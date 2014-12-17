@@ -6,25 +6,25 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.App;
+import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 
 
 final class Network {
 
 
-    private static final String BASE_URL = "http://api.garpr.com";
     private static final String TAG = Network.class.getSimpleName();
 
 
 
 
     static String makeUrl(final String suffix) {
-        return BASE_URL + '/' + Settings.getRegion().getId() + '/' + suffix;
+        return Constants.API_URL + '/' + Settings.getRegion().getId() + '/' + suffix;
     }
 
 
     static String makeRegionFreeUrl(final String suffix) {
-        return BASE_URL + '/' + suffix;
+        return Constants.API_URL + '/' + suffix;
     }
 
 

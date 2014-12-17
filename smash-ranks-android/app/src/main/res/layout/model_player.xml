@@ -1,44 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/selectableItemBackground"
+    android:background="@color/overlay_bright"
+    android:id="@+id/model_player_root"
     tools:ignore="Overdraw"
-    style="@style/list_item_root">
-    <TextView
-        android:id="@+id/model_player_rank"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:textSize="14sp"
-        tools:ignore="RelativeOverlap"
-        tools:text="1" />
-    <TextView
-        android:id="@+id/model_player_rating"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:textSize="14sp"
-        tools:text="30.102"
-        style="@style/gravity_end" />
-    <TextView
-        android:ellipsize="end"
-        android:gravity="center_vertical"
-        android:id="@+id/model_player_name"
-        android:layout_centerVertical="true"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/root_padding_half"
-        android:layout_marginRight="@dimen/root_padding_half"
-        android:layout_toEndOf="@id/model_player_rank"
-        android:layout_toLeftOf="@id/model_player_rating"
-        android:layout_toRightOf="@id/model_player_rank"
-        android:layout_toStartOf="@id/model_player_rating"
-        android:layout_width="0dp"
-        android:lineSpacingExtra="2dp"
-        android:maxLines="3"
-        android:textSize="20sp"
-        tools:text="Shroomed" />
-</RelativeLayout>
+    style="@style/list_item_root.no_padding">
+    <RelativeLayout
+        android:background="?attr/selectableItemBackground"
+        style="@style/list_item_root">
+        <TextView
+            android:id="@+id/model_player_rank"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            tools:ignore="RelativeOverlap"
+            tools:text="1" />
+        <TextView
+            android:id="@+id/model_player_rating"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            tools:text="30.102"
+            style="@style/gravity_end" />
+        <TextView
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:id="@+id/model_player_name"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/root_padding_half"
+            android:layout_marginRight="@dimen/root_padding_half"
+            android:layout_toEndOf="@id/model_player_rank"
+            android:layout_toLeftOf="@id/model_player_rating"
+            android:layout_toRightOf="@id/model_player_rank"
+            android:layout_toStartOf="@id/model_player_rating"
+            android:layout_width="0dp"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="3"
+            android:textSize="20sp"
+            tools:text="Shroomed" />
+    </RelativeLayout>
+</FrameLayout>

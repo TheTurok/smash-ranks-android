@@ -15,9 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.garpr.android.App;
@@ -47,7 +48,7 @@ abstract class BaseActivity extends ActionBarActivity implements
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean mIsAlive;
     private DrawerLayout mDrawerLayout;
-    private FrameLayout mDrawerContents;
+    private RelativeLayout mDrawerContents;
     private TextView mDrawerAbout;
     private TextView mDrawerRankings;
     private TextView mDrawerSettings;
@@ -55,6 +56,7 @@ abstract class BaseActivity extends ActionBarActivity implements
     private TextView mDrawerUserName;
     private TextView mDrawerUserRegion;
     private Toolbar mToolbar;
+    private View mDrawerBuffer;
     private View mDrawerOverlay;
 
 
@@ -67,7 +69,8 @@ abstract class BaseActivity extends ActionBarActivity implements
 
     private void findViews() {
         mDrawerAbout = (TextView) findViewById(R.id.navigation_drawer_about);
-        mDrawerContents = (FrameLayout) findViewById(R.id.navigation_drawer);
+        mDrawerBuffer = findViewById(R.id.navigation_drawer_buffer);
+        mDrawerContents = (RelativeLayout) findViewById(R.id.navigation_drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerOverlay = findViewById(R.id.navigation_drawer_overlay);
         mDrawerRankings = (TextView) findViewById(R.id.navigation_drawer_rankings);
@@ -159,6 +162,13 @@ abstract class BaseActivity extends ActionBarActivity implements
                 }
             });
         }
+
+        mDrawerBuffer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View v, final MotionEvent event) {
+                return true;
+            }
+        });
 
         mDrawerAbout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -357,10 +367,12 @@ abstract class BaseActivity extends ActionBarActivity implements
             mDrawerToggle.syncState();
         }
 
-        try {
-            Analytics.report(getActivityName()).sendScreenView();
-        } catch (final GooglePlayServicesUnavailableException e) {
-            Log.w(TAG, "Unable to report screen view to analytics", e);
+        if (reportToAnalytics()) {
+            try {
+                Analytics.report(getActivityName()).sendScreenView();
+            } catch (final GooglePlayServicesUnavailableException e) {
+                Log.w(TAG, "Unable to report screen view to analytics", e);
+            }
         }
     }
 
@@ -381,6 +393,11 @@ abstract class BaseActivity extends ActionBarActivity implements
         if (isNavigationDrawerEnabled()) {
             updateDrawerRegion();
         }
+    }
+
+
+    protected boolean reportToAnalytics() {
+        return true;
     }
 
 

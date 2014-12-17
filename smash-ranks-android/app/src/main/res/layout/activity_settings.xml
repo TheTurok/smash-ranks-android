@@ -55,12 +55,19 @@
                     style="@style/settings_container.disabled">
                     <TextView
                         android:id="@+id/activity_settings"
-                        android:text="@string/version"
+                        android:text="@string/version_information"
                         style="@style/settings_title" />
                     <TextView
                         android:id="@+id/activity_settings_version"
-                        tools:text="1.0 (1)"
+                        tools:text="1.0 (build 1)"
                         style="@style/settings_subtitle" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/activity_settings_author"
+                    style="@style/settings_container">
+                    <TextView
+                        android:text="@string/app_by_charles_madere"
+                        style="@style/settings_title" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

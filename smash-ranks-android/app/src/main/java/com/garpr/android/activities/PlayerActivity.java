@@ -4,6 +4,7 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
@@ -52,8 +53,10 @@ public class PlayerActivity extends BaseListActivity implements
     private ArrayList<ListItem> mListItemsShown;
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
+    private Intent mShareIntent;
     private MatchesFilter mFilter;
     private MenuItem mSearchItem;
+    private MenuItem mShare;
     private MenuItem mShowAll;
     private MenuItem mShowLoses;
     private MenuItem mShowWins;
@@ -171,6 +174,7 @@ public class PlayerActivity extends BaseListActivity implements
     protected void onDrawerClosed() {
         if (!isLoading()) {
             mSearchItem.setVisible(true);
+            mShare.setVisible(true);
             mShowAll.setVisible(true);
             mShowLoses.setVisible(true);
             mShowWins.setVisible(true);
@@ -182,6 +186,7 @@ public class PlayerActivity extends BaseListActivity implements
     protected void onDrawerOpened() {
         MenuItemCompat.collapseActionView(mSearchItem);
         mSearchItem.setVisible(false);
+        mShare.setVisible(false);
         mShowAll.setVisible(false);
         mShowLoses.setVisible(false);
         mShowWins.setVisible(false);
@@ -205,6 +210,10 @@ public class PlayerActivity extends BaseListActivity implements
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.activity_player_menu_share:
+                share();
+                break;
+
             case R.id.activity_player_menu_show_all:
                 mShowAll.setEnabled(false);
                 mShowLoses.setEnabled(true);
@@ -238,6 +247,7 @@ public class PlayerActivity extends BaseListActivity implements
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         mSearchItem = menu.findItem(R.id.activity_player_menu_search);
+        mShare = menu.findItem(R.id.activity_player_menu_share);
         mShowAll = menu.findItem(R.id.activity_player_menu_show_all);
         mShowLoses = menu.findItem(R.id.activity_player_menu_show_loses);
         mShowWins = menu.findItem(R.id.activity_player_menu_show_wins);
@@ -249,6 +259,7 @@ public class PlayerActivity extends BaseListActivity implements
 
         if (mSetMenuItemsVisible) {
             mSearchItem.setVisible(true);
+            mShare.setVisible(true);
             mShowAll.setVisible(true);
             mShowLoses.setVisible(true);
             mShowWins.setVisible(true);
@@ -303,14 +314,26 @@ public class PlayerActivity extends BaseListActivity implements
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
-        if (mSearchItem == null || mShowAll == null || mShowLoses == null || mShowWins == null) {
+        if (mSearchItem == null || mShare == null || mShowAll == null || mShowLoses == null || mShowWins == null) {
             mSetMenuItemsVisible = true;
         } else {
             mSearchItem.setVisible(true);
+            mShare.setVisible(true);
             mShowAll.setVisible(true);
             mShowLoses.setVisible(true);
             mShowWins.setVisible(true);
         }
+    }
+
+
+    private void share() {
+        if (mShareIntent == null) {
+            mShareIntent = new Intent(Intent.ACTION_VIEW);
+            mShareIntent.setData(Uri.parse(mPlayer.getProfileUrl()));
+            mShareIntent = Intent.createChooser(mShareIntent, getString(R.string.share_to_));
+        }
+
+        startActivity(mShareIntent);
     }
 
 

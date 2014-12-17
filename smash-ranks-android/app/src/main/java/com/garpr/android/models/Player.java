@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
 
 import org.json.JSONArray;
@@ -25,6 +26,7 @@ public class Player implements Parcelable {
     private int rank;
     private String id;
     private String name;
+    private String profileUrl;
 
 
 
@@ -70,6 +72,7 @@ public class Player implements Parcelable {
         rank = source.readInt();
         id = source.readString();
         name = source.readString();
+        profileUrl = source.readString();
     }
 
 
@@ -112,6 +115,17 @@ public class Player implements Parcelable {
 
     public float getRating() {
         return rating;
+    }
+
+
+    public String getProfileUrl() {
+        if (profileUrl == null) {
+            final Region region = Settings.getRegion();
+            final String regionName = region.getName();
+            profileUrl = Constants.WEB_URL + regionName + '/' + Constants.PLAYERS + '/' + id;
+        }
+
+        return profileUrl;
     }
 
 
@@ -208,6 +222,7 @@ public class Player implements Parcelable {
         dest.writeInt(rank);
         dest.writeString(id);
         dest.writeString(name);
+        dest.writeString(profileUrl);
     }
 
 

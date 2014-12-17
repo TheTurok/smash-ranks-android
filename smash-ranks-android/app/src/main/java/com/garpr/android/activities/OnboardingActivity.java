@@ -39,6 +39,7 @@ public class OnboardingActivity extends BaseActivity implements
 
     private AlertDialog mGoDialog;
     private AlertDialog mSkipDialog;
+    private boolean mReportToAnalytics;
     private NonSwipeableViewPager mPager;
     private PlayersFragment mPlayersFragment;
     private Region mSelectedRegion;
@@ -159,8 +160,10 @@ public class OnboardingActivity extends BaseActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mReportToAnalytics = true;
 
         if (onboardingCompleted()) {
+            mReportToAnalytics = false;
             RankingsActivity.start(this);
             finish();
         } else {
@@ -252,6 +255,14 @@ public class OnboardingActivity extends BaseActivity implements
     private void prepareViews() {
         mPager.setAdapter(new OnboardingFragmentAdapter());
     }
+
+
+    @Override
+    protected boolean reportToAnalytics() {
+        return mReportToAnalytics;
+    }
+
+
 
 
     private final class OnboardingFragmentAdapter extends FragmentPagerAdapter {

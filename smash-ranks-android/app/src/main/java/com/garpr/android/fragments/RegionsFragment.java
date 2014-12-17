@@ -30,6 +30,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     private static final String KEY_LOAD_USER_REGION = "KEY_LOAD_USER_REGION";
+    private static final String KEY_SELECTED_POSITION = "KEY_SELECTED_POSITION";
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
     private static final String KEY_SHOW_TOOLBAR = "KEY_SHOW_TOOLBAR";
     private static final String TAG = RegionsFragment.class.getSimpleName();
@@ -38,6 +39,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
     private ArrayList<Region> mRegions;
     private boolean mLoadUserRegion;
     private boolean mShowToolbar;
+    private int mSelectedPosition;
     private MenuItem mNext;
     private Region mSelectedRegion;
     private RegionClickListener mRegionClickListener;
@@ -126,6 +128,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mSelectedPosition = savedInstanceState.getInt(KEY_SELECTED_POSITION, 0);
             mSelectedRegion = savedInstanceState.getParcelable(KEY_SELECTED_REGION);
         }
 
@@ -153,8 +156,13 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
     @Override
     protected void onItemClick(final View view, final int position) {
-        mSelectedRegion = mRegions.get(position);
-        notifyDatasetChanged();
+        if (mSelectedRegion != null) {
+            notifyItemChanged(mSelectedPosition);
+        }
+
+        mSelectedPosition = position;
+        mSelectedRegion = mRegions.get(mSelectedPosition);
+        notifyItemChanged(mSelectedPosition);
 
         if (mRegionClickListener != null) {
             mRegionClickListener.onRegionClick(mSelectedRegion);
@@ -200,6 +208,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
         super.onSaveInstanceState(outState);
 
         if (mSelectedRegion != null) {
+            outState.putInt(KEY_SELECTED_POSITION, mSelectedPosition);
             outState.putParcelable(KEY_SELECTED_REGION, mSelectedRegion);
         }
     }

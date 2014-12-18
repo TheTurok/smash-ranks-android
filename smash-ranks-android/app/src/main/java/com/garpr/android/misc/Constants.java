@@ -4,6 +4,8 @@ package com.garpr.android.misc;
 public final class Constants {
 
 
+    public static final int TWITTER_LENGTH = 140;
+
     public static final String ABOUT_URL = "http://www.garpr.com/#/about";
     public static final String API_URL = "http://api.garpr.com";
     public static final String AUTHOR_URL = "https://twitter.com/scootrnova";
@@ -25,6 +27,7 @@ public final class Constants {
     public static final String MATCH = "match";
     public static final String MATCHES = "matches";
     public static final String MESSAGE = "message";
+    public static final String MIMETYPE_TEXT_PLAIN = "text/plain";
     public static final String NAME = "name";
     public static final String NETWORK_EXCEPTION = "network_exception";
     public static final String NEW_ROSTER = "new_roster";
@@ -46,6 +49,7 @@ public final class Constants {
     public static final String ROSTER_DATE_FORMAT = "yyyy-MM-dd kk:mm:ss.SSSSSS";
     public static final String SAME_ROSTER = "same_roster";
     public static final String SETTINGS = "settings";
+    public static final String SHARE = "share";
     public static final String SKIPPED = "skipped";
     public static final String STATUS = "status";
     public static final String SYNC = "sync";

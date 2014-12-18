@@ -11,7 +11,7 @@
     <item
         android:icon="@drawable/ic_sort"
         android:id="@+id/activity_rankings_menu_sort"
-        android:title="@string/sort"
+        android:title="@string/sort_"
         android:visible="false"
         compat:showAsAction="ifRoom">
         <menu>

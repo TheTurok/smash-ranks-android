@@ -22,6 +22,7 @@ import com.garpr.android.data.Tournaments.TournamentsCallback;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ public class TournamentsActivity extends BaseListActivity implements
 
     private ArrayList<Tournament> mTournaments;
     private ArrayList<Tournament> mTournamentsShown;
-    private boolean mSetSearchItemVisible;
-    private MenuItem mSearchItem;
+    private boolean mSetSearchVisible;
+    private MenuItem mSearch;
     private TournamentsFilter mFilter;
 
 
@@ -116,15 +117,15 @@ public class TournamentsActivity extends BaseListActivity implements
     @Override
     protected void onDrawerClosed() {
         if (!isLoading()) {
-            mSearchItem.setVisible(true);
+            Utils.showMenuItems(mSearch);
         }
     }
 
 
     @Override
     protected void onDrawerOpened() {
-        MenuItemCompat.collapseActionView(mSearchItem);
-        mSearchItem.setVisible(false);
+        MenuItemCompat.collapseActionView(mSearch);
+        Utils.hideMenuItems(mSearch);
     }
 
 
@@ -144,16 +145,16 @@ public class TournamentsActivity extends BaseListActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        mSearchItem = menu.findItem(R.id.activity_tournaments_menu_search);
-        MenuItemCompat.setOnActionExpandListener(mSearchItem, this);
+        mSearch = menu.findItem(R.id.activity_tournaments_menu_search);
+        MenuItemCompat.setOnActionExpandListener(mSearch, this);
 
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearch);
         searchView.setQueryHint(getString(R.string.search_tournaments));
         searchView.setOnQueryTextListener(this);
 
-        if (mSetSearchItemVisible) {
-            mSearchItem.setVisible(true);
-            mSetSearchItemVisible = true;
+        if (mSetSearchVisible) {
+            Utils.showMenuItems(mSearch);
+            mSetSearchVisible = false;
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -178,7 +179,7 @@ public class TournamentsActivity extends BaseListActivity implements
         super.onRefresh();
 
         if (!isLoading()) {
-            MenuItemCompat.collapseActionView(mSearchItem);
+            MenuItemCompat.collapseActionView(mSearch);
             Tournaments.clear();
             fetchTournaments();
         }
@@ -192,10 +193,10 @@ public class TournamentsActivity extends BaseListActivity implements
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
-        if (mSearchItem == null) {
-            mSetSearchItemVisible = true;
+        if (Utils.areAnyMenuItemsNull(mSearch)) {
+            mSetSearchVisible = true;
         } else {
-            mSearchItem.setVisible(true);
+            Utils.showMenuItems(mSearch);
         }
     }
 

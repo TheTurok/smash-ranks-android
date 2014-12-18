@@ -28,6 +28,7 @@ import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
@@ -47,9 +48,9 @@ public class RankingsActivity extends BaseListActivity implements
     private ArrayList<Player> mPlayersShown;
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
-    private Comparator<Player> mSort;
-    private MenuItem mSearchItem;
-    private MenuItem mSortItem;
+    private Comparator<Player> mOrder;
+    private MenuItem mSearch;
+    private MenuItem mSort;
     private MenuItem mSortAlphabetical;
     private MenuItem mSortRank;
     private Player mUserPlayer;
@@ -84,11 +85,11 @@ public class RankingsActivity extends BaseListActivity implements
 
             @Override
             public void response(final ArrayList<Player> list) {
-                if (mSort == null) {
-                    mSort = Player.RANK_ORDER;
+                if (mOrder == null) {
+                    mOrder = Player.RANK_ORDER;
                 }
 
-                Collections.sort(list, mSort);
+                Collections.sort(list, mOrder);
                 mPlayers = list;
                 mPlayersShown = list;
                 setAdapter(new RankingsAdapter());
@@ -157,17 +158,15 @@ public class RankingsActivity extends BaseListActivity implements
     @Override
     protected void onDrawerClosed() {
         if (!isLoading()) {
-            mSearchItem.setVisible(true);
-            mSortItem.setVisible(true);
+            Utils.showMenuItems(mSearch, mSort);
         }
     }
 
 
     @Override
     protected void onDrawerOpened() {
-        MenuItemCompat.collapseActionView(mSearchItem);
-        mSearchItem.setVisible(false);
-        mSortItem.setVisible(false);
+        MenuItemCompat.collapseActionView(mSearch);
+        Utils.hideMenuItems(mSearch, mSort);
     }
 
 
@@ -196,11 +195,11 @@ public class RankingsActivity extends BaseListActivity implements
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_rankings_menu_sort_alphabetical:
-                sort(Player.ALPHABETICAL_ORDER);
+                order(Player.ALPHABETICAL_ORDER);
                 break;
 
             case R.id.activity_rankings_menu_sort_rank:
-                sort(Player.RANK_ORDER);
+                order(Player.RANK_ORDER);
                 break;
 
             default:
@@ -213,20 +212,18 @@ public class RankingsActivity extends BaseListActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        mSearchItem = menu.findItem(R.id.activity_rankings_menu_search);
-        MenuItemCompat.setOnActionExpandListener(mSearchItem, this);
+        mSearch = menu.findItem(R.id.activity_rankings_menu_search);
+        mSort = menu.findItem(R.id.activity_rankings_menu_sort);
+        mSortAlphabetical = menu.findItem(R.id.activity_rankings_menu_sort_alphabetical);
+        mSortRank = menu.findItem(R.id.activity_rankings_menu_sort_rank);
+        MenuItemCompat.setOnActionExpandListener(mSearch, this);
 
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearch);
         searchView.setQueryHint(getString(R.string.search_players));
         searchView.setOnQueryTextListener(this);
 
-        mSortItem = menu.findItem(R.id.activity_rankings_menu_sort);
-        mSortAlphabetical = menu.findItem(R.id.activity_rankings_menu_sort_alphabetical);
-        mSortRank = menu.findItem(R.id.activity_rankings_menu_sort_rank);
-
         if (mSetMenuItemsVisible) {
-            mSearchItem.setVisible(true);
-            mSortItem.setVisible(true);
+            Utils.showMenuItems(mSearch, mSort);
             mSetMenuItemsVisible = false;
         }
 
@@ -252,7 +249,7 @@ public class RankingsActivity extends BaseListActivity implements
         super.onRefresh();
 
         if (!isLoading()) {
-            MenuItemCompat.collapseActionView(mSearchItem);
+            MenuItemCompat.collapseActionView(mSearch);
             Players.clear();
             fetchRankings();
         }
@@ -267,6 +264,17 @@ public class RankingsActivity extends BaseListActivity implements
     }
 
 
+    private void order(final Comparator<Player> order) {
+        mOrder = order;
+        Collections.sort(mPlayers, order);
+        Collections.sort(mPlayersShown, order);
+        notifyDataSetChanged();
+
+        mSortAlphabetical.setEnabled(order != Player.ALPHABETICAL_ORDER);
+        mSortRank.setEnabled(order != Player.RANK_ORDER);
+    }
+
+
     @Override
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
@@ -274,23 +282,11 @@ public class RankingsActivity extends BaseListActivity implements
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
-        if (mSearchItem == null || mSortItem == null) {
+        if (Utils.areAnyMenuItemsNull(mSearch, mSort)) {
             mSetMenuItemsVisible = true;
         } else {
-            mSearchItem.setVisible(true);
-            mSortItem.setVisible(true);
+            Utils.showMenuItems(mSearch, mSort);
         }
-    }
-
-
-    private void sort(final Comparator<Player> sort) {
-        mSort = sort;
-        Collections.sort(mPlayers, sort);
-        Collections.sort(mPlayersShown, sort);
-        notifyDataSetChanged();
-
-        mSortAlphabetical.setEnabled(sort != Player.ALPHABETICAL_ORDER);
-        mSortRank.setEnabled(sort != Player.RANK_ORDER);
     }
 
 

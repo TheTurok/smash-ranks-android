@@ -4,7 +4,6 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +29,7 @@ import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
@@ -55,8 +55,9 @@ public class PlayerActivity extends BaseListActivity implements
     private boolean mSetMenuItemsVisible;
     private Intent mShareIntent;
     private MatchesFilter mFilter;
-    private MenuItem mSearchItem;
+    private MenuItem mSearch;
     private MenuItem mShare;
+    private MenuItem mShow;
     private MenuItem mShowAll;
     private MenuItem mShowLoses;
     private MenuItem mShowWins;
@@ -101,7 +102,7 @@ public class PlayerActivity extends BaseListActivity implements
         final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when fetching matches for " + mPlayer.toString(), e);
+                Log.e(TAG, "Exception when fetching matches for " + mPlayer, e);
                 showError();
 
                 try {
@@ -173,23 +174,15 @@ public class PlayerActivity extends BaseListActivity implements
     @Override
     protected void onDrawerClosed() {
         if (!isLoading()) {
-            mSearchItem.setVisible(true);
-            mShare.setVisible(true);
-            mShowAll.setVisible(true);
-            mShowLoses.setVisible(true);
-            mShowWins.setVisible(true);
+            Utils.showMenuItems(mSearch, mShare, mShow);
         }
     }
 
 
     @Override
     protected void onDrawerOpened() {
-        MenuItemCompat.collapseActionView(mSearchItem);
-        mSearchItem.setVisible(false);
-        mShare.setVisible(false);
-        mShowAll.setVisible(false);
-        mShowLoses.setVisible(false);
-        mShowWins.setVisible(false);
+        MenuItemCompat.collapseActionView(mSearch);
+        Utils.hideMenuItems(mSearch, mShare, mShow);
     }
 
 
@@ -246,23 +239,20 @@ public class PlayerActivity extends BaseListActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        mSearchItem = menu.findItem(R.id.activity_player_menu_search);
+        mSearch = menu.findItem(R.id.activity_player_menu_search);
         mShare = menu.findItem(R.id.activity_player_menu_share);
+        mShow = menu.findItem(R.id.activity_player_menu_show);
         mShowAll = menu.findItem(R.id.activity_player_menu_show_all);
         mShowLoses = menu.findItem(R.id.activity_player_menu_show_loses);
         mShowWins = menu.findItem(R.id.activity_player_menu_show_wins);
-        MenuItemCompat.setOnActionExpandListener(mSearchItem, this);
+        MenuItemCompat.setOnActionExpandListener(mSearch, this);
 
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearch);
         searchView.setQueryHint(getString(R.string.search_matches));
         searchView.setOnQueryTextListener(this);
 
         if (mSetMenuItemsVisible) {
-            mSearchItem.setVisible(true);
-            mShare.setVisible(true);
-            mShowAll.setVisible(true);
-            mShowLoses.setVisible(true);
-            mShowWins.setVisible(true);
+            Utils.showMenuItems(mSearch, mShare, mShow);
             mSetMenuItemsVisible = false;
         }
 
@@ -288,7 +278,7 @@ public class PlayerActivity extends BaseListActivity implements
         super.onRefresh();
 
         if (!isLoading()) {
-            MenuItemCompat.collapseActionView(mSearchItem);
+            MenuItemCompat.collapseActionView(mSearch);
             fetchMatches();
         }
     }
@@ -313,33 +303,47 @@ public class PlayerActivity extends BaseListActivity implements
         mFilter = new MatchesFilter();
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
-
-        if (mSearchItem == null || mShare == null || mShowAll == null || mShowLoses == null || mShowWins == null) {
+        if (Utils.areAnyMenuItemsNull(mSearch, mShare, mShow)) {
             mSetMenuItemsVisible = true;
         } else {
-            mSearchItem.setVisible(true);
-            mShare.setVisible(true);
-            mShowAll.setVisible(true);
-            mShowLoses.setVisible(true);
-            mShowWins.setVisible(true);
+            Utils.showMenuItems(mSearch, mShare, mShow);
         }
     }
 
 
     private void share() {
         if (mShareIntent == null) {
-            mShareIntent = new Intent(Intent.ACTION_VIEW);
-            mShareIntent.setData(Uri.parse(mPlayer.getProfileUrl()));
-            mShareIntent = Intent.createChooser(mShareIntent, getString(R.string.share_to_));
+            String text = getString(R.string.x_is_ranked_y_on_gar_pr_z, mPlayer.getName(),
+                    mPlayer.getRank(), mPlayer.getProfileUrl());
+
+            if (text.length() > Constants.TWITTER_LENGTH) {
+                text = getString(R.string.x_on_gar_pr_y, mPlayer.getName(), mPlayer.getProfileUrl());
+            }
+
+            if (text.length() > Constants.TWITTER_LENGTH) {
+                text = getString(R.string.gar_pr_x, mPlayer.getProfileUrl());
+            }
+
+            if (text.length() > Constants.TWITTER_LENGTH) {
+                text = mPlayer.getProfileUrl();
+            }
+
+            final String title = getString(R.string.x_on_gar_pr, mPlayer.getName());
+            mShareIntent = new Intent(Intent.ACTION_SEND)
+                    .putExtra(Intent.EXTRA_TEXT, text)
+                    .putExtra(Intent.EXTRA_TITLE, title)
+                    .setType(Constants.MIMETYPE_TEXT_PLAIN);
+
+            mShareIntent = Intent.createChooser(mShareIntent, getString(R.string.share_to));
         }
 
         startActivity(mShareIntent);
-    }
 
-
-    @Override
-    protected boolean showDrawerIndicator() {
-        return false;
+        try {
+            Analytics.report(TAG).sendEvent(Constants.SHARE, Constants.PLAYER);
+        } catch (final GooglePlayServicesUnavailableException e) {
+            Log.w(TAG, "Unable to report share to analytics", e);
+        }
     }
 
 
@@ -349,13 +353,13 @@ public class PlayerActivity extends BaseListActivity implements
         for (int i = 0; i < mListItems.size(); ++i) {
             final ListItem listItem = mListItems.get(i);
 
-            if (listItem.isTypeMatch() && listItem.mMatch.getResult() == result) {
+            if (listItem.isMatch() && listItem.mMatch.getResult() == result) {
                 ListItem tournament = null;
 
                 for (int j = i - 1; tournament == null; --j) {
                     final ListItem li = mListItems.get(j);
 
-                    if (li.isTypeTournament()) {
+                    if (li.isTournament()) {
                         tournament = li;
                     }
                 }
@@ -374,27 +378,30 @@ public class PlayerActivity extends BaseListActivity implements
     }
 
 
+    @Override
+    protected boolean showDrawerIndicator() {
+        return false;
+    }
+
+
 
 
     private static final class ListItem {
 
 
-        private static final int LIST_TYPE_MATCH = 0;
-        private static final int LIST_TYPE_TOURNAMENT = 1;
-
-        private final int mListType;
         private Match mMatch;
         private Tournament mTournament;
+        private final Type mType;
 
 
         private ListItem(final Match match) {
-            mListType = LIST_TYPE_MATCH;
+            mType = Type.MATCH;
             mMatch = match;
         }
 
 
         private ListItem(final Tournament tournament) {
-            mListType = LIST_TYPE_TOURNAMENT;
+            mType = Type.TOURNAMENT;
             mTournament = tournament;
         }
 
@@ -408,10 +415,12 @@ public class PlayerActivity extends BaseListActivity implements
             } else if (o instanceof ListItem) {
                 final ListItem li = (ListItem) o;
 
-                if (isTypeMatch() && li.isTypeMatch()) {
+                if (isMatch() && li.isMatch()) {
                     isEqual = mMatch.equals(li.mMatch);
-                } else {
+                } else if (isTournament() && li.isTournament()) {
                     isEqual = mTournament.equals(li.mTournament);
+                } else {
+                    isEqual = false;
                 }
             } else {
                 isEqual = false;
@@ -421,13 +430,33 @@ public class PlayerActivity extends BaseListActivity implements
         }
 
 
-        private boolean isTypeMatch() {
-            return mListType == LIST_TYPE_MATCH;
+        private int getTypeOrdinal() {
+            return mType.ordinal();
         }
 
 
-        private boolean isTypeTournament() {
-            return mListType == LIST_TYPE_TOURNAMENT;
+        private boolean isMatch() {
+            return mType == Type.MATCH;
+        }
+
+
+        private boolean isTournament() {
+            return mType == Type.TOURNAMENT;
+        }
+
+
+        private static enum Type {
+            MATCH, TOURNAMENT;
+
+
+            private static boolean isMatch(final int ordinal) {
+                return MATCH.ordinal() == ordinal;
+            }
+
+
+            private static boolean isTournament(final int ordinal) {
+                return TOURNAMENT.ordinal() == ordinal;
+            }
         }
 
 
@@ -460,7 +489,7 @@ public class PlayerActivity extends BaseListActivity implements
 
         @Override
         public int getItemViewType(final int position) {
-            return mListItemsShown.get(position).mListType;
+            return mListItemsShown.get(position).getTypeOrdinal();
         }
 
 
@@ -468,7 +497,7 @@ public class PlayerActivity extends BaseListActivity implements
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             final ListItem listItem = mListItemsShown.get(position);
 
-            if (listItem.isTypeMatch()) {
+            if (listItem.isMatch()) {
                 final Match match = listItem.mMatch;
                 final MatchViewHolder viewHolder = (MatchViewHolder) holder;
                 viewHolder.mOpponent.setText(match.getOpponentName());
@@ -488,11 +517,13 @@ public class PlayerActivity extends BaseListActivity implements
                         viewHolder.mOpponent.setBackgroundColor(mBgTransparent);
                     }
                 }
-            } else {
+            } else if (listItem.isTournament()) {
                 final Tournament tournament = listItem.mTournament;
                 final TournamentViewHolder viewHolder = (TournamentViewHolder) holder;
                 viewHolder.mDate.setText(tournament.getDate());
                 viewHolder.mName.setText(tournament.getName());
+            } else {
+                throw new RuntimeException("Illegal ListItem Type detected");
             }
         }
 
@@ -503,12 +534,14 @@ public class PlayerActivity extends BaseListActivity implements
             final RecyclerView.ViewHolder holder;
             final LayoutInflater inflater = getLayoutInflater();
 
-            if (viewType == ListItem.LIST_TYPE_MATCH) {
+            if (ListItem.Type.isMatch(viewType)) {
                 final View view = inflater.inflate(R.layout.model_match, parent, false);
                 holder = new MatchViewHolder(view);
-            } else {
+            } else if (ListItem.Type.isTournament(viewType)) {
                 final View view = inflater.inflate(R.layout.separator_tournament, parent, false);
                 holder = new TournamentViewHolder(view);
+            } else {
+                throw new RuntimeException("Illegal ListItem Type detected: " + viewType);
             }
 
             return holder;
@@ -529,7 +562,7 @@ public class PlayerActivity extends BaseListActivity implements
             for (int i = 0; i < mListItems.size(); ++i) {
                 final ListItem match = mListItems.get(i);
 
-                if (match.isTypeMatch()) {
+                if (match.isMatch()) {
                     final String name = match.mMatch.getOpponentName().toLowerCase();
 
                     if (name.contains(query)) {
@@ -542,7 +575,7 @@ public class PlayerActivity extends BaseListActivity implements
                         for (int j = i - 1; tournament == null; --j) {
                             final ListItem li = mListItems.get(j);
 
-                            if (li.isTypeTournament()) {
+                            if (li.isTournament()) {
                                 tournament = li;
                             }
                         }

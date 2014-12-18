@@ -2,6 +2,7 @@ package com.garpr.android.misc;
 
 
 import android.text.TextUtils;
+import android.view.MenuItem;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -10,13 +11,28 @@ import java.io.IOException;
 public final class Utils {
 
 
+    public static boolean areAnyMenuItemsNull(final MenuItem... items) {
+        if (items == null || items.length == 0) {
+            return true;
+        }
+
+        for (final MenuItem item : items) {
+            if (item == null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
     /**
      * Allows you to safely and easily close a bunch of stream-type objects. Note that SQL objects
      * absolutely can't be closed using this method (this is a bug with Android in versions before
      * API 16).
      */
     public static void closeCloseables(final Closeable... closeables) {
-        if (closeables != null && closeables.length != 0) {
+        if (closeables != null && closeables.length >= 1) {
             for (final Closeable closeable : closeables) {
                 if (closeable != null) {
                     try {
@@ -27,6 +43,27 @@ public final class Utils {
                 }
             }
         }
+    }
+
+
+    public static void hideMenuItems(final MenuItem... items) {
+        setMenuItemsVisibility(false, items);
+    }
+
+
+    private static void setMenuItemsVisibility(final boolean visible, final MenuItem... items) {
+        if (items != null && items.length >= 1) {
+            for (final MenuItem item : items) {
+                if (item != null) {
+                    item.setVisible(visible);
+                }
+            }
+        }
+    }
+
+
+    public static void showMenuItems(final MenuItem... items) {
+        setMenuItemsVisibility(true, items);
     }
 
 

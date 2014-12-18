@@ -26,9 +26,9 @@ public final class Regions {
 
 
     public static void clear() {
-        final SQLiteDatabase database = Database.writeTo();
+        final SQLiteDatabase database = Database.start();
         clear(database);
-        database.close();
+        Database.stop();
     }
 
 

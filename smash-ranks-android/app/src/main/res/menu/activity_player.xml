@@ -15,19 +15,22 @@
         android:visible="false"
         compat:showAsAction="ifRoom" />
     <item
-        android:id="@+id/activity_player_menu_show_loses"
-        android:title="@string/show_loses"
+        android:icon="@drawable/ic_sort"
+        android:id="@+id/activity_player_menu_show"
+        android:title="@string/show_"
         android:visible="false"
-        compat:showAsAction="never" />
-    <item
-        android:id="@+id/activity_player_menu_show_wins"
-        android:title="@string/show_wins"
-        android:visible="false"
-        compat:showAsAction="never" />
-    <item
-        android:enabled="false"
-        android:id="@+id/activity_player_menu_show_all"
-        android:title="@string/show_all"
-        android:visible="false"
-        compat:showAsAction="never" />
+        compat:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/activity_player_menu_show_loses"
+                android:title="@string/show_loses" />
+            <item
+                android:id="@+id/activity_player_menu_show_wins"
+                android:title="@string/show_wins" />
+            <item
+                android:enabled="false"
+                android:id="@+id/activity_player_menu_show_all"
+                android:title="@string/show_all" />
+        </menu>
+    </item>
 </menu>

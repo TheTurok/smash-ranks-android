@@ -16,9 +16,7 @@ import android.widget.TextView;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
-import com.garpr.android.data.User;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
 import static android.provider.Settings.ACTION_SYNC_SETTINGS;
@@ -31,10 +29,8 @@ public class SettingsActivity extends BaseActivity {
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
     private LinearLayout mAuthor;
-    private LinearLayout mPlayer;
     private LinearLayout mRegion;
     private LinearLayout mSync;
-    private TextView mPlayerName;
     private TextView mRegionName;
     private TextView mSyncStatus;
     private TextView mVersion;
@@ -51,8 +47,6 @@ public class SettingsActivity extends BaseActivity {
 
     private void findViews() {
         mAuthor = (LinearLayout) findViewById(R.id.activity_settings_author);
-        mPlayer = (LinearLayout) findViewById(R.id.activity_settings_player);
-        mPlayerName = (TextView) findViewById(R.id.activity_settings_player_name);
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
         mSync = (LinearLayout) findViewById(R.id.activity_settings_sync);
@@ -122,12 +116,6 @@ public class SettingsActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
-        if (User.hasPlayer()) {
-            final Player player = User.getPlayer();
-            mPlayerName.setText(player.getName());
-            mPlayer.setVisibility(View.VISIBLE);
-        }
 
         mVersion.setText(getString(R.string.x_build_y, App.getVersionName(), App.getVersionCode()));
 

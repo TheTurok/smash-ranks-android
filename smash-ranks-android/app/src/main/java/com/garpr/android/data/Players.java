@@ -46,9 +46,9 @@ public final class Players {
 
 
     public static void clear() {
-        final SQLiteDatabase database = Database.writeTo();
+        final SQLiteDatabase database = Database.start();
         clear(database);
-        database.close();
+        Database.stop();
     }
 
 
@@ -213,12 +213,12 @@ public final class Players {
 
 
     public static void save(final Player player) {
-        final SQLiteDatabase database = Database.writeTo();
+        final SQLiteDatabase database = Database.start();
         final ContentValues values = createContentValues(player);
         final String whereClause = Constants.ID + " = ?";
         final String[] whereArgs = { player.getId() };
         database.update(getTableName(), values, whereClause, whereArgs);
-        database.close();
+        Database.stop();
     }
 
 

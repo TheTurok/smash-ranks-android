@@ -23,11 +23,17 @@ import java.util.Map;
 public final class Analytics {
 
 
+    private static final Object sTrackerLock;
     private static final String TRACKING_ID = "UA-57286718-1";
 
     private static Tracker sTracker;
 
 
+
+
+    static {
+        sTrackerLock = new Object();
+    }
 
 
     private static int getGooglePlayServicesConnectionCode() {
@@ -36,12 +42,15 @@ public final class Analytics {
     }
 
 
-    private static synchronized Tracker getTracker() throws GooglePlayServicesUnavailableException {
-        if (sTracker == null) {
-            throwIfGooglePlayServicesAreUnavailable();
-            final Context context = App.getContext();
-            final GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
-            sTracker = analytics.newTracker(TRACKING_ID);
+    private static Tracker getTracker() throws GooglePlayServicesUnavailableException {
+        throwIfGooglePlayServicesAreUnavailable();
+
+        synchronized (sTrackerLock) {
+            if (sTracker == null) {
+                final Context context = App.getContext();
+                final GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
+                sTracker = analytics.newTracker(TRACKING_ID);
+            }
         }
 
         return sTracker;
@@ -80,8 +89,7 @@ public final class Analytics {
             this.name = name;
 
             if (BuildConfig.DEBUG) {
-                extras = new HashMap<>();
-                extras.put(Constants.DEBUG, Constants.TRUE);
+                putExtra(Constants.DEBUG, Constants.TRUE);
             }
         }
 
@@ -91,9 +99,15 @@ public final class Analytics {
         }
 
 
-        private void putExtra(final String key, final String value) {
+        private void putExtra(String key, final String value) {
             if (extras == null) {
                 extras = new HashMap<>();
+            }
+
+            // the documentation states that arbitrary extras must be prefixed with '&'
+            // https://developer.android.com/reference/com/google/android/gms/analytics/HitBuilders.HitBuilder.html#set(java.lang.String, java.lang.String)
+            if (key.charAt(0) != '&') {
+                key = '&' + key;
             }
 
             extras.put(key, value);

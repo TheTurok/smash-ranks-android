@@ -3,7 +3,6 @@ package com.garpr.android.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
@@ -18,8 +17,6 @@ import java.util.Comparator;
 
 public class Player implements Parcelable {
 
-
-    private static final String TAG = Player.class.getSimpleName();
 
     private ArrayList<Match> matches;
     private float rating;
@@ -44,13 +41,9 @@ public class Player implements Parcelable {
                 matches = new ArrayList<>(matchesLength);
 
                 for (int i = 0; i < matchesLength; ++i) {
-                    try {
-                        final JSONObject matchJSON = matchesJSON.getJSONObject(i);
-                        final Match match = new Match(matchJSON);
-                        matches.add(match);
-                    } catch (final JSONException e) {
-                        Log.e(TAG, "Exception when building Match at index " + i, e);
-                    }
+                    final JSONObject matchJSON = matchesJSON.getJSONObject(i);
+                    final Match match = new Match(matchJSON);
+                    matches.add(match);
                 }
 
                 if (matches.isEmpty()) {
@@ -121,7 +114,7 @@ public class Player implements Parcelable {
     public String getProfileUrl() {
         if (profileUrl == null) {
             final Region region = Settings.getRegion();
-            final String regionName = region.getName();
+            final String regionName = region.getName().toLowerCase();
             profileUrl = Constants.WEB_URL + regionName + '/' + Constants.PLAYERS + '/' + id;
         }
 

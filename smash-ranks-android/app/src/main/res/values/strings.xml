@@ -24,6 +24,7 @@
     <string name="error_fetching_tournaments">Error fetching tournaments!</string>
     <string name="fetching_regions">Fetching regions…</string>
     <string name="gar_pr">GAR PR</string>
+    <string name="gar_pr_x">GAR PR: %s</string>
     <string name="go">Go</string>
     <string name="go_">Go!</string>
     <string name="hello">Hello</string>
@@ -66,12 +67,14 @@
     <string name="skip">Skip</string>
     <string name="skip_">Skip!</string>
     <string name="share">Share</string>
-    <string name="share_to_">Share to…</string>
+    <string name="share_to">Share to</string>
+    <string name="show">Show</string>
     <string name="show_">Show…</string>
     <string name="show_all">Show All</string>
     <string name="show_loses">Show Loses</string>
     <string name="show_wins">Show Wins</string>
     <string name="sort">Sort</string>
+    <string name="sort_">Sort…</string>
     <string name="sync">Sync</string>
     <string name="syncing">Syncing</string>
     <string name="syncing_can_occur_on_any_data_connection">Syncing can occur on any data connection</string>
@@ -89,6 +92,9 @@
     <string name="win">Win</string>
     <string name="won">Won</string>
     <string name="x_build_y">%1$s (build %2$d)</string>
+    <string name="x_is_ranked_y_on_gar_pr_z">%1$s is ranked %2$d on GAR PR %3$s</string>
+    <string name="x_on_gar_pr">%s on GAR PR</string>
+    <string name="x_on_gar_pr_y">%1$s on GAR PR %2$s</string>
     <string name="x_viewing_y">%1$s (viewing %2$s)</string>
     <string name="yes">Yes</string>
     <string name="youre_x_from_y_ready">You\'re %1$s from %2$s. Ready?</string>

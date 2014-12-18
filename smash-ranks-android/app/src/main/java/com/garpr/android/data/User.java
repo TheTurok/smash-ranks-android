@@ -44,7 +44,7 @@ public final class User {
     }
 
 
-    private static User getUser() {
+    private static synchronized User getUser() {
         if (sUser == null) {
             loadUser();
         }
@@ -58,7 +58,7 @@ public final class User {
     }
 
 
-    private static synchronized void loadUser() {
+    private static void loadUser() {
         sUser = new User();
 
         final SharedPreferences sPreferences = Settings.get(CNAME);

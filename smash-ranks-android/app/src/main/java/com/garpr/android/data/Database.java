@@ -15,11 +15,20 @@ public final class Database extends SQLiteOpenHelper implements
         Settings.OnRegionChangedListener {
 
 
+    private static final int VERSION = 1;
+    private static final Object lock;
     private static final String TAG = Database.class.getSimpleName();
 
-    private static Database sDatabase;
+    private static Database sInstance;
+    private static int sAttachments;
+    private static SQLiteDatabase sDatabase;
 
 
+
+
+    static {
+        lock = new Object();
+    }
 
 
     static void createTable(final SQLiteDatabase database, final String tableName) {
@@ -43,24 +52,45 @@ public final class Database extends SQLiteOpenHelper implements
     public static void initialize() {
         final Context context = App.getContext();
         final String packageName = context.getPackageName();
-        final int version = App.getVersionCode();
-        sDatabase = new Database(context, packageName, version);
-        Settings.addRegionListener(sDatabase);
+        sInstance = new Database(context, packageName);
+        Settings.addRegionListener(sInstance);
     }
 
 
-    static SQLiteDatabase readFrom() {
-        return sDatabase.getReadableDatabase();
+    static SQLiteDatabase start() {
+        synchronized (lock) {
+            ++sAttachments;
+
+            if (sDatabase == null) {
+                sDatabase = sInstance.getWritableDatabase();
+            }
+        }
+
+        return sDatabase;
     }
 
 
-    static SQLiteDatabase writeTo() {
-        return sDatabase.getWritableDatabase();
+    static void stop() {
+        synchronized (lock) {
+            if (sAttachments > 0) {
+                --sAttachments;
+            }
+
+            if (sAttachments <= 0) {
+                sAttachments = 0;
+
+                if (sDatabase != null) {
+                    sDatabase.close();
+                    sDatabase = null;
+                    sInstance.close();
+                }
+            }
+        }
     }
 
 
-    private Database(final Context context, final String name, final int version) {
-        super(context, name, null, version);
+    private Database(final Context context, final String name) {
+        super(context, name, null, VERSION);
     }
 
 
@@ -72,18 +102,16 @@ public final class Database extends SQLiteOpenHelper implements
 
     @Override
     public void onRegionChanged(final Region region) {
-        final SQLiteDatabase database = writeTo();
+        final SQLiteDatabase database = start();
         createTable(database, Players.getTableName());
         createTable(database, Tournaments.getTableName());
-        database.close();
+        stop();
     }
 
 
     @Override
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         Log.d(TAG, "Database being upgraded from " + oldVersion + " to " + newVersion);
-        db.execSQL("DROP TABLE *");
-        onCreate(db);
     }
 
 

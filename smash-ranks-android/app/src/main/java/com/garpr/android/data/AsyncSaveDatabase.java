@@ -32,7 +32,7 @@ abstract class AsyncSaveDatabase<T> extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(final Void... params) {
-        final SQLiteDatabase database = Database.writeTo();
+        final SQLiteDatabase database = Database.start();
         clear(database);
 
         database.beginTransaction();
@@ -43,7 +43,7 @@ abstract class AsyncSaveDatabase<T> extends AsyncTask<Void, Void, Void> {
 
         database.setTransactionSuccessful();
         database.endTransaction();
-        database.close();
+        Database.stop();
 
         Log.d(TAG, "Saved " + mItems.size() + " objects to the " + mTableName + " database");
 

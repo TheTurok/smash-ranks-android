@@ -107,6 +107,26 @@
         <item name="android:alpha">0.6</item>
     </style>
 
+    <style name="settings_section">
+        <item name="android:background">@color/bg_window</item>
+        <item name="android:elevation" tools:ignore="NewApi">@dimen/root_padding_eighth</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/root_padding_half</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">@dimen/root_padding</item>
+    </style>
+
+    <style name="settings_separator">
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-medium</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/root_padding_half</item>
+        <item name="android:layout_marginLeft">@dimen/root_padding</item>
+        <item name="android:layout_marginRight">@dimen/root_padding</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/cyan</item>
+    </style>
+
     <style name="settings_subtitle" parent="settings_text">
         <item name="android:textSize">14sp</item>
     </style>

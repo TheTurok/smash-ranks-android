@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="bg_toolbar">#37474F</color>
     <color name="bg_window">#303030</color>
     <color name="black">#000000</color>
     <color name="blue">#0000FF</color>
-    <color name="cyan">#00FFFF</color>
+    <color name="cyan">#00BCD4</color>
     <color name="gray">#666666</color>
     <color name="gray_dark">#212121</color>
     <color name="green">#00FF00</color>
     <color name="lose_pink">#EC407A</color>
     <color name="magenta">#FF00FF</color>
+    <color name="material">#455A64</color>
     <color name="overlay_bright">#33FFFFFF</color>
     <color name="overlay_dark">#88000000</color>
     <color name="red">#FF0000</color>

@@ -8,79 +8,97 @@
         <include
             layout="@layout/toolbar" />
         <ScrollView
+            android:background="@color/gray_dark"
+            android:fillViewport="true"
             android:layout_height="match_parent"
             android:layout_width="match_parent">
             <LinearLayout
-                android:divider="@drawable/divider_dark"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:showDividers="middle">
+                android:orientation="vertical">
                 <LinearLayout
-                    android:id="@+id/activity_settings_region"
-                    style="@style/settings_container">
+                    style="@style/settings_section">
                     <TextView
-                        android:text="@string/change_region"
-                        style="@style/settings_title" />
-                    <TextView
-                        android:id="@+id/activity_settings_region_name"
-                        tools:text="@string/norcal"
-                        style="@style/settings_subtitle" />
+                        android:text="@string/general"
+                        style="@style/settings_separator" />
+                    <LinearLayout
+                        android:id="@+id/activity_settings_region"
+                        style="@style/settings_container">
+                        <TextView
+                            android:text="@string/change_region"
+                            style="@style/settings_title" />
+                        <TextView
+                            android:id="@+id/activity_settings_region_name"
+                            tools:text="@string/norcal"
+                            style="@style/settings_subtitle" />
+                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/activity_settings_sync"
-                    style="@style/settings_container">
+                    style="@style/settings_section">
                     <TextView
-                        android:text="@string/enable_or_disable_sync"
-                        style="@style/settings_title" />
-                    <TextView
-                        android:id="@+id/activity_settings_sync_status"
-                        tools:text="@string/periodic_sync_is_enabled"
-                        style="@style/settings_subtitle" />
+                        android:text="@string/sync"
+                        style="@style/settings_separator" />
+                    <LinearLayout
+                        android:id="@+id/activity_settings_sync"
+                        style="@style/settings_container">
+                        <TextView
+                            android:text="@string/enable_or_disable_sync"
+                            style="@style/settings_title" />
+                        <TextView
+                            android:id="@+id/activity_settings_sync_status"
+                            tools:text="@string/periodic_sync_is_enabled"
+                            style="@style/settings_subtitle" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/activity_settings_sync_charging"
+                        style="@style/settings_container">
+                        <CheckedTextView
+                            android:checkMark="@drawable/checkbox"
+                            android:id="@+id/activity_settings_sync_charging_label"
+                            android:text="@string/only_sync_when_charging"
+                            style="@style/settings_title" />
+                        <TextView
+                            android:id="@+id/activity_settings_sync_charging_desc"
+                            tools:text="@string/will_only_sync_if_plugged_in"
+                            style="@style/settings_subtitle" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/activity_settings_sync_wifi"
+                        style="@style/settings_container">
+                        <CheckedTextView
+                            android:checkMark="@drawable/checkbox"
+                            android:id="@+id/activity_settings_sync_wifi_label"
+                            android:text="@string/only_sync_on_wifi"
+                            style="@style/settings_title" />
+                        <TextView
+                            android:id="@+id/activity_settings_sync_wifi_desc"
+                            tools:text="@string/will_only_sync_if_connected_to_wifi"
+                            style="@style/settings_subtitle" />
+                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/activity_settings_sync_charging"
-                    style="@style/settings_container">
-                    <CheckedTextView
-                        android:checkMark="@drawable/checkbox"
-                        android:id="@+id/activity_settings_sync_charging_label"
-                        android:text="@string/only_sync_when_charging"
-                        style="@style/settings_title" />
+                    style="@style/settings_section">
                     <TextView
-                        android:id="@+id/activity_settings_sync_charging_desc"
-                        tools:text="@string/will_only_sync_if_plugged_in"
-                        style="@style/settings_subtitle" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/activity_settings_sync_wifi"
-                    style="@style/settings_container">
-                    <CheckedTextView
-                        android:checkMark="@drawable/checkbox"
-                        android:id="@+id/activity_settings_sync_wifi_label"
-                        android:text="@string/only_sync_on_wifi"
-                        style="@style/settings_title" />
-                    <TextView
-                        android:id="@+id/activity_settings_sync_wifi_desc"
-                        tools:text="@string/will_only_sync_if_connected_to_wifi"
-                        style="@style/settings_subtitle" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/activity_settings_author"
-                    style="@style/settings_container">
-                    <TextView
-                        android:text="@string/app_by_charles_madere"
-                        style="@style/settings_title" />
-                </LinearLayout>
-                <LinearLayout
-                    style="@style/settings_container.disabled">
-                    <TextView
-                        android:id="@+id/activity_settings"
-                        android:text="@string/version_information"
-                        style="@style/settings_title" />
-                    <TextView
-                        android:id="@+id/activity_settings_version"
-                        tools:text="1.0 (build 1)"
-                        style="@style/settings_subtitle" />
+                        android:text="@string/miscellaneous"
+                        style="@style/settings_separator" />
+                    <LinearLayout
+                        android:id="@+id/activity_settings_author"
+                        style="@style/settings_container">
+                        <TextView
+                            android:text="@string/app_by_charles_madere"
+                            style="@style/settings_title" />
+                    </LinearLayout>
+                    <LinearLayout
+                        style="@style/settings_container.disabled">
+                        <TextView
+                            android:id="@+id/activity_settings"
+                            android:text="@string/version_information"
+                            style="@style/settings_title" />
+                        <TextView
+                            android:id="@+id/activity_settings_version"
+                            tools:text="1.0 (build 1)"
+                            style="@style/settings_subtitle" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

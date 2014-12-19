@@ -26,6 +26,7 @@
     <string name="fetching_regions">Fetching regions…</string>
     <string name="gar_pr">GAR PR</string>
     <string name="gar_pr_x">GAR PR: %s</string>
+    <string name="general">General</string>
     <string name="go">Go</string>
     <string name="go_">Go!</string>
     <string name="hello">Hello</string>

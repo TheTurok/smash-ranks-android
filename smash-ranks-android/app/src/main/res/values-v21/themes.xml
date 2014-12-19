@@ -8,7 +8,7 @@
     </style>
 
     <style name="app_theme.no_toolbar">
-        <item name="android:statusBarColor">@color/bg_toolbar</item>
+        <item name="android:statusBarColor">@color/material</item>
     </style>
 
 </resources>

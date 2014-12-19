@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="bg_material">#37474F</color>
-    <color name="bg_material_dark">#242F35</color>
-    <color name="bg_statusbar">#263238</color>
     <color name="bg_toolbar">#37474F</color>
     <color name="bg_window">#303030</color>
     <color name="black">#000000</color>

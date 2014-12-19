@@ -4,10 +4,11 @@
     <style name="app_theme" parent="base_theme">
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="app_theme.no_toolbar">
-        <item name="android:statusBarColor">@color/bg_statusbar</item>
+        <item name="android:statusBarColor">@color/bg_toolbar</item>
     </style>
 
 </resources>

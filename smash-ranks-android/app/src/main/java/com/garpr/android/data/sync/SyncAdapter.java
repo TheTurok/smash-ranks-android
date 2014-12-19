@@ -64,14 +64,14 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
         final Resources res = context.getResources();
         final SharedPreferences sPreferences = Settings.getDefault();
 
-        final String keyCharging = res.getString(R.string.sync_preferences_charging);
-        final boolean keyChargingDefault = res.getBoolean(R.bool.sync_preferences_charging_default);
+        final String keyCharging = res.getString(R.string.preferences_sync_charging);
+        final boolean keyChargingDefault = res.getBoolean(R.bool.preferences_sync_charging_default);
         if (sPreferences.getBoolean(keyCharging, keyChargingDefault) && !isCharging()) {
             return false;
         }
 
-        final String keyWifi = res.getString(R.string.sync_preferences_wifi);
-        final boolean keyWifiDefault = res.getBoolean(R.bool.sync_preferences_wifi_default);
+        final String keyWifi = res.getString(R.string.preferences_sync_wifi);
+        final boolean keyWifiDefault = res.getBoolean(R.bool.preferences_sync_wifi_default);
         if (sPreferences.getBoolean(keyWifi, keyWifiDefault) && !isOnWifi()) {
             return false;
         }

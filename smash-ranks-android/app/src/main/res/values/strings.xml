@@ -14,6 +14,7 @@
     <string name="change_sync_settings">Change sync settings</string>
     <string name="clear_cache">Clear cache</string>
     <string name="close_drawer">Close Drawer</string>
+    <string name="enable_or_disable_sync">Enable or disable sync</string>
     <string name="error">Error</string>
     <string name="error_">Error!</string>
     <string name="error_fetching_matches">Error fetching matches!</string>
@@ -34,15 +35,21 @@
     <string name="lose">Lose</string>
     <string name="loss">Loss</string>
     <string name="lost">Lost</string>
+    <string name="misc">Misc</string>
+    <string name="miscellaneous">Miscellaneous</string>
     <string name="newengland">New England</string>
     <string name="next">Next</string>
     <string name="next_">Next!</string>
+    <string name="no">No</string>
     <string name="norcal">Norcal</string>
     <string name="ok">OK</string>
     <string name="okay">Okay</string>
     <string name="only_sync_on_wifi">Only sync on wifi</string>
     <string name="only_sync_when_charging">Only sync when charging</string>
     <string name="open_drawer">Open Drawer</string>
+    <string name="open_source_on_github">Open source on GitHub</string>
+    <string name="periodic_sync_is_disabled">Periodic sync is disabled</string>
+    <string name="periodic_sync_is_enabled">Periodic sync is enabled</string>
     <string name="player">Player</string>
     <string name="players">Players</string>
     <string name="quit">Quit</string>
@@ -77,18 +84,17 @@
     <string name="sort_">Sort…</string>
     <string name="sync">Sync</string>
     <string name="syncing">Syncing</string>
-    <string name="syncing_can_occur_on_any_data_connection">Syncing can occur on any data connection</string>
-    <string name="syncing_can_occur_only_when_connected_to_wifi">Syncing can occur only when connected to wifi</string>
-    <string name="syncing_is_disabled">Syncing is disabled</string>
-    <string name="syncing_is_enabled">Syncing is enabled</string>
+    <string name="syncing_">Syncing…</string>
     <string name="texas">Texas</string>
     <string name="tournament">Tournament</string>
     <string name="tournaments">Tournaments</string>
     <string name="version_information">Version information</string>
     <string name="welcome">Welcome</string>
     <string name="welcome_">Welcome!</string>
-    <string name="will_only_sync_if_plugged_in">Will only sync if plugged in</string>
+    <string name="will_sync_on_any_data_connection">Will sync on any data connection</string>
     <string name="will_sync_regardless_of_being_plugged_in_or_not">Will sync regardless of being plugged in or not</string>
+    <string name="will_only_sync_if_connected_to_wifi">Will only sync if connected to wifi</string>
+    <string name="will_only_sync_if_plugged_in">Will only sync if plugged in</string>
     <string name="win">Win</string>
     <string name="won">Won</string>
     <string name="x_build_y">%1$s (build %2$d)</string>
@@ -99,7 +105,7 @@
     <string name="yes">Yes</string>
     <string name="youre_x_from_y_ready">You\'re %1$s from %2$s. Ready?</string>
 
-    <string name="sync_preferences_charging">sync_preferences_charging</string>
-    <string name="sync_preferences_wifi">sync_preferences_wifi</string>
+    <string name="preferences_sync_charging">preferences_sync_charging</string>
+    <string name="preferences_sync_wifi">preferences_sync_wifi</string>
 
 </resources>

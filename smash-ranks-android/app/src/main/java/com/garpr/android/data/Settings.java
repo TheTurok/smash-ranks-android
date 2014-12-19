@@ -55,15 +55,16 @@ public final class Settings {
             }
 
             final WeakReference<OnRegionChangedListener> reference = new WeakReference<>(listener);
+            int indexOf = sRegionListeners.indexOf(reference);
 
-            if (sRegionListeners.contains(reference)) {
-                Log.d(TAG, "Went to add a RegionListener but it already exists at index "
-                        + sRegionListeners.indexOf(reference) + ". There are "
+            if (indexOf == -1) {
+                sRegionListeners.add(reference);
+                indexOf = sRegionListeners.indexOf(reference);
+                Log.d(TAG, "Added RegionListener at index " + indexOf + ". There are now " +
                         + sRegionListeners.size() + " listener(s).");
             } else {
-                sRegionListeners.add(reference);
-                Log.d(TAG, "Added RegionListener at index " + sRegionListeners.indexOf(reference)
-                        + ". There are now " + sRegionListeners.size() + " listener(s).");
+                Log.d(TAG, "Went to add a RegionListener but it already exists at index "
+                        + indexOf + ". There are " + sRegionListeners.size() + " listener(s).");
             }
         }
     }
@@ -76,6 +77,11 @@ public final class Settings {
 
     public static Editor edit(final String name) {
         return get(name).edit();
+    }
+
+
+    public static Editor editDefault() {
+        return getDefault().edit();
     }
 
 
@@ -114,8 +120,7 @@ public final class Settings {
                     }
                 } else {
                     Log.d(TAG, "Region doesn't exist in SharedPreferences");
-                    sRegion = User.getRegion();
-                    saveRegion(sRegion);
+                    saveRegion(User.getRegion());
                 }
             }
         }

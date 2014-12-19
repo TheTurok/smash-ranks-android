@@ -55,7 +55,15 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     public void clearSelectedPlayer() {
-        mSelectedPlayer = null;
+        if (mPlayers != null && !mPlayers.isEmpty() && mSelectedPlayer != null) {
+            final int indexOf = mPlayers.indexOf(mSelectedPlayer);
+
+            if (indexOf != -1) {
+                notifyItemChanged(indexOf);
+            }
+
+            mSelectedPlayer = null;
+        }
     }
 
 

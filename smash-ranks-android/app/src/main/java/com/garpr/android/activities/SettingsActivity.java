@@ -7,9 +7,13 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,11 +32,18 @@ public class SettingsActivity extends BaseActivity {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
+    private CheckedTextView mSyncChargingLabel;
+    private CheckedTextView mSyncWifiLabel;
+    private Intent mSyncSettingsIntent;
     private LinearLayout mAuthor;
     private LinearLayout mRegion;
     private LinearLayout mSync;
+    private LinearLayout mSyncCharging;
+    private LinearLayout mSyncWifi;
     private TextView mRegionName;
+    private TextView mSyncChargingDesc;
     private TextView mSyncStatus;
+    private TextView mSyncWifiDesc;
     private TextView mVersion;
 
 
@@ -50,7 +61,13 @@ public class SettingsActivity extends BaseActivity {
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
         mSync = (LinearLayout) findViewById(R.id.activity_settings_sync);
+        mSyncCharging = (LinearLayout) findViewById(R.id.activity_settings_sync_charging);
+        mSyncChargingDesc = (TextView) findViewById(R.id.activity_settings_sync_charging_desc);
+        mSyncChargingLabel = (CheckedTextView) findViewById(R.id.activity_settings_sync_charging_label);
         mSyncStatus = (TextView) findViewById(R.id.activity_settings_sync_status);
+        mSyncWifi = (LinearLayout) findViewById(R.id.activity_settings_sync_wifi);
+        mSyncWifiDesc = (TextView) findViewById(R.id.activity_settings_sync_wifi_desc);
+        mSyncWifiLabel = (CheckedTextView) findViewById(R.id.activity_settings_sync_wifi_label);
         mVersion = (TextView) findViewById(R.id.activity_settings_version);
     }
 
@@ -92,7 +109,29 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateSyncStatus();
+        pollSyncStatus();
+    }
+
+
+    private void pollSyncStatus() {
+        // this code was taken from Stack Overflow: http://stackoverflow.com/a/20098676/823952
+        final AccountManager am = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
+        final String packageName = getPackageName();
+        final Account account = am.getAccountsByType(packageName)[0];
+
+        if (ContentResolver.getSyncAutomatically(account, packageName)) {
+            mSyncStatus.setText(R.string.periodic_sync_is_enabled);
+            mSyncCharging.setEnabled(true);
+            mSyncCharging.setAlpha(1f);
+            mSyncWifi.setEnabled(true);
+            mSyncWifi.setAlpha(1f);
+        } else {
+            mSyncStatus.setText(R.string.periodic_sync_is_disabled);
+            mSyncCharging.setEnabled(false);
+            mSyncCharging.setAlpha(0.6f);
+            mSyncWifi.setEnabled(false);
+            mSyncWifi.setAlpha(0.6f);
+        }
     }
 
 
@@ -110,14 +149,59 @@ public class SettingsActivity extends BaseActivity {
         mSync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final Intent intent = new Intent(ACTION_SYNC_SETTINGS);
-                final String[] authorities = { getPackageName() };
-                intent.putExtra(EXTRA_AUTHORITIES, authorities);
-                startActivity(intent);
+                if (mSyncSettingsIntent == null) {
+                    mSyncSettingsIntent = new Intent(ACTION_SYNC_SETTINGS);
+                    final String[] authorities = { getPackageName() };
+                    mSyncSettingsIntent.putExtra(EXTRA_AUTHORITIES, authorities);
+                }
+
+                startActivity(mSyncSettingsIntent);
             }
         });
 
-        mVersion.setText(getString(R.string.x_build_y, App.getVersionName(), App.getVersionCode()));
+        final String syncChargingKey = getString(R.string.preferences_sync_charging);
+        final String syncWifiKey = getString(R.string.preferences_sync_wifi);
+
+        final Resources res = getResources();
+        final boolean syncChargingDefault = res.getBoolean(R.bool.preferences_sync_charging_default);
+        final boolean syncWifiDefault = res.getBoolean(R.bool.preferences_sync_wifi_default);
+
+        final SharedPreferences sPreferences = Settings.getDefault();
+
+        if (sPreferences.getBoolean(syncChargingKey, syncChargingDefault)) {
+            mSyncChargingLabel.setChecked(true);
+            mSyncChargingDesc.setText(R.string.will_only_sync_if_plugged_in);
+        } else {
+            mSyncChargingLabel.setChecked(false);
+            mSyncChargingDesc.setText(R.string.will_sync_regardless_of_being_plugged_in_or_not);
+        }
+
+        if (sPreferences.getBoolean(syncWifiKey, syncWifiDefault)) {
+            mSyncWifiLabel.setChecked(true);
+            mSyncWifiDesc.setText(R.string.will_only_sync_if_connected_to_wifi);
+        } else {
+            mSyncWifiLabel.setChecked(false);
+            mSyncWifiDesc.setText(R.string.will_sync_on_any_data_connection);
+        }
+
+        mSyncCharging.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                toggleCheckPreferenceAndViews(R.string.preferences_sync_charging,
+                        mSyncChargingLabel, mSyncChargingDesc,
+                        R.string.will_only_sync_if_plugged_in,
+                        R.string.will_sync_regardless_of_being_plugged_in_or_not);
+            }
+        });
+
+        mSyncWifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                toggleCheckPreferenceAndViews(R.string.preferences_sync_wifi, mSyncWifiLabel,
+                        mSyncWifiDesc, R.string.will_only_sync_if_connected_to_wifi,
+                        R.string.will_sync_on_any_data_connection);
+            }
+        });
 
         mAuthor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,19 +211,28 @@ public class SettingsActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        final String versionName = App.getVersionName();
+        final int versionCode = App.getVersionCode();
+        mVersion.setText(getString(R.string.x_build_y, versionName, versionCode));
     }
 
 
-    private void updateSyncStatus() {
-        // this code was taken from Stack Overflow: http://stackoverflow.com/a/20098676/823952
-        final AccountManager am = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
-        final String packageName = getPackageName();
-        final Account account = am.getAccountsByType(packageName)[0];
+    private void toggleCheckPreferenceAndViews( final int preferenceskeyId,
+            final CheckedTextView label, final TextView desc, final int onDescStringId,
+            final int offDescStringId) {
+        final Editor editor = Settings.editDefault();
+        final String key = getString(preferenceskeyId);
+        final boolean checked = !label.isChecked();
+        editor.putBoolean(key, checked);
+        editor.apply();
 
-        if (ContentResolver.getSyncAutomatically(account, packageName)) {
-            mSyncStatus.setText(R.string.syncing_is_enabled);
+        label.setChecked(checked);
+
+        if (checked) {
+            desc.setText(onDescStringId);
         } else {
-            mSyncStatus.setText(R.string.syncing_is_disabled);
+            desc.setText(offDescStringId);
         }
     }
 

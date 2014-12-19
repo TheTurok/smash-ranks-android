@@ -84,14 +84,4 @@
         android:layout_below="@id/navigation_drawer_list"
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
-
-    <!-- the below view's height is changed dynamically within BaseActivity -->
-    <View
-        android:background="@color/overlay_dark"
-        android:id="@+id/navigation_drawer_overlay"
-        android:layout_alignParentTop="true"
-        android:layout_height="24dp"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        tools:visibility="visible" />
 </RelativeLayout>

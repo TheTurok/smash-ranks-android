@@ -17,7 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -57,7 +57,6 @@ abstract class BaseActivity extends ActionBarActivity implements
     private TextView mDrawerUserRegion;
     private Toolbar mToolbar;
     private View mDrawerBuffer;
-    private View mDrawerOverlay;
 
 
 
@@ -72,7 +71,6 @@ abstract class BaseActivity extends ActionBarActivity implements
         mDrawerBuffer = findViewById(R.id.navigation_drawer_buffer);
         mDrawerContents = (RelativeLayout) findViewById(R.id.navigation_drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerOverlay = findViewById(R.id.navigation_drawer_overlay);
         mDrawerRankings = (TextView) findViewById(R.id.navigation_drawer_rankings);
         mDrawerSettings = (TextView) findViewById(R.id.navigation_drawer_settings);
         mDrawerTournaments = (TextView) findViewById(R.id.navigation_drawer_tournaments);
@@ -129,15 +127,11 @@ abstract class BaseActivity extends ActionBarActivity implements
 
             if (statusBarHeightResId > 0) {
                 final int statusBarHeight = res.getDimensionPixelSize(statusBarHeightResId);
-                final ViewGroup.MarginLayoutParams p0 = (ViewGroup.MarginLayoutParams) mDrawerContents.getLayoutParams();
-                p0.topMargin = -statusBarHeight;
-
-                final ViewGroup.LayoutParams p1 = mDrawerOverlay.getLayoutParams();
-                p1.height = statusBarHeight;
-                mDrawerOverlay.setVisibility(View.VISIBLE);
+                final MarginLayoutParams params = (MarginLayoutParams) mDrawerContents.getLayoutParams();
+                params.topMargin = -statusBarHeight;
             }
 
-            mDrawerLayout.setStatusBarBackground(R.color.bg_statusbar);
+            mDrawerLayout.setStatusBarBackground(R.color.bg_toolbar);
         }
 
         if (User.hasPlayer()) {

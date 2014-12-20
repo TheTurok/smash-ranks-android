@@ -4,9 +4,12 @@
     android:orientation="horizontal"
     style="@style/root.no_padding">
     <RelativeLayout
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
+        android:background="@color/gray"
+        android:elevation="@dimen/elevation"
+        android:gravity="center_vertical"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        tools:ignore="UnusedAttribute">
         <TextView
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
@@ -33,7 +36,6 @@
             tools:ignore="ContentDescription" />
     </RelativeLayout>
     <com.garpr.android.misc.NonSwipeableViewPager
-        android:background="@color/black"
         android:id="@+id/activity_onboarding_pager"
         android:layout_height="match_parent"
         android:layout_weight="1"

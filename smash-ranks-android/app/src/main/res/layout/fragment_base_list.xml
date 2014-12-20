@@ -2,18 +2,13 @@
 <com.garpr.android.misc.FlexibleSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_base_list_refresh"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    style="@style/root.no_padding">
     <FrameLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_base_list_list"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:scrollbars="vertical"
-            android:visibility="gone"
-            tools:visibility="visible" />
+            style="@style/list" />
         <TextView
             android:id="@+id/fragment_base_list_error"
             tools:visibility="visible"

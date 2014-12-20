@@ -14,11 +14,7 @@
             android:layout_width="match_parent">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_base_list_list"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:scrollbars="vertical"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                style="@style/list" />
             <TextView
                 android:id="@+id/fragment_base_list_error"
                 tools:visibility="visible"
@@ -26,7 +22,7 @@
         </FrameLayout>
     </com.garpr.android.misc.FlexibleSwipeRefreshLayout>
     <android.support.v7.widget.Toolbar
-        android:background="@color/bg_window"
+        android:background="@color/gray"
         app:theme="@style/toolbar_theme"
         style="@style/toolbar" />
 </LinearLayout>

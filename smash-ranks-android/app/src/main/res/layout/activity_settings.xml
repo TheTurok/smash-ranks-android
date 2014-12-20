@@ -8,7 +8,6 @@
         <include
             layout="@layout/toolbar" />
         <ScrollView
-            android:background="@color/gray_dark"
             android:fillViewport="true"
             android:layout_height="match_parent"
             android:layout_width="match_parent">

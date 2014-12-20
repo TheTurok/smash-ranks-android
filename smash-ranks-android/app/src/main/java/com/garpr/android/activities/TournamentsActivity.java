@@ -23,6 +23,7 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.Utils;
+import com.garpr.android.models.Region;
 import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
@@ -183,6 +184,13 @@ public class TournamentsActivity extends BaseListActivity implements
             Tournaments.clear();
             fetchTournaments();
         }
+    }
+
+
+    @Override
+    public void onRegionChanged(final Region region) {
+        super.onRegionChanged(region);
+        fetchTournaments();
     }
 
 

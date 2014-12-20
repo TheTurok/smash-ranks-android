@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.garpr.android.R;
-import com.garpr.android.misc.FadeAnimator;
 import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 
 
@@ -19,23 +18,11 @@ abstract class BaseListFragment extends BaseFragment implements
 
     private BaseListAdapter mAdapter;
     private boolean mIsLoading;
-    private FadeAnimator mErrorAnimator;
-    private FadeAnimator mListAnimator;
     private FlexibleSwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
     private TextView mErrorView;
 
 
-
-
-    private void animateError(final boolean fadeIn) {
-        mErrorAnimator = FadeAnimator.animate(mErrorAnimator, mErrorView, fadeIn);
-    }
-
-
-    private void animateList(final boolean fadeIn) {
-        mListAnimator = FadeAnimator.animate(mListAnimator, mRecyclerView, fadeIn);
-    }
 
 
     protected void findViews() {
@@ -92,7 +79,7 @@ abstract class BaseListFragment extends BaseFragment implements
 
     @Override
     public void onRefresh() {
-        animateError(false);
+        mErrorView.setVisibility(View.GONE);
     }
 
 
@@ -110,10 +97,10 @@ abstract class BaseListFragment extends BaseFragment implements
 
 
     protected void setAdapter(final BaseListAdapter adapter) {
-        animateError(false);
+        mErrorView.setVisibility(View.GONE);
         mAdapter = adapter;
         mRecyclerView.setAdapter(mAdapter);
-        animateList(true);
+        mRecyclerView.setVisibility(View.VISIBLE);
         setLoading(false);
     }
 
@@ -126,8 +113,8 @@ abstract class BaseListFragment extends BaseFragment implements
 
     protected void showError() {
         setLoading(false);
-        animateList(false);
-        animateError(true);
+        mRecyclerView.setVisibility(View.GONE);
+        mErrorView.setVisibility(View.VISIBLE);
     }
 
 

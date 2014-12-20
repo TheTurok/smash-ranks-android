@@ -6,6 +6,7 @@
     </style>
 
     <style name="error">
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-medium</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_centerInParent">true</item>
         <item name="android:layout_gravity">center</item>
@@ -15,12 +16,18 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:lineSpacingExtra">@dimen/root_padding_fourth</item>
         <item name="android:text">@string/error_</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:visibility">gone</item>
     </style>
 
     <style name="gravity_end">
         <item name="android:gravity">right</item>
+    </style>
+
+    <style name="list">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:scrollbars">vertical</item>
     </style>
 
     <style name="list_item_root">
@@ -108,8 +115,8 @@
     </style>
 
     <style name="settings_section">
-        <item name="android:background">@color/bg_window</item>
-        <item name="android:elevation" tools:ignore="NewApi">@dimen/root_padding_eighth</item>
+        <item name="android:background">@color/gray</item>
+        <item name="android:elevation" tools:ignore="NewApi">@dimen/elevation</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/root_padding_half</item>
         <item name="android:layout_width">match_parent</item>
@@ -117,14 +124,17 @@
         <item name="android:paddingTop">@dimen/root_padding</item>
     </style>
 
-    <style name="settings_separator">
-        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-medium</item>
+    <style name="settings_separator_base">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/root_padding_half</item>
         <item name="android:layout_marginLeft">@dimen/root_padding</item>
         <item name="android:layout_marginRight">@dimen/root_padding</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:textColor">@color/cyan</item>
+    </style>
+
+    <style name="settings_separator" parent="settings_separator_base">
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="settings_subtitle" parent="settings_text">
@@ -150,10 +160,11 @@
     </style>
 
     <style name="toolbar">
+        <item name="android:background">@color/material</item>
+        <item name="android:elevation" tools:ignore="NewApi">@dimen/elevation</item>
         <item name="android:id">@id/toolbar</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
 
 </resources>

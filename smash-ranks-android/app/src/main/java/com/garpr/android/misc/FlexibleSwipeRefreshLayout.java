@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.widget.AbsListView;
 
+import com.garpr.android.R;
+
 
 /**
  * An extension of the support library's {@link SwipeRefreshLayout} view that allows for its
@@ -36,6 +38,13 @@ public final class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
 
     public FlexibleSwipeRefreshLayout(final Context context, final AttributeSet attrs) {
         super(context, attrs);
+    }
+
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        setColorSchemeResources(R.color.indigo_dark, R.color.indigo, R.color.indigo_bright);
     }
 
 

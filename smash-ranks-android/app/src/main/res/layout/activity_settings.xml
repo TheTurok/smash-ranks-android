@@ -8,13 +8,15 @@
         <include
             layout="@layout/toolbar" />
         <ScrollView
-            android:fillViewport="true"
             android:layout_height="match_parent"
             android:layout_width="match_parent">
             <LinearLayout
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:orientation="vertical">
+                <View
+                    android:layout_height="@dimen/root_padding_half"
+                    android:layout_width="match_parent" />
                 <LinearLayout
                     style="@style/settings_section">
                     <TextView

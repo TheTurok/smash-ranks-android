@@ -130,7 +130,7 @@
         <item name="android:layout_marginLeft">@dimen/root_padding</item>
         <item name="android:layout_marginRight">@dimen/root_padding</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:textColor">@color/cyan</item>
+        <item name="android:textColor">@color/indigo_bright</item>
     </style>
 
     <style name="settings_separator" parent="settings_separator_base">
@@ -160,7 +160,7 @@
     </style>
 
     <style name="toolbar">
-        <item name="android:background">@color/material</item>
+        <item name="android:background">@color/indigo</item>
         <item name="android:elevation" tools:ignore="NewApi">@dimen/elevation</item>
         <item name="android:id">@id/toolbar</item>
         <item name="android:layout_height">?attr/actionBarSize</item>

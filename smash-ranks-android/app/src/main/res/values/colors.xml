@@ -2,19 +2,20 @@
 <resources>
 
     <color name="black">#000000</color>
-    <color name="blue">#0000FF</color>
-    <color name="cyan">#00BCD4</color>
     <color name="gray">#303030</color>
     <color name="gray_dark">#212121</color>
     <color name="gray_light">#666666</color>
-    <color name="green">#00FF00</color>
+    <color name="indigo">#4C00BE</color>
+    <color name="indigo_bright">#7E66D8</color>
+    <color name="indigo_dark">#3A0091</color>
     <color name="lose_pink">#EC407A</color>
-    <color name="material">#455A64</color>
     <color name="overlay_bright">#33FFFFFF</color>
     <color name="overlay_dark">#88000000</color>
-    <color name="red">#FF0000</color>
     <color name="transparent">#00000000</color>
     <color name="white">#FFFFFF</color>
     <color name="win_green">#66BB6A</color>
 
+    <color name="r">#FF0000</color>
+    <color name="g">#00FF00</color>
+    <color name="b">#0000FF</color>
 </resources>

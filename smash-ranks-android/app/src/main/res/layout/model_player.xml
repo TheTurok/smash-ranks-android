@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/model_player_root"
-    tools:ignore="Overdraw"
     style="@style/list_item_root.no_padding">
     <RelativeLayout
         android:background="?attr/selectableItemBackground"

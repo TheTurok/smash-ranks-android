@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/gray"
     android:id="@+id/model_match_root"
     style="@style/list_item_root">
     <TextView
+        android:background="?attr/selectableItemBackground"
         android:ellipsize="end"
         android:id="@+id/model_match_opponent"
         android:gravity="center_vertical"
+        android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:maxLines="3"

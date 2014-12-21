@@ -483,21 +483,6 @@ public class PlayerActivity extends BaseListActivity implements
 
                 return type;
             }
-
-
-            private static boolean isBuffer(final int ordinal) {
-                return BUFFER.ordinal() == ordinal;
-            }
-
-
-            private static boolean isMatch(final int ordinal) {
-                return MATCH.ordinal() == ordinal;
-            }
-
-
-            private static boolean isTournament(final int ordinal) {
-                return TOURNAMENT.ordinal() == ordinal;
-            }
         }
 
 
@@ -507,16 +492,16 @@ public class PlayerActivity extends BaseListActivity implements
     private final class MatchesAdapter extends BaseListAdapter {
 
 
+        private final int mBgGray;
         private final int mBgHighlight;
-        private final int mBgTransparent;
         private final int mColorLose;
         private final int mColorWin;
 
 
         private MatchesAdapter() {
             final Resources resources = getResources();
+            mBgGray = resources.getColor(R.color.gray);
             mBgHighlight = resources.getColor(R.color.overlay_bright);
-            mBgTransparent = resources.getColor(R.color.transparent);
             mColorLose = resources.getColor(R.color.lose_pink);
             mColorWin = resources.getColor(R.color.win_green);
         }
@@ -552,9 +537,9 @@ public class PlayerActivity extends BaseListActivity implements
                     final String opponentId = listItem.mMatch.getOpponentId();
 
                     if (opponentId.equals(mUserPlayer.getId())) {
-                        viewHolder.mOpponent.setBackgroundColor(mBgHighlight);
+                        viewHolder.mRoot.setBackgroundColor(mBgHighlight);
                     } else {
-                        viewHolder.mOpponent.setBackgroundColor(mBgTransparent);
+                        viewHolder.mRoot.setBackgroundColor(mBgGray);
                     }
                 }
             } else if (listItem.isTournament()) {

@@ -41,7 +41,7 @@ public enum Result implements Parcelable {
         } else if (ordinal == WIN.ordinal()) {
             result = WIN;
         } else {
-            throw new IllegalArgumentException("Result ordinal is invalid: \"" + ordinal + "\"");
+            throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
         }
 
         return result;

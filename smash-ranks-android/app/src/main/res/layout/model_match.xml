@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/model_match_opponent"
-    android:gravity="center_vertical"
-    tools:text="Shroomed"
-    style="@style/list_item_root.text" />
+    android:id="@+id/model_match_root"
+    style="@style/list_item_root">
+    <TextView
+        android:ellipsize="end"
+        android:id="@+id/model_match_opponent"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:maxLines="3"
+        android:textSize="20sp"
+        tools:text="Shroomed" />
+</FrameLayout>

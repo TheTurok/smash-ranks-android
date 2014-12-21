@@ -1,43 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="42dp"
-    android:layout_width="match_parent">
-    <View
-        android:background="@drawable/divider_bright"
-        android:id="@+id/separator_tournament_divider"
-        android:layout_alignParentBottom="true"
-        android:layout_height="1dp"
-        android:layout_marginTop="2dp"
-        android:layout_width="match_parent" />
+    style="@style/separator_item_root">
     <TextView
         android:id="@+id/separator_tournament_date"
-        android:layout_above="@id/separator_tournament_divider"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/root_padding"
-        android:layout_marginRight="@dimen/root_padding"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
+        android:textColor="@color/indigo_bright"
         android:textSize="14sp"
         tools:text="10/10/14"
-        style="@style/gravity_end" />
+        style="@style/fontFamily_medium" />
     <TextView
+        android:ellipsize="end"
+        android:gravity="center_vertical"
         android:id="@+id/separator_tournament_name"
-        android:layout_above="@id/separator_tournament_divider"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/root_padding_fourth"
-        android:layout_marginLeft="@dimen/root_padding"
-        android:layout_marginRight="@dimen/root_padding_fourth"
-        android:layout_marginStart="@dimen/root_padding"
+        android:layout_marginEnd="@dimen/root_padding_half"
+        android:layout_marginRight="@dimen/root_padding_half"
         android:layout_toLeftOf="@id/separator_tournament_date"
         android:layout_toStartOf="@id/separator_tournament_date"
         android:layout_width="wrap_content"
-        android:textAllCaps="true"
+        android:lines="1"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="1"
+        android:textColor="@color/indigo_bright"
         android:textSize="14sp"
-        tools:ignore="RelativeOverlap"
         tools:text="The Big House 4"
-        style="@style/singleline" />
+        style="@style/fontFamily_medium" />
 </RelativeLayout>

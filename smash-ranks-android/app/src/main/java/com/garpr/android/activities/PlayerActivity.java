@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -82,12 +83,16 @@ public class PlayerActivity extends BaseListActivity implements
             final Tournament tournament = match.getTournament();
 
             if (!tournament.equals(lastTournament)) {
+                if (lastTournament != null) {
+                    mListItems.add(ListItem.createBuffer());
+                }
+
                 lastTournament = tournament;
-                final ListItem listItem = new ListItem(tournament);
+                final ListItem listItem = ListItem.createTournament(tournament);
                 mListItems.add(listItem);
             }
 
-            final ListItem listItem = new ListItem(match);
+            final ListItem listItem = ListItem.createMatch(match);
             mListItems.add(listItem);
         }
 
@@ -391,18 +396,32 @@ public class PlayerActivity extends BaseListActivity implements
 
         private Match mMatch;
         private Tournament mTournament;
-        private final Type mType;
+        private Type mType;
 
 
-        private ListItem(final Match match) {
-            mType = Type.MATCH;
-            mMatch = match;
+        private static ListItem createBuffer() {
+            final ListItem item = new ListItem();
+            item.mType = Type.BUFFER;
+
+            return item;
         }
 
 
-        private ListItem(final Tournament tournament) {
-            mType = Type.TOURNAMENT;
-            mTournament = tournament;
+        private static ListItem createMatch(final Match match) {
+            final ListItem item = new ListItem();
+            item.mMatch = match;
+            item.mType = Type.MATCH;
+
+            return item;
+        }
+
+
+        private static ListItem createTournament(final Tournament tournament) {
+            final ListItem item = new ListItem();
+            item.mTournament = tournament;
+            item.mType = Type.TOURNAMENT;
+
+            return item;
         }
 
 
@@ -435,6 +454,11 @@ public class PlayerActivity extends BaseListActivity implements
         }
 
 
+        private boolean isBuffer() {
+            return mType == Type.BUFFER;
+        }
+
+
         private boolean isMatch() {
             return mType == Type.MATCH;
         }
@@ -446,7 +470,29 @@ public class PlayerActivity extends BaseListActivity implements
 
 
         private static enum Type {
-            MATCH, TOURNAMENT;
+            BUFFER, MATCH, TOURNAMENT;
+
+
+            private static Type create(final int ordinal) {
+                final Type type;
+
+                if (ordinal == BUFFER.ordinal()) {
+                    type = BUFFER;
+                } else if (ordinal == MATCH.ordinal()) {
+                    type = MATCH;
+                } else if (ordinal == TOURNAMENT.ordinal()) {
+                    type = TOURNAMENT;
+                } else {
+                    throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
+                }
+
+                return type;
+            }
+
+
+            private static boolean isBuffer(final int ordinal) {
+                return BUFFER.ordinal() == ordinal;
+            }
 
 
             private static boolean isMatch(final int ordinal) {
@@ -522,8 +568,6 @@ public class PlayerActivity extends BaseListActivity implements
                 final TournamentViewHolder viewHolder = (TournamentViewHolder) holder;
                 viewHolder.mDate.setText(tournament.getDate());
                 viewHolder.mName.setText(tournament.getName());
-            } else {
-                throw new RuntimeException("Illegal ListItem Type detected");
             }
         }
 
@@ -531,17 +575,30 @@ public class PlayerActivity extends BaseListActivity implements
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
-            final RecyclerView.ViewHolder holder;
             final LayoutInflater inflater = getLayoutInflater();
+            final ListItem.Type listItemType = ListItem.Type.create(viewType);
 
-            if (ListItem.Type.isMatch(viewType)) {
-                final View view = inflater.inflate(R.layout.model_match, parent, false);
-                holder = new MatchViewHolder(view);
-            } else if (ListItem.Type.isTournament(viewType)) {
-                final View view = inflater.inflate(R.layout.separator_tournament, parent, false);
-                holder = new TournamentViewHolder(view);
-            } else {
-                throw new RuntimeException("Illegal ListItem Type detected: " + viewType);
+            final View view;
+            final RecyclerView.ViewHolder holder;
+
+            switch (listItemType) {
+                case BUFFER:
+                    view = inflater.inflate(R.layout.buffer, parent, false);
+                    holder = new BufferViewHolder(view);
+                    break;
+
+                case MATCH:
+                    view = inflater.inflate(R.layout.model_match, parent, false);
+                    holder = new MatchViewHolder(view);
+                    break;
+
+                case TOURNAMENT:
+                    view = inflater.inflate(R.layout.separator_tournament, parent, false);
+                    holder = new TournamentViewHolder(view);
+                    break;
+
+                default:
+                    throw new RuntimeException("Illegal ListItem Type detected: " + viewType);
             }
 
             return holder;
@@ -609,14 +666,27 @@ public class PlayerActivity extends BaseListActivity implements
     }
 
 
+    private static final class BufferViewHolder extends RecyclerView.ViewHolder {
+
+
+        private BufferViewHolder(final View view) {
+            super(view);
+        }
+
+
+    }
+
+
     private static final class MatchViewHolder extends RecyclerView.ViewHolder {
 
 
+        private final FrameLayout mRoot;
         private final TextView mOpponent;
 
 
         private MatchViewHolder(final View view) {
             super(view);
+            mRoot = (FrameLayout) view.findViewById(R.id.model_match_root);
             mOpponent = (TextView) view.findViewById(R.id.model_match_opponent);
         }
 

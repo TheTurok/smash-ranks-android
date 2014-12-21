@@ -4,14 +4,13 @@
     android:orientation="vertical"
     style="@style/root.no_padding">
     <LinearLayout
-        android:background="@color/indigo"
+        android:background="@color/indigo_dark"
         android:elevation="@dimen/elevation"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical"
         tools:ignore="UnusedAttribute">
         <TextView
-            android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:id="@+id/activity_onboarding_title"
             android:layout_gravity="center"
@@ -23,7 +22,8 @@
             android:layout_width="wrap_content"
             android:text="@string/gar_pr"
             android:textSize="32sp"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"
+            style="@style/fontFamily_medium" />
         <ImageView
             android:id="@+id/activity_onboarding_orb"
             android:layout_gravity="center"

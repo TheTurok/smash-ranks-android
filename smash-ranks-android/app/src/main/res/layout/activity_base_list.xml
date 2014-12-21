@@ -18,7 +18,6 @@
                     android:clipToPadding="false"
                     android:id="@+id/activity_base_list_list"
                     android:paddingBottom="@dimen/root_padding_half"
-                    android:paddingTop="@dimen/root_padding_half"
                     style="@style/list" />
                 <TextView
                     android:id="@+id/activity_base_list_error"

@@ -449,11 +449,6 @@ public class PlayerActivity extends BaseListActivity implements
         }
 
 
-        private int getTypeOrdinal() {
-            return mType.ordinal();
-        }
-
-
         private boolean isBuffer() {
             return mType == Type.BUFFER;
         }
@@ -535,7 +530,7 @@ public class PlayerActivity extends BaseListActivity implements
 
         @Override
         public int getItemViewType(final int position) {
-            return mListItemsShown.get(position).getTypeOrdinal();
+            return mListItemsShown.get(position).mType.ordinal();
         }
 
 
@@ -544,18 +539,17 @@ public class PlayerActivity extends BaseListActivity implements
             final ListItem listItem = mListItemsShown.get(position);
 
             if (listItem.isMatch()) {
-                final Match match = listItem.mMatch;
                 final MatchViewHolder viewHolder = (MatchViewHolder) holder;
-                viewHolder.mOpponent.setText(match.getOpponentName());
+                viewHolder.mOpponent.setText(listItem.mMatch.getOpponentName());
 
-                if (match.isWin()) {
+                if (listItem.mMatch.isWin()) {
                     viewHolder.mOpponent.setTextColor(mColorWin);
                 } else {
                     viewHolder.mOpponent.setTextColor(mColorLose);
                 }
 
                 if (mInUsersRegion && mUserPlayer != null) {
-                    final String opponentId = match.getOpponentId();
+                    final String opponentId = listItem.mMatch.getOpponentId();
 
                     if (opponentId.equals(mUserPlayer.getId())) {
                         viewHolder.mOpponent.setBackgroundColor(mBgHighlight);
@@ -564,10 +558,9 @@ public class PlayerActivity extends BaseListActivity implements
                     }
                 }
             } else if (listItem.isTournament()) {
-                final Tournament tournament = listItem.mTournament;
                 final TournamentViewHolder viewHolder = (TournamentViewHolder) holder;
-                viewHolder.mDate.setText(tournament.getDate());
-                viewHolder.mName.setText(tournament.getName());
+                viewHolder.mDate.setText(listItem.mTournament.getDate());
+                viewHolder.mName.setText(listItem.mTournament.getName());
             }
         }
 

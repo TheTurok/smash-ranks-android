@@ -83,10 +83,6 @@ public class PlayerActivity extends BaseListActivity implements
             final Tournament tournament = match.getTournament();
 
             if (!tournament.equals(lastTournament)) {
-                if (lastTournament != null) {
-                    mListItems.add(ListItem.createBuffer());
-                }
-
                 lastTournament = tournament;
                 final ListItem listItem = ListItem.createTournament(tournament);
                 mListItems.add(listItem);
@@ -399,14 +395,6 @@ public class PlayerActivity extends BaseListActivity implements
         private Type mType;
 
 
-        private static ListItem createBuffer() {
-            final ListItem item = new ListItem();
-            item.mType = Type.BUFFER;
-
-            return item;
-        }
-
-
         private static ListItem createMatch(final Match match) {
             final ListItem item = new ListItem();
             item.mMatch = match;
@@ -449,11 +437,6 @@ public class PlayerActivity extends BaseListActivity implements
         }
 
 
-        private boolean isBuffer() {
-            return mType == Type.BUFFER;
-        }
-
-
         private boolean isMatch() {
             return mType == Type.MATCH;
         }
@@ -465,15 +448,13 @@ public class PlayerActivity extends BaseListActivity implements
 
 
         private static enum Type {
-            BUFFER, MATCH, TOURNAMENT;
+            MATCH, TOURNAMENT;
 
 
             private static Type create(final int ordinal) {
                 final Type type;
 
-                if (ordinal == BUFFER.ordinal()) {
-                    type = BUFFER;
-                } else if (ordinal == MATCH.ordinal()) {
+                if (ordinal == MATCH.ordinal()) {
                     type = MATCH;
                 } else if (ordinal == TOURNAMENT.ordinal()) {
                     type = TOURNAMENT;
@@ -560,11 +541,6 @@ public class PlayerActivity extends BaseListActivity implements
             final RecyclerView.ViewHolder holder;
 
             switch (listItemType) {
-                case BUFFER:
-                    view = inflater.inflate(R.layout.buffer, parent, false);
-                    holder = new BufferViewHolder(view);
-                    break;
-
                 case MATCH:
                     view = inflater.inflate(R.layout.model_match, parent, false);
                     holder = new MatchViewHolder(view);

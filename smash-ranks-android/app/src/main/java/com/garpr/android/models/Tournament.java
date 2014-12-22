@@ -1,10 +1,14 @@
 package com.garpr.android.models;
 
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.garpr.android.App;
+import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,18 +22,27 @@ import java.util.Date;
 public class Tournament implements Parcelable {
 
 
-    private static final SimpleDateFormat sDateFormat;
+    private static final SimpleDateFormat dateParser;
+    private static final SimpleDateFormat dayOfMonthFormatter;
+    private static final SimpleDateFormat monthFormatter;
+    private static final SimpleDateFormat yearFormatter;
 
     private Date date;
+    private String dayOfMonth;
     private String dateString;
     private String id;
+    private String month;
     private String name;
+    private String year;
 
 
 
 
     static {
-        sDateFormat = new SimpleDateFormat(Constants.TOURNAMENT_DATE_FORMAT);
+        dateParser = new SimpleDateFormat(Constants.TOURNAMENT_DATE_FORMAT);
+        dayOfMonthFormatter = new SimpleDateFormat(Constants.DAY_OF_MONTH_FORMAT);
+        monthFormatter = new SimpleDateFormat(Constants.MONTH_FORMAT);
+        yearFormatter = new SimpleDateFormat(Constants.YEAR_FORMAT);
     }
 
 
@@ -45,7 +58,7 @@ public class Tournament implements Parcelable {
         }
 
         try {
-            date = sDateFormat.parse(dateString);
+            date = dateParser.parse(dateString);
         } catch (final ParseException e) {
             throw new JSONException("Couldn't parse the date: \"" + dateString + "\"");
         }
@@ -68,13 +81,16 @@ public class Tournament implements Parcelable {
         dateString = source.readString();
 
         try {
-            date = sDateFormat.parse(dateString);
+            date = dateParser.parse(dateString);
         } catch (final ParseException e) {
             throw new RuntimeException("Couldn't parse the date: \"" + dateString + "\"");
         }
 
+        dayOfMonth = source.readString();
         id = source.readString();
+        month = source.readString();
         name = source.readString();
+        year = source.readString();
     }
 
 
@@ -100,13 +116,46 @@ public class Tournament implements Parcelable {
     }
 
 
+    public String getDayOfMonth() {
+        if (!Utils.validStrings(dayOfMonth)) {
+            dayOfMonth = dayOfMonthFormatter.format(date);
+        }
+
+        return dayOfMonth;
+    }
+
+
     public String getId() {
         return id;
     }
 
 
+    public String getMonth() {
+        if (!Utils.validStrings(month)) {
+            month = monthFormatter.format(date);
+        }
+
+        return month;
+    }
+
+
+    public String getMonthAndYear() {
+        final Context context = App.getContext();
+        return context.getString(R.string.x_y, getMonth(), getYear());
+    }
+
+
     public String getName() {
         return name;
+    }
+
+
+    public String getYear() {
+        if (!Utils.validStrings(year)) {
+            year = yearFormatter.format(date);
+        }
+
+        return year;
     }
 
 
@@ -163,8 +212,11 @@ public class Tournament implements Parcelable {
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeString(dateString);
+        dest.writeString(dayOfMonth);
         dest.writeString(id);
+        dest.writeString(month);
         dest.writeString(name);
+        dest.writeString(year);
     }
 
 

@@ -11,6 +11,7 @@ public final class Constants {
     public static final String AUTHOR_URL = "https://twitter.com/scootrnova";
     public static final String COMPLETED = "completed";
     public static final String DATE = "date";
+    public static final String DAY_OF_MONTH_FORMAT = "d";
     public static final String DEBUG = "debug";
     public static final String DISPLAY_NAME = "display_name";
     public static final String ERROR = "error";
@@ -28,6 +29,7 @@ public final class Constants {
     public static final String MATCHES = "matches";
     public static final String MESSAGE = "message";
     public static final String MIMETYPE_TEXT_PLAIN = "text/plain";
+    public static final String MONTH_FORMAT = "LLLL";
     public static final String NAME = "name";
     public static final String NETWORK_EXCEPTION = "network_exception";
     public static final String NEW_ROSTER = "new_roster";
@@ -63,6 +65,7 @@ public final class Constants {
     public static final String TRUE = "true";
     public static final String WEB_URL = "http://garpr.com/#/";
     public static final String WIN = "win";
+    public static final String YEAR_FORMAT = "yyyy";
 
 
 }

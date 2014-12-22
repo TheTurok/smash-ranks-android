@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="@dimen/root_padding_half"
+    style="@style/separator_item_root">
+    <TextView
+        android:ellipsize="end"
+        android:id="@+id/separator_date_month_and_year"
+        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:lines="1"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/indigo_bright"
+        android:textSize="14sp"
+        tools:text="November 2014"
+        style="@style/fontFamily_medium" />
+</FrameLayout>

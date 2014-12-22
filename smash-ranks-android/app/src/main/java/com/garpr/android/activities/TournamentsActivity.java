@@ -211,6 +211,55 @@ public class TournamentsActivity extends BaseListActivity implements
 
 
 
+    private final static class ListItem {
+
+
+        private String mDate;
+        private Tournament mTournament;
+        private Type mType;
+
+
+        private static ListItem createDate(final Tournament tournament) {
+            final ListItem item = new ListItem();
+            item.mDate = tournament.getMonthAndYear();
+            item.mType = Type.DATE;
+
+            return item;
+        }
+
+
+        private static ListItem createTournament(final Tournament tournament) {
+            final ListItem item = new ListItem();
+            item.mTournament = tournament;
+            item.mType = Type.TOURNAMENT;
+
+            return item;
+        }
+
+
+        private static enum Type {
+            DATE, TOURNAMENT;
+
+
+            private static Type create(final int ordinal) {
+                final Type type;
+
+                if (ordinal == DATE.ordinal()) {
+                    type = DATE;
+                } else if (ordinal == TOURNAMENT.ordinal()) {
+                    type = TOURNAMENT;
+                } else {
+                    throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
+                }
+
+                return type;
+            }
+        }
+
+
+    }
+
+
     private final class TournamentAdapter extends BaseListAdapter<ViewHolder> {
 
 

@@ -131,7 +131,7 @@ abstract class BaseActivity extends ActionBarActivity implements
                 params.topMargin = -statusBarHeight;
             }
 
-            mDrawerLayout.setStatusBarBackground(R.color.indigo);
+            mDrawerLayout.setStatusBarBackground(R.color.indigo_dark);
         }
 
         if (User.hasPlayer()) {

@@ -173,7 +173,7 @@
     </style>
 
     <style name="toolbar">
-        <item name="android:background">@color/indigo</item>
+        <item name="android:background">@color/indigo_dark</item>
         <item name="android:elevation" tools:ignore="NewApi">@dimen/elevation</item>
         <item name="android:id">@id/toolbar</item>
         <item name="android:layout_height">?attr/actionBarSize</item>

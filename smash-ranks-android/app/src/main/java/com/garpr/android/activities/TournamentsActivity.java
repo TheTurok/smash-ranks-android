@@ -37,8 +37,8 @@ public class TournamentsActivity extends BaseListActivity implements
 
     private static final String TAG = TournamentsActivity.class.getSimpleName();
 
-    private ArrayList<Tournament> mTournaments;
-    private ArrayList<Tournament> mTournamentsShown;
+    private ArrayList<ListItem> mListItems;
+    private ArrayList<ListItem> mListItemsShown;
     private boolean mSetSearchVisible;
     private MenuItem mSearch;
     private TournamentsFilter mFilter;
@@ -50,6 +50,28 @@ public class TournamentsActivity extends BaseListActivity implements
         final Intent intent = new Intent(activity, TournamentsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         activity.startActivity(intent);
+    }
+
+
+    private void createListItems(final ArrayList<Tournament> list) {
+        mListItems = new ArrayList<>();
+        String lastMonthAndYear = null;
+
+        for (final Tournament tournament : list) {
+            final String monthAndYear = tournament.getMonthAndYear();
+
+            if (!monthAndYear.equals(lastMonthAndYear)) {
+                lastMonthAndYear = monthAndYear;
+                final ListItem listItem = ListItem.createDate(monthAndYear);
+                mListItems.add(listItem);
+            }
+
+            final ListItem listItem = ListItem.createTournament(tournament);
+            mListItems.add(listItem);
+        }
+
+        mListItems.trimToSize();
+        mListItemsShown = mListItems;
     }
 
 
@@ -73,8 +95,7 @@ public class TournamentsActivity extends BaseListActivity implements
             @Override
             public void response(final ArrayList<Tournament> list) {
                 Collections.sort(list, Tournament.DATE_ORDER);
-                mTournaments = list;
-                mTournamentsShown = list;
+                createListItems(list);
                 setAdapter(new TournamentAdapter());
             }
         };
@@ -132,7 +153,7 @@ public class TournamentsActivity extends BaseListActivity implements
 
     @Override
     public boolean onMenuItemActionCollapse(final MenuItem item) {
-        mTournamentsShown = mTournaments;
+        mListItemsShown = mListItems;
         notifyDataSetChanged();
         return true;
     }
@@ -219,9 +240,9 @@ public class TournamentsActivity extends BaseListActivity implements
         private Type mType;
 
 
-        private static ListItem createDate(final Tournament tournament) {
+        private static ListItem createDate(final String monthAndYear) {
             final ListItem item = new ListItem();
-            item.mDate = tournament.getMonthAndYear();
+            item.mDate = monthAndYear;
             item.mType = Type.DATE;
 
             return item;
@@ -234,6 +255,40 @@ public class TournamentsActivity extends BaseListActivity implements
             item.mType = Type.TOURNAMENT;
 
             return item;
+        }
+
+
+        @Override
+        public boolean equals(final Object o) {
+            final boolean isEqual;
+
+            if (this == o) {
+                isEqual = true;
+            } else if (o instanceof ListItem) {
+                final ListItem li = (ListItem) o;
+
+                if (isDate() && li.isDate()) {
+                    isEqual = mDate.equals(li.mDate);
+                } else if (isTournament() && li.isTournament()) {
+                    isEqual = mTournament.equals(li.mTournament);
+                } else {
+                    isEqual = false;
+                }
+            } else {
+                isEqual = false;
+            }
+
+            return isEqual;
+        }
+
+
+        private boolean isDate() {
+            return mType == Type.DATE;
+        }
+
+
+        private boolean isTournament() {
+            return mType == Type.TOURNAMENT;
         }
 
 
@@ -260,28 +315,61 @@ public class TournamentsActivity extends BaseListActivity implements
     }
 
 
-    private final class TournamentAdapter extends BaseListAdapter<ViewHolder> {
+    private final class TournamentAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
 
 
         @Override
         public int getItemCount() {
-            return mTournamentsShown.size();
+            return mListItemsShown.size();
         }
 
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
-            final Tournament tournament = mTournamentsShown.get(position);
-            holder.mDate.setText(tournament.getDate());
-            holder.mName.setText(tournament.getName());
+        public int getItemViewType(final int position) {
+            return mListItemsShown.get(position).mType.ordinal();
         }
 
 
         @Override
-        public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+            final ListItem listItem = mListItemsShown.get(position);
+
+            if (listItem.isDate()) {
+                final DateViewHolder viewHolder = (DateViewHolder) holder;
+                viewHolder.mDate.setText(listItem.mDate);
+            } else if (listItem.isTournament()) {
+                final TournamentViewHolder viewHolder = (TournamentViewHolder) holder;
+                viewHolder.mDate.setText(listItem.mTournament.getDayOfMonth());
+                viewHolder.mName.setText(listItem.mTournament.getName());
+            }
+        }
+
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
+                final int viewType) {
             final LayoutInflater inflater = getLayoutInflater();
-            final View view = inflater.inflate(R.layout.model_tournament, parent, false);
-            return new ViewHolder(view);
+            final ListItem.Type listItemType = ListItem.Type.create(viewType);
+
+            final View view;
+            final RecyclerView.ViewHolder holder;
+
+            switch (listItemType) {
+                case DATE:
+                    view = inflater.inflate(R.layout.separator_date, parent, false);
+                    holder = new DateViewHolder(view);
+                    break;
+
+                case TOURNAMENT:
+                    view = inflater.inflate(R.layout.model_tournament, parent, false);
+                    holder = new TournamentViewHolder(view);
+                    break;
+
+                default:
+                    throw new RuntimeException("Illegal ListItem Type detected: " + viewType);
+            }
+
+            return holder;
         }
 
 
@@ -293,20 +381,41 @@ public class TournamentsActivity extends BaseListActivity implements
 
         @Override
         protected FilterResults performFiltering(final CharSequence constraint) {
-            final ArrayList<Tournament> tournamentsList = new ArrayList<>(mTournaments.size());
+            // This method is nearly identical to one in PlayerActivity, look there for info on
+            // what's going on here.
+
+            final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
             final String query = constraint.toString().trim().toLowerCase();
 
-            for (final Tournament tournament : mTournaments) {
-                final String name = tournament.getName().toLowerCase();
+            for (int i = 0; i < mListItems.size(); ++i) {
+                final ListItem item = mListItems.get(i);
 
-                if (name.contains(query)) {
-                    tournamentsList.add(tournament);
+                if (item.isTournament()) {
+                    final String name = item.mTournament.getName().toLowerCase();
+
+                    if (name.contains(query)) {
+                        ListItem date = null;
+
+                        for (int j = i - 1; date == null; --j) {
+                            final ListItem li = mListItems.get(j);
+
+                            if (li.isDate()) {
+                                date = li;
+                            }
+                        }
+
+                        if (!listItems.contains(date)) {
+                            listItems.add(date);
+                        }
+
+                        listItems.add(item);
+                    }
                 }
             }
 
             final FilterResults results = new FilterResults();
-            results.count = tournamentsList.size();
-            results.values = tournamentsList;
+            results.count = listItems.size();
+            results.values = listItems;
 
             return results;
         }
@@ -315,7 +424,7 @@ public class TournamentsActivity extends BaseListActivity implements
         @Override
         @SuppressWarnings("unchecked")
         protected void publishResults(final CharSequence constraint, final FilterResults results) {
-            mTournamentsShown = (ArrayList<Tournament>) results.values;
+            mListItemsShown = (ArrayList<ListItem>) results.values;
             notifyDataSetChanged();
         }
 
@@ -323,14 +432,29 @@ public class TournamentsActivity extends BaseListActivity implements
     }
 
 
-    private static final class ViewHolder extends RecyclerView.ViewHolder {
+    private static final class DateViewHolder extends RecyclerView.ViewHolder {
+
+
+        private final TextView mDate;
+
+
+        private DateViewHolder(final View view) {
+            super(view);
+            mDate = (TextView) view.findViewById(R.id.separator_date_month_and_year);
+        }
+
+
+    }
+
+
+    private static final class TournamentViewHolder extends RecyclerView.ViewHolder {
 
 
         private final TextView mName;
         private final TextView mDate;
 
 
-        private ViewHolder(final View view) {
+        private TournamentViewHolder(final View view) {
             super(view);
             mDate = (TextView) view.findViewById(R.id.model_tournament_date);
             mName = (TextView) view.findViewById(R.id.model_tournament_name);

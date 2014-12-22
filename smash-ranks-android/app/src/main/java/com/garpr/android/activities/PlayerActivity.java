@@ -571,10 +571,10 @@ public class PlayerActivity extends BaseListActivity implements
             final String query = constraint.toString().trim().toLowerCase();
 
             for (int i = 0; i < mListItems.size(); ++i) {
-                final ListItem match = mListItems.get(i);
+                final ListItem item = mListItems.get(i);
 
-                if (match.isMatch()) {
-                    final String name = match.mMatch.getOpponentName().toLowerCase();
+                if (item.isMatch()) {
+                    final String name = item.mMatch.getOpponentName().toLowerCase();
 
                     if (name.contains(query)) {
                         // So we've now found a match with an opponent name that matches what the
@@ -596,7 +596,7 @@ public class PlayerActivity extends BaseListActivity implements
                             listItems.add(tournament);
                         }
 
-                        listItems.add(match);
+                        listItems.add(item);
                     }
                 }
             }

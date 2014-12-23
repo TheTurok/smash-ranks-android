@@ -1,8 +1,6 @@
 package com.garpr.android.activities;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -11,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
@@ -37,8 +36,6 @@ public class OnboardingActivity extends BaseActivity implements
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
     private static final String TAG = OnboardingActivity.class.getSimpleName();
 
-    private AlertDialog mGoDialog;
-    private AlertDialog mSkipDialog;
     private boolean mReportToAnalytics;
     private NonSwipeableViewPager mPager;
     private PlayersFragment mPlayersFragment;
@@ -175,28 +172,19 @@ public class OnboardingActivity extends BaseActivity implements
 
     @Override
     public void onGoClick() {
-        if (mGoDialog == null) {
-            mGoDialog = new AlertDialog.Builder(this)
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, final int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .setPositiveButton(R.string.lets_go, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, final int which) {
-                            dialog.dismiss();
-                            finishOnboarding(true);
-                        }
-                    })
-                    .create();
-        }
-
         final Player player = mPlayersFragment.getSelectedPlayer();
-        mGoDialog.setMessage(getString(R.string.youre_x_from_y_ready, player.getName(),
-                mSelectedRegion.getName()));
-        mGoDialog.show();
+
+        new MaterialDialog.Builder(this)
+                .callback(new MaterialDialog.SimpleCallback() {
+                    @Override
+                    public void onPositive(final MaterialDialog materialDialog) {
+                        finishOnboarding(true);
+                    }
+                })
+                .content(R.string.youre_x_from_y_ready, player.getName(), mSelectedRegion.getName())
+                .negativeText(R.string.cancel)
+                .positiveText(R.string.lets_go)
+                .show();
     }
 
 
@@ -229,26 +217,17 @@ public class OnboardingActivity extends BaseActivity implements
 
     @Override
     public void onSkipClick() {
-        if (mSkipDialog == null) {
-            mSkipDialog = new AlertDialog.Builder(this)
-                    .setMessage(R.string.are_you_sure_you_dont_want_to_select_your_tag)
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, final int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, final int which) {
-                            dialog.dismiss();
-                            finishOnboarding(false);
-                        }
-                    })
-                    .create();
-        }
-
-        mSkipDialog.show();
+        new MaterialDialog.Builder(this)
+                .callback(new MaterialDialog.SimpleCallback() {
+                    @Override
+                    public void onPositive(final MaterialDialog materialDialog) {
+                        finishOnboarding(false);
+                    }
+                })
+                .content(R.string.are_you_sure_you_dont_want_to_select_your_tag)
+                .negativeText(R.string.cancel)
+                .positiveText(R.string.yes)
+                .show();
     }
 
 

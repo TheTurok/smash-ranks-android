@@ -100,7 +100,6 @@ abstract class BaseListFragment extends BaseFragment implements
         mErrorView.setVisibility(View.GONE);
         mAdapter = adapter;
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setVisibility(View.VISIBLE);
         setLoading(false);
     }
 
@@ -113,7 +112,7 @@ abstract class BaseListFragment extends BaseFragment implements
 
     protected void showError() {
         setLoading(false);
-        mRecyclerView.setVisibility(View.GONE);
+        mRecyclerView.setAdapter(null);
         mErrorView.setVisibility(View.VISIBLE);
     }
 

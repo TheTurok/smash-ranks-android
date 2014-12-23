@@ -36,6 +36,7 @@ public class SettingsActivity extends BaseActivity {
     private CheckedTextView mSyncWifiLabel;
     private Intent mSyncSettingsIntent;
     private LinearLayout mAuthor;
+    private LinearLayout mGitHub;
     private LinearLayout mRegion;
     private LinearLayout mSync;
     private LinearLayout mSyncCharging;
@@ -58,6 +59,7 @@ public class SettingsActivity extends BaseActivity {
 
     private void findViews() {
         mAuthor = (LinearLayout) findViewById(R.id.activity_settings_author);
+        mGitHub = (LinearLayout) findViewById(R.id.activity_settings_github);
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
         mSync = (LinearLayout) findViewById(R.id.activity_settings_sync);
@@ -96,6 +98,13 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         findViews();
         prepareViews();
+    }
+
+
+    private void openLink(final String url) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 
 
@@ -206,9 +215,14 @@ public class SettingsActivity extends BaseActivity {
         mAuthor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(Constants.AUTHOR_URL));
-                startActivity(intent);
+                openLink(Constants.AUTHOR_URL);
+            }
+        });
+
+        mGitHub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                openLink(Constants.GITHUB_URL);
             }
         });
 

@@ -90,6 +90,13 @@
                             style="@style/settings_title" />
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/activity_settings_github"
+                        style="@style/settings_container">
+                        <TextView
+                            android:text="@string/open_source_on_github"
+                            style="@style/settings_title" />
+                    </LinearLayout>
+                    <LinearLayout
                         style="@style/settings_container.disabled">
                         <TextView
                             android:id="@+id/activity_settings"

@@ -21,6 +21,7 @@ public final class Constants {
     public static final String FAILURE = "failure";
     public static final String FIRST_SYNC = "first_sync";
     public static final String GAME = "game";
+    public static final String GITHUB_URL = "https://github.com/airokay/smash-ranks-android";
     public static final String ID = "id";
     public static final String JSON = "json";
     public static final String LAST_SYNC = "last_sync";

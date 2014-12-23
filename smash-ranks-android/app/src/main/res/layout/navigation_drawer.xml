@@ -38,14 +38,18 @@
                     android:layout_width="match_parent"
                     android:orientation="vertical">
                     <TextView
+                        android:ellipsize="end"
                         android:fontFamily="sans-serif-medium"
                         android:id="@+id/navigation_drawer_user_name"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true"
                         android:textIsSelectable="true"
                         tools:ignore="UnusedAttribute"
                         tools:text="Charles"
-                        style="@style/singleline" />
+                        style="@style/fontFamily_medium" />
                     <TextView
                         android:id="@+id/navigation_drawer_user_region"
                         android:layout_height="wrap_content"

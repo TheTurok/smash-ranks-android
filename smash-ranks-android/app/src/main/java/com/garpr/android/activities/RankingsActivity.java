@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -295,14 +296,16 @@ public class RankingsActivity extends BaseListActivity implements
     private final class RankingsAdapter extends BaseListAdapter<ViewHolder> {
 
 
+        private final int mBgGray;
         private final int mBgHighlight;
-        private final int mBgTransparent;
+        private final int mTopMargin;
 
 
         private RankingsAdapter() {
             final Resources resources = getResources();
+            mBgGray = resources.getColor(R.color.gray);
             mBgHighlight = resources.getColor(R.color.overlay_bright);
-            mBgTransparent = resources.getColor(R.color.transparent);
+            mTopMargin = resources.getDimensionPixelSize(R.dimen.root_padding_half);
         }
 
 
@@ -323,8 +326,16 @@ public class RankingsActivity extends BaseListActivity implements
                 if (player.equals(mUserPlayer)) {
                     holder.mRoot.setBackgroundColor(mBgHighlight);
                 } else {
-                    holder.mRoot.setBackgroundColor(mBgTransparent);
+                    holder.mRoot.setBackgroundColor(mBgGray);
                 }
+            }
+
+            final MarginLayoutParams params = (MarginLayoutParams) holder.mRoot.getLayoutParams();
+
+            if (position == 0) {
+                params.topMargin = mTopMargin;
+            } else {
+                params.topMargin = 0;
             }
         }
 

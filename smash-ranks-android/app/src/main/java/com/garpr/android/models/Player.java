@@ -101,6 +101,17 @@ public class Player implements Parcelable {
     }
 
 
+    public String getProfileUrl() {
+        if (profileUrl == null) {
+            final Region region = Settings.getRegion();
+            final String regionName = region.getName().toLowerCase();
+            profileUrl = Constants.WEB_URL + regionName + '/' + Constants.PLAYERS + '/' + id;
+        }
+
+        return profileUrl;
+    }
+
+
     public int getRank() {
         return rank;
     }
@@ -111,14 +122,8 @@ public class Player implements Parcelable {
     }
 
 
-    public String getProfileUrl() {
-        if (profileUrl == null) {
-            final Region region = Settings.getRegion();
-            final String regionName = region.getName().toLowerCase();
-            profileUrl = Constants.WEB_URL + regionName + '/' + Constants.PLAYERS + '/' + id;
-        }
-
-        return profileUrl;
+    public String getRatingTruncated() {
+        return String.format("%.3f", rating);
     }
 
 

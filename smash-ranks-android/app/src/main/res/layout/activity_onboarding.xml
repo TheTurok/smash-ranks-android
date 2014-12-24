@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_onboarding_root"
     android:orientation="vertical"
     style="@style/root.no_padding">
     <LinearLayout
-        android:background="@color/indigo_dark"
+        android:background="@color/gray"
         android:elevation="@dimen/elevation"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"

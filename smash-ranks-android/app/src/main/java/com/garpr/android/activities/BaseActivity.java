@@ -97,6 +97,21 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
+    protected int getStatusBarHeight() {
+        final Resources res = getResources();
+        final int statusBarHeightResId = res.getIdentifier("status_bar_height", "dimen", "android");
+        final int statusBarHeight;
+
+        if (statusBarHeightResId > 0) {
+            statusBarHeight = res.getDimensionPixelSize(statusBarHeightResId);
+        } else {
+            statusBarHeight = res.getDimensionPixelSize(R.dimen.status_bar_height);
+        }
+
+        return statusBarHeight;
+    }
+
+
     protected Toolbar getToolbar() {
         return mToolbar;
     }
@@ -122,16 +137,11 @@ abstract class BaseActivity extends ActionBarActivity implements
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            final Resources res = getResources();
-            final int statusBarHeightResId = res.getIdentifier("status_bar_height", "dimen", "android");
+            final int statusBarHeight = getStatusBarHeight();
+            final MarginLayoutParams params = (MarginLayoutParams) mDrawerContents.getLayoutParams();
+            params.topMargin = -statusBarHeight;
 
-            if (statusBarHeightResId > 0) {
-                final int statusBarHeight = res.getDimensionPixelSize(statusBarHeightResId);
-                final MarginLayoutParams params = (MarginLayoutParams) mDrawerContents.getLayoutParams();
-                params.topMargin = -statusBarHeight;
-            }
-
-            mDrawerLayout.setStatusBarBackground(R.color.indigo_dark);
+            mDrawerLayout.setStatusBarBackground(R.color.gray_light);
         }
 
         if (User.hasPlayer()) {

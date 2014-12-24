@@ -4,6 +4,6 @@
     <item
         android:enabled="false"
         android:id="@+id/fragment_regions_menu_next"
-        android:title="@string/next_"
+        android:title="@string/next"
         compat:showAsAction="ifRoom|withText" />
 </menu>

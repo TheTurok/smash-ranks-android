@@ -18,5 +18,8 @@
     <color name="r">#FF0000</color>
     <color name="g">#00FF00</color>
     <color name="b">#0000FF</color>
+    <color name="c">#00FFFF</color>
+    <color name="m">#FF00FF</color>
+    <color name="y">#FFFF00</color>
 
 </resources>

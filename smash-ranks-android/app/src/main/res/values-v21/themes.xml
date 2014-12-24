@@ -7,7 +7,7 @@
     </style>
 
     <style name="app_theme.no_toolbar">
-        <item name="android:statusBarColor">@color/indigo_dark</item>
+        <item name="android:statusBarColor">@color/gray_light</item>
     </style>
 
 </resources>

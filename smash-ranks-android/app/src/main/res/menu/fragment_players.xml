@@ -10,13 +10,13 @@
         compat:showAsAction="collapseActionView|ifRoom" />
     <item
         android:id="@+id/fragment_players_menu_skip"
-        android:title="@string/skip_"
+        android:title="@string/skip"
         android:visible="false"
         compat:showAsAction="ifRoom|withText" />
     <item
         android:enabled="false"
         android:id="@+id/fragment_players_menu_go"
-        android:title="@string/go_"
+        android:title="@string/go"
         android:visible="false"
         compat:showAsAction="ifRoom|withText" />
 </menu>

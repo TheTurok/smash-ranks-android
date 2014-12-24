@@ -11,5 +11,6 @@
     <dimen name="root_padding_eighth">2dp</dimen>
     <dimen name="root_padding_fourth">4dp</dimen>
     <dimen name="root_padding_half">8dp</dimen>
+    <dimen name="status_bar_height">24dp</dimen>
 
 </resources>

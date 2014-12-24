@@ -93,19 +93,19 @@
     </style>
 
     <style name="navigation_drawer_item.about">
-        <item name="android:drawableLeft">@drawable/ic_about</item>
+        <item name="android:drawableLeft">@drawable/ic_about_default</item>
     </style>
 
     <style name="navigation_drawer_item.rankings">
-        <item name="android:drawableLeft">@drawable/ic_people</item>
+        <item name="android:drawableLeft">@drawable/ic_people_default</item>
     </style>
 
     <style name="navigation_drawer_item.settings">
-        <item name="android:drawableLeft">@drawable/ic_settings</item>
+        <item name="android:drawableLeft">@drawable/ic_settings_default</item>
     </style>
 
     <style name="navigation_drawer_item.tournaments">
-        <item name="android:drawableLeft">@drawable/ic_star</item>
+        <item name="android:drawableLeft">@drawable/ic_star_default</item>
     </style>
 
     <style name="root">

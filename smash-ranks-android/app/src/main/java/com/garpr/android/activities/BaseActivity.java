@@ -211,6 +211,7 @@ abstract class BaseActivity extends ActionBarActivity implements
 
         if (view != null) {
             view.setBackgroundColor(getResources().getColor(R.color.overlay_bright));
+            view.setSelected(true);
         }
     }
 

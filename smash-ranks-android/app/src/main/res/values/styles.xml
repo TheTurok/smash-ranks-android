@@ -5,19 +5,33 @@
         <item name="android:id">@id/drawer_layout</item>
     </style>
 
-    <style name="error">
-        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-medium</item>
+    <style name="error_container">
         <item name="android:gravity">center</item>
-        <item name="android:layout_centerInParent">true</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">@dimen/root_padding</item>
-        <item name="android:layout_marginRight">@dimen/root_padding</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:lineSpacingExtra">@dimen/root_padding_fourth</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingLeft">@dimen/root_padding</item>
+        <item name="android:paddingRight">@dimen/root_padding</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="error_line">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="error_line1" parent="error_line">
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-medium</item>
         <item name="android:text">@string/error_</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="error_line2" parent="error_line">
+        <item name="android:text">@string/swipe_to_refresh_and_try_again</item>
+        <item name="android:textColor">@color/gray_light</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="fontFamily_medium">

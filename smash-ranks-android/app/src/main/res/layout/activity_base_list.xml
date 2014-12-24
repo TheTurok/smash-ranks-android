@@ -19,10 +19,16 @@
                     android:id="@+id/activity_base_list_list"
                     android:paddingBottom="@dimen/root_padding_half"
                     style="@style/list" />
-                <TextView
+                <LinearLayout
                     android:id="@+id/activity_base_list_error"
-                    tools:visibility="visible"
-                    style="@style/error" />
+                    tools:visibilty="visible"
+                    style="@style/error_container">
+                    <TextView
+                        android:id="@+id/activity_base_list_error_line"
+                        style="@style/error_line1" />
+                    <TextView
+                        style="@style/error_line2" />
+                </LinearLayout>
             </FrameLayout>
         </com.garpr.android.misc.FlexibleSwipeRefreshLayout>
     </LinearLayout>

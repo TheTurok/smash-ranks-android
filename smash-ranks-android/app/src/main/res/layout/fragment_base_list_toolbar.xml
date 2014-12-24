@@ -15,10 +15,16 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_base_list_list"
                 style="@style/list" />
-            <TextView
+            <LinearLayout
                 android:id="@+id/fragment_base_list_error"
                 tools:visibility="visible"
-                style="@style/error" />
+                style="@style/error_container">
+                <TextView
+                    android:id="@+id/fragment_base_list_error_line"
+                    style="@style/error_line1" />
+                <TextView
+                    style="@style/error_line2" />
+            </LinearLayout>
         </FrameLayout>
     </com.garpr.android.misc.FlexibleSwipeRefreshLayout>
     <android.support.v7.widget.Toolbar

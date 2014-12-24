@@ -83,6 +83,7 @@
     <string name="show_wins">Show Wins</string>
     <string name="sort">Sort</string>
     <string name="sort_">Sort…</string>
+    <string name="swipe_to_refresh_and_try_again">Swipe to refresh and try again.</string>
     <string name="sync">Sync</string>
     <string name="syncing">Syncing</string>
     <string name="syncing_">Syncing…</string>

@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -20,14 +21,16 @@ abstract class BaseListActivity extends BaseActivity implements
     private BaseListAdapter mAdapter;
     private boolean mIsLoading;
     private FlexibleSwipeRefreshLayout mRefreshLayout;
+    private LinearLayout mErrorView;
     private RecyclerView mRecyclerView;
-    private TextView mErrorView;
+    private TextView mErrorLine;
 
 
 
 
     protected void findViews() {
-        mErrorView = (TextView) findViewById(R.id.activity_base_list_error);
+        mErrorLine = (TextView) findViewById(R.id.activity_base_list_error_line);
+        mErrorView = (LinearLayout) findViewById(R.id.activity_base_list_error);
         mRecyclerView = (RecyclerView) findViewById(R.id.activity_base_list_list);
         mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_base_list_refresh);
     }
@@ -84,7 +87,7 @@ abstract class BaseListActivity extends BaseActivity implements
 
 
     protected void prepareViews() {
-        mErrorView.setText(getErrorText());
+        mErrorLine.setText(getErrorText());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setRecyclerView(mRecyclerView);

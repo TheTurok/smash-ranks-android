@@ -14,6 +14,10 @@
         <item name="android:windowActionBar">false</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowBackground">@color/gray_dark</item>
+
+        <!-- theming for the Material Dialog library -->
+        <item name="md_accent_color">@color/indigo_bright</item>
+        <item name="md_dark_theme">true</item>
     </style>
 
     <style name="toolbar_theme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

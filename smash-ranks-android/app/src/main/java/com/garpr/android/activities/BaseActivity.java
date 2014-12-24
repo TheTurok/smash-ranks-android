@@ -141,7 +141,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             final MarginLayoutParams params = (MarginLayoutParams) mDrawerContents.getLayoutParams();
             params.topMargin = -statusBarHeight;
 
-            mDrawerLayout.setStatusBarBackground(R.color.gray_light);
+            mDrawerLayout.setStatusBarBackground(R.color.gray_dark);
         }
 
         if (User.hasPlayer()) {

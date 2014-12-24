@@ -13,7 +13,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:windowActionBar">false</item>
         <item name="windowActionBar">false</item>
-        <item name="android:windowBackground">@color/gray_dark</item>
+        <item name="android:windowBackground">@color/gray_darker</item>
 
         <!-- theming for the Material Dialog library -->
         <item name="md_accent_color">@color/indigo_bright</item>

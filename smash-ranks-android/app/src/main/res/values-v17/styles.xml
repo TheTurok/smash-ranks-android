@@ -10,19 +10,19 @@
     </style>
 
     <style name="navigation_drawer_item.about">
-        <item name="android:drawableStart">@drawable/ic_about_default</item>
+        <item name="android:drawableStart">@drawable/ic_about</item>
     </style>
 
     <style name="navigation_drawer_item.rankings">
-        <item name="android:drawableStart">@drawable/ic_people_default</item>
+        <item name="android:drawableStart">@drawable/ic_people</item>
     </style>
 
     <style name="navigation_drawer_item.settings">
-        <item name="android:drawableStart">@drawable/ic_settings_default</item>
+        <item name="android:drawableStart">@drawable/ic_settings</item>
     </style>
 
     <style name="navigation_drawer_item.tournaments">
-        <item name="android:drawableStart">@drawable/ic_star_default</item>
+        <item name="android:drawableStart">@drawable/ic_star</item>
     </style>
 
 </resources>

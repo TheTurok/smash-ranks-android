@@ -28,6 +28,7 @@ import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 
 public class TournamentsActivity extends BaseListActivity implements
@@ -39,6 +40,7 @@ public class TournamentsActivity extends BaseListActivity implements
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
+    private ArrayList<Tournament> mTournaments;
     private boolean mSetSearchVisible;
     private MenuItem mSearch;
     private MenuItem mSort;
@@ -56,11 +58,11 @@ public class TournamentsActivity extends BaseListActivity implements
     }
 
 
-    private void createListItems(final ArrayList<Tournament> list) {
+    private void createListItems() {
         mListItems = new ArrayList<>();
         String lastMonthAndYear = null;
 
-        for (final Tournament tournament : list) {
+        for (final Tournament tournament : mTournaments) {
             final String monthAndYear = tournament.getMonthAndYear();
 
             if (!monthAndYear.equals(lastMonthAndYear)) {
@@ -97,9 +99,9 @@ public class TournamentsActivity extends BaseListActivity implements
 
             @Override
             public void response(final ArrayList<Tournament> list) {
-                Collections.sort(list, Tournament.REVERSE_CHRONOLOGICAL_ORDER);
-                createListItems(list);
-                setAdapter(new TournamentAdapter());
+                mTournaments = list;
+                Collections.sort(mTournaments, Tournament.REVERSE_CHRONOLOGICAL_ORDER);
+                setList();
             }
         };
 
@@ -172,11 +174,11 @@ public class TournamentsActivity extends BaseListActivity implements
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_tournaments_menu_sort_chronological:
-
+                sort(Tournament.CHRONOLOGICAL_ORDER);
                 break;
 
             case R.id.activity_tournaments_menu_sort_reverse_chronological:
-
+                sort(Tournament.REVERSE_CHRONOLOGICAL_ORDER);
                 break;
 
             default:
@@ -247,11 +249,27 @@ public class TournamentsActivity extends BaseListActivity implements
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
-        if (Utils.areAnyMenuItemsNull(mSearch)) {
+        if (Utils.areAnyMenuItemsNull(mSearch, mSort, mSortChronological, mSortReverseChronological)) {
             mSetSearchVisible = true;
         } else {
             Utils.showMenuItems(mSearch, mSort);
         }
+    }
+
+
+    private void setList() {
+        createListItems();
+        setAdapter(new TournamentAdapter());
+    }
+
+
+    private void sort(final Comparator<Tournament> sort) {
+        mSortChronological.setEnabled(sort != Tournament.CHRONOLOGICAL_ORDER);
+        mSortReverseChronological.setEnabled(sort != Tournament.REVERSE_CHRONOLOGICAL_ORDER);
+
+        Collections.sort(mTournaments, sort);
+        createListItems();
+        notifyDataSetChanged();
     }
 
 

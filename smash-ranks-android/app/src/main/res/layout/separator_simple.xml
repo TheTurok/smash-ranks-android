@@ -5,7 +5,7 @@
     style="@style/separator_item_root">
     <TextView
         android:ellipsize="end"
-        android:id="@+id/separator_date_month_and_year"
+        android:id="@+id/separator_simple_text"
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"

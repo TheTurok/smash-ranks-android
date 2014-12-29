@@ -104,11 +104,12 @@
     <string name="win">Win</string>
     <string name="won">Won</string>
     <string name="x_build_y">%1$s (build %2$d)</string>
+    <string name="x_dash_y">%1$d - %2$d</string>
     <string name="x_is_ranked_y_on_gar_pr_z">%1$s is ranked %2$d on GAR PR %3$s</string>
     <string name="x_on_gar_pr">%s on GAR PR</string>
     <string name="x_on_gar_pr_y">%1$s on GAR PR %2$s</string>
-    <string name="x_viewing_y">%1$s (viewing %2$s)</string>
     <string name="x_paren_y">%1$s (%2$s)</string>
+    <string name="x_viewing_y">%1$s (viewing %2$s)</string>
     <string name="x_y">%1$s %2$s</string>
     <string name="yes">Yes</string>
     <string name="youre_x_from_y_ready">You\'re %1$s from %2$s. Ready?</string>

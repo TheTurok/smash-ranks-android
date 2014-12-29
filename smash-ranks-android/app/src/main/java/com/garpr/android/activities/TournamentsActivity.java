@@ -152,7 +152,9 @@ public class TournamentsActivity extends BaseListActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
+            mComparator = Tournament.REVERSE_CHRONOLOGICAL_ORDER;
+        } else {
             final int comparatorIndex = savedInstanceState.getInt(KEY_COMPARATOR, COMPARATOR_REVERSE_CHRONOLOGICAL);
 
             switch (comparatorIndex) {
@@ -165,8 +167,6 @@ public class TournamentsActivity extends BaseListActivity implements
                     mComparator = Tournament.REVERSE_CHRONOLOGICAL_ORDER;
                     break;
             }
-        } else {
-            mComparator = Tournament.REVERSE_CHRONOLOGICAL_ORDER;
         }
 
         fetchTournaments();
@@ -283,10 +283,10 @@ public class TournamentsActivity extends BaseListActivity implements
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (!isMenuNull()) {
-            if (!mSortChronological.isEnabled()) {
+        if (mComparator != null) {
+            if (mComparator == Tournament.CHRONOLOGICAL_ORDER) {
                 outState.putInt(KEY_COMPARATOR, COMPARATOR_CHRONOLOGICAL);
-            } else if (!mSortReverseChronological.isEnabled()) {
+            } else if (mComparator == Tournament.REVERSE_CHRONOLOGICAL_ORDER) {
                 outState.putInt(KEY_COMPARATOR, COMPARATOR_REVERSE_CHRONOLOGICAL);
             }
         }
@@ -320,6 +320,7 @@ public class TournamentsActivity extends BaseListActivity implements
 
 
     private void sort(final Comparator<Tournament> sort) {
+        mComparator = sort;
         mSortChronological.setEnabled(sort != Tournament.CHRONOLOGICAL_ORDER);
         mSortReverseChronological.setEnabled(sort != Tournament.REVERSE_CHRONOLOGICAL_ORDER);
 
@@ -455,7 +456,7 @@ public class TournamentsActivity extends BaseListActivity implements
 
             switch (listItemType) {
                 case DATE:
-                    view = inflater.inflate(R.layout.separator_date, parent, false);
+                    view = inflater.inflate(R.layout.separator_simple, parent, false);
                     holder = new DateViewHolder(view);
                     break;
 
@@ -539,7 +540,7 @@ public class TournamentsActivity extends BaseListActivity implements
 
         private DateViewHolder(final View view) {
             super(view);
-            mDate = (TextView) view.findViewById(R.id.separator_date_month_and_year);
+            mDate = (TextView) view.findViewById(R.id.separator_simple_text);
         }
 
 

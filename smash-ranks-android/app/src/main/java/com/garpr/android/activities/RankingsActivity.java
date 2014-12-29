@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -43,13 +42,17 @@ public class RankingsActivity extends BaseListActivity implements
         SearchView.OnQueryTextListener {
 
 
+    private static final int COMPARATOR_ALPHABETICAL = 1;
+    private static final int COMPARATOR_RANK = 2;
+    private static final String KEY_COMPARATOR = "KEY_COMPARATOR";
     private static final String TAG = RankingsActivity.class.getSimpleName();
 
+    private ArrayList<ListItem> mListItems;
+    private ArrayList<ListItem> mListItemsShown;
     private ArrayList<Player> mPlayers;
-    private ArrayList<Player> mPlayersShown;
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
-    private Comparator<Player> mOrder;
+    private Comparator<Player> mComparator;
     private MenuItem mSearch;
     private MenuItem mSort;
     private MenuItem mSortAlphabetical;
@@ -64,6 +67,49 @@ public class RankingsActivity extends BaseListActivity implements
         final Intent intent = new Intent(activity, RankingsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
+    }
+
+
+    private void createAlphabeticalListItems() {
+        String lastLetter = null;
+
+        for (final Player player : mPlayers) {
+            final String name = player.getName();
+            final String letter = String.valueOf(name.charAt(0));
+
+            if (!letter.equals(lastLetter)) {
+                lastLetter = letter;
+                final ListItem listItem = ListItem.createTitle(letter);
+                mListItems.add(listItem);
+            }
+
+            final ListItem listItem = ListItem.createPlayer(player);
+            mListItems.add(listItem);
+        }
+    }
+
+
+    private void createListItems() {
+        mListItems = new ArrayList<>();
+
+        if (mComparator == Player.ALPHABETICAL_ORDER) {
+            createAlphabeticalListItems();
+        } else if (mComparator == Player.RANK_ORDER) {
+            createRankListItems();
+        } else {
+            throw new IllegalStateException("Comparator is an unknown value");
+        }
+
+        mListItems.trimToSize();
+        mListItemsShown = mListItems;
+    }
+
+
+    private void createRankListItems() {
+        final Resources resources = getResources();
+        final int ranksPerSection = resources.getInteger(R.integer.ranks_per_section);
+
+        // TODO
     }
 
 
@@ -86,14 +132,9 @@ public class RankingsActivity extends BaseListActivity implements
 
             @Override
             public void response(final ArrayList<Player> list) {
-                if (mOrder == null) {
-                    mOrder = Player.RANK_ORDER;
-                }
-
-                Collections.sort(list, mOrder);
                 mPlayers = list;
-                mPlayersShown = list;
-                setAdapter(new RankingsAdapter());
+                Collections.sort(mPlayers, mComparator);
+                setList();
             }
         };
 
@@ -126,6 +167,16 @@ public class RankingsActivity extends BaseListActivity implements
     }
 
 
+    private void hideMenuItems() {
+        Utils.hideMenuItems(mSearch, mSort);
+    }
+
+
+    private boolean isMenuNull() {
+        return Utils.areAnyMenuItemsNull(mSearch, mSort, mSortAlphabetical, mSortRank);
+    }
+
+
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode,
             final Intent data) {
@@ -149,6 +200,24 @@ public class RankingsActivity extends BaseListActivity implements
         super.onCreate(savedInstanceState);
         mInUsersRegion = User.areWeInTheUsersRegion();
         mUserPlayer = User.getPlayer();
+
+        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
+            mComparator = Player.RANK_ORDER;
+        } else {
+            final int comparatorIndex = savedInstanceState.getInt(KEY_COMPARATOR, COMPARATOR_RANK);
+
+            switch (comparatorIndex) {
+                case COMPARATOR_ALPHABETICAL:
+                    mComparator = Player.ALPHABETICAL_ORDER;
+                    break;
+
+                case COMPARATOR_RANK:
+                default:
+                    mComparator = Player.RANK_ORDER;
+                    break;
+            }
+        }
+
         fetchRankings();
 
         // prepares the app's data-syncing capabilities
@@ -159,7 +228,7 @@ public class RankingsActivity extends BaseListActivity implements
     @Override
     protected void onDrawerClosed() {
         if (!isLoading()) {
-            Utils.showMenuItems(mSearch, mSort);
+            showMenuItems();
         }
     }
 
@@ -167,20 +236,20 @@ public class RankingsActivity extends BaseListActivity implements
     @Override
     protected void onDrawerOpened() {
         MenuItemCompat.collapseActionView(mSearch);
-        Utils.hideMenuItems(mSearch, mSort);
+        hideMenuItems();
     }
 
 
     @Override
     protected void onItemClick(final View view, final int position) {
-        final Player player = mPlayersShown.get(position);
-        PlayerActivity.startForResult(this, player);
+        final ListItem item = mListItemsShown.get(position);
+        PlayerActivity.startForResult(this, item.mPlayer);
     }
 
 
     @Override
     public boolean onMenuItemActionCollapse(final MenuItem item) {
-        mPlayersShown = mPlayers;
+        mListItemsShown = mListItems;
         notifyDataSetChanged();
         return true;
     }
@@ -196,11 +265,11 @@ public class RankingsActivity extends BaseListActivity implements
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_rankings_menu_sort_alphabetical:
-                order(Player.ALPHABETICAL_ORDER);
+                sort(Player.ALPHABETICAL_ORDER);
                 break;
 
             case R.id.activity_rankings_menu_sort_rank:
-                order(Player.RANK_ORDER);
+                sort(Player.RANK_ORDER);
                 break;
 
             default:
@@ -224,7 +293,7 @@ public class RankingsActivity extends BaseListActivity implements
         searchView.setOnQueryTextListener(this);
 
         if (mSetMenuItemsVisible) {
-            Utils.showMenuItems(mSearch, mSort);
+            showMenuItems();
             mSetMenuItemsVisible = false;
         }
 
@@ -265,14 +334,17 @@ public class RankingsActivity extends BaseListActivity implements
     }
 
 
-    private void order(final Comparator<Player> order) {
-        mOrder = order;
-        Collections.sort(mPlayers, order);
-        Collections.sort(mPlayersShown, order);
-        notifyDataSetChanged();
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        mSortAlphabetical.setEnabled(order != Player.ALPHABETICAL_ORDER);
-        mSortRank.setEnabled(order != Player.RANK_ORDER);
+        if (mComparator != null) {
+            if (mComparator == Player.ALPHABETICAL_ORDER) {
+                outState.putInt(KEY_COMPARATOR, COMPARATOR_ALPHABETICAL);
+            } else if (mComparator == Player.RANK_ORDER) {
+                outState.putInt(KEY_COMPARATOR, COMPARATOR_RANK);
+            }
+        }
     }
 
 
@@ -283,69 +355,190 @@ public class RankingsActivity extends BaseListActivity implements
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
-        if (Utils.areAnyMenuItemsNull(mSearch, mSort)) {
+        if (isMenuNull()) {
             mSetMenuItemsVisible = true;
         } else {
-            Utils.showMenuItems(mSearch, mSort);
+            showMenuItems();
         }
+    }
+
+
+    private void setList() {
+        createListItems();
+        setAdapter(new RankingsAdapter());
+    }
+
+
+    private void showMenuItems() {
+        Utils.showMenuItems(mSearch, mSort);
+    }
+
+
+    private void sort(final Comparator<Player> sort) {
+        mComparator = sort;
+        mSortAlphabetical.setEnabled(sort != Player.ALPHABETICAL_ORDER);
+        mSortRank.setEnabled(sort != Player.RANK_ORDER);
+
+        Collections.sort(mPlayers, sort);
+        createListItems();
+        notifyDataSetChanged();
     }
 
 
 
 
-    private final class RankingsAdapter extends BaseListAdapter<ViewHolder> {
+    private static final class ListItem {
+
+
+        private Player mPlayer;
+        private String mTitle;
+        private Type mType;
+
+
+        private static ListItem createPlayer(final Player player) {
+            final ListItem item = new ListItem();
+            item.mPlayer = player;
+            item.mType = Type.PLAYER;
+
+            return item;
+        }
+
+
+        private static ListItem createTitle(final String title) {
+            final ListItem item = new ListItem();
+            item.mTitle = title;
+            item.mType = Type.TITLE;
+
+            return item;
+        }
+
+
+        @Override
+        public boolean equals(final Object o) {
+            final boolean isEqual;
+
+            if (this == o) {
+                isEqual = true;
+            } else if (o instanceof ListItem) {
+                final ListItem li = (ListItem) o;
+
+                if (isPlayer() && li.isPlayer()) {
+                    isEqual = mPlayer.equals(li.mPlayer);
+                } else if (isTitle() && li.isTitle()) {
+                    isEqual = mTitle.equals(li.mTitle);
+                } else {
+                    isEqual = false;
+                }
+            } else {
+                isEqual = false;
+            }
+
+            return isEqual;
+        }
+
+
+        private boolean isPlayer() {
+            return mType == Type.PLAYER;
+        }
+
+
+        private boolean isTitle() {
+            return mType == Type.TITLE;
+        }
+
+
+        private static enum Type {
+            PLAYER, TITLE;
+
+
+            private static Type create(final int ordinal) {
+                final Type type;
+
+                if (ordinal == PLAYER.ordinal()) {
+                    type = PLAYER;
+                } else if (ordinal == TITLE.ordinal()) {
+                    type = TITLE;
+                } else {
+                    throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
+                }
+
+                return type;
+            }
+        }
+
+
+    }
+
+
+    private final class RankingsAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
 
 
         private final int mBgGray;
         private final int mBgHighlight;
-        private final int mTopMargin;
 
 
         private RankingsAdapter() {
             final Resources resources = getResources();
             mBgGray = resources.getColor(R.color.gray);
             mBgHighlight = resources.getColor(R.color.overlay_bright);
-            mTopMargin = resources.getDimensionPixelSize(R.dimen.root_padding_half);
         }
 
 
         @Override
         public int getItemCount() {
-            return mPlayersShown.size();
+            return mListItemsShown.size();
         }
 
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
-            final Player player = mPlayersShown.get(position);
-            holder.mName.setText(player.getName());
-            holder.mRank.setText(String.valueOf(player.getRank()));
-            holder.mRating.setText(String.format("%.3f", player.getRating()));
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+            final ListItem listItem = mListItemsShown.get(position);
 
-            if (mInUsersRegion && mUserPlayer != null) {
-                if (player.equals(mUserPlayer)) {
-                    holder.mRoot.setBackgroundColor(mBgHighlight);
-                } else {
-                    holder.mRoot.setBackgroundColor(mBgGray);
+            if (listItem.isPlayer()) {
+                final PlayerViewHolder viewHolder = (PlayerViewHolder) holder;
+                viewHolder.mName.setText(listItem.mPlayer.getName());
+                viewHolder.mRank.setText(String.valueOf(listItem.mPlayer.getRank()));
+                viewHolder.mRating.setText(listItem.mPlayer.getRatingTruncated());
+
+                if (mInUsersRegion && mUserPlayer != null) {
+                    if (listItem.mPlayer.equals(mUserPlayer)) {
+                        viewHolder.mRoot.setBackgroundColor(mBgHighlight);
+                    } else {
+                        viewHolder.mRoot.setBackgroundColor(mBgGray);
+                    }
                 }
-            }
-
-            final MarginLayoutParams params = (MarginLayoutParams) holder.mRoot.getLayoutParams();
-
-            if (position == 0) {
-                params.topMargin = mTopMargin;
-            } else {
-                params.topMargin = 0;
+            } else if (listItem.isTitle()) {
+                final TitleViewHolder viewHolder = (TitleViewHolder) holder;
+                viewHolder.mTitle.setText(listItem.mTitle);
             }
         }
 
 
         @Override
-        public ViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
+        public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
+                final int viewType) {
             final LayoutInflater inflater = getLayoutInflater();
-            final View view = inflater.inflate(R.layout.model_player, parent, false);
-            view.setOnClickListener(this);
-            return new ViewHolder(view);
+            final ListItem.Type listItemType = ListItem.Type.create(viewType);
+
+            final View view;
+            final RecyclerView.ViewHolder holder;
+
+            switch (listItemType) {
+                case PLAYER:
+                    view = inflater.inflate(R.layout.model_player, parent, false);
+                    holder = new PlayerViewHolder(view);
+                    break;
+
+                case TITLE:
+                    view = inflater.inflate(R.layout.separator_simple, parent, false);
+                    holder = new TitleViewHolder(view);
+                    break;
+
+                default:
+                    throw new RuntimeException("Illegal ListItem Type detected: " + viewType);
+            }
+
+            return holder;
         }
 
 
@@ -379,7 +572,7 @@ public class RankingsActivity extends BaseListActivity implements
         @Override
         @SuppressWarnings("unchecked")
         protected void publishResults(final CharSequence constraint, final FilterResults results) {
-            mPlayersShown = (ArrayList<Player>) results.values;
+            mListItemsShown = (ArrayList<ListItem>) results.values;
             notifyDataSetChanged();
         }
 
@@ -387,7 +580,7 @@ public class RankingsActivity extends BaseListActivity implements
     }
 
 
-    private static final class ViewHolder extends RecyclerView.ViewHolder {
+    private static final class PlayerViewHolder extends RecyclerView.ViewHolder {
 
 
         private final FrameLayout mRoot;
@@ -396,13 +589,29 @@ public class RankingsActivity extends BaseListActivity implements
         private final TextView mRating;
 
 
-        private ViewHolder(final View view) {
+        private PlayerViewHolder(final View view) {
             super(view);
             mRoot = (FrameLayout) view.findViewById(R.id.model_player_root);
             mRank = (TextView) view.findViewById(R.id.model_player_rank);
             mName = (TextView) view.findViewById(R.id.model_player_name);
             mRating = (TextView) view.findViewById(R.id.model_player_rating);
         }
+
+
+    }
+
+
+    private static final class TitleViewHolder extends RecyclerView.ViewHolder {
+
+
+        private final TextView mTitle;
+
+
+        private TitleViewHolder(final View view) {
+            super(view);
+            mTitle = (TextView) view.findViewById(R.id.separator_simple_text);
+        }
+
 
     }
 

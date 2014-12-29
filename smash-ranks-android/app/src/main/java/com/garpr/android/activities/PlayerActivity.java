@@ -152,6 +152,16 @@ public class PlayerActivity extends BaseListActivity implements
     }
 
 
+    private void hideMenuItems() {
+        Utils.hideMenuItems(mSearch, mShare, mShow);
+    }
+
+
+    private boolean isMenuNull() {
+        return Utils.areAnyMenuItemsNull(mSearch, mShare, mShow, mShowAll, mShowLoses, mShowWins);
+    }
+
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,7 +189,7 @@ public class PlayerActivity extends BaseListActivity implements
     @Override
     protected void onDrawerClosed() {
         if (!isLoading()) {
-            Utils.showMenuItems(mSearch, mShare, mShow);
+            showMenuItems();
         }
     }
 
@@ -187,7 +197,7 @@ public class PlayerActivity extends BaseListActivity implements
     @Override
     protected void onDrawerOpened() {
         MenuItemCompat.collapseActionView(mSearch);
-        Utils.hideMenuItems(mSearch, mShare, mShow);
+        hideMenuItems();
     }
 
 
@@ -257,7 +267,7 @@ public class PlayerActivity extends BaseListActivity implements
         searchView.setOnQueryTextListener(this);
 
         if (mSetMenuItemsVisible) {
-            Utils.showMenuItems(mSearch, mShare, mShow);
+            showMenuItems();
             mSetMenuItemsVisible = false;
         }
 
@@ -307,7 +317,7 @@ public class PlayerActivity extends BaseListActivity implements
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (!Utils.areAnyMenuItemsNull(mShowLoses, mShowWins)) {
+        if (!isMenuNull()) {
             if (!mShowLoses.isEnabled()) {
                 outState.putInt(KEY_PREVIOUSLY_SHOWING, PREVIOUSLY_SHOWING_LOSES);
             } else if (!mShowWins.isEnabled()) {
@@ -329,10 +339,10 @@ public class PlayerActivity extends BaseListActivity implements
         mFilter = new MatchesFilter();
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
-        if (Utils.areAnyMenuItemsNull(mSearch, mShare, mShow)) {
+        if (isMenuNull()) {
             mSetMenuItemsVisible = true;
         } else {
-            Utils.showMenuItems(mSearch, mShare, mShow);
+            showMenuItems();
         }
     }
 
@@ -424,6 +434,11 @@ public class PlayerActivity extends BaseListActivity implements
     @Override
     protected boolean showDrawerIndicator() {
         return false;
+    }
+
+
+    private void showMenuItems() {
+        Utils.showMenuItems(mSearch, mShare, mShow);
     }
 
 

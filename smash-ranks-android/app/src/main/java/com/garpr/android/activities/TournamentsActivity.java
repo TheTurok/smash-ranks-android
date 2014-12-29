@@ -36,14 +36,16 @@ public class TournamentsActivity extends BaseListActivity implements
         SearchView.OnQueryTextListener {
 
 
-    private static final String KEY_SORTED_CHRONOLOGICALLY = "KEY_SORTED_CHRONOLOGICALLY";
+    private static final int COMPARATOR_CHRONOLOGICAL = 1;
+    private static final int COMPARATOR_REVERSE_CHRONOLOGICAL = 2;
+    private static final String KEY_COMPARATOR = "KEY_COMPARATOR";
     private static final String TAG = TournamentsActivity.class.getSimpleName();
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
     private ArrayList<Tournament> mTournaments;
     private boolean mSetSearchVisible;
-    private boolean mSortedChronologically;
+    private Comparator<Tournament> mComparator;
     private MenuItem mSearch;
     private MenuItem mSort;
     private MenuItem mSortChronological;
@@ -102,13 +104,7 @@ public class TournamentsActivity extends BaseListActivity implements
             @Override
             public void response(final ArrayList<Tournament> list) {
                 mTournaments = list;
-
-                if (mSortedChronologically) {
-                    Collections.sort(mTournaments, Tournament.CHRONOLOGICAL_ORDER);
-                } else {
-                    Collections.sort(mTournaments, Tournament.REVERSE_CHRONOLOGICAL_ORDER);
-                }
-
+                Collections.sort(mTournaments, mComparator);
                 setList();
             }
         };
@@ -142,6 +138,11 @@ public class TournamentsActivity extends BaseListActivity implements
     }
 
 
+    private void hideMenuItems() {
+        Utils.hideMenuItems(mSearch, mSort);
+    }
+
+
     private boolean isMenuNull() {
         return Utils.areAnyMenuItemsNull(mSearch, mSort, mSortChronological, mSortReverseChronological);
     }
@@ -152,7 +153,20 @@ public class TournamentsActivity extends BaseListActivity implements
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
-            mSortedChronologically = savedInstanceState.getBoolean(KEY_SORTED_CHRONOLOGICALLY, false);
+            final int comparatorIndex = savedInstanceState.getInt(KEY_COMPARATOR, COMPARATOR_REVERSE_CHRONOLOGICAL);
+
+            switch (comparatorIndex) {
+                case COMPARATOR_CHRONOLOGICAL:
+                    mComparator = Tournament.CHRONOLOGICAL_ORDER;
+                    break;
+
+                case COMPARATOR_REVERSE_CHRONOLOGICAL:
+                default:
+                    mComparator = Tournament.REVERSE_CHRONOLOGICAL_ORDER;
+                    break;
+            }
+        } else {
+            mComparator = Tournament.REVERSE_CHRONOLOGICAL_ORDER;
         }
 
         fetchTournaments();
@@ -162,7 +176,7 @@ public class TournamentsActivity extends BaseListActivity implements
     @Override
     protected void onDrawerClosed() {
         if (!isLoading()) {
-            Utils.showMenuItems(mSearch);
+            showMenuItems();
         }
     }
 
@@ -170,7 +184,7 @@ public class TournamentsActivity extends BaseListActivity implements
     @Override
     protected void onDrawerOpened() {
         MenuItemCompat.collapseActionView(mSearch);
-        Utils.hideMenuItems(mSearch);
+        hideMenuItems();
     }
 
 
@@ -220,11 +234,11 @@ public class TournamentsActivity extends BaseListActivity implements
         searchView.setOnQueryTextListener(this);
 
         if (mSetSearchVisible) {
-            Utils.showMenuItems(mSearch, mSort);
+            showMenuItems();
             mSetSearchVisible = false;
         }
 
-        if (mSortedChronologically) {
+        if (mComparator == Tournament.CHRONOLOGICAL_ORDER) {
             mSortChronological.setEnabled(false);
             mSortReverseChronological.setEnabled(true);
         }
@@ -269,8 +283,12 @@ public class TournamentsActivity extends BaseListActivity implements
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (!isMenuNull() && !mSortChronological.isEnabled()) {
-            outState.putBoolean(KEY_SORTED_CHRONOLOGICALLY, true);
+        if (!isMenuNull()) {
+            if (!mSortChronological.isEnabled()) {
+                outState.putInt(KEY_COMPARATOR, COMPARATOR_CHRONOLOGICAL);
+            } else if (!mSortReverseChronological.isEnabled()) {
+                outState.putInt(KEY_COMPARATOR, COMPARATOR_REVERSE_CHRONOLOGICAL);
+            }
         }
     }
 
@@ -285,7 +303,7 @@ public class TournamentsActivity extends BaseListActivity implements
         if (isMenuNull()) {
             mSetSearchVisible = true;
         } else {
-            Utils.showMenuItems(mSearch, mSort);
+            showMenuItems();
         }
     }
 
@@ -293,6 +311,11 @@ public class TournamentsActivity extends BaseListActivity implements
     private void setList() {
         createListItems();
         setAdapter(new TournamentAdapter());
+    }
+
+
+    private void showMenuItems() {
+        Utils.showMenuItems(mSearch, mSort);
     }
 
 

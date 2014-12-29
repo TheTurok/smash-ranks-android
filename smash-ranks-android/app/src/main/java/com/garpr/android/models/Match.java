@@ -120,12 +120,20 @@ public class Match implements Parcelable {
     };
 
 
-    public static final Comparator<Match> DATE_ORDER = new Comparator<Match>() {
+    public static final Comparator<Match> CHRONOLOGICAL_ORDER = new Comparator<Match>() {
         @Override
         public int compare(final Match m0, final Match m1) {
             final Tournament t0 = m0.getTournament();
             final Tournament t1 = m1.getTournament();
-            return Tournament.DATE_ORDER.compare(t0, t1);
+            return Tournament.REVERSE_CHRONOLOGICAL_ORDER.compare(t1, t0);
+        }
+    };
+
+
+    public static final Comparator<Match> REVERSE_CHRONOLOGICAL_ORDER = new Comparator<Match>() {
+        @Override
+        public int compare(final Match m0, final Match m1) {
+            return CHRONOLOGICAL_ORDER.compare(m1, m0);
         }
     };
 

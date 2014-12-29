@@ -41,6 +41,9 @@ public class TournamentsActivity extends BaseListActivity implements
     private ArrayList<ListItem> mListItemsShown;
     private boolean mSetSearchVisible;
     private MenuItem mSearch;
+    private MenuItem mSort;
+    private MenuItem mSortChronological;
+    private MenuItem mSortReverseChronological;
     private TournamentsFilter mFilter;
 
 
@@ -94,7 +97,7 @@ public class TournamentsActivity extends BaseListActivity implements
 
             @Override
             public void response(final ArrayList<Tournament> list) {
-                Collections.sort(list, Tournament.DATE_ORDER);
+                Collections.sort(list, Tournament.REVERSE_CHRONOLOGICAL_ORDER);
                 createListItems(list);
                 setAdapter(new TournamentAdapter());
             }
@@ -166,8 +169,30 @@ public class TournamentsActivity extends BaseListActivity implements
 
 
     @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.activity_tournaments_menu_sort_chronological:
+
+                break;
+
+            case R.id.activity_tournaments_menu_sort_reverse_chronological:
+
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
+
+    @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         mSearch = menu.findItem(R.id.activity_tournaments_menu_search);
+        mSort = menu.findItem(R.id.activity_tournaments_menu_sort);
+        mSortChronological = menu.findItem(R.id.activity_tournaments_menu_sort_chronological);
+        mSortReverseChronological = menu.findItem(R.id.activity_tournaments_menu_sort_reverse_chronological);
         MenuItemCompat.setOnActionExpandListener(mSearch, this);
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearch);
@@ -175,7 +200,7 @@ public class TournamentsActivity extends BaseListActivity implements
         searchView.setOnQueryTextListener(this);
 
         if (mSetSearchVisible) {
-            Utils.showMenuItems(mSearch);
+            Utils.showMenuItems(mSearch, mSort);
             mSetSearchVisible = false;
         }
 
@@ -225,7 +250,7 @@ public class TournamentsActivity extends BaseListActivity implements
         if (Utils.areAnyMenuItemsNull(mSearch)) {
             mSetSearchVisible = true;
         } else {
-            Utils.showMenuItems(mSearch);
+            Utils.showMenuItems(mSearch, mSort);
         }
     }
 

@@ -120,10 +120,9 @@ public class PlayerActivity extends BaseListActivity implements
 
             @Override
             public void response(final ArrayList<Match> list) {
-                Collections.sort(list, Match.DATE_ORDER);
+                setList(list);
                 mPlayer.setMatches(list);
                 Players.save(mPlayer);
-                setList(list);
 
                 final Intent data = new Intent();
                 data.putExtra(ResultData.PLAYER, mPlayer);
@@ -339,7 +338,7 @@ public class PlayerActivity extends BaseListActivity implements
 
 
     private void setList(final ArrayList<Match> matches) {
-        Collections.sort(matches, Match.DATE_ORDER);
+        Collections.sort(matches, Match.REVERSE_CHRONOLOGICAL_ORDER);
         createListItems(matches);
         setAdapter(new MatchesAdapter());
 

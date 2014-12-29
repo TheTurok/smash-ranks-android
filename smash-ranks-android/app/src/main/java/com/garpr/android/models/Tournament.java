@@ -187,10 +187,18 @@ public class Tournament implements Parcelable {
     };
 
 
-    public static final Comparator<Tournament> DATE_ORDER = new Comparator<Tournament>() {
+    public static Comparator<Tournament> CHRONOLOGICAL_ORDER = new Comparator<Tournament>() {
         @Override
         public int compare(final Tournament t0, final Tournament t1) {
-            return t1.date.compareTo(t0.date);
+            return t0.date.compareTo(t1.date);
+        }
+    };
+
+
+    public static final Comparator<Tournament> REVERSE_CHRONOLOGICAL_ORDER = new Comparator<Tournament>() {
+        @Override
+        public int compare(final Tournament t0, final Tournament t1) {
+            return CHRONOLOGICAL_ORDER.compare(t1, t0);
         }
     };
 

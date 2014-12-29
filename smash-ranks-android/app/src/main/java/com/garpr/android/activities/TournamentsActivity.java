@@ -36,12 +36,14 @@ public class TournamentsActivity extends BaseListActivity implements
         SearchView.OnQueryTextListener {
 
 
+    private static final String KEY_SORTED_CHRONOLOGICALLY = "KEY_SORTED_CHRONOLOGICALLY";
     private static final String TAG = TournamentsActivity.class.getSimpleName();
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
     private ArrayList<Tournament> mTournaments;
     private boolean mSetSearchVisible;
+    private boolean mSortedChronologically;
     private MenuItem mSearch;
     private MenuItem mSort;
     private MenuItem mSortChronological;
@@ -100,7 +102,13 @@ public class TournamentsActivity extends BaseListActivity implements
             @Override
             public void response(final ArrayList<Tournament> list) {
                 mTournaments = list;
-                Collections.sort(mTournaments, Tournament.REVERSE_CHRONOLOGICAL_ORDER);
+
+                if (mSortedChronologically) {
+                    Collections.sort(mTournaments, Tournament.CHRONOLOGICAL_ORDER);
+                } else {
+                    Collections.sort(mTournaments, Tournament.REVERSE_CHRONOLOGICAL_ORDER);
+                }
+
                 setList();
             }
         };
@@ -134,9 +142,19 @@ public class TournamentsActivity extends BaseListActivity implements
     }
 
 
+    private boolean isMenuNull() {
+        return Utils.areAnyMenuItemsNull(mSearch, mSort, mSortChronological, mSortReverseChronological);
+    }
+
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mSortedChronologically = savedInstanceState.getBoolean(KEY_SORTED_CHRONOLOGICALLY, false);
+        }
+
         fetchTournaments();
     }
 
@@ -206,6 +224,11 @@ public class TournamentsActivity extends BaseListActivity implements
             mSetSearchVisible = false;
         }
 
+        if (mSortedChronologically) {
+            mSortChronological.setEnabled(false);
+            mSortReverseChronological.setEnabled(true);
+        }
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -243,13 +266,23 @@ public class TournamentsActivity extends BaseListActivity implements
 
 
     @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (!isMenuNull() && !mSortChronological.isEnabled()) {
+            outState.putBoolean(KEY_SORTED_CHRONOLOGICALLY, true);
+        }
+    }
+
+
+    @Override
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
         mFilter = new TournamentsFilter();
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
-        if (Utils.areAnyMenuItemsNull(mSearch, mSort, mSortChronological, mSortReverseChronological)) {
+        if (isMenuNull()) {
             mSetSearchVisible = true;
         } else {
             Utils.showMenuItems(mSearch, mSort);

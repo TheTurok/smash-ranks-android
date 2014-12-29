@@ -46,14 +46,18 @@ public class PlayerActivity extends BaseListActivity implements
         SearchView.OnQueryTextListener {
 
 
+    private static final int PREVIOUSLY_SHOWING_LOSES = 1;
+    private static final int PREVIOUSLY_SHOWING_WINS = 2;
     private static final String CNAME = PlayerActivity.class.getCanonicalName();
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
+    private static final String KEY_PREVIOUSLY_SHOWING = "KEY_PREVIOUSLY_SHOWING";
     private static final String TAG = PlayerActivity.class.getSimpleName();
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
+    private int mPreviouslyShowing;
     private Intent mShareIntent;
     private MatchesFilter mFilter;
     private MenuItem mSearch;
@@ -119,8 +123,7 @@ public class PlayerActivity extends BaseListActivity implements
                 Collections.sort(list, Match.DATE_ORDER);
                 mPlayer.setMatches(list);
                 Players.save(mPlayer);
-                createListItems(list);
-                setAdapter(new MatchesAdapter());
+                setList(list);
 
                 final Intent data = new Intent();
                 data.putExtra(ResultData.PLAYER, mPlayer);
@@ -161,11 +164,13 @@ public class PlayerActivity extends BaseListActivity implements
         mInUsersRegion = User.areWeInTheUsersRegion();
         mUserPlayer = User.getPlayer();
 
+        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mPreviouslyShowing = savedInstanceState.getInt(KEY_PREVIOUSLY_SHOWING, 0);
+        }
+
         if (mPlayer.hasMatches()) {
             final ArrayList<Match> matches = mPlayer.getMatches();
-            Collections.sort(matches, Match.DATE_ORDER);
-            createListItems(matches);
-            setAdapter(new MatchesAdapter());
+            setList(matches);
         } else {
             fetchMatches();
         }
@@ -257,6 +262,13 @@ public class PlayerActivity extends BaseListActivity implements
             mSetMenuItemsVisible = false;
         }
 
+        if (mPreviouslyShowing == PREVIOUSLY_SHOWING_LOSES ||
+                mPreviouslyShowing == PREVIOUSLY_SHOWING_WINS) {
+            mShowLoses.setEnabled(mPreviouslyShowing != PREVIOUSLY_SHOWING_LOSES);
+            mShowWins.setEnabled(mPreviouslyShowing != PREVIOUSLY_SHOWING_WINS);
+            mShowAll.setEnabled(true);
+        }
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -293,6 +305,20 @@ public class PlayerActivity extends BaseListActivity implements
 
 
     @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (!Utils.areAnyMenuItemsNull(mShowLoses, mShowWins)) {
+            if (!mShowLoses.isEnabled()) {
+                outState.putInt(KEY_PREVIOUSLY_SHOWING, PREVIOUSLY_SHOWING_LOSES);
+            } else if (!mShowWins.isEnabled()) {
+                outState.putInt(KEY_PREVIOUSLY_SHOWING, PREVIOUSLY_SHOWING_WINS);
+            }
+        }
+    }
+
+
+    @Override
     protected void readIntentData(final Intent intent) {
         mPlayer = intent.getParcelableExtra(EXTRA_PLAYER);
     }
@@ -308,6 +334,23 @@ public class PlayerActivity extends BaseListActivity implements
             mSetMenuItemsVisible = true;
         } else {
             Utils.showMenuItems(mSearch, mShare, mShow);
+        }
+    }
+
+
+    private void setList(final ArrayList<Match> matches) {
+        Collections.sort(matches, Match.DATE_ORDER);
+        createListItems(matches);
+        setAdapter(new MatchesAdapter());
+
+        switch (mPreviouslyShowing) {
+            case PREVIOUSLY_SHOWING_LOSES:
+                show(Result.LOSE);
+                break;
+
+            case PREVIOUSLY_SHOWING_WINS:
+                show(Result.WIN);
+                break;
         }
     }
 
@@ -614,17 +657,6 @@ public class PlayerActivity extends BaseListActivity implements
         protected void publishResults(final CharSequence constraint, final FilterResults results) {
             mListItemsShown = (ArrayList<ListItem>) results.values;
             notifyDataSetChanged();
-        }
-
-
-    }
-
-
-    private static final class BufferViewHolder extends RecyclerView.ViewHolder {
-
-
-        private BufferViewHolder(final View view) {
-            super(view);
         }
 
 

@@ -17,11 +17,13 @@
         <menu>
             <item
                 android:id="@+id/activity_tournaments_menu_sort_chronological"
-                android:title="@string/sort_chronologically" />
+                android:title="@string/sort_chronologically"
+                android:titleCondensed="@string/chronologically" />
             <item
                 android:enabled="false"
                 android:id="@+id/activity_tournaments_menu_sort_reverse_chronological"
-                android:title="@string/sort_reverse_chronologically" />
+                android:title="@string/sort_reverse_chronologically"
+                android:titleCondensed="@string/reverse_chronologically" />
         </menu>
     </item>
 </menu>

@@ -12,6 +12,7 @@
     <string name="cancel">Cancel</string>
     <string name="change_region">Change region</string>
     <string name="change_sync_settings">Change sync settings</string>
+    <string name="chronologically">Chronologically</string>
     <string name="clear_cache">Clear cache</string>
     <string name="close_drawer">Close Drawer</string>
     <string name="enable_or_disable_sync">Enable or disable sync</string>
@@ -62,6 +63,7 @@
     <string name="refresh">Refresh</string>
     <string name="region">Region</string>
     <string name="regions">Regions</string>
+    <string name="reverse_chronologically">Reverse Chronologically</string>
     <string name="save">Save</string>
     <string name="save_">Save!</string>
     <string name="search">Search</string>

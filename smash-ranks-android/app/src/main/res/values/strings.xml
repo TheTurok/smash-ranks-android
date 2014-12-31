@@ -50,10 +50,12 @@
     <string name="only_sync_when_charging">Only sync when charging</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="open_source_on_github">Open source on GitHub</string>
+    <string name="other">Other</string>
     <string name="periodic_sync_is_disabled">Periodic sync is disabled</string>
     <string name="periodic_sync_is_enabled">Periodic sync is enabled</string>
     <string name="player">Player</string>
     <string name="players">Players</string>
+    <string name="pound_sign">#</string>
     <string name="quit">Quit</string>
     <string name="ranking">Ranking</string>
     <string name="rankings">Rankings</string>
@@ -104,7 +106,7 @@
     <string name="win">Win</string>
     <string name="won">Won</string>
     <string name="x_build_y">%1$s (build %2$d)</string>
-    <string name="x_dash_y">%1$d - %2$d</string>
+    <string name="x_em_dash_y">%1$d &#8212; %2$d</string>
     <string name="x_is_ranked_y_on_gar_pr_z">%1$s is ranked %2$d on GAR PR %3$s</string>
     <string name="x_on_gar_pr">%s on GAR PR</string>
     <string name="x_on_gar_pr_y">%1$s on GAR PR %2$s</string>

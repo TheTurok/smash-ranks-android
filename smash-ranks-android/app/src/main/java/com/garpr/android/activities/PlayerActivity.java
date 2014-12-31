@@ -98,6 +98,8 @@ public class PlayerActivity extends BaseListActivity implements
 
         mListItems.trimToSize();
         mListItemsShown = mListItems;
+
+        ListItem.setItemIds(mListItems);
     }
 
 
@@ -447,6 +449,7 @@ public class PlayerActivity extends BaseListActivity implements
     private static final class ListItem {
 
 
+        private long mId;
         private Match mMatch;
         private Tournament mTournament;
         private Type mType;
@@ -467,6 +470,13 @@ public class PlayerActivity extends BaseListActivity implements
             item.mType = Type.TOURNAMENT;
 
             return item;
+        }
+
+
+        private static void setItemIds(final ArrayList<ListItem> listItems) {
+            for (int i = 0; i < listItems.size(); ++i) {
+                listItems.get(i).mId = (long) i;
+            }
         }
 
 
@@ -548,6 +558,12 @@ public class PlayerActivity extends BaseListActivity implements
         @Override
         public int getItemCount() {
             return mListItemsShown.size();
+        }
+
+
+        @Override
+        public long getItemId(final int position) {
+            return mListItemsShown.get(position).mId;
         }
 
 

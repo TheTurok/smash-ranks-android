@@ -130,6 +130,8 @@ public class RankingsActivity extends BaseListActivity implements
 
         mListItems.trimToSize();
         mListItemsShown = mListItems;
+
+        ListItem.setItemIds(mListItems);
     }
 
 
@@ -440,6 +442,7 @@ public class RankingsActivity extends BaseListActivity implements
     private static final class ListItem {
 
 
+        private long mId;
         private Player mPlayer;
         private String mTitle;
         private Type mType;
@@ -460,6 +463,13 @@ public class RankingsActivity extends BaseListActivity implements
             item.mType = Type.TITLE;
 
             return item;
+        }
+
+
+        private static void setItemIds(final ArrayList<ListItem> listItems) {
+            for (int i = 0; i < listItems.size(); ++i) {
+                listItems.get(i).mId = (long) i;
+            }
         }
 
 
@@ -537,6 +547,12 @@ public class RankingsActivity extends BaseListActivity implements
         @Override
         public int getItemCount() {
             return mListItemsShown.size();
+        }
+
+
+        @Override
+        public long getItemId(final int position) {
+            return mListItemsShown.get(position).mId;
         }
 
 

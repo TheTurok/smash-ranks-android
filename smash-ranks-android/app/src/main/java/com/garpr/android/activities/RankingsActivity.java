@@ -71,16 +71,44 @@ public class RankingsActivity extends BaseListActivity implements
 
 
     private void createAlphabeticalListItems() {
-        String lastLetter = null;
+        char lastCharacter = ' ';
+        boolean lastCharacterIsSet = false;
+
+        boolean digitTitleAdded = false;
+        boolean otherTitleAdded = false;
 
         for (final Player player : mPlayers) {
             final String name = player.getName();
-            final String letter = String.valueOf(name.charAt(0));
+            char character = name.charAt(0);
 
-            if (!letter.equals(lastLetter)) {
-                lastLetter = letter;
-                final ListItem listItem = ListItem.createTitle(letter);
-                mListItems.add(listItem);
+            final boolean characterIsLetter = Character.isLetter(character);
+
+            if (characterIsLetter) {
+                character = Character.toUpperCase(character);
+            }
+
+            if (!lastCharacterIsSet || character != lastCharacter) {
+                lastCharacter = character;
+                lastCharacterIsSet = true;
+
+                String listItemTitle = null;
+
+                if (characterIsLetter) {
+                    listItemTitle = String.valueOf(Character.toUpperCase(character));
+                } else if (Character.isDigit(character)) {
+                    if (!digitTitleAdded) {
+                        digitTitleAdded = true;
+                        listItemTitle = getString(R.string.pound_sign);
+                    }
+                } else if (!otherTitleAdded) {
+                    otherTitleAdded = true;
+                    listItemTitle = getString(R.string.other);
+                }
+
+                if (listItemTitle != null) {
+                    final ListItem listItem = ListItem.createTitle(listItemTitle);
+                    mListItems.add(listItem);
+                }
             }
 
             final ListItem listItem = ListItem.createPlayer(player);
@@ -109,7 +137,34 @@ public class RankingsActivity extends BaseListActivity implements
         final Resources resources = getResources();
         final int ranksPerSection = resources.getInteger(R.integer.ranks_per_section);
 
-        // TODO
+        final int mPlayersSize = mPlayers.size();
+
+        for (int i = 0; i < mPlayersSize; ++i) {
+            final Player player = mPlayers.get(i);
+
+            String listItemTitle = null;
+
+            if (i % ranksPerSection == 0) {
+                final int sectionStart = player.getRank();
+                final int sectionEnd;
+
+                if (sectionStart + ranksPerSection - 1 > mPlayersSize) {
+                    sectionEnd = mPlayersSize;
+                } else {
+                    sectionEnd = sectionStart + ranksPerSection - 1;
+                }
+
+                listItemTitle = getString(R.string.x_em_dash_y, sectionStart, sectionEnd);
+            }
+
+            if (listItemTitle != null) {
+                final ListItem listItem = ListItem.createTitle(listItemTitle);
+                mListItems.add(listItem);
+            }
+
+            final ListItem listItem = ListItem.createPlayer(player);
+            mListItems.add(listItem);
+        }
     }
 
 
@@ -134,7 +189,8 @@ public class RankingsActivity extends BaseListActivity implements
             public void response(final ArrayList<Player> list) {
                 mPlayers = list;
                 Collections.sort(mPlayers, mComparator);
-                setList();
+                createListItems();
+                setAdapter(new RankingsAdapter());
             }
         };
 
@@ -363,12 +419,6 @@ public class RankingsActivity extends BaseListActivity implements
     }
 
 
-    private void setList() {
-        createListItems();
-        setAdapter(new RankingsAdapter());
-    }
-
-
     private void showMenuItems() {
         Utils.showMenuItems(mSearch, mSort);
     }
@@ -491,6 +541,12 @@ public class RankingsActivity extends BaseListActivity implements
 
 
         @Override
+        public int getItemViewType(final int position) {
+            return mListItemsShown.get(position).mType.ordinal();
+        }
+
+
+        @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             final ListItem listItem = mListItemsShown.get(position);
 
@@ -527,6 +583,7 @@ public class RankingsActivity extends BaseListActivity implements
                 case PLAYER:
                     view = inflater.inflate(R.layout.model_player, parent, false);
                     holder = new PlayerViewHolder(view);
+                    view.setOnClickListener(this);
                     break;
 
                 case TITLE:
@@ -550,20 +607,38 @@ public class RankingsActivity extends BaseListActivity implements
 
         @Override
         protected FilterResults performFiltering(final CharSequence constraint) {
-            final ArrayList<Player> playersList = new ArrayList<>(mPlayers.size());
+            final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
             final String query = constraint.toString().trim().toLowerCase();
 
-            for (final Player player : mPlayers) {
-                final String name = player.getName().toLowerCase();
+            for (int i = 0; i < mListItems.size(); ++i) {
+                final ListItem item = mListItems.get(i);
 
-                if (name.contains(query)) {
-                    playersList.add(player);
+                if (item.isPlayer()) {
+                    final String name = item.mPlayer.getName().toLowerCase();
+
+                    if (name.contains(query)) {
+                        ListItem title = null;
+
+                        for (int j = i - 1; title == null; --j) {
+                            final ListItem li = mListItems.get(j);
+
+                            if (li.isTitle()) {
+                                title = li;
+                            }
+                        }
+
+                        if (!listItems.contains(title)) {
+                            listItems.add(title);
+                        }
+
+                        listItems.add(item);
+                    }
                 }
             }
 
             final FilterResults results = new FilterResults();
-            results.count = playersList.size();
-            results.values = playersList;
+            results.count = listItems.size();
+            results.values = listItems;
 
             return results;
         }

@@ -141,7 +141,6 @@ public class OnboardingActivity extends BaseActivity implements
                 case ONBOARDING_FRAGMENT_PLAYERS:
                     if (!mPlayersFragment.onBackPressed()) {
                         mPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
-                        mPlayersFragment.clearSelectedPlayer();
                     }
                     break;
 

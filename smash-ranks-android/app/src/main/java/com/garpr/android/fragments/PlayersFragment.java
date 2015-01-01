@@ -119,6 +119,10 @@ public class PlayersFragment extends BaseListToolbarFragment implements
             }
 
             mSelectedPlayer = null;
+
+            if (!isMenuNull()) {
+                mGo.setEnabled(false);
+            }
         }
     }
 
@@ -328,7 +332,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     public void refresh() {
-        mSelectedPlayer = null;
+        clearSelectedPlayer();
         fetchPlayers();
     }
 

@@ -151,7 +151,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     private void findToolbarItems() {
-        if (mGo == null || mSearch == null || mSkip == null) {
+        if (isMenuNull()) {
             final Toolbar toolbar = getToolbar();
             final Menu menu = toolbar.getMenu();
             mGo = menu.findItem(R.id.fragment_players_menu_go);
@@ -180,6 +180,11 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
     public Player getSelectedPlayer() {
         return mSelectedPlayer;
+    }
+
+
+    private boolean isMenuNull() {
+        return mGo == null || mSearch == null || mSkip == null;
     }
 
 
@@ -213,7 +218,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     public boolean onBackPressed() {
         boolean actionConsumed = false;
 
-        if (mSearch != null && MenuItemCompat.isActionViewExpanded(mSearch)) {
+        if (!isMenuNull() && MenuItemCompat.isActionViewExpanded(mSearch)) {
             MenuItemCompat.collapseActionView(mSearch);
             actionConsumed = true;
         }
@@ -289,7 +294,10 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         super.onRefresh();
 
         if (!isLoading()) {
-            MenuItemCompat.collapseActionView(mSearch);
+            if (!isMenuNull()) {
+                MenuItemCompat.collapseActionView(mSearch);
+            }
+
             Players.clear();
             refresh();
         }

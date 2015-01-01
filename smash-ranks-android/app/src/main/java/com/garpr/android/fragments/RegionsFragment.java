@@ -253,6 +253,12 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
         @Override
+        public long getItemId(final int position) {
+            return (long) position;
+        }
+
+
+        @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             final Region region = mRegions.get(position);
             holder.mName.setText(region.getName());
@@ -285,7 +291,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
         private ViewHolder(final View view) {
             super(view);
-            mName = (CheckedTextView) view.findViewById(R.id.model_checkable_name);
+            mName = (CheckedTextView) view.findViewById(R.id.model_checkable_text);
         }
 
 

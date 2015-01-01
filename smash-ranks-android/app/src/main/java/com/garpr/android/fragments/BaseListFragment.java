@@ -102,6 +102,7 @@ abstract class BaseListFragment extends BaseFragment implements
     protected void setAdapter(final BaseListAdapter adapter) {
         mErrorView.setVisibility(View.GONE);
         mAdapter = adapter;
+        mAdapter.setHasStableIds(true);
         mRecyclerView.setAdapter(mAdapter);
         setLoading(false);
     }
@@ -124,6 +125,10 @@ abstract class BaseListFragment extends BaseFragment implements
 
     protected abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
             RecyclerView.Adapter<T> implements View.OnClickListener {
+
+
+        @Override
+        public abstract long getItemId(final int position);
 
 
         @Override

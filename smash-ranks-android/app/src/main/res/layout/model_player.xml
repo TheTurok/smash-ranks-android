@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
     android:id="@+id/model_player_root"
+    tools:ignore="Overdraw"
     style="@style/list_item_root.no_padding">
     <RelativeLayout
         android:background="?attr/selectableItemBackground"
+        android:duplicateParentState="true"
         tools:ignore="UselessParent"
         style="@style/list_item_root">
         <TextView

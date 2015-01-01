@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
     android:id="@+id/model_match_root"
+    tools:ignore="Overdraw"
     style="@style/list_item_root">
     <TextView
         android:background="?attr/selectableItemBackground"
+        android:duplicateParentState="true"
         android:ellipsize="end"
         android:id="@+id/model_match_opponent"
         android:gravity="center_vertical"

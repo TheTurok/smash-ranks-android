@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +24,8 @@ import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Region;
 
+import java.util.Random;
+
 import static android.provider.Settings.ACTION_SYNC_SETTINGS;
 import static android.provider.Settings.EXTRA_AUTHORITIES;
 
@@ -30,10 +33,31 @@ import static android.provider.Settings.EXTRA_AUTHORITIES;
 public class SettingsActivity extends BaseActivity {
 
 
+    private static final String[] RANDOM_YOUTUBE_VIDEOS = {
+            "https://www.youtube.com/watch?v=pD_imYhNoQ4", // wombo combo
+            "https://www.youtube.com/watch?v=rZIxUjct3uo", // axe vs silentwolf evo 2014
+            "https://www.youtube.com/watch?v=jcfv63Xvs5c", // mango vs leffen apex 2014
+            "https://www.youtube.com/watch?v=Qna80MbcAAc", // m2k vs shiz RoM
+            "https://www.youtube.com/watch?v=WqWFYOxjZ54", // pure pwnage episode 1
+            "https://www.youtube.com/watch?v=xRitJ1m8E1w", // the human abstract - patterns
+            "https://www.youtube.com/watch?v=Al_0TsWKtZk", // chillin' at charles crew battle
+            "https://www.youtube.com/watch?v=HkzMA1jrm00", // austin powers blackjack scene
+            "https://www.youtube.com/watch?v=IFlfHC1Rr8E", // bizzarro flame's up tilt kill KoC4
+            "https://www.youtube.com/watch?v=SDnKE5J7ki8", // m2k vs amsa KoC 4
+            "https://www.youtube.com/watch?v=UVJK98U99ZY", // algerian DI
+            "https://www.youtube.com/watch?v=ZRbDl3duEqQ", // luigi was pissed today
+            "https://www.youtube.com/watch?v=me45kHEy10A", // scott pilgrim with british accents
+            "https://www.youtube.com/watch?v=WNr5Ts-oaj0", // westballz vs eddy mexico SSS
+            "https://www.youtube.com/watch?v=NB2klN3Tiog", // hbox vs javi Forte 2
+            "https://www.youtube.com/watch?v=DQ4AhCW5-IA", // the greatest thing ever said
+            "https://www.youtube.com/watch?v=NSf2mgkRm7Q" // documentary episode 1
+    };
+
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
     private CheckedTextView mSyncChargingLabel;
     private CheckedTextView mSyncWifiLabel;
+    private ImageButton mOrb;
     private Intent mSyncSettingsIntent;
     private LinearLayout mAuthor;
     private LinearLayout mGitHub;
@@ -41,6 +65,7 @@ public class SettingsActivity extends BaseActivity {
     private LinearLayout mSync;
     private LinearLayout mSyncCharging;
     private LinearLayout mSyncWifi;
+    private Random mRandom;
     private TextView mRegionName;
     private TextView mSyncChargingDesc;
     private TextView mSyncStatus;
@@ -62,6 +87,7 @@ public class SettingsActivity extends BaseActivity {
         mGitHub = (LinearLayout) findViewById(R.id.activity_settings_github);
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
+        mOrb = (ImageButton) findViewById(R.id.activity_settings_orb);
         mSync = (LinearLayout) findViewById(R.id.activity_settings_sync);
         mSyncCharging = (LinearLayout) findViewById(R.id.activity_settings_sync_charging);
         mSyncChargingDesc = (TextView) findViewById(R.id.activity_settings_sync_charging_desc);
@@ -229,6 +255,29 @@ public class SettingsActivity extends BaseActivity {
         final String versionName = App.getVersionName();
         final int versionCode = App.getVersionCode();
         mVersion.setText(getString(R.string.x_build_y, versionName, versionCode));
+
+        mOrb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                randomYoutubeVideo();
+            }
+        });
+    }
+
+
+    private void randomYoutubeVideo() {
+        if (mRandom == null) {
+            mRandom = new Random();
+        }
+
+        int which;
+
+        do {
+            which = mRandom.nextInt(RANDOM_YOUTUBE_VIDEOS.length);
+        } while (which >= RANDOM_YOUTUBE_VIDEOS.length);
+
+        final String youtubeVideo = RANDOM_YOUTUBE_VIDEOS[which];
+        openLink(youtubeVideo);
     }
 
 

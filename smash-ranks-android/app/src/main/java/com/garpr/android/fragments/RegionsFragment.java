@@ -68,7 +68,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
         final Resources res = getResources();
         final int newMargin = res.getDimensionPixelSize(R.dimen.floating_action_button_disabled);
-        final int duration = res.getInteger(android.R.integer.config_mediumAnimTime);
+        final int duration = res.getInteger(android.R.integer.config_shortAnimTime);
 
         final ValueAnimator animator = ValueAnimator.ofInt(currentMargin, newMargin);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -95,7 +95,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
         final int newMargin = res.getDimensionPixelSize(R.dimen.floating_action_button_enabled);
 
         if (animate) {
-            final int duration = res.getInteger(android.R.integer.config_mediumAnimTime);
+            final int duration = res.getInteger(android.R.integer.config_shortAnimTime);
 
             final ValueAnimator animator = ValueAnimator.ofInt(currentMargin, newMargin);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

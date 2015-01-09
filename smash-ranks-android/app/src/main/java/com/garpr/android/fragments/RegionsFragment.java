@@ -144,8 +144,14 @@ public class RegionsFragment extends BaseListToolbarFragment {
             mSelectedRegion = savedInstanceState.getParcelable(KEY_SELECTED_REGION);
         }
 
-        if (mSelectedRegion == null && isStandaloneMode()) {
-            mSelectedRegion = Settings.getRegion();
+        if (isStandaloneMode()) {
+            final Region region = Settings.getRegion();
+
+            if (mSelectedRegion == null) {
+                mSelectedRegion = region;
+            } else if (!region.equals(mSelectedRegion)) {
+                mSave.setEnabled(true);
+            }
         }
 
         fetchRegions();
@@ -242,6 +248,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
             // TODO
             // adjust the bottom margin / padding so that the action button can properly show
 
+            mSave.setEnabled(mSelectedRegion != null);
             mSave.setVisibility(View.VISIBLE);
 
             mSave.setOnClickListener(new View.OnClickListener() {

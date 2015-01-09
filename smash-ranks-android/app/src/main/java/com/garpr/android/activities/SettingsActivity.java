@@ -175,7 +175,7 @@ public class SettingsActivity extends BaseActivity {
         final boolean syncChargingDefault = res.getBoolean(R.bool.preferences_sync_charging_default);
         final boolean syncWifiDefault = res.getBoolean(R.bool.preferences_sync_wifi_default);
 
-        final SharedPreferences sPreferences = Settings.getDefault();
+        final SharedPreferences sPreferences = Settings.get();
 
         if (sPreferences.getBoolean(syncChargingKey, syncChargingDefault)) {
             mSyncChargingLabel.setChecked(true);
@@ -235,7 +235,7 @@ public class SettingsActivity extends BaseActivity {
     private void toggleCheckPreferenceAndViews( final int preferenceskeyId,
             final CheckedTextView label, final TextView desc, final int onDescStringId,
             final int offDescStringId) {
-        final Editor editor = Settings.editDefault();
+        final Editor editor = Settings.edit();
         final String key = getString(preferenceskeyId);
         final boolean checked = !label.isChecked();
         editor.putBoolean(key, checked);
@@ -248,6 +248,12 @@ public class SettingsActivity extends BaseActivity {
         } else {
             desc.setText(offDescStringId);
         }
+    }
+
+
+    @Override
+    public String toString() {
+        return TAG;
     }
 
 

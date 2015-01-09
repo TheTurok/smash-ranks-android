@@ -15,6 +15,7 @@
     <string name="chronologically">Chronologically</string>
     <string name="clear_cache">Clear cache</string>
     <string name="close_drawer">Close Drawer</string>
+    <string name="date">Date</string>
     <string name="enable_or_disable_sync">Enable or disable sync</string>
     <string name="error">Error</string>
     <string name="error_">Error!</string>
@@ -37,6 +38,7 @@
     <string name="lose">Lose</string>
     <string name="loss">Loss</string>
     <string name="lost">Lost</string>
+    <string name="match">Match</string>
     <string name="misc">Misc</string>
     <string name="miscellaneous">Miscellaneous</string>
     <string name="newengland">New England</string>
@@ -94,6 +96,7 @@
     <string name="syncing">Syncing</string>
     <string name="syncing_">Syncing…</string>
     <string name="texas">Texas</string>
+    <string name="title">Title</string>
     <string name="tournament">Tournament</string>
     <string name="tournaments">Tournaments</string>
     <string name="version_information">Version information</string>

@@ -47,6 +47,11 @@ abstract class BaseListFragment extends BaseFragment implements
     }
 
 
+    public RecyclerView getRecyclerView() {
+        return mRecyclerView;
+    }
+
+
     protected boolean isLoading() {
         return mIsLoading;
     }

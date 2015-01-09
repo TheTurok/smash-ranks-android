@@ -2,6 +2,7 @@ package com.garpr.android.activities;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Matches;
 import com.garpr.android.data.Matches.MatchesCallback;
@@ -27,6 +29,7 @@ import com.garpr.android.data.User;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
+import com.garpr.android.misc.ListFilter;
 import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
@@ -57,9 +60,9 @@ public class PlayerActivity extends BaseListActivity implements
     private ArrayList<ListItem> mListItemsShown;
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
+    private Filter mFilter;
     private int mPreviouslyShowing;
     private Intent mShareIntent;
-    private MatchesFilter mFilter;
     private MenuItem mSearch;
     private MenuItem mShare;
     private MenuItem mShow;
@@ -189,17 +192,10 @@ public class PlayerActivity extends BaseListActivity implements
 
 
     @Override
-    protected void onDrawerClosed() {
-        if (!isLoading()) {
-            showMenuItems();
-        }
-    }
-
-
-    @Override
     protected void onDrawerOpened() {
-        MenuItemCompat.collapseActionView(mSearch);
-        hideMenuItems();
+        if (!isMenuNull() && MenuItemCompat.isActionViewExpanded(mSearch)) {
+            MenuItemCompat.collapseActionView(mSearch);
+        }
     }
 
 
@@ -338,7 +334,17 @@ public class PlayerActivity extends BaseListActivity implements
     @Override
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
-        mFilter = new MatchesFilter();
+
+        final ListFilter.Listener listener = new ListFilter.Listener(this) {
+            @Override
+            @SuppressWarnings("unchecked")
+            public void onFilterComplete(final ArrayList list) {
+                mListItemsShown = (ArrayList<ListItem>) list;
+                notifyDataSetChanged();
+            }
+        };
+
+        mFilter = ListFilter.createSpecialFilter(mListItems, listener);
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
         if (isMenuNull()) {
@@ -444,9 +450,15 @@ public class PlayerActivity extends BaseListActivity implements
     }
 
 
+    @Override
+    public String toString() {
+        return TAG;
+    }
 
 
-    private static final class ListItem {
+
+
+    private static final class ListItem implements ListFilter.SpecialFilterable {
 
 
         private long mId;
@@ -504,6 +516,33 @@ public class PlayerActivity extends BaseListActivity implements
         }
 
 
+        @Override
+        public String getLowerCaseName() {
+            final String lowerCaseName;
+
+            switch (mType) {
+                case MATCH:
+                    lowerCaseName = mMatch.getOpponentName().toLowerCase();
+                    break;
+
+                case TOURNAMENT:
+                    lowerCaseName = mTournament.getName().toLowerCase();
+                    break;
+
+                default:
+                    throw new IllegalStateException("ListItem type is invalid");
+            }
+
+            return lowerCaseName;
+        }
+
+
+        @Override
+        public boolean isBasicItem() {
+            return isMatch();
+        }
+
+
         private boolean isMatch() {
             return mType == Type.MATCH;
         }
@@ -511,6 +550,33 @@ public class PlayerActivity extends BaseListActivity implements
 
         private boolean isTournament() {
             return mType == Type.TOURNAMENT;
+        }
+
+
+        @Override
+        public boolean isSpecialItem() {
+            return isTournament();
+        }
+
+
+        @Override
+        public String toString() {
+            final String title;
+
+            switch (mType) {
+                case MATCH:
+                    title = mMatch.getOpponentName();
+                    break;
+
+                case TOURNAMENT:
+                    title = mTournament.getName();
+                    break;
+
+                default:
+                    throw new IllegalStateException("ListItem type is invalid");
+            }
+
+            return title;
         }
 
 
@@ -530,6 +596,28 @@ public class PlayerActivity extends BaseListActivity implements
                 }
 
                 return type;
+            }
+
+
+            @Override
+            public String toString() {
+                final int resId;
+
+                switch (this) {
+                    case MATCH:
+                        resId = R.string.match;
+                        break;
+
+                    case TOURNAMENT:
+                        resId = R.string.tournament;
+                        break;
+
+                    default:
+                        throw new IllegalStateException("Type is invalid");
+                }
+
+                final Context context = App.getContext();
+                return context.getString(resId);
             }
         }
 
@@ -629,64 +717,6 @@ public class PlayerActivity extends BaseListActivity implements
             }
 
             return holder;
-        }
-
-
-    }
-
-
-    private final class MatchesFilter extends Filter {
-
-
-        @Override
-        protected FilterResults performFiltering(final CharSequence constraint) {
-            final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
-            final String query = constraint.toString().trim().toLowerCase();
-
-            for (int i = 0; i < mListItems.size(); ++i) {
-                final ListItem item = mListItems.get(i);
-
-                if (item.isMatch()) {
-                    final String name = item.mMatch.getOpponentName().toLowerCase();
-
-                    if (name.contains(query)) {
-                        // So we've now found a match with an opponent name that matches what the
-                        // user typed into the search field. Now let's find its corresponding
-                        // Tournament ListItem.
-
-                        ListItem tournament = null;
-
-                        for (int j = i - 1; tournament == null; --j) {
-                            final ListItem li = mListItems.get(j);
-
-                            if (li.isTournament()) {
-                                tournament = li;
-                            }
-                        }
-
-                        // make sure we haven't already added this tournament to the list
-                        if (!listItems.contains(tournament)) {
-                            listItems.add(tournament);
-                        }
-
-                        listItems.add(item);
-                    }
-                }
-            }
-
-            final FilterResults results = new FilterResults();
-            results.count = listItems.size();
-            results.values = listItems;
-
-            return results;
-        }
-
-
-        @Override
-        @SuppressWarnings("unchecked")
-        protected void publishResults(final CharSequence constraint, final FilterResults results) {
-            mListItemsShown = (ArrayList<ListItem>) results.values;
-            notifyDataSetChanged();
         }
 
 

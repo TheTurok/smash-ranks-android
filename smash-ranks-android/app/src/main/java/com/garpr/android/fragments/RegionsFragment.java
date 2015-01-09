@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Regions;
@@ -29,32 +30,23 @@ import java.util.Collections;
 public class RegionsFragment extends BaseListToolbarFragment {
 
 
-    private static final String KEY_LOAD_USER_REGION = "KEY_LOAD_USER_REGION";
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
-    private static final String KEY_SHOW_TOOLBAR = "KEY_SHOW_TOOLBAR";
     private static final String TAG = RegionsFragment.class.getSimpleName();
 
 
     private ArrayList<Region> mRegions;
-    private boolean mLoadUserRegion;
-    private boolean mShowToolbar;
+    private ImageButton mSave;
     private MenuItem mNext;
+    private Mode mMode;
     private Region mSelectedRegion;
-    private RegionClickListener mRegionClickListener;
-    private ToolbarClickListener mToolbarClickListener;
+    private RegionSaveListener mRegionSaveListener;
+    private ToolbarNextListener mToolbarNextListener;
 
 
 
 
-    public static RegionsFragment create(final boolean loadUserRegion, final boolean showToolbar) {
-        final Bundle arguments = new Bundle();
-        arguments.putBoolean(KEY_LOAD_USER_REGION, loadUserRegion);
-        arguments.putBoolean(KEY_SHOW_TOOLBAR, showToolbar);
-
-        final RegionsFragment fragment = new RegionsFragment();
-        fragment.setArguments(arguments);
-
-        return fragment;
+    public static RegionsFragment create() {
+        return new RegionsFragment();
     }
 
 
@@ -97,6 +89,20 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     @Override
+    protected void findViews() {
+        super.findViews();
+        final View view = getView();
+        mSave = (ImageButton) view.findViewById(R.id.fragment_regions_save);
+    }
+
+
+    @Override
+    protected int getContentView() {
+        return R.layout.fragment_regions;
+    }
+
+
+    @Override
     protected String getErrorText() {
         return getString(R.string.error_fetching_regions);
     }
@@ -106,7 +112,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
     protected int getOptionsMenu() {
         final int optionsMenu;
 
-        if (mShowToolbar) {
+        if (isEmbeddedMode()) {
             optionsMenu = R.menu.fragment_regions;
         } else {
             optionsMenu = 0;
@@ -121,6 +127,16 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
+    private boolean isEmbeddedMode() {
+        return mMode == Mode.EMBEDDED;
+    }
+
+
+    private boolean isStandaloneMode() {
+        return mMode == Mode.STANDALONE;
+    }
+
+
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -129,7 +145,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
             mSelectedRegion = savedInstanceState.getParcelable(KEY_SELECTED_REGION);
         }
 
-        if (mSelectedRegion == null && mLoadUserRegion) {
+        if (mSelectedRegion == null && isStandaloneMode()) {
             mSelectedRegion = Settings.getRegion();
         }
 
@@ -141,12 +157,20 @@ public class RegionsFragment extends BaseListToolbarFragment {
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
 
-        if (activity instanceof RegionClickListener) {
-            mRegionClickListener = (RegionClickListener) activity;
+        if (activity instanceof RegionSaveListener) {
+            mRegionSaveListener = (RegionSaveListener) activity;
+            mMode = Mode.STANDALONE;
         }
 
-        if (activity instanceof ToolbarClickListener) {
-            mToolbarClickListener = (ToolbarClickListener) activity;
+        if (activity instanceof ToolbarNextListener) {
+            mToolbarNextListener = (ToolbarNextListener) activity;
+            mMode = Mode.EMBEDDED;
+        }
+
+        if (mRegionSaveListener == null && mToolbarNextListener == null) {
+            throw new IllegalStateException("Attached Activity must implement a listener");
+        } else if (mRegionSaveListener != null && mToolbarNextListener != null) {
+            throw new IllegalStateException("Attached Activity can only implement one listener");
         }
     }
 
@@ -156,24 +180,28 @@ public class RegionsFragment extends BaseListToolbarFragment {
         mSelectedRegion = mRegions.get(position);
         notifyDataSetChanged();
 
-        if (mRegionClickListener != null) {
-            mRegionClickListener.onRegionClick(mSelectedRegion);
-        }
+        if (isStandaloneMode()) {
+            final Region region = Settings.getRegion();
 
-        if (mShowToolbar) {
+            if (region.equals(mSelectedRegion)) {
+                mSave.setEnabled(false);
+            } else {
+                mSave.setEnabled(true);
+            }
+        } else if (isEmbeddedMode()) {
             findToolbarItems();
             mNext.setEnabled(true);
+        } else {
+            throw new IllegalStateException("Mode is unknown");
         }
     }
 
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        findToolbarItems();
-
         switch (item.getItemId()) {
             case R.id.fragment_regions_menu_next:
-                mToolbarClickListener.onNextClick();
+                mToolbarNextListener.onNextClick();
                 break;
 
             default:
@@ -210,22 +238,26 @@ public class RegionsFragment extends BaseListToolbarFragment {
         super.prepareViews();
         final Toolbar toolbar = getToolbar();
 
-        if (mShowToolbar) {
+        if (isStandaloneMode()) {
+            final RecyclerView recyclerView = getRecyclerView();
+            recyclerView.setClipToPadding(false);
+
+            // TODO
+            // adjust the bottom margin / padding so that the action button can properly show
+
+            mSave.setVisibility(View.VISIBLE);
+
+            mSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    mRegionSaveListener.onRegionSaved();
+                }
+            });
+        } else if (isEmbeddedMode()) {
             toolbar.setTitle(R.string.select_your_region);
+            toolbar.setVisibility(View.VISIBLE);
         } else {
-            toolbar.setVisibility(View.GONE);
-        }
-    }
-
-
-    @Override
-    protected void readArguments(final Bundle arguments) {
-        if (arguments == null || arguments.isEmpty()) {
-            // this should never happen
-            throw new RuntimeException();
-        } else {
-            mLoadUserRegion = arguments.getBoolean(KEY_LOAD_USER_REGION, true);
-            mShowToolbar = arguments.getBoolean(KEY_SHOW_TOOLBAR, false);
+            throw new IllegalStateException("Mode is unknown");
         }
     }
 
@@ -234,10 +266,26 @@ public class RegionsFragment extends BaseListToolbarFragment {
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
 
-        if (mShowToolbar && mSelectedRegion != null) {
+        if (mSelectedRegion != null && isEmbeddedMode()) {
             findToolbarItems();
             mNext.setEnabled(true);
         }
+    }
+
+
+    @Override
+    protected void showError() {
+        super.showError();
+
+        if (isStandaloneMode()) {
+            mSave.setVisibility(View.GONE);
+        }
+    }
+
+
+    @Override
+    public String toString() {
+        return TAG;
     }
 
 
@@ -298,16 +346,21 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
-    public interface RegionClickListener {
+    private static enum Mode {
+        EMBEDDED, STANDALONE
+    }
 
 
-        public void onRegionClick(final Region region);
+    public interface RegionSaveListener {
+
+
+        public void onRegionSaved();
 
 
     }
 
 
-    public interface ToolbarClickListener {
+    public interface ToolbarNextListener {
 
 
         public void onNextClick();

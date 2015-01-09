@@ -21,7 +21,6 @@ import java.util.LinkedList;
 public final class Settings {
 
 
-    private static final String CNAME = Settings.class.getCanonicalName();
     private static final String KEY_REGION = "KEY_REGION";
     private static final String TAG = Settings.class.getSimpleName();
 
@@ -70,8 +69,8 @@ public final class Settings {
     }
 
 
-    private static Editor edit() {
-        return edit(CNAME);
+    public static Editor edit() {
+        return get().edit();
     }
 
 
@@ -80,25 +79,15 @@ public final class Settings {
     }
 
 
-    public static Editor editDefault() {
-        return getDefault().edit();
-    }
-
-
-    private static SharedPreferences get() {
-        return get(CNAME);
+    public static SharedPreferences get() {
+        final Context context = App.getContext();
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
 
     public static SharedPreferences get(final String name) {
         final Context context = App.getContext();
         return context.getSharedPreferences(name, Context.MODE_PRIVATE);
-    }
-
-
-    public static SharedPreferences getDefault() {
-        final Context context = App.getContext();
-        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
 

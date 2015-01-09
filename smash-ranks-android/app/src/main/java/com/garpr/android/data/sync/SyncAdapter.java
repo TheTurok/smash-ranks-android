@@ -62,7 +62,7 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
     private boolean canSync() {
         final Context context = getContext();
         final Resources res = context.getResources();
-        final SharedPreferences sPreferences = Settings.getDefault();
+        final SharedPreferences sPreferences = Settings.get();
 
         final String keyCharging = res.getString(R.string.preferences_sync_charging);
         final boolean keyChargingDefault = res.getBoolean(R.bool.preferences_sync_charging_default);

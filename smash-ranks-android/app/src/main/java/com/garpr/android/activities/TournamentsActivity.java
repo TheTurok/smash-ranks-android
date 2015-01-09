@@ -2,6 +2,7 @@ package com.garpr.android.activities;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -16,12 +17,14 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Tournaments;
 import com.garpr.android.data.Tournaments.TournamentsCallback;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
+import com.garpr.android.misc.ListFilter;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 import com.garpr.android.models.Tournament;
@@ -46,11 +49,11 @@ public class TournamentsActivity extends BaseListActivity implements
     private ArrayList<Tournament> mTournaments;
     private boolean mSetSearchVisible;
     private Comparator<Tournament> mComparator;
+    private Filter mFilter;
     private MenuItem mSearch;
     private MenuItem mSort;
     private MenuItem mSortChronological;
     private MenuItem mSortReverseChronological;
-    private TournamentsFilter mFilter;
 
 
 
@@ -176,17 +179,10 @@ public class TournamentsActivity extends BaseListActivity implements
 
 
     @Override
-    protected void onDrawerClosed() {
-        if (!isLoading()) {
-            showMenuItems();
-        }
-    }
-
-
-    @Override
     protected void onDrawerOpened() {
-        MenuItemCompat.collapseActionView(mSearch);
-        hideMenuItems();
+        if (!isMenuNull() && MenuItemCompat.isActionViewExpanded(mSearch)) {
+            MenuItemCompat.collapseActionView(mSearch);
+        }
     }
 
 
@@ -298,7 +294,17 @@ public class TournamentsActivity extends BaseListActivity implements
     @Override
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
-        mFilter = new TournamentsFilter();
+
+        final ListFilter.Listener listener = new ListFilter.Listener(this) {
+            @Override
+            @SuppressWarnings("unchecked")
+            public void onFilterComplete(final ArrayList list) {
+                mListItemsShown = (ArrayList<ListItem>) list;
+                notifyDataSetChanged();
+            }
+        };
+
+        mFilter = ListFilter.createSpecialFilter(mListItems, listener);
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
@@ -312,7 +318,7 @@ public class TournamentsActivity extends BaseListActivity implements
 
     private void setList() {
         createListItems();
-        setAdapter(new TournamentAdapter());
+        setAdapter(new TournamentsAdapter());
     }
 
 
@@ -332,9 +338,15 @@ public class TournamentsActivity extends BaseListActivity implements
     }
 
 
+    @Override
+    public String toString() {
+        return TAG;
+    }
 
 
-    private final static class ListItem {
+
+
+    private final static class ListItem implements ListFilter.SpecialFilterable {
 
 
         private long mId;
@@ -392,13 +404,67 @@ public class TournamentsActivity extends BaseListActivity implements
         }
 
 
+        @Override
+        public String getLowerCaseName() {
+            final String lowerCaseName;
+
+            switch (mType) {
+                case DATE:
+                    lowerCaseName = mDate.toLowerCase();
+                    break;
+
+                case TOURNAMENT:
+                    lowerCaseName = mTournament.getName().toLowerCase();
+                    break;
+
+                default:
+                    throw new IllegalStateException("ListItem type is invalid");
+            }
+
+            return lowerCaseName;
+        }
+
+
+        @Override
+        public boolean isBasicItem() {
+            return isTournament();
+        }
+
+
         private boolean isDate() {
             return mType == Type.DATE;
         }
 
 
+        @Override
+        public boolean isSpecialItem() {
+            return isDate();
+        }
+
+
         private boolean isTournament() {
             return mType == Type.TOURNAMENT;
+        }
+
+
+        @Override
+        public String toString() {
+            final String name;
+
+            switch (mType) {
+                case DATE:
+                    name = mDate;
+                    break;
+
+                case TOURNAMENT:
+                    name = mTournament.getName();
+                    break;
+
+                default:
+                    throw new IllegalStateException("ListItem type is invalid");
+            }
+
+            return name;
         }
 
 
@@ -419,13 +485,35 @@ public class TournamentsActivity extends BaseListActivity implements
 
                 return type;
             }
+
+
+            @Override
+            public String toString() {
+                final int resId;
+
+                switch (this) {
+                    case DATE:
+                        resId = R.string.date;
+                        break;
+
+                    case TOURNAMENT:
+                        resId = R.string.tournament;
+                        break;
+
+                    default:
+                        throw new IllegalStateException("Type is invalid");
+                }
+
+                final Context context = App.getContext();
+                return context.getString(resId);
+            }
         }
 
 
     }
 
 
-    private final class TournamentAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
+    private final class TournamentsAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
 
 
         @Override
@@ -486,62 +574,6 @@ public class TournamentsActivity extends BaseListActivity implements
             }
 
             return holder;
-        }
-
-
-    }
-
-
-    private final class TournamentsFilter extends Filter {
-
-
-        @Override
-        protected FilterResults performFiltering(final CharSequence constraint) {
-            // This method is nearly identical to one in PlayerActivity, look there for info on
-            // what's going on here.
-
-            final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
-            final String query = constraint.toString().trim().toLowerCase();
-
-            for (int i = 0; i < mListItems.size(); ++i) {
-                final ListItem item = mListItems.get(i);
-
-                if (item.isTournament()) {
-                    final String name = item.mTournament.getName().toLowerCase();
-
-                    if (name.contains(query)) {
-                        ListItem date = null;
-
-                        for (int j = i - 1; date == null; --j) {
-                            final ListItem li = mListItems.get(j);
-
-                            if (li.isDate()) {
-                                date = li;
-                            }
-                        }
-
-                        if (!listItems.contains(date)) {
-                            listItems.add(date);
-                        }
-
-                        listItems.add(item);
-                    }
-                }
-            }
-
-            final FilterResults results = new FilterResults();
-            results.count = listItems.size();
-            results.values = listItems;
-
-            return results;
-        }
-
-
-        @Override
-        @SuppressWarnings("unchecked")
-        protected void publishResults(final CharSequence constraint, final FilterResults results) {
-            mListItemsShown = (ArrayList<ListItem>) results.values;
-            notifyDataSetChanged();
         }
 
 

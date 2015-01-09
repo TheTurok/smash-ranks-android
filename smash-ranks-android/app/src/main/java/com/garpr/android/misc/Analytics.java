@@ -184,6 +184,12 @@ public final class Analytics {
         }
 
 
+        @Override
+        public String toString() {
+            return name;
+        }
+
+
     }
 
 

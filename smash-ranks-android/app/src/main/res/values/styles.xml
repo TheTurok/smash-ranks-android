@@ -29,6 +29,7 @@
     </style>
 
     <style name="error_line2" parent="error_line">
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
         <item name="android:text">@string/swipe_to_refresh_and_try_again</item>
         <item name="android:textColor">@color/gray_light</item>
         <item name="android:textSize">14sp</item>
@@ -40,6 +41,10 @@
 
     <style name="gravity_end">
         <item name="android:gravity">right</item>
+    </style>
+
+    <style name="layout_gravity_bottom_end">
+        <item name="android:layout_gravity">bottom|right</item>
     </style>
 
     <style name="list">

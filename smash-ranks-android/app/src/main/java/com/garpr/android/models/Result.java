@@ -62,13 +62,17 @@ public enum Result implements Parcelable {
     public String toString() {
         final int resId;
 
-        if (isLose()) {
-            resId = R.string.lose;
-        } else if (isWin()) {
-            resId = R.string.win;
-        } else {
-            // this should never happen
-            throw new IllegalStateException();
+        switch (this) {
+            case LOSE:
+                resId = R.string.lose;
+                break;
+
+            case WIN:
+                resId = R.string.win;
+                break;
+
+            default:
+                throw new IllegalStateException("Result type is invalid");
         }
 
         final Context context = App.getContext();

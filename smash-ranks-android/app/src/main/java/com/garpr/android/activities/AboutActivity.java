@@ -71,4 +71,10 @@ public class AboutActivity extends BaseActivity {
     }
 
 
+    @Override
+    public String toString() {
+        return TAG;
+    }
+
+
 }

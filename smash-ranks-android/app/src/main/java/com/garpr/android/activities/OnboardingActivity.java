@@ -28,7 +28,7 @@ import com.garpr.android.models.Region;
 
 public class OnboardingActivity extends BaseActivity implements
         PlayersFragment.Listeners,
-        RegionsFragment.ToolbarClickListener {
+        RegionsFragment.ToolbarNextListener {
 
 
     private static final int ONBOARDING_FRAGMENT_COUNT = 2;
@@ -251,6 +251,12 @@ public class OnboardingActivity extends BaseActivity implements
     }
 
 
+    @Override
+    public String toString() {
+        return TAG;
+    }
+
+
 
 
     private final class OnboardingFragmentAdapter extends FragmentPagerAdapter {
@@ -273,7 +279,7 @@ public class OnboardingActivity extends BaseActivity implements
 
             switch (position) {
                 case ONBOARDING_FRAGMENT_REGIONS:
-                    fragment = RegionsFragment.create(false, true);
+                    fragment = RegionsFragment.create();
                     break;
 
                 case ONBOARDING_FRAGMENT_PLAYERS:

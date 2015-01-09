@@ -2,6 +2,7 @@ package com.garpr.android.activities;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.Players.PlayersCallback;
@@ -26,6 +28,7 @@ import com.garpr.android.data.sync.Sync;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
+import com.garpr.android.misc.ListFilter;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
 import com.garpr.android.misc.Utils;
@@ -53,12 +56,12 @@ public class RankingsActivity extends BaseListActivity implements
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
     private Comparator<Player> mComparator;
+    private Filter mFilter;
     private MenuItem mSearch;
     private MenuItem mSort;
     private MenuItem mSortAlphabetical;
     private MenuItem mSortRank;
     private Player mUserPlayer;
-    private RankingsFilter mFilter;
 
 
 
@@ -284,17 +287,10 @@ public class RankingsActivity extends BaseListActivity implements
 
 
     @Override
-    protected void onDrawerClosed() {
-        if (!isLoading()) {
-            showMenuItems();
-        }
-    }
-
-
-    @Override
     protected void onDrawerOpened() {
-        MenuItemCompat.collapseActionView(mSearch);
-        hideMenuItems();
+        if (!isMenuNull() && MenuItemCompat.isActionViewExpanded(mSearch)) {
+            MenuItemCompat.collapseActionView(mSearch);
+        }
     }
 
 
@@ -409,7 +405,17 @@ public class RankingsActivity extends BaseListActivity implements
     @Override
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
-        mFilter = new RankingsFilter();
+
+        final ListFilter.Listener listener = new ListFilter.Listener(this) {
+            @Override
+            @SuppressWarnings("unchecked")
+            public void onFilterComplete(final ArrayList list) {
+                mListItemsShown = (ArrayList<ListItem>) list;
+                notifyDataSetChanged();
+            }
+        };
+
+        mFilter = ListFilter.createSpecialFilter(mListItems, listener);
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
@@ -437,9 +443,15 @@ public class RankingsActivity extends BaseListActivity implements
     }
 
 
+    @Override
+    public String toString() {
+        return TAG;
+    }
 
 
-    private static final class ListItem {
+
+
+    private static final class ListItem implements ListFilter.SpecialFilterable {
 
 
         private long mId;
@@ -497,13 +509,67 @@ public class RankingsActivity extends BaseListActivity implements
         }
 
 
+        @Override
+        public String getLowerCaseName() {
+            final String lowerCaseName;
+
+            switch (mType) {
+                case PLAYER:
+                    lowerCaseName = mPlayer.getName().toLowerCase();
+                    break;
+
+                case TITLE:
+                    lowerCaseName = mTitle.toLowerCase();
+                    break;
+
+                default:
+                    throw new IllegalStateException("ListItem type is invalid");
+            }
+
+            return lowerCaseName;
+        }
+
+
+        @Override
+        public boolean isBasicItem() {
+            return isPlayer();
+        }
+
+
         private boolean isPlayer() {
             return mType == Type.PLAYER;
         }
 
 
+        @Override
+        public boolean isSpecialItem() {
+            return isTitle();
+        }
+
+
         private boolean isTitle() {
             return mType == Type.TITLE;
+        }
+
+
+        @Override
+        public String toString() {
+            final String name;
+
+            switch (mType) {
+                case PLAYER:
+                    name = mPlayer.getName();
+                    break;
+
+                case TITLE:
+                    name = mTitle;
+                    break;
+
+                default:
+                    throw new IllegalStateException("ListItem type is invalid");
+            }
+
+            return name;
         }
 
 
@@ -523,6 +589,28 @@ public class RankingsActivity extends BaseListActivity implements
                 }
 
                 return type;
+            }
+
+
+            @Override
+            public String toString() {
+                final int resId;
+
+                switch (this) {
+                    case PLAYER:
+                        resId = R.string.player;
+                        break;
+
+                    case TITLE:
+                        resId = R.string.title;
+                        break;
+
+                    default:
+                        throw new IllegalStateException("Type is invalid");
+                }
+
+                final Context context = App.getContext();
+                return context.getString(resId);
             }
         }
 
@@ -612,59 +700,6 @@ public class RankingsActivity extends BaseListActivity implements
             }
 
             return holder;
-        }
-
-
-    }
-
-
-    private final class RankingsFilter extends Filter {
-
-
-        @Override
-        protected FilterResults performFiltering(final CharSequence constraint) {
-            final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
-            final String query = constraint.toString().trim().toLowerCase();
-
-            for (int i = 0; i < mListItems.size(); ++i) {
-                final ListItem item = mListItems.get(i);
-
-                if (item.isPlayer()) {
-                    final String name = item.mPlayer.getName().toLowerCase();
-
-                    if (name.contains(query)) {
-                        ListItem title = null;
-
-                        for (int j = i - 1; title == null; --j) {
-                            final ListItem li = mListItems.get(j);
-
-                            if (li.isTitle()) {
-                                title = li;
-                            }
-                        }
-
-                        if (!listItems.contains(title)) {
-                            listItems.add(title);
-                        }
-
-                        listItems.add(item);
-                    }
-                }
-            }
-
-            final FilterResults results = new FilterResults();
-            results.count = listItems.size();
-            results.values = listItems;
-
-            return results;
-        }
-
-
-        @Override
-        @SuppressWarnings("unchecked")
-        protected void publishResults(final CharSequence constraint, final FilterResults results) {
-            mListItemsShown = (ArrayList<ListItem>) results.values;
-            notifyDataSetChanged();
         }
 
 

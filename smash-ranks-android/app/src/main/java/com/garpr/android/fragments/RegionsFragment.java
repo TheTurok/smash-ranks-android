@@ -4,8 +4,10 @@ package com.garpr.android.fragments;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MarginLayoutParamsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
+import android.view.ViewTreeObserver;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 
@@ -296,6 +299,33 @@ public class RegionsFragment extends BaseListToolbarFragment {
             final RecyclerView recyclerView = getRecyclerView();
             recyclerView.setClipToPadding(false);
 
+            final ViewTreeObserver vto = mSave.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                @SuppressWarnings("deprecation")
+                public void onGlobalLayout() {
+                    final ViewTreeObserver vto = mSave.getViewTreeObserver();
+
+                    if (vto.isAlive()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            vto.removeOnGlobalLayoutListener(this);
+                        } else {
+                            vto.removeGlobalOnLayoutListener(this);
+                        }
+                    }
+
+                    // TODO
+                    // same as the one below
+
+//                    final Resources res = getResources();
+//                    final int rootPadding = res.getDimensionPixelSize(R.dimen.root_padding);
+//                    final int bottom = mSave.getTop();
+//
+//                    ViewCompat.setPaddingRelative(recyclerView, 0, 0, rootPadding + bottom, 0);
+//                    recyclerView.requestLayout();
+                }
+            });
+
             // TODO
             // adjust the bottom margin / padding so that the action button can properly show
 
@@ -304,7 +334,6 @@ public class RegionsFragment extends BaseListToolbarFragment {
             }
 
             mSave.setVisibility(View.VISIBLE);
-
             mSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {

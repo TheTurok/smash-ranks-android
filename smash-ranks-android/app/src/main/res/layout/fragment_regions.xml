@@ -26,14 +26,19 @@
                     style="@style/error_line2" />
             </LinearLayout>
             <ImageButton
-                android:background="@color/indigo"
+                android:background="@drawable/floating_action_button"
                 android:contentDescription="@string/save"
-                android:elevation="@dimen/elevation_double"
                 android:id="@+id/fragment_regions_save"
-                android:layout_height="@dimen/list_item_height"
-                android:layout_width="@dimen/list_item_height"
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/root_padding_double"
+                android:layout_marginEnd="@dimen/floating_action_button_disabled"
+                android:layout_marginRight="@dimen/floating_action_button_disabled"
+                android:layout_width="48dp"
+                android:src="@drawable/ic_save"
                 android:visibility="gone"
                 tools:ignore="UnusedAttribute"
+                tools:layout_marginEnd="@dimen/floating_action_button_enabled"
+                tools:layout_marginRight="@dimen/floating_action_button_enabled"
                 tools:visibility="visible"
                 style="@style/layout_gravity_bottom_end" />
         </FrameLayout>

@@ -49,6 +49,16 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
+    private void disableSave() {
+
+    }
+
+
+    private void enableSave(final boolean animate) {
+        mSave.setEnabled(true);
+    }
+
+
     private void fetchRegions() {
         setLoading(true);
 
@@ -150,7 +160,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
             if (mSelectedRegion == null) {
                 mSelectedRegion = region;
             } else if (!region.equals(mSelectedRegion)) {
-                mSave.setEnabled(true);
+                enableSave(false);
             }
         }
 
@@ -187,9 +197,9 @@ public class RegionsFragment extends BaseListToolbarFragment {
             final Region region = Settings.getRegion();
 
             if (region.equals(mSelectedRegion)) {
-                mSave.setEnabled(false);
+                disableSave();
             } else {
-                mSave.setEnabled(true);
+                enableSave(true);
             }
         } else if (isEmbeddedMode()) {
             findToolbarItems();
@@ -248,7 +258,10 @@ public class RegionsFragment extends BaseListToolbarFragment {
             // TODO
             // adjust the bottom margin / padding so that the action button can properly show
 
-            mSave.setEnabled(mSelectedRegion != null);
+            if (mSelectedRegion != null) {
+                enableSave(false);
+            }
+
             mSave.setVisibility(View.VISIBLE);
 
             mSave.setOnClickListener(new View.OnClickListener() {

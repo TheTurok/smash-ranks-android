@@ -1,8 +1,11 @@
 package com.garpr.android.fragments;
 
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,6 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 
@@ -49,13 +55,64 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
-    private void disableSave() {
+    private void animateSave() {
 
+    }
+
+
+    private void disableSave() {
+        mSave.setEnabled(false);
+
+        final MarginLayoutParams params = (MarginLayoutParams) mSave.getLayoutParams();
+        final int currentMargin = MarginLayoutParamsCompat.getMarginEnd(params);
+
+        final Resources res = getResources();
+        final int newMargin = res.getDimensionPixelSize(R.dimen.floating_action_button_disabled);
+        final int duration = res.getInteger(android.R.integer.config_mediumAnimTime);
+
+        final ValueAnimator animator = ValueAnimator.ofInt(currentMargin, newMargin);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(final ValueAnimator animation) {
+                final int margin = (Integer) animation.getAnimatedValue();
+                MarginLayoutParamsCompat.setMarginEnd(params, margin);
+                mSave.requestLayout();
+            }
+        });
+
+        animator.setDuration(duration);
+        animator.start();
     }
 
 
     private void enableSave(final boolean animate) {
         mSave.setEnabled(true);
+
+        final MarginLayoutParams params = (MarginLayoutParams) mSave.getLayoutParams();
+        final int currentMargin = MarginLayoutParamsCompat.getMarginEnd(params);
+
+        final Resources res = getResources();
+        final int newMargin = res.getDimensionPixelSize(R.dimen.floating_action_button_enabled);
+
+        if (animate) {
+            final int duration = res.getInteger(android.R.integer.config_mediumAnimTime);
+
+            final ValueAnimator animator = ValueAnimator.ofInt(currentMargin, newMargin);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(final ValueAnimator animation) {
+                    final int margin = (Integer) animation.getAnimatedValue();
+                    MarginLayoutParamsCompat.setMarginEnd(params, margin);
+                    mSave.requestLayout();
+                }
+            });
+
+            animator.setDuration(duration);
+            animator.start();
+        } else {
+            MarginLayoutParamsCompat.setMarginEnd(params, newMargin);
+            mSave.setLayoutParams(params);
+        }
     }
 
 

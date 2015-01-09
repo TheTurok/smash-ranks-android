@@ -76,7 +76,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
             public void onAnimationUpdate(final ValueAnimator animation) {
                 final int margin = (Integer) animation.getAnimatedValue();
                 MarginLayoutParamsCompat.setMarginEnd(params, margin);
-                mSave.requestLayout();
+                mSave.setLayoutParams(params);
             }
         });
 
@@ -103,7 +103,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
                 public void onAnimationUpdate(final ValueAnimator animation) {
                     final int margin = (Integer) animation.getAnimatedValue();
                     MarginLayoutParamsCompat.setMarginEnd(params, margin);
-                    mSave.requestLayout();
+                    mSave.setLayoutParams(params);
                 }
             });
 

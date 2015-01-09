@@ -37,7 +37,6 @@ public class RegionsFragment extends BaseListToolbarFragment {
     private ArrayList<Region> mRegions;
     private ImageButton mSave;
     private MenuItem mNext;
-    private Mode mMode;
     private Region mSelectedRegion;
     private RegionSaveListener mRegionSaveListener;
     private ToolbarNextListener mToolbarNextListener;
@@ -128,12 +127,12 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     private boolean isEmbeddedMode() {
-        return mMode == Mode.EMBEDDED;
+        return mToolbarNextListener != null;
     }
 
 
     private boolean isStandaloneMode() {
-        return mMode == Mode.STANDALONE;
+        return mRegionSaveListener != null;
     }
 
 
@@ -159,12 +158,10 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
         if (activity instanceof RegionSaveListener) {
             mRegionSaveListener = (RegionSaveListener) activity;
-            mMode = Mode.STANDALONE;
         }
 
         if (activity instanceof ToolbarNextListener) {
             mToolbarNextListener = (ToolbarNextListener) activity;
-            mMode = Mode.EMBEDDED;
         }
 
         if (mRegionSaveListener == null && mToolbarNextListener == null) {
@@ -343,11 +340,6 @@ public class RegionsFragment extends BaseListToolbarFragment {
         }
 
 
-    }
-
-
-    private static enum Mode {
-        EMBEDDED, STANDALONE
     }
 
 

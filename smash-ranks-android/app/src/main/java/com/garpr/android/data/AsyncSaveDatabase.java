@@ -3,7 +3,8 @@ package com.garpr.android.data;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
+
+import com.garpr.android.misc.Console;
 
 import java.util.ArrayList;
 
@@ -45,7 +46,7 @@ abstract class AsyncSaveDatabase<T> extends AsyncTask<Void, Void, Void> {
         database.endTransaction();
         Database.stop();
 
-        Log.d(TAG, "Saved " + mItems.size() + " objects to the " + mTableName + " database");
+        Console.d(TAG, "Saved " + mItems.size() + " objects to the " + mTableName + " database");
 
         return null;
     }

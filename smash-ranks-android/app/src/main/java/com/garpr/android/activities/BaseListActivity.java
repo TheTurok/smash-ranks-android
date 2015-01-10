@@ -11,10 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
+import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 
 
 abstract class BaseListActivity extends BaseActivity implements
+        BaseListAdapter.Listener,
         SwipeRefreshLayout.OnRefreshListener {
 
 
@@ -47,6 +49,11 @@ abstract class BaseListActivity extends BaseActivity implements
     }
 
 
+    protected RecyclerView getRecyclerView() {
+        return mRecyclerView;
+    }
+
+
     protected boolean isLoading() {
         return mIsLoading;
     }
@@ -75,7 +82,14 @@ abstract class BaseListActivity extends BaseActivity implements
     }
 
 
-    protected void onItemClick(final View view, final int position) {
+    @Override
+    public void onItemClick(final View view, final int position) {
+        // this method intentionally left blank (children can override)
+    }
+
+
+    @Override
+    public void onItemLongClick(final View view, final int position) {
         // this method intentionally left blank (children can override)
     }
 
@@ -102,7 +116,6 @@ abstract class BaseListActivity extends BaseActivity implements
     protected void setAdapter(final BaseListAdapter adapter) {
         mErrorView.setVisibility(View.GONE);
         mAdapter = adapter;
-        mAdapter.setHasStableIds(true);
         mRecyclerView.setAdapter(mAdapter);
         setLoading(false);
     }
@@ -118,26 +131,6 @@ abstract class BaseListActivity extends BaseActivity implements
         setLoading(false);
         mRecyclerView.setAdapter(null);
         mErrorView.setVisibility(View.VISIBLE);
-    }
-
-
-
-
-    protected abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
-            RecyclerView.Adapter<T> implements View.OnClickListener {
-
-
-        @Override
-        public abstract long getItemId(final int position);
-
-
-        @Override
-        public void onClick(final View v) {
-            final int position = mRecyclerView.getChildPosition(v);
-            onItemClick(v, position);
-        }
-
-
     }
 
 

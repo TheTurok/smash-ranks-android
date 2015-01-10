@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +25,8 @@ import com.garpr.android.data.Players.PlayersCallback;
 import com.garpr.android.data.User;
 import com.garpr.android.data.sync.Sync;
 import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.BaseListAdapter;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.ListFilter;
@@ -179,13 +180,13 @@ public class RankingsActivity extends BaseListActivity implements
         final PlayersCallback callback = new PlayersCallback(this) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when retrieving rankings!", e);
+                Console.e(TAG, "Exception when retrieving rankings!", e);
                 showError();
 
                 try {
                     Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
                 } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Log.w(TAG, "Unable to report rankings exception to analytics", gpsue);
+                    Console.w(TAG, "Unable to report rankings exception to analytics", gpsue);
                 }
             }
 
@@ -295,7 +296,7 @@ public class RankingsActivity extends BaseListActivity implements
 
 
     @Override
-    protected void onItemClick(final View view, final int position) {
+    public void onItemClick(final View view, final int position) {
         final ListItem item = mListItemsShown.get(position);
         PlayerActivity.startForResult(this, item.mPlayer);
     }
@@ -626,6 +627,7 @@ public class RankingsActivity extends BaseListActivity implements
 
 
         private RankingsAdapter() {
+            super(RankingsActivity.this, getRecyclerView());
             final Resources resources = getResources();
             mBgGray = resources.getColor(R.color.gray);
             mBgHighlight = resources.getColor(R.color.overlay_bright);

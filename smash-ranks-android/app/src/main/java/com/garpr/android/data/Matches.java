@@ -1,9 +1,8 @@
 package com.garpr.android.data;
 
 
-import android.util.Log;
-
 import com.android.volley.VolleyError;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Match;
@@ -41,7 +40,7 @@ public final class Matches {
                 final Match match = new Match(matchJSON);
                 matches.add(match);
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when building Match at index " + i, e);
+                Console.e(TAG, "Exception when building Match at index " + i, e);
             }
         }
 
@@ -68,7 +67,7 @@ public final class Matches {
 
         @Override
         public final void onErrorResponse(final VolleyError error) {
-            Log.e(TAG, "Exception when downloading matches", error);
+            Console.e(TAG, "Exception when downloading matches", error);
 
             if (isAlive()) {
                 error(error);
@@ -80,11 +79,11 @@ public final class Matches {
         public final void onResponse(final JSONObject json) {
             try {
                 final ArrayList<Match> matches = parseJSON(json);
-                Log.d(TAG, "Read in " + matches.size() + " Match objects from JSON response");
+                Console.d(TAG, "Read in " + matches.size() + " Match objects from JSON response");
 
                 if (matches.isEmpty()) {
                     final JSONException e = new JSONException("No matches grabbed from JSON response for Player " + mPlayerId);
-                    Log.e(TAG, "No matches available for Player " + mPlayerId, e);
+                    Console.e(TAG, "No matches available for Player " + mPlayerId, e);
 
                     if (isAlive()) {
                         error(e);
@@ -93,11 +92,11 @@ public final class Matches {
                     if (isAlive()) {
                         response(matches);
                     } else {
-                        Log.d(TAG, "Matches response canceled because the listener is dead");
+                        Console.d(TAG, "Matches response canceled because the listener is dead");
                     }
                 }
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when parsing matches JSON response", e);
+                Console.e(TAG, "Exception when parsing matches JSON response", e);
 
                 if (isAlive()) {
                     error(e);

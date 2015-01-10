@@ -5,10 +5,10 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.util.Log;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
+import com.garpr.android.misc.Console;
 
 
 /**
@@ -33,11 +33,11 @@ public final class Sync {
         final String packageName = context.getPackageName();
 
         if (am.addAccountExplicitly(account, null, null)) {
-            Log.d(TAG, "Account manager is explicitly adding the account");
+            Console.d(TAG, "Account manager is explicitly adding the account");
             ContentResolver.setIsSyncable(account, packageName, 1);
             ContentResolver.setSyncAutomatically(account, packageName, true);
         } else {
-            Log.d(TAG, "Account manager did not need to explicitly add the account");
+            Console.d(TAG, "Account manager did not need to explicitly add the account");
         }
     }
 

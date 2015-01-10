@@ -10,7 +10,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +26,8 @@ import com.garpr.android.data.Matches.MatchesCallback;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.User;
 import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.BaseListAdapter;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.ListFilter;
@@ -112,13 +113,13 @@ public class PlayerActivity extends BaseListActivity implements
         final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when fetching matches for " + mPlayer, e);
+                Console.e(TAG, "Exception when fetching matches for " + mPlayer, e);
                 showError();
 
                 try {
                     Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.MATCHES);
                 } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Log.w(TAG, "Unable to report matches exception to analytics", gpsue);
+                    Console.w(TAG, "Unable to report matches exception to analytics", gpsue);
                 }
             }
 
@@ -403,7 +404,7 @@ public class PlayerActivity extends BaseListActivity implements
         try {
             Analytics.report(TAG).sendEvent(Constants.SHARE, Constants.PLAYER);
         } catch (final GooglePlayServicesUnavailableException e) {
-            Log.w(TAG, "Unable to report share to analytics", e);
+            Console.w(TAG, "Unable to report share to analytics", e);
         }
     }
 
@@ -635,6 +636,7 @@ public class PlayerActivity extends BaseListActivity implements
 
 
         private MatchesAdapter() {
+            super(PlayerActivity.this, getRecyclerView());
             final Resources resources = getResources();
             mBgGray = resources.getColor(R.color.gray);
             mBgHighlight = resources.getColor(R.color.overlay_bright);

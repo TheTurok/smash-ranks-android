@@ -8,7 +8,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +22,8 @@ import com.garpr.android.R;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.Players.PlayersCallback;
 import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.BaseListAdapter;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.ListFilter;
@@ -136,13 +137,13 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         final PlayersCallback callback = new PlayersCallback(this) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when retrieving players!", e);
+                Console.e(TAG, "Exception when retrieving players!", e);
                 showError();
 
                 try {
                     Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.PLAYERS);
                 } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Log.w(TAG, "Unable to report players exception to analytics", gpsue);
+                    Console.w(TAG, "Unable to report players exception to analytics", gpsue);
                 }
             }
 
@@ -235,7 +236,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     @Override
-    protected void onItemClick(final View view, final int position) {
+    public void onItemClick(final View view, final int position) {
         mSelectedPlayer = mListItemsShown.get(position).mPlayer;
         notifyDataSetChanged();
 
@@ -546,6 +547,11 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     private final class PlayersAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
+
+
+        private PlayersAdapter() {
+            super(PlayersFragment.this, getRecyclerView());
+        }
 
 
         @Override

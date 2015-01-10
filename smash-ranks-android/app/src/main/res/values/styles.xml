@@ -31,7 +31,7 @@
     <style name="error_line2" parent="error_line">
         <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
         <item name="android:text">@string/swipe_to_refresh_and_try_again</item>
-        <item name="android:textColor">@color/gray_light</item>
+        <item name="android:textColor">@color/gray_lighter</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -48,8 +48,10 @@
     </style>
 
     <style name="list">
+        <item name="android:clipToPadding">false</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingBottom">@dimen/root_padding_half</item>
         <item name="android:scrollbars">vertical</item>
     </style>
 
@@ -170,6 +172,7 @@
     </style>
 
     <style name="settings_subtitle" parent="settings_text">
+        <item name="android:lineSpacingExtra">2dp</item>
         <item name="android:textSize">14sp</item>
     </style>
 

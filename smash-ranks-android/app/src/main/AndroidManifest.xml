@@ -31,6 +31,17 @@
         </activity>
 
         <activity
+            android:label="@string/log_console"
+            android:launchMode="singleTop"
+            android:name=".activities.ConsoleActivity"
+            android:parentActivityName=".activities.SettingsActivity"
+            tools:ignore="UnusedAttribute">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.SettingsActivity" />
+        </activity>
+
+        <activity
             android:label="@string/gar_pr"
             android:launchMode="singleTop"
             android:name=".activities.OnboardingActivity"

@@ -4,9 +4,9 @@ package com.garpr.android.data;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.android.volley.VolleyError;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Player;
@@ -94,11 +94,11 @@ public final class Players {
             @Override
             public void response(final ArrayList<Player> list) {
                 if (playersHaveRankings(list)) {
-                    Log.d(TAG, "Found rankings in the list of players");
+                    Console.d(TAG, "Found rankings in the list of players");
                     stripListOfRankinglessPlayers(list);
                     callback.response(list);
                 } else {
-                    Log.d(TAG, "Rankings were not found in the list of players");
+                    Console.d(TAG, "Rankings were not found in the list of players");
 
                     final RankingsCallback callbackWrapper1 = new RankingsCallback(getHeartbeat()) {
                         @Override
@@ -124,22 +124,22 @@ public final class Players {
 
     private static void getPlayersFromNetwork(final PlayersCallback callback) {
         if (callback.isAlive()) {
-            Log.d(TAG, "Grabbing players from network");
+            Console.d(TAG, "Grabbing players from network");
             final String url = Network.makeUrl(Constants.PLAYERS);
             Network.sendRequest(url, callback);
         } else {
-            Log.d(TAG, "Canceled grabbing players from network");
+            Console.d(TAG, "Canceled grabbing players from network");
         }
     }
 
 
     private static void getRankingsFromNetwork(final RankingsCallback callback) {
         if (callback.isAlive()) {
-            Log.d(TAG, "Grabbing rankings from network");
+            Console.d(TAG, "Grabbing rankings from network");
             final String url = Network.makeUrl(Constants.RANKINGS);
             Network.sendRequest(url, callback);
         } else {
-            Log.d(TAG, "Canceled grabbing rankings from network");
+            Console.d(TAG, "Canceled grabbing rankings from network");
         }
     }
 
@@ -170,7 +170,7 @@ public final class Players {
                 final Player player = new Player(playerJSON);
                 players.add(player);
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when building Player at index " + i, e);
+                Console.e(TAG, "Exception when building Player at index " + i, e);
             }
         }
 
@@ -334,7 +334,7 @@ public final class Players {
 
         @Override
         public final void onErrorResponse(final VolleyError error) {
-            Log.e(TAG, "Exception when downloading players", error);
+            Console.e(TAG, "Exception when downloading players", error);
 
             if (isAlive()) {
                 error(error);
@@ -346,11 +346,11 @@ public final class Players {
         public final void onResponse(final JSONObject json) {
             try {
                 final ArrayList<Player> players = parseJSON(json);
-                Log.d(TAG, "Read in " + players.size() + " Player objects from players JSON response");
+                Console.d(TAG, "Read in " + players.size() + " Player objects from players JSON response");
 
                 if (players.isEmpty()) {
                     final JSONException e = new JSONException("No players grabbed from players JSON response");
-                    Log.e(TAG, "No players available", e);
+                    Console.e(TAG, "No players available", e);
 
                     if (isAlive()) {
                         error(e);
@@ -361,11 +361,11 @@ public final class Players {
                     if (isAlive()) {
                         response(players);
                     } else {
-                        Log.d(TAG, "Players response canceled because the listener is dead");
+                        Console.d(TAG, "Players response canceled because the listener is dead");
                     }
                 }
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when parsing players JSON response", e);
+                Console.e(TAG, "Exception when parsing players JSON response", e);
 
                 if (isAlive()) {
                     error(e);
@@ -403,7 +403,7 @@ public final class Players {
 
         @Override
         public final void onErrorResponse(final VolleyError error) {
-            Log.e(TAG, "Exception when downloading rankings", error);
+            Console.e(TAG, "Exception when downloading rankings", error);
 
             if (isAlive()) {
                 error(error);
@@ -415,11 +415,11 @@ public final class Players {
         public final void onResponse(final JSONObject response) {
             try {
                 final ArrayList<Player> rankings = parseJSON(response);
-                Log.d(TAG, "Read in " + rankings.size() + " Player objects from rankings JSON response");
+                Console.d(TAG, "Read in " + rankings.size() + " Player objects from rankings JSON response");
 
                 if (rankings.isEmpty()) {
                     final JSONException e = new JSONException("No players grabbed from rankings JSON response");
-                    Log.e(TAG, "No players available", e);
+                    Console.e(TAG, "No players available", e);
 
                     if (isAlive()) {
                         error(e);
@@ -431,11 +431,11 @@ public final class Players {
                     if (isAlive()) {
                         response(rankings);
                     } else {
-                        Log.d(TAG, "Rankings response canceled because the listener is dead");
+                        Console.d(TAG, "Rankings response canceled because the listener is dead");
                     }
                 }
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when parsing rankings JSON response", e);
+                Console.e(TAG, "Exception when parsing rankings JSON response", e);
 
                 if (isAlive()) {
                     error(e);
@@ -504,7 +504,7 @@ public final class Players {
 
         @Override
         public final void onErrorResponse(final VolleyError error) {
-            Log.e(TAG, "Exception when downloading roster", error);
+            Console.e(TAG, "Exception when downloading roster", error);
 
             if (isAlive()) {
                 error(error);
@@ -520,24 +520,24 @@ public final class Players {
                 final long currentUpdate = parseRosterUpdate(response);
 
                 if (currentUpdate > lastUpdate) {
-                    Log.d(TAG, "A new roster is available");
+                    Console.d(TAG, "A new roster is available");
                     final ArrayList<Player> rankings = parseJSON(response);
 
                     if (rankings.isEmpty()) {
-                        Log.d(TAG, "But the roster's players were empty??");
+                        Console.d(TAG, "But the roster's players were empty??");
                         error(new Exception("empty roster"));
                     } else {
                         getPlayersFromNetwork(rankings);
                     }
                 } else {
-                    Log.d(TAG, "There is no new roster");
+                    Console.d(TAG, "There is no new roster");
 
                     if (isAlive()) {
                         noNewRoster();
                     }
                 }
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when parsing roster JSON response", e);
+                Console.e(TAG, "Exception when parsing roster JSON response", e);
 
                 if (isAlive()) {
                     error(e);

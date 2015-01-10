@@ -10,7 +10,6 @@ import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.garpr.android.R;
@@ -26,6 +27,8 @@ import com.garpr.android.data.Regions;
 import com.garpr.android.data.Regions.RegionsCallback;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.BaseListAdapter;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.models.Region;
@@ -42,6 +45,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     private ArrayList<Region> mRegions;
+    private FrameLayout mFrame;
     private ImageButton mSave;
     private MenuItem mNext;
     private Region mSelectedRegion;
@@ -73,6 +77,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
             }
         });
 
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(duration);
         animator.start();
     }
@@ -109,13 +114,13 @@ public class RegionsFragment extends BaseListToolbarFragment {
         final RegionsCallback callback = new RegionsCallback(this) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when retrieving regions!", e);
+                Console.e(TAG, "Exception when retrieving regions!", e);
                 showError();
 
                 try {
                     Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.REGIONS);
                 } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Log.w(TAG, "Unable to report regions exception to analytics", gpsue);
+                    Console.w(TAG, "Unable to report regions exception to analytics", gpsue);
                 }
             }
 
@@ -145,6 +150,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
     protected void findViews() {
         super.findViews();
         final View view = getView();
+        mFrame = (FrameLayout) view.findViewById(R.id.fragment_regions_list_frame);
         mSave = (ImageButton) view.findViewById(R.id.fragment_regions_save);
     }
 
@@ -187,6 +193,25 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
     private boolean isStandaloneMode() {
         return mRegionSaveListener != null;
+    }
+
+
+    private void measureRecyclerViewBottomOffset() {
+        final RecyclerView recyclerView = getRecyclerView();
+        recyclerView.setClipToPadding(false);
+
+        final int frameHeight = mFrame.getHeight();
+        final int distanceFromTop = mSave.getTop();
+
+        final Resources res = getResources();
+        final int rootPadding = res.getDimensionPixelSize(R.dimen.root_padding);
+        final int bottom = frameHeight - distanceFromTop + rootPadding;
+
+        final int start = ViewCompat.getPaddingStart(recyclerView);
+        final int top = recyclerView.getPaddingTop();
+        final int end = ViewCompat.getPaddingEnd(recyclerView);
+        ViewCompat.setPaddingRelative(recyclerView, start, top, end, bottom);
+        recyclerView.requestLayout();
     }
 
 
@@ -233,7 +258,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     @Override
-    protected void onItemClick(final View view, final int position) {
+    public void onItemClick(final View view, final int position) {
         mSelectedRegion = mRegions.get(position);
         notifyDataSetChanged();
 
@@ -296,9 +321,6 @@ public class RegionsFragment extends BaseListToolbarFragment {
         final Toolbar toolbar = getToolbar();
 
         if (isStandaloneMode()) {
-            final RecyclerView recyclerView = getRecyclerView();
-            recyclerView.setClipToPadding(false);
-
             final ViewTreeObserver vto = mSave.getViewTreeObserver();
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -314,20 +336,9 @@ public class RegionsFragment extends BaseListToolbarFragment {
                         }
                     }
 
-                    // TODO
-                    // same as the one below
-
-//                    final Resources res = getResources();
-//                    final int rootPadding = res.getDimensionPixelSize(R.dimen.root_padding);
-//                    final int bottom = mSave.getTop();
-//
-//                    ViewCompat.setPaddingRelative(recyclerView, 0, 0, rootPadding + bottom, 0);
-//                    recyclerView.requestLayout();
+                    measureRecyclerViewBottomOffset();
                 }
             });
-
-            // TODO
-            // adjust the bottom margin / padding so that the action button can properly show
 
             if (mSelectedRegion != null) {
                 enableSave(false);
@@ -379,6 +390,11 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     private final class RegionsAdapter extends BaseListAdapter<ViewHolder> {
+
+
+        private RegionsAdapter() {
+            super(RegionsFragment.this, getRecyclerView());
+        }
 
 
         @Override

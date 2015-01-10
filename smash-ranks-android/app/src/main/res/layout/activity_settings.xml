@@ -42,11 +42,10 @@
                     <TextView
                         android:layout_marginBottom="@dimen/root_padding_half"
                         android:layout_marginTop="@dimen/root_padding_half"
-                        android:lineSpacingExtra="2dp"
                         android:paddingLeft="@dimen/root_padding"
                         android:paddingRight="@dimen/root_padding"
                         android:text="@string/sync_description"
-                        style="@style/settings_text" />
+                        style="@style/settings_subtitle" />
                     <LinearLayout
                         android:id="@+id/activity_settings_sync"
                         style="@style/settings_container">
@@ -103,6 +102,16 @@
                         <TextView
                             android:text="@string/open_source_on_github"
                             style="@style/settings_title" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/activity_settings_console"
+                        style="@style/settings_container">
+                        <TextView
+                            android:text="@string/log_console"
+                            style="@style/settings_title" />
+                        <TextView
+                            android:text="@string/log_console_description"
+                            style="@style/settings_subtitle" />
                     </LinearLayout>
                     <LinearLayout
                         style="@style/settings_container.disabled">

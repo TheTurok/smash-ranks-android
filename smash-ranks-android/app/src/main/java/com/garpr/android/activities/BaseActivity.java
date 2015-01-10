@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -26,6 +25,7 @@ import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
 import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.Notifications;
@@ -376,7 +376,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             try {
                 Analytics.report(getActivityName()).sendScreenView();
             } catch (final GooglePlayServicesUnavailableException e) {
-                Log.w(TAG, "Unable to report screen view to analytics", e);
+                Console.w(TAG, "Unable to report screen view to analytics", e);
             }
         }
     }

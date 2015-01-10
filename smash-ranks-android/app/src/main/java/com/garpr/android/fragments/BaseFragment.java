@@ -13,7 +13,7 @@ import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Region;
 
 
-public abstract class BaseFragment extends Fragment implements
+abstract class BaseFragment extends Fragment implements
         Heartbeat,
         Settings.OnRegionChangedListener {
 

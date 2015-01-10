@@ -4,9 +4,9 @@ package com.garpr.android.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.garpr.android.App;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Region;
 
@@ -32,7 +32,7 @@ public final class Database extends SQLiteOpenHelper implements
 
 
     static void createTable(final SQLiteDatabase database, final String tableName) {
-        Log.d(TAG, "Creating \"" + tableName + "\" database table");
+        Console.d(TAG, "Creating \"" + tableName + "\" database table");
         final String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " ("
                 + Constants.ID + " TEXT NOT NULL, "
                 + Constants.JSON + " TEXT NOT NULL, "
@@ -43,7 +43,7 @@ public final class Database extends SQLiteOpenHelper implements
 
 
     static void dropTable(final SQLiteDatabase database, final String tableName) {
-        Log.d(TAG, "Dropping \"" + tableName + "\" database table");
+        Console.d(TAG, "Dropping \"" + tableName + "\" database table");
         final String sql = "DROP TABLE IF EXISTS " + tableName + ";";
         database.execSQL(sql);
     }
@@ -111,7 +111,7 @@ public final class Database extends SQLiteOpenHelper implements
 
     @Override
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-        Log.d(TAG, "Database being upgraded from " + oldVersion + " to " + newVersion);
+        Console.d(TAG, "Database being upgraded from " + oldVersion + " to " + newVersion);
     }
 
 

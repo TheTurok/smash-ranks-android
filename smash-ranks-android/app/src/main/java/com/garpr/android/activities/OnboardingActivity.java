@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -19,6 +18,7 @@ import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.NonSwipeableViewPager;
@@ -66,7 +66,7 @@ public class OnboardingActivity extends BaseActivity implements
                         .setExtra(Constants.REGION, mSelectedRegion.getName())
                         .sendEvent(Constants.ONBOARDING, Constants.COMPLETED);
             } catch (final GooglePlayServicesUnavailableException e) {
-                Log.w(TAG, "Unable to report onboarding completion to analytics", e);
+                Console.w(TAG, "Unable to report onboarding completion to analytics", e);
             }
         } else {
             try {
@@ -74,7 +74,7 @@ public class OnboardingActivity extends BaseActivity implements
                         .setExtra(Constants.REGION, mSelectedRegion.getName())
                         .sendEvent(Constants.ONBOARDING, Constants.SKIPPED);
             } catch (final GooglePlayServicesUnavailableException e) {
-                Log.w(TAG, "Unable to report onboarding skip to analytics", e);
+                Console.w(TAG, "Unable to report onboarding skip to analytics", e);
             }
         }
 

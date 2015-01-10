@@ -3,9 +3,9 @@ package com.garpr.android.data;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.android.volley.VolleyError;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Region;
@@ -59,11 +59,11 @@ public final class Regions {
 
     private static void getFromNetwork(final RegionsCallback callback) {
         if (callback.isAlive()) {
-            Log.d(TAG, "Grabbing regions from network");
+            Console.d(TAG, "Grabbing regions from network");
             final String url = Network.makeRegionFreeUrl(Constants.REGIONS);
             Network.sendRequest(url, callback);
         } else {
-            Log.d(TAG, "Canceled grabbing regions from network");
+            Console.d(TAG, "Canceled grabbing regions from network");
         }
     }
 
@@ -84,7 +84,7 @@ public final class Regions {
                 final Region region = new Region(regionJSON);
                 regions.add(region);
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when building Region at index " + i, e);
+                Console.e(TAG, "Exception when building Region at index " + i, e);
             }
         }
 
@@ -161,7 +161,7 @@ public final class Regions {
 
         @Override
         public final void onErrorResponse(final VolleyError error) {
-            Log.e(TAG, "Exception when downloading regions", error);
+            Console.e(TAG, "Exception when downloading regions", error);
 
             if (isAlive()) {
                 error(error);
@@ -173,11 +173,11 @@ public final class Regions {
         public final void onResponse(final JSONObject json) {
             try {
                 final ArrayList<Region> regions = parseJSON(json);
-                Log.d(TAG, "Read in " + regions.size() + " regions from JSON response");
+                Console.d(TAG, "Read in " + regions.size() + " regions from JSON response");
 
                 if (regions.isEmpty()) {
                     final JSONException e = new JSONException("No regions grabbed from JSON response");
-                    Log.e(TAG, "No regions available", e);
+                    Console.e(TAG, "No regions available", e);
 
                     if (isAlive()) {
                         error(e);
@@ -188,11 +188,11 @@ public final class Regions {
                     if (isAlive()) {
                         response(regions);
                     } else {
-                        Log.d(TAG, "Regions response canceled because the listener is dead");
+                        Console.d(TAG, "Regions response canceled because the listener is dead");
                     }
                 }
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when parsing regions JSON response", e);
+                Console.e(TAG, "Exception when parsing regions JSON response", e);
 
                 if (isAlive()) {
                     error(e);

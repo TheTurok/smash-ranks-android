@@ -4,11 +4,11 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.garpr.android.data.Settings;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.models.Region;
@@ -57,7 +57,7 @@ public class RegionsActivity extends BaseFragmentActivity implements
                     .setExtra(Constants.REGION, region.getName())
                     .sendEvent(Constants.SETTINGS, Constants.REGION_CHANGE);
         } catch (final GooglePlayServicesUnavailableException e) {
-            Log.w(TAG, "Unable to report region change to analytics", e);
+            Console.w(TAG, "Unable to report region change to analytics", e);
         }
     }
 

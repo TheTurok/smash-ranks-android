@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +21,8 @@ import com.garpr.android.R;
 import com.garpr.android.data.Tournaments;
 import com.garpr.android.data.Tournaments.TournamentsCallback;
 import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.BaseListAdapter;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.ListFilter;
@@ -95,13 +96,13 @@ public class TournamentsActivity extends BaseListActivity implements
         final TournamentsCallback callback = new TournamentsCallback(this) {
             @Override
             public void error(final Exception e) {
-                Log.e(TAG, "Exception when retrieving tournaments!", e);
+                Console.e(TAG, "Exception when retrieving tournaments!", e);
                 showError();
 
                 try {
                     Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.TOURNAMENTS);
                 } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Log.w(TAG, "Unable to report tournaments exception to analytics", gpsue);
+                    Console.w(TAG, "Unable to report tournaments exception to analytics", gpsue);
                 }
             }
 
@@ -514,6 +515,11 @@ public class TournamentsActivity extends BaseListActivity implements
 
 
     private final class TournamentsAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
+
+
+        private TournamentsAdapter() {
+            super(TournamentsActivity.this, getRecyclerView());
+        }
 
 
         @Override

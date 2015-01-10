@@ -3,9 +3,9 @@ package com.garpr.android.data;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.android.volley.VolleyError;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Tournament;
@@ -59,11 +59,11 @@ public final class Tournaments {
 
     private static void getFromNetwork(final TournamentsCallback callback) {
         if (callback.isAlive()) {
-            Log.d(TAG, "Grabbing tournaments from network");
+            Console.d(TAG, "Grabbing tournaments from network");
             final String url = Network.makeUrl(Constants.TOURNAMENTS);
             Network.sendRequest(url, callback);
         } else {
-            Log.d(TAG, "Canceled grabbing tournaments from network");
+            Console.d(TAG, "Canceled grabbing tournaments from network");
         }
     }
 
@@ -84,7 +84,7 @@ public final class Tournaments {
                 final Tournament tournament = new Tournament(tournamentJSON);
                 tournaments.add(tournament);
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when building Tournament at index " + i, e);
+                Console.e(TAG, "Exception when building Tournament at index " + i, e);
             }
         }
 
@@ -162,7 +162,7 @@ public final class Tournaments {
 
         @Override
         public final void onErrorResponse(final VolleyError error) {
-            Log.e(TAG, "Exception when downloading tournaments!", error);
+            Console.e(TAG, "Exception when downloading tournaments!", error);
 
             if (isAlive()) {
                 error(error);
@@ -174,11 +174,11 @@ public final class Tournaments {
         public final void onResponse(final JSONObject json) {
             try {
                 final ArrayList<Tournament> tournaments = parseJSON(json);
-                Log.d(TAG, "Read in " + tournaments.size() + " Tournament objects from JSON response");
+                Console.d(TAG, "Read in " + tournaments.size() + " Tournament objects from JSON response");
 
                 if (tournaments.isEmpty()) {
                     final JSONException e = new JSONException("No tournaments grabbed from JSON response");
-                    Log.e(TAG, "No tournaments available", e);
+                    Console.e(TAG, "No tournaments available", e);
 
                     if (isAlive()) {
                         error(e);
@@ -189,11 +189,11 @@ public final class Tournaments {
                     if (isAlive()) {
                         response(tournaments);
                     } else {
-                        Log.d(TAG, "Tournaments response canceled because the listener is dead");
+                        Console.d(TAG, "Tournaments response canceled because the listener is dead");
                     }
                 }
             } catch (final JSONException e) {
-                Log.e(TAG, "Exception when parsing tournaments JSON response", e);
+                Console.e(TAG, "Exception when parsing tournaments JSON response", e);
 
                 if (isAlive()) {
                     error(e);

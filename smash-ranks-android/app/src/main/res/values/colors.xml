@@ -2,10 +2,14 @@
 <resources>
 
     <color name="black">#000000</color>
+    <color name="console_error">#FF6666</color>
+    <color name="console_warning">#FFB8B8</color>
     <color name="gray">#303030</color>
     <color name="gray_dark">#212121</color>
     <color name="gray_darker">#161616</color>
     <color name="gray_light">#666666</color>
+    <color name="gray_lighter">#888888</color>
+    <color name="gray_lightest">#BBBBBB</color>
     <color name="indigo">#311B52</color>
     <color name="indigo_bright">#7E66D8</color>
     <color name="indigo_dark">#210054</color>

@@ -373,10 +373,12 @@ abstract class BaseActivity extends ActionBarActivity implements
         }
 
         if (reportToAnalytics()) {
+            final String activityName = getActivityName();
+
             try {
-                Analytics.report(getActivityName()).sendScreenView();
+                Analytics.report(activityName).sendScreenView();
             } catch (final GooglePlayServicesUnavailableException e) {
-                Console.w(TAG, "Unable to report screen view to analytics", e);
+                Console.w(TAG, "Unable to report screen view for " + activityName + " to analytics", e);
             }
         }
     }

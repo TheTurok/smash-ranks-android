@@ -90,7 +90,7 @@ public class ConsoleActivity extends BaseListActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        Console.removeListener();
+        Console.detachListener(this);
     }
 
 

@@ -15,15 +15,14 @@ public final class Console {
 
     private static final int LOG_MESSAGES_MAX_SIZE = 64;
     private static final LinkedList<LogMessage> LOG_MESSAGES;
+    private static final LinkedList<WeakReference<Listener>> LOG_LISTENERS;
     private static long sLogMessageIdPointer;
-    private static final Object LISTENER_LOCK;
-    private static WeakReference<Listener> sListener;
 
 
 
 
     static {
-        LISTENER_LOCK = new Object();
+        LOG_LISTENERS = new LinkedList<>();
         LOG_MESSAGES = new LinkedList<>();
     }
 
@@ -46,17 +45,40 @@ public final class Console {
             }
         }
 
-        notifyListener();
+        notifyListeners();
     }
 
 
     public static void attachListener(final Listener listener) {
-        synchronized (LISTENER_LOCK) {
-            if (sListener != null && sListener.get() != null) {
-                throw new IllegalStateException("Listener already exists");
+        if (listener == null) {
+            throw new IllegalArgumentException("Listener can't be null");
+        }
+
+        synchronized (LOG_LISTENERS) {
+            boolean listenerExists = false;
+
+            for (int i = 0; i < LOG_LISTENERS.size() && !listenerExists; ) {
+                final WeakReference<Listener> wrl = LOG_LISTENERS.get(i);
+
+                if (wrl == null) {
+                    LOG_LISTENERS.remove(i);
+                } else {
+                    final Listener l = wrl.get();
+
+                    if (l == null) {
+                        LOG_LISTENERS.remove(i);
+                    } else if (l == listener) {
+                        listenerExists = true;
+                    } else {
+                        ++i;
+                    }
+                }
             }
 
-            sListener = new WeakReference<>(listener);
+            if (!listenerExists) {
+                final WeakReference<Listener> wrl = new WeakReference<>(listener);
+                LOG_LISTENERS.add(wrl);
+            }
         }
     }
 
@@ -66,7 +88,7 @@ public final class Console {
             LOG_MESSAGES.clear();
         }
 
-        notifyListener();
+        notifyListeners();
     }
 
 
@@ -79,6 +101,36 @@ public final class Console {
     public static void d(final String tag, final String msg, final Throwable tr) {
         Log.d(tag, msg, tr);
         add(Level.DEBUG, tag, msg, tr);
+    }
+
+
+    public static void detachListener(final Listener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Listener can't be null");
+        }
+
+        synchronized (LOG_LISTENERS) {
+            if (LOG_LISTENERS.isEmpty()) {
+                final WeakReference<Listener> wrl = new WeakReference<>(listener);
+                LOG_LISTENERS.add(wrl);
+            } else {
+                for (int i = 0; i < LOG_LISTENERS.size(); ) {
+                    final WeakReference<Listener> wrl = LOG_LISTENERS.get(i);
+
+                    if (wrl == null) {
+                        LOG_LISTENERS.remove(i);
+                    } else {
+                        final Listener l = wrl.get();
+
+                        if (l == null || l == listener) {
+                            LOG_LISTENERS.remove(i);
+                        } else {
+                            ++i;
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
@@ -115,24 +167,28 @@ public final class Console {
     }
 
 
-    private static void notifyListener() {
-        synchronized (LISTENER_LOCK) {
-            if (sListener != null) {
-                final Listener listener = sListener.get();
+    private static void notifyListeners() {
+        synchronized (LOG_LISTENERS) {
+            if (LOG_LISTENERS.isEmpty()) {
+                return;
+            }
 
-                if (listener == null) {
-                    sListener = null;
+            for (int i = 0; i < LOG_LISTENERS.size(); ) {
+                final WeakReference<Listener> wrl = LOG_LISTENERS.get(i);
+
+                if (wrl == null) {
+                    LOG_LISTENERS.remove(i);
                 } else {
-                    listener.onLogMessagesChanged();
+                    final Listener l = wrl.get();
+
+                    if (l == null) {
+                        LOG_LISTENERS.remove(i);
+                    } else {
+                        l.onLogMessagesChanged();
+                        ++i;
+                    }
                 }
             }
-        }
-    }
-
-
-    public static void removeListener() {
-        synchronized (LISTENER_LOCK) {
-            sListener = null;
         }
     }
 

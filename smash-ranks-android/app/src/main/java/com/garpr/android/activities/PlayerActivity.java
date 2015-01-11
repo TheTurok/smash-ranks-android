@@ -714,6 +714,7 @@ public class PlayerActivity extends BaseListActivity implements
                 case MATCH:
                     view = inflater.inflate(R.layout.model_match, parent, false);
                     holder = new MatchViewHolder(view);
+                    view.setOnClickListener(this);
                     break;
 
                 case TOURNAMENT:

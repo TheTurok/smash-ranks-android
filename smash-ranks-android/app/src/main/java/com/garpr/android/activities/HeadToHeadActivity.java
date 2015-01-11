@@ -4,9 +4,13 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
@@ -135,10 +139,26 @@ public class HeadToHeadActivity extends BaseListActivity {
 
 
     @Override
+    public void onRefresh() {
+        super.onRefresh();
+
+        if (!isLoading()) {
+            fetchMatches();
+        }
+    }
+
+
+    @Override
     protected void readIntentData(final Intent intent) {
         mPlayer = intent.getParcelableExtra(EXTRA_PLAYER);
         mOpponentId = intent.getStringExtra(EXTRA_OPPONENT_ID);
         mOpponentName = intent.getStringExtra(EXTRA_OPPONENT_NAME);
+    }
+
+
+    @Override
+    protected boolean showDrawerIndicator() {
+        return false;
     }
 
 
@@ -306,8 +326,38 @@ public class HeadToHeadActivity extends BaseListActivity {
     private final class MatchesAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
 
 
+        private final int mColorLose;
+        private final int mColorWin;
+
+
         private MatchesAdapter() {
             super(HeadToHeadActivity.this, getRecyclerView());
+
+            final Resources res = getResources();
+            mColorLose = res.getColor(R.color.lose_pink);
+            mColorWin = res.getColor(R.color.win_green);
+        }
+
+
+        private void bindHeaderViewHolder(final HeaderViewHolder holder, final ListItem listItem) {
+            holder.mHeader.setText(listItem.mHeader);
+        }
+
+
+        private void bindMatchViewHolder(final MatchViewHolder holder, final ListItem listItem) {
+            holder.mOpponent.setText(listItem.mMatch.getOpponentName());
+
+            if (listItem.mMatch.isWin()) {
+                holder.mOpponent.setTextColor(mColorLose);
+            } else {
+                holder.mOpponent.setTextColor(mColorWin);
+            }
+        }
+
+
+        private void bindTournamentViewHolder(final TournamentViewHolder holder, final ListItem listItem) {
+            holder.mDate.setText(listItem.mTournament.getDate());
+            holder.mName.setText(listItem.mTournament.getName());
         }
 
 
@@ -324,15 +374,111 @@ public class HeadToHeadActivity extends BaseListActivity {
 
 
         @Override
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        public int getItemViewType(final int position) {
+            return mListItems.get(position).mType.ordinal();
+        }
 
+
+        @Override
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+            final ListItem listItem = mListItems.get(position);
+
+            switch (listItem.mType) {
+                case HEADER:
+                    bindHeaderViewHolder((HeaderViewHolder) holder, listItem);
+                    break;
+
+                case MATCH:
+                    bindMatchViewHolder((MatchViewHolder) holder, listItem);
+                    break;
+
+                case TOURNAMENT:
+                    bindTournamentViewHolder((TournamentViewHolder) holder, listItem);
+                    break;
+
+                default:
+                    throw new RuntimeException("Illegal ListItem Type detected: " + listItem.mType);
+            }
         }
 
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
-            return null;
+            final LayoutInflater inflater = getLayoutInflater();
+            final ListItem.Type type = ListItem.Type.create(viewType);
+
+            final View view;
+            final RecyclerView.ViewHolder holder;
+
+            switch (type) {
+                case HEADER:
+                    view = inflater.inflate(R.layout.head_to_head_header, parent, false);
+                    holder = new HeaderViewHolder(view);
+                    break;
+
+                case MATCH:
+                    view = inflater.inflate(R.layout.model_match, parent, false);
+                    holder = new MatchViewHolder(view);
+                    break;
+
+                case TOURNAMENT:
+                    view = inflater.inflate(R.layout.separator_tournament, parent, false);
+                    holder = new TournamentViewHolder(view);
+                    break;
+
+                default:
+                    throw new RuntimeException("Illegal ListItem Type detected: " + type);
+            }
+
+            return holder;
+        }
+
+
+    }
+
+
+    private static final class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+
+        private final TextView mHeader;
+
+
+        private HeaderViewHolder(final View view) {
+            super(view);
+            mHeader = (TextView) view.findViewById(R.id.head_to_head_header_text);
+        }
+
+
+    }
+
+
+    private static final class MatchViewHolder extends RecyclerView.ViewHolder {
+
+
+        private final TextView mOpponent;
+
+
+        private MatchViewHolder(final View view) {
+            super(view);
+            mOpponent = (TextView) view.findViewById(R.id.model_match_opponent);
+        }
+
+
+    }
+
+
+    private static final class TournamentViewHolder extends RecyclerView.ViewHolder {
+
+
+        private final TextView mDate;
+        private final TextView mName;
+
+
+        private TournamentViewHolder(final View view) {
+            super(view);
+            mDate = (TextView) view.findViewById(R.id.separator_tournament_date);
+            mName = (TextView) view.findViewById(R.id.separator_tournament_name);
         }
 
 

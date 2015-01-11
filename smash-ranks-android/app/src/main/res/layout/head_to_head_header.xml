@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
+    android:id="@+id/head_to_head_header_text"
+    android:layout_height="80dp"
+    android:layout_width="match_parent"
+    android:paddingBottom="@dimen/root_padding_half"
+    android:paddingTop="@dimen/root_padding_half"
+    android:textSize="32sp"
+    tools:text="1 - 3"
+    style="@style/fontFamily_medium" />

@@ -4,6 +4,7 @@ package com.garpr.android.data;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
@@ -18,6 +19,7 @@ public final class User {
     private static final String CNAME = User.class.getCanonicalName();
     private static final String KEY_PLAYER = "KEY_PLAYER";
     private static final String KEY_REGION = "KEY_REGION";
+    private static final String TAG = User.class.getSimpleName();
 
     private static User sUser;
 
@@ -46,6 +48,7 @@ public final class User {
 
     private static synchronized User getUser() {
         if (sUser == null) {
+            Console.d(TAG, "User is null, going to try reading it in from SharedPreferences");
             loadUser();
         }
 
@@ -60,19 +63,23 @@ public final class User {
 
     private static void loadUser() {
         sUser = new User();
-
         final SharedPreferences sPreferences = Settings.get(CNAME);
 
         try {
+            // remember that it's possible for the user to not have set a player
             final String playerString = sPreferences.getString(KEY_PLAYER, null);
 
             if (Utils.validStrings(playerString)) {
-            // remember that it's possible for the user to not have set a player
+                Console.d(TAG, "Read in User's Player from SharedPreferences: " + playerString);
                 final JSONObject playerJSON = new JSONObject(playerString);
                 sUser.mPlayer = new Player(playerJSON);
+            } else {
+                Console.d(TAG, "User has no Player saved in SharedPreferences");
             }
 
             final String regionString = sPreferences.getString(KEY_REGION, null);
+            Console.d(TAG, "Read in User's Region from SharedPreferences: " + regionString);
+
             final JSONObject regionJSON = new JSONObject(regionString);
             sUser.mRegion = new Region(regionJSON);
         } catch (final JSONException e) {

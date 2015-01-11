@@ -54,6 +54,17 @@
         </activity>
 
         <activity
+            android:label="@string/head_to_head"
+            android:launchMode="singleTop"
+            android:name=".activities.HeadToHeadActivity"
+            android:parentActivityName=".activities.PlayerActivity"
+            tools:ignore="UnusedAttribute">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.PlayerActivity" />
+        </activity>
+
+        <activity
             android:label="@string/player"
             android:launchMode="singleTop"
             android:name=".activities.PlayerActivity"

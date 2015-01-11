@@ -37,8 +37,8 @@
     <string name="gar_pr_x">GAR PR: %s</string>
     <string name="general">General</string>
     <string name="go">Go</string>
-    <string name="no_gorgonite_johns">No Gorgonite Johns</string>
     <string name="go_">Go!</string>
+    <string name="head_to_head">Head to Head</string>
     <string name="hello">Hello</string>
     <string name="hello_">Hello!</string>
     <string name="hello_world">Hello, World!</string>
@@ -57,6 +57,7 @@
     <string name="next_">Next!</string>
     <string name="no">No</string>
     <string name="norcal">Norcal</string>
+    <string name="no_gorgonite_johns">No Gorgonite Johns</string>
     <string name="ok">OK</string>
     <string name="okay">Okay</string>
     <string name="only_sync_on_wifi">Only sync on wifi</string>
@@ -132,6 +133,7 @@
     <string name="x_on_gar_pr_y">%1$s on GAR PR %2$s</string>
     <string name="x_paren_y">%1$s (%2$s)</string>
     <string name="x_viewing_y">%1$s (viewing %2$s)</string>
+    <string name="x_vs_y">%1$s vs %2$s</string>
     <string name="x_y">%1$s %2$s</string>
     <string name="yes">Yes</string>
     <string name="youre_x_from_y_ready">You\'re %1$s from %2$s. Ready?</string>

@@ -201,6 +201,15 @@ public class PlayerActivity extends BaseListActivity implements
 
 
     @Override
+    public void onItemClick(final View view, final int position) {
+        final ListItem listItem = mListItemsShown.get(position);
+        final String opponentId = listItem.mMatch.getOpponentId();
+        final String opponentName = listItem.mMatch.getOpponentName();
+        HeadToHeadActivity.start(this, mPlayer, opponentId, opponentName);
+    }
+
+
+    @Override
     public boolean onMenuItemActionCollapse(final MenuItem item) {
         mListItemsShown = mListItems;
         notifyDataSetChanged();

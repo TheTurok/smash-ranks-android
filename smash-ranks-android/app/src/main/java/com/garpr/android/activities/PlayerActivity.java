@@ -540,7 +540,7 @@ public class PlayerActivity extends BaseListActivity implements
                     break;
 
                 default:
-                    throw new IllegalStateException("ListItem type is invalid");
+                    throw new IllegalStateException("ListItem Type is invalid");
             }
 
             return lowerCaseName;

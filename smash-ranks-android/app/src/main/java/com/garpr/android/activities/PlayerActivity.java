@@ -92,12 +92,10 @@ public class PlayerActivity extends BaseListActivity implements
 
             if (!tournament.equals(lastTournament)) {
                 lastTournament = tournament;
-                final ListItem listItem = ListItem.createTournament(tournament);
-                mListItems.add(listItem);
+                mListItems.add(ListItem.createTournament(tournament));
             }
 
-            final ListItem listItem = ListItem.createMatch(match);
-            mListItems.add(listItem);
+            mListItems.add(ListItem.createMatch(match));
         }
 
         mListItems.trimToSize();
@@ -113,7 +111,7 @@ public class PlayerActivity extends BaseListActivity implements
         final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
             @Override
             public void error(final Exception e) {
-                Console.e(TAG, "Exception when fetching matches for " + mPlayer, e);
+                Console.e(TAG, "Exception when fetching matches for " + mPlayer.getName(), e);
                 showError();
 
                 try {
@@ -136,7 +134,7 @@ public class PlayerActivity extends BaseListActivity implements
             }
         };
 
-        Matches.get(callback);
+        Matches.getMatches(callback);
     }
 
 

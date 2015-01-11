@@ -22,10 +22,22 @@ public final class Matches {
 
 
 
-    public static void get(final MatchesCallback callback) {
-        final String suffix = Constants.MATCHES + '/' + callback.mPlayerId;
+    private static void get(final String suffix, final MatchesCallback callback) {
         final String url = Network.makeUrl(suffix);
         Network.sendRequest(url, callback);
+    }
+
+
+    public static void getHeadToHeadMatches(final String opponentId, final MatchesCallback callback) {
+        final String suffix = Constants.MATCHES + '/' + callback.mPlayerId + '?' +
+                Constants.OPPONENT + '=' + opponentId;
+        get(suffix, callback);
+    }
+
+
+    public static void getMatches(final MatchesCallback callback) {
+        final String suffix = Constants.MATCHES + '/' + callback.mPlayerId;
+        get(suffix, callback);
     }
 
 

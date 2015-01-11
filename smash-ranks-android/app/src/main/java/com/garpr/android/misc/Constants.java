@@ -22,6 +22,7 @@ public final class Constants {
     public static final String FIRST_SYNC = "first_sync";
     public static final String GAME = "game";
     public static final String GITHUB_URL = "https://github.com/airokay/smash-ranks-android";
+    public static final String HEAD_TO_HEAD = "head_to_head";
     public static final String ID = "id";
     public static final String JSON = "json";
     public static final String LAST_SYNC = "last_sync";
@@ -36,6 +37,7 @@ public final class Constants {
     public static final String NEW_ROSTER = "new_roster";
     public static final String NORCAL = "norcal";
     public static final String ONBOARDING = "onboarding";
+    public static final String OPPONENT = "opponent";
     public static final String OPPONENT_ID = "opponent_id";
     public static final String OPPONENT_NAME = "opponent_name";
     public static final String PERIODIC_SYNC = "periodic_sync";

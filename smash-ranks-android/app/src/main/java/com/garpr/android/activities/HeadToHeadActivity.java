@@ -10,11 +10,19 @@ import android.view.ViewGroup;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
+import com.garpr.android.data.Matches;
+import com.garpr.android.data.Matches.MatchesCallback;
+import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
+import com.garpr.android.misc.Console;
+import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
+import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class HeadToHeadActivity extends BaseListActivity {
@@ -44,14 +52,77 @@ public class HeadToHeadActivity extends BaseListActivity {
     }
 
 
+    private void createListItems(final ArrayList<Match> matches) {
+        mListItems = new ArrayList<>();
+        int loses = 0, wins = 0;
+
+        for (final Match match : matches) {
+            if (match.isLose()) {
+                ++loses;
+            } else {
+                ++wins;
+            }
+        }
+
+        final String header = getString(R.string.x_em_dash_y, loses, wins);
+        mListItems.add(ListItem.createHeader(header));
+
+        Tournament lastTournament = null;
+
+        for (final Match match : matches) {
+            final Tournament tournament = match.getTournament();
+
+            if (!tournament.equals(lastTournament)) {
+                lastTournament = tournament;
+                mListItems.add(ListItem.createTournament(tournament));
+            }
+
+            mListItems.add(ListItem.createMatch(match));
+        }
+
+        mListItems.trimToSize();
+    }
+
+
     private void fetchMatches() {
-        // TODO
+        setLoading(true);
+
+        final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
+            @Override
+            public void error(final Exception e) {
+                Console.e(TAG, "Exception when fetching head to head matches for "
+                        + mPlayer.getName() + " and " + mOpponentName, e);
+                showError();
+
+                try {
+                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.HEAD_TO_HEAD);
+                } catch (final GooglePlayServicesUnavailableException gpsue) {
+                    Console.w(TAG, "Unable to report matches exception to analytics", gpsue);
+                }
+            }
+
+
+            @Override
+            public void response(final ArrayList<Match> list) {
+                Collections.sort(list, Match.REVERSE_CHRONOLOGICAL_ORDER);
+                createListItems(list);
+                setAdapter(new MatchesAdapter());
+            }
+        };
+
+        Matches.getHeadToHeadMatches(mOpponentId, callback);
     }
 
 
     @Override
     protected String getActivityName() {
         return TAG;
+    }
+
+
+    @Override
+    protected String getErrorText() {
+        return getString(R.string.error_fetching_matches);
     }
 
 
@@ -84,6 +155,7 @@ public class HeadToHeadActivity extends BaseListActivity {
 
         private Match mMatch;
         private String mHeader;
+        private Tournament mTournament;
         private Type mType;
 
 
@@ -105,6 +177,15 @@ public class HeadToHeadActivity extends BaseListActivity {
         }
 
 
+        private static ListItem createTournament(final Tournament tournament) {
+            final ListItem listItem = new ListItem();
+            listItem.mTournament = tournament;
+            listItem.mType = Type.TOURNAMENT;
+
+            return listItem;
+        }
+
+
         @Override
         public boolean equals(final Object o) {
             final boolean isEqual;
@@ -118,6 +199,8 @@ public class HeadToHeadActivity extends BaseListActivity {
                     isEqual = mHeader.equals(li.mHeader);
                 } else if (isMatch() && li.isMatch()) {
                     isEqual = mMatch.equals(li.mMatch);
+                } else if (isTournament() && li.isTournament()) {
+                    isEqual = mTournament.equals(li.mTournament);
                 } else {
                     isEqual = false;
                 }
@@ -139,6 +222,11 @@ public class HeadToHeadActivity extends BaseListActivity {
         }
 
 
+        private boolean isTournament() {
+            return mType == Type.TOURNAMENT;
+        }
+
+
         @Override
         public String toString() {
             final String title;
@@ -152,6 +240,10 @@ public class HeadToHeadActivity extends BaseListActivity {
                     title = mMatch.getOpponentName();
                     break;
 
+                case TOURNAMENT:
+                    title = mTournament.getName();
+                    break;
+
                 default:
                     throw new IllegalStateException("ListItem Type is invalid");
             }
@@ -161,16 +253,18 @@ public class HeadToHeadActivity extends BaseListActivity {
 
 
         private static enum Type {
-            HEADER, MATCH;
+            HEADER, MATCH, TOURNAMENT;
 
 
             private static Type create(final int ordinal) {
                 final Type type;
 
-                if (ordinal == MATCH.ordinal()) {
-                    type = MATCH;
-                } else if (ordinal == HEADER.ordinal()) {
+                if (ordinal == HEADER.ordinal()) {
                     type = HEADER;
+                } else if (ordinal == MATCH.ordinal()) {
+                    type = MATCH;
+                } else if (ordinal == TOURNAMENT.ordinal()) {
+                    type = TOURNAMENT;
                 } else {
                     throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
                 }
@@ -190,6 +284,10 @@ public class HeadToHeadActivity extends BaseListActivity {
 
                     case MATCH:
                         resId = R.string.match;
+                        break;
+
+                    case TOURNAMENT:
+                        resId = R.string.tournament;
                         break;
 
                     default:

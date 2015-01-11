@@ -64,6 +64,7 @@
     <string name="open_drawer">Open Drawer</string>
     <string name="open_source_on_github">Open source on GitHub</string>
     <string name="other">Other</string>
+    <string name="periodic_sync">Periodic Sync</string>
     <string name="periodic_sync_is_disabled">Periodic sync is disabled</string>
     <string name="periodic_sync_is_enabled">Periodic sync is enabled</string>
     <string name="player">Player</string>

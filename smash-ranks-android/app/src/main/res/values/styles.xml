@@ -39,6 +39,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="header_text">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="gravity_end">
         <item name="android:gravity">right</item>
     </style>

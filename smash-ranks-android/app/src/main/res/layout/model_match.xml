@@ -4,7 +4,7 @@
     android:background="@color/gray"
     android:id="@+id/model_match_root"
     tools:ignore="Overdraw"
-    style="@style/list_item_root">
+    style="@style/list_item_root.no_padding">
     <TextView
         android:background="?attr/selectableItemBackground"
         android:duplicateParentState="true"
@@ -14,6 +14,11 @@
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:minHeight="@dimen/list_item_height"
+        android:paddingBottom="@dimen/root_padding_fourth"
+        android:paddingLeft="@dimen/root_padding"
+        android:paddingRight="@dimen/root_padding"
+        android:paddingTop="@dimen/root_padding_fourth"
         android:maxLines="3"
         android:textSize="20sp"
         tools:text="Shroomed" />

@@ -3,6 +3,7 @@ package com.garpr.android.fragments;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +22,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Regions;
 import com.garpr.android.data.Regions.RegionsCallback;
@@ -44,7 +47,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
     private static final String TAG = RegionsFragment.class.getSimpleName();
 
 
-    private ArrayList<Region> mRegions;
+    private ArrayList<ListItem> mListItems;
     private FrameLayout mFrame;
     private ImageButton mSave;
     private MenuItem mNext;
@@ -80,6 +83,55 @@ public class RegionsFragment extends BaseListToolbarFragment {
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(duration);
         animator.start();
+    }
+
+
+    private void createListItems(final ArrayList<Region> regions) {
+        mListItems = new ArrayList<>();
+
+        char lastCharacter = ' ';
+        boolean lastCharacterIsSet = false;
+
+        boolean digitTitleAdded = false;
+        boolean otherTitleAdded = false;
+
+        for (final Region region : regions) {
+            final String name = region.getName();
+            char character = name.charAt(0);
+
+            final boolean characterIsLetter = Character.isLetter(character);
+
+            if (characterIsLetter) {
+                character = Character.toUpperCase(character);
+            }
+
+            if (!lastCharacterIsSet || character != lastCharacter) {
+                lastCharacter = character;
+                lastCharacterIsSet = true;
+
+                String listItemTitle = null;
+
+                if (characterIsLetter) {
+                    listItemTitle = String.valueOf(Character.toUpperCase(character));
+                } else if (Character.isDigit(character)) {
+                    if (!digitTitleAdded) {
+                        digitTitleAdded = true;
+                        listItemTitle = getString(R.string.pound_sign);
+                    }
+                } else if (!otherTitleAdded) {
+                    otherTitleAdded = true;
+                    listItemTitle = getString(R.string.other);
+                }
+
+                if (listItemTitle != null) {
+                    mListItems.add(ListItem.createTitle(listItemTitle));
+                }
+            }
+
+            mListItems.add(ListItem.createRegion(region));
+        }
+
+        mListItems.trimToSize();
     }
 
 
@@ -128,7 +180,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
             @Override
             public void response(final ArrayList<Region> list) {
                 Collections.sort(list, Region.ALPHABETICAL_ORDER);
-                mRegions = list;
+                createListItems(list);
                 setAdapter(new RegionsAdapter());
             }
         };
@@ -259,7 +311,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
     @Override
     public void onItemClick(final View view, final int position) {
-        mSelectedRegion = mRegions.get(position);
+        mSelectedRegion = mListItems.get(position).mRegion;
         notifyDataSetChanged();
 
         if (isStandaloneMode()) {
@@ -389,7 +441,133 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
 
-    private final class RegionsAdapter extends BaseListAdapter<ViewHolder> {
+    private static final class ListItem {
+
+
+        private Region mRegion;
+        private String mTitle;
+        private Type mType;
+
+
+        private static ListItem createRegion(final Region region) {
+            final ListItem listItem = new ListItem();
+            listItem.mRegion = region;
+            listItem.mType = Type.REGION;
+
+            return listItem;
+        }
+
+
+        private static ListItem createTitle(final String title) {
+            final ListItem listItem = new ListItem();
+            listItem.mTitle = title;
+            listItem.mType = Type.TITLE;
+
+            return listItem;
+        }
+
+
+        @Override
+        public boolean equals(final Object o) {
+            final boolean isEqual;
+
+            if (this == o) {
+                isEqual = true;
+            } else if (o instanceof ListItem) {
+                final ListItem li = (ListItem) o;
+
+                if (isRegion() && li.isRegion()) {
+                    isEqual = mRegion.equals(li.mRegion);
+                } else if (isTitle() && li.isTitle()) {
+                    isEqual = mTitle.equals(li.mTitle);
+                } else {
+                    isEqual = false;
+                }
+            } else {
+                isEqual = false;
+            }
+
+            return isEqual;
+        }
+
+
+        private boolean isRegion() {
+            return mType == Type.REGION;
+        }
+
+
+        private boolean isTitle() {
+            return mType == Type.TITLE;
+        }
+
+
+        @Override
+        public String toString() {
+            final String title;
+
+            switch (mType) {
+                case REGION:
+                    title = mRegion.getName();
+                    break;
+
+                case TITLE:
+                    title = mTitle;
+                    break;
+
+                default:
+                    throw new IllegalStateException("ListItem Type is invalid");
+            }
+
+            return title;
+        }
+
+
+        private static enum Type {
+            REGION, TITLE;
+
+
+            private static Type create(final int ordinal) {
+                final Type type;
+
+                if (ordinal == REGION.ordinal()) {
+                    type = REGION;
+                } else if (ordinal == TITLE.ordinal()) {
+                    type = TITLE;
+                } else {
+                    throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
+                }
+
+                return type;
+            }
+
+
+            @Override
+            public String toString() {
+                final int resId;
+
+                switch (this) {
+                    case REGION:
+                        resId = R.string.region;
+                        break;
+
+                    case TITLE:
+                        resId = R.string.title;
+                        break;
+
+                    default:
+                        throw new IllegalStateException("Type is invalid");
+                }
+
+                final Context context = App.getContext();
+                return context.getString(resId);
+            }
+        }
+
+
+    }
+
+
+    private final class RegionsAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
 
 
         private RegionsAdapter() {
@@ -397,9 +575,25 @@ public class RegionsFragment extends BaseListToolbarFragment {
         }
 
 
+        private void bindRegionViewHolder(final RegionViewHolder holder, final ListItem listItem) {
+            holder.mName.setText(listItem.mRegion.getName());
+
+            if (listItem.mRegion.equals(mSelectedRegion)) {
+                holder.mName.setChecked(true);
+            } else {
+                holder.mName.setChecked(false);
+            }
+        }
+
+
+        private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
+            holder.mTitle.setText(listItem.mTitle);
+        }
+
+
         @Override
         public int getItemCount() {
-            return mRegions.size();
+            return mListItems.size();
         }
 
 
@@ -410,39 +604,85 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
-            final Region region = mRegions.get(position);
-            holder.mName.setText(region.getName());
+        public int getItemViewType(final int position) {
+            return mListItems.get(position).mType.ordinal();
+        }
 
-            if (region.equals(mSelectedRegion)) {
-                holder.mName.setChecked(true);
-            } else {
-                holder.mName.setChecked(false);
+
+        @Override
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+            final ListItem listItem = mListItems.get(position);
+
+            switch (listItem.mType) {
+                case REGION:
+                    bindRegionViewHolder((RegionViewHolder) holder, listItem);
+                    break;
+
+                case TITLE:
+                    bindTitleViewHolder((TitleViewHolder) holder, listItem);
+                    break;
+
+                default:
+                    throw new RuntimeException("Illegal ListItem Type: " + listItem.mType);
             }
         }
 
 
         @Override
-        public ViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
+        public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
             final LayoutInflater inflater = getLayoutInflater();
-            final View view = inflater.inflate(R.layout.model_checkable, parent, false);
-            view.setOnClickListener(this);
-            return new ViewHolder(view);
+            final ListItem.Type type = ListItem.Type.create(viewType);
+
+            final View view;
+            final RecyclerView.ViewHolder holder;
+
+            switch (type) {
+                case REGION:
+                    view = inflater.inflate(R.layout.model_checkable, parent, false);
+                    holder = new RegionViewHolder(view);
+                    view.setOnClickListener(this);
+                    break;
+
+                case TITLE:
+                    view = inflater.inflate(R.layout.separator_simple, parent, false);
+                    holder = new TitleViewHolder(view);
+                    break;
+
+                default:
+                    throw new RuntimeException("Illegal ListItem Type: " + type);
+            }
+
+            return holder;
         }
 
 
     }
 
 
-    private static final class ViewHolder extends RecyclerView.ViewHolder {
+    private static final class RegionViewHolder extends RecyclerView.ViewHolder {
 
 
         private final CheckedTextView mName;
 
 
-        private ViewHolder(final View view) {
+        private RegionViewHolder(final View view) {
             super(view);
             mName = (CheckedTextView) view.findViewById(R.id.model_checkable_text);
+        }
+
+
+    }
+
+
+    private static final class TitleViewHolder extends RecyclerView.ViewHolder {
+
+
+        private final TextView mTitle;
+
+
+        private TitleViewHolder(final View view) {
+            super(view);
+            mTitle = (TextView) view.findViewById(R.id.separator_simple_text);
         }
 
 

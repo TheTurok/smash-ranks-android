@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,7 +103,7 @@ public class Player implements Parcelable {
 
 
     public String getProfileUrl() {
-        if (profileUrl == null) {
+        if (!Utils.validStrings(profileUrl)) {
             final Region region = Settings.getRegion();
             final String regionName = region.getName().toLowerCase();
             profileUrl = Constants.WEB_URL + regionName + '/' + Constants.PLAYERS + '/' + id;

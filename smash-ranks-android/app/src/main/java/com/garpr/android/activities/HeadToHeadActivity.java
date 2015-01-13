@@ -58,31 +58,29 @@ public class HeadToHeadActivity extends BaseListActivity {
 
     private void createListItems(final ArrayList<Match> matches) {
         mListItems = new ArrayList<>();
-        int loses = 0, wins = 0;
-
-        for (final Match match : matches) {
-            if (match.isLose()) {
-                ++loses;
-            } else {
-                ++wins;
-            }
-        }
-
-        final String header = getString(R.string.x_em_dash_y, loses, wins);
-        mListItems.add(ListItem.createHeader(header));
-
+        int wins = 0, loses = 0;
         Tournament lastTournament = null;
 
         for (final Match match : matches) {
+            if (match.isWin()) {
+                ++wins;
+            } else {
+                ++loses;
+            }
+
             final Tournament tournament = match.getTournament();
 
             if (!tournament.equals(lastTournament)) {
                 lastTournament = tournament;
-                mListItems.add(ListItem.createTournament(tournament));
+                final String monthAndYear = tournament.getMonthAndYear();
+                mListItems.add(ListItem.createDate(monthAndYear));
             }
 
-            mListItems.add(ListItem.createMatch(match));
+            mListItems.add(ListItem.createTournament(match));
         }
+
+        final String header = getString(R.string.x_em_dash_y, wins, loses);
+        mListItems.add(0, ListItem.createHeader(header));
 
         mListItems.trimToSize();
     }
@@ -126,7 +124,7 @@ public class HeadToHeadActivity extends BaseListActivity {
 
     @Override
     protected String getErrorText() {
-        return getString(R.string.error_fetching_matches);
+        return getString(R.string.error_fetching_head_to_head_matches);
     }
 
 
@@ -174,9 +172,18 @@ public class HeadToHeadActivity extends BaseListActivity {
 
 
         private Match mMatch;
+        private String mDate;
         private String mHeader;
-        private Tournament mTournament;
         private Type mType;
+
+
+        private static ListItem createDate(final String date) {
+            final ListItem listItem = new ListItem();
+            listItem.mDate = date;
+            listItem.mType = Type.DATE;
+
+            return listItem;
+        }
 
 
         private static ListItem createHeader(final String header) {
@@ -188,18 +195,9 @@ public class HeadToHeadActivity extends BaseListActivity {
         }
 
 
-        private static ListItem createMatch(final Match match) {
+        private static ListItem createTournament(final Match match) {
             final ListItem listItem = new ListItem();
             listItem.mMatch = match;
-            listItem.mType = Type.MATCH;
-
-            return listItem;
-        }
-
-
-        private static ListItem createTournament(final Tournament tournament) {
-            final ListItem listItem = new ListItem();
-            listItem.mTournament = tournament;
             listItem.mType = Type.TOURNAMENT;
 
             return listItem;
@@ -215,12 +213,12 @@ public class HeadToHeadActivity extends BaseListActivity {
             } else if (o instanceof ListItem) {
                 final ListItem li = (ListItem) o;
 
-                if (isHeader() && li.isHeader()) {
+                if (isDate() && li.isDate()) {
+                    isEqual = mDate.equals(li.mDate);
+                } else if (isHeader() && li.isHeader()) {
                     isEqual = mHeader.equals(li.mHeader);
-                } else if (isMatch() && li.isMatch()) {
-                    isEqual = mMatch.equals(li.mMatch);
                 } else if (isTournament() && li.isTournament()) {
-                    isEqual = mTournament.equals(li.mTournament);
+                    isEqual = mMatch.equals(li.mMatch);
                 } else {
                     isEqual = false;
                 }
@@ -232,13 +230,13 @@ public class HeadToHeadActivity extends BaseListActivity {
         }
 
 
-        private boolean isHeader() {
-            return mType == Type.HEADER;
+        private boolean isDate() {
+            return mType == Type.DATE;
         }
 
 
-        private boolean isMatch() {
-            return mType == Type.MATCH;
+        private boolean isHeader() {
+            return mType == Type.HEADER;
         }
 
 
@@ -252,16 +250,16 @@ public class HeadToHeadActivity extends BaseListActivity {
             final String title;
 
             switch (mType) {
+                case DATE:
+                    title = mMatch.getOpponentName();
+                    break;
+
                 case HEADER:
                     title = mHeader;
                     break;
 
-                case MATCH:
-                    title = mMatch.getOpponentName();
-                    break;
-
                 case TOURNAMENT:
-                    title = mTournament.getName();
+                    title = mMatch.getTournament().getName();
                     break;
 
                 default:
@@ -273,16 +271,16 @@ public class HeadToHeadActivity extends BaseListActivity {
 
 
         private static enum Type {
-            HEADER, MATCH, TOURNAMENT;
+            DATE, HEADER, TOURNAMENT;
 
 
             private static Type create(final int ordinal) {
                 final Type type;
 
-                if (ordinal == HEADER.ordinal()) {
+                if (ordinal == DATE.ordinal()) {
+                    type = DATE;
+                } else if (ordinal == HEADER.ordinal()) {
                     type = HEADER;
-                } else if (ordinal == MATCH.ordinal()) {
-                    type = MATCH;
                 } else if (ordinal == TOURNAMENT.ordinal()) {
                     type = TOURNAMENT;
                 } else {
@@ -298,12 +296,12 @@ public class HeadToHeadActivity extends BaseListActivity {
                 final int resId;
 
                 switch (this) {
-                    case HEADER:
-                        resId = R.string.header;
+                    case DATE:
+                        resId = R.string.date;
                         break;
 
-                    case MATCH:
-                        resId = R.string.match;
+                    case HEADER:
+                        resId = R.string.header;
                         break;
 
                     case TOURNAMENT:
@@ -339,25 +337,26 @@ public class HeadToHeadActivity extends BaseListActivity {
         }
 
 
+        private void bindDateViewHolder(final DateViewHolder holder, final ListItem listItem) {
+            holder.mDate.setText(listItem.mDate);
+        }
+
+
         private void bindHeaderViewHolder(final HeaderViewHolder holder, final ListItem listItem) {
             holder.mHeader.setText(listItem.mHeader);
         }
 
 
-        private void bindMatchViewHolder(final MatchViewHolder holder, final ListItem listItem) {
-            holder.mOpponent.setText(listItem.mMatch.getOpponentName());
+        private void bindTournamentViewHolder(final TournamentViewHolder holder, final ListItem listItem) {
+            final Tournament tournament = listItem.mMatch.getTournament();
+            holder.mDate.setText(tournament.getDayOfMonth());
+            holder.mName.setText(tournament.getName());
 
             if (listItem.mMatch.isWin()) {
-                holder.mOpponent.setTextColor(mColorLose);
+                holder.mName.setTextColor(mColorWin);
             } else {
-                holder.mOpponent.setTextColor(mColorWin);
+                holder.mName.setTextColor(mColorLose);
             }
-        }
-
-
-        private void bindTournamentViewHolder(final TournamentViewHolder holder, final ListItem listItem) {
-            holder.mDate.setText(listItem.mTournament.getDate());
-            holder.mName.setText(listItem.mTournament.getName());
         }
 
 
@@ -384,12 +383,12 @@ public class HeadToHeadActivity extends BaseListActivity {
             final ListItem listItem = mListItems.get(position);
 
             switch (listItem.mType) {
-                case HEADER:
-                    bindHeaderViewHolder((HeaderViewHolder) holder, listItem);
+                case DATE:
+                    bindDateViewHolder((DateViewHolder) holder, listItem);
                     break;
 
-                case MATCH:
-                    bindMatchViewHolder((MatchViewHolder) holder, listItem);
+                case HEADER:
+                    bindHeaderViewHolder((HeaderViewHolder) holder, listItem);
                     break;
 
                 case TOURNAMENT:
@@ -397,7 +396,7 @@ public class HeadToHeadActivity extends BaseListActivity {
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type detected: " + listItem.mType);
+                    throw new RuntimeException("Illegal ListItem Type: " + listItem.mType);
             }
         }
 
@@ -412,26 +411,41 @@ public class HeadToHeadActivity extends BaseListActivity {
             final RecyclerView.ViewHolder holder;
 
             switch (type) {
+                case DATE:
+                    view = inflater.inflate(R.layout.separator_simple, parent, false);
+                    holder = new DateViewHolder(view);
+                    break;
+
                 case HEADER:
                     view = inflater.inflate(R.layout.head_to_head_header, parent, false);
                     holder = new HeaderViewHolder(view);
                     break;
 
-                case MATCH:
-                    view = inflater.inflate(R.layout.model_match, parent, false);
-                    holder = new MatchViewHolder(view);
-                    break;
-
                 case TOURNAMENT:
-                    view = inflater.inflate(R.layout.separator_tournament, parent, false);
+                    view = inflater.inflate(R.layout.model_tournament, parent, false);
                     holder = new TournamentViewHolder(view);
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type detected: " + type);
+                    throw new RuntimeException("Illegal ListItem Type: " + type);
             }
 
             return holder;
+        }
+
+
+    }
+
+
+    private static final class DateViewHolder extends RecyclerView.ViewHolder {
+
+
+        private final TextView mDate;
+
+
+        private DateViewHolder(final View view) {
+            super(view);
+            mDate = (TextView) view.findViewById(R.id.separator_simple_text);
         }
 
 
@@ -453,21 +467,6 @@ public class HeadToHeadActivity extends BaseListActivity {
     }
 
 
-    private static final class MatchViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mOpponent;
-
-
-        private MatchViewHolder(final View view) {
-            super(view);
-            mOpponent = (TextView) view.findViewById(R.id.model_match_opponent);
-        }
-
-
-    }
-
-
     private static final class TournamentViewHolder extends RecyclerView.ViewHolder {
 
 
@@ -477,8 +476,8 @@ public class HeadToHeadActivity extends BaseListActivity {
 
         private TournamentViewHolder(final View view) {
             super(view);
-            mDate = (TextView) view.findViewById(R.id.separator_tournament_date);
-            mName = (TextView) view.findViewById(R.id.separator_tournament_name);
+            mDate = (TextView) view.findViewById(R.id.model_tournament_date);
+            mName = (TextView) view.findViewById(R.id.model_tournament_name);
         }
 
 

@@ -42,6 +42,8 @@ public final class Constants {
     public static final String OPPONENT_NAME = "opponent_name";
     public static final String PERIODIC_SYNC = "periodic_sync";
     public static final String PLAYER = "player";
+    public static final String PLAYER_HEAD_TO_HEAD = "player_head_to_head";
+    public static final String PLAYER_MATCHES = "player_matches";
     public static final String PLAYERS = "players";
     public static final String RANK = "rank";
     public static final String RANKING = "ranking";

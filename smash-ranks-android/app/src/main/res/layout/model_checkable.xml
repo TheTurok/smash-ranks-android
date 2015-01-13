@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:checkMark="@drawable/checkbox"
-    android:id="@+id/model_checkable_text"
-    android:gravity="center_vertical"
-    tools:text="Hungrybox"
-    style="@style/list_item_root.text" />
+    android:background="@color/gray"
+    android:id="@+id/model_checkable_root"
+    tools:ignore="Overdraw"
+    style="@style/list_item_root.no_padding">
+    <CheckedTextView
+        android:checkMark="@drawable/checkbox"
+        android:duplicateParentState="true"
+        android:id="@+id/model_checkable_text"
+        android:gravity="center_vertical"
+        tools:text="Hungrybox"
+        style="@style/list_item_root.text" />
+</FrameLayout>

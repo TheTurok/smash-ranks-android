@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     style="@style/root.no_padding">
     <RelativeLayout
-        android:background="@color/gray"
+        android:background="@color/gray_dark"
         android:gravity="center_vertical"
         android:layout_height="match_parent"
         android:layout_width="wrap_content"

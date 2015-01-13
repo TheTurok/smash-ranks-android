@@ -345,11 +345,10 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
 
-        final ListFilter.Listener listener = new ListFilter.Listener(this) {
+        final ListFilter.Listener<ListItem> listener = new ListFilter.Listener<ListItem>(this) {
             @Override
-            @SuppressWarnings("unchecked")
-            public void onFilterComplete(final ArrayList list) {
-                mListItemsShown = (ArrayList<ListItem>) list;
+            public void onFilterComplete(final ArrayList<ListItem> list) {
+                mListItemsShown = list;
                 notifyDataSetChanged();
             }
         };
@@ -451,7 +450,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
                     break;
 
                 default:
-                    throw new IllegalStateException("ListItem type is invalid");
+                    throw new IllegalStateException("ListItem Type is invalid");
             }
 
             return lowerCaseName;
@@ -494,7 +493,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
                     break;
 
                 default:
-                    throw new IllegalStateException("ListItem type is invalid");
+                    throw new IllegalStateException("ListItem Type is invalid");
             }
 
             return title;
@@ -603,13 +602,13 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
             switch (listItemType) {
                 case PLAYER:
-                    view = inflater.inflate(R.layout.model_checkable2, parent, false);
+                    view = inflater.inflate(R.layout.model_checkable, parent, false);
                     holder = new PlayerViewHolder(view);
                     view.setOnClickListener(this);
                     break;
 
                 case TITLE:
-                    view = inflater.inflate(R.layout.separator_simple2, parent, false);
+                    view = inflater.inflate(R.layout.separator_simple, parent, false);
                     holder = new TitleViewHolder(view);
                     break;
 
@@ -632,7 +631,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
         private PlayerViewHolder(final View view) {
             super(view);
-            mName = (CheckedTextView) view.findViewById(R.id.model_checkable2_text);
+            mName = (CheckedTextView) view.findViewById(R.id.model_checkable_text);
         }
 
 
@@ -647,7 +646,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
         private TitleViewHolder(final View view) {
             super(view);
-            mTitle = (TextView) view.findViewById(R.id.separator_simple2_text);
+            mTitle = (TextView) view.findViewById(R.id.separator_simple_text);
         }
 
 

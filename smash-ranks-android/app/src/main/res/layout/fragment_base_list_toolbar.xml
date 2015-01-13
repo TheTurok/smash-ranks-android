@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     style="@style/root.no_padding">
@@ -27,8 +26,6 @@
             </LinearLayout>
         </FrameLayout>
     </com.garpr.android.misc.FlexibleSwipeRefreshLayout>
-    <android.support.v7.widget.Toolbar
-        android:background="@color/gray"
-        app:theme="@style/toolbar_theme"
-        style="@style/toolbar" />
+    <include
+        layout="@layout/toolbar" />
 </LinearLayout>

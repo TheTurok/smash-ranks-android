@@ -13,11 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/root_padding_fourth"
         android:layout_width="match_parent"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:text="Region listener added at index 4" />
     <TextView
         android:id="@+id/model_log_message_with_stack_trace_stack_trace"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:textSize="11sp"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        tools:text="Exception at line 54 in Object.toString()" />
 </LinearLayout>

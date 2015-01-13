@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
     android:gravity="center_vertical"
+    android:id="@+id/model_tournament_root"
     android:orientation="horizontal"
     tools:ignore="Overdraw"
     style="@style/list_item_root">

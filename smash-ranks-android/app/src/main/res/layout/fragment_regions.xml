@@ -45,7 +45,6 @@
         </FrameLayout>
     </com.garpr.android.misc.FlexibleSwipeRefreshLayout>
     <android.support.v7.widget.Toolbar
-        android:background="@color/gray"
         android:visibility="gone"
         app:theme="@style/toolbar_theme"
         tools:visibility="visible"

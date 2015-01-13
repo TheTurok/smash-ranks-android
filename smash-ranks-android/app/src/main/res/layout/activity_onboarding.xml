@@ -5,7 +5,7 @@
     android:orientation="vertical"
     style="@style/root.no_padding">
     <LinearLayout
-        android:background="@color/gray"
+        android:background="@color/gray_dark"
         android:elevation="@dimen/elevation"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"

@@ -26,7 +26,7 @@
     <string name="enable_or_disable_sync">Enable or disable sync</string>
     <string name="error">Error</string>
     <string name="error_">Error!</string>
-    <string name="error_fetching_matches">Error fetching matches!</string>
+    <string name="error_fetching_head_to_head_matches">Error fetching head-to-head matches!</string>
     <string name="error_fetching_x_matches">Error fetching %s\'s matches!</string>
     <string name="error_fetching_players">Error fetching players!</string>
     <string name="error_fetching_rankings">Error fetching rankings!</string>
@@ -135,6 +135,7 @@
     <string name="x_paren_y">%1$s (%2$s)</string>
     <string name="x_viewing_y">%1$s (viewing %2$s)</string>
     <string name="x_vs_y">%1$s vs %2$s</string>
+    <string name="x_vs_y_on_gar_pr_z">%1$s vs %2$s on GAR PR %3$s</string>
     <string name="x_y">%1$s %2$s</string>
     <string name="yes">Yes</string>
     <string name="youre_x_from_y_ready">You\'re %1$s from %2$s. Ready?</string>

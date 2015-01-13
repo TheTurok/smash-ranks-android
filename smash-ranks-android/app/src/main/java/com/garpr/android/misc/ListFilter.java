@@ -93,7 +93,7 @@ public final class ListFilter {
     }
 
 
-    public abstract static class Listener {
+    public abstract static class Listener<T extends BasicFilterable> {
 
 
         private final WeakReference<Heartbeat> mHeartbeat;
@@ -110,7 +110,7 @@ public final class ListFilter {
         }
 
 
-        public abstract void onFilterComplete(final ArrayList list);
+        public abstract void onFilterComplete(final ArrayList<T> list);
 
 
     }

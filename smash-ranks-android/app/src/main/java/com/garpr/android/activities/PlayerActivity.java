@@ -343,11 +343,10 @@ public class PlayerActivity extends BaseListActivity implements
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
 
-        final ListFilter.Listener listener = new ListFilter.Listener(this) {
+        final ListFilter.Listener<ListItem> listener = new ListFilter.Listener<ListItem>(this) {
             @Override
-            @SuppressWarnings("unchecked")
-            public void onFilterComplete(final ArrayList list) {
-                mListItemsShown = (ArrayList<ListItem>) list;
+            public void onFilterComplete(final ArrayList<ListItem> list) {
+                mListItemsShown = list;
                 notifyDataSetChanged();
             }
         };
@@ -409,7 +408,7 @@ public class PlayerActivity extends BaseListActivity implements
         startActivity(mShareIntent);
 
         try {
-            Analytics.report(TAG).sendEvent(Constants.SHARE, Constants.PLAYER);
+            Analytics.report(TAG).sendEvent(Constants.SHARE, Constants.PLAYER_MATCHES);
         } catch (final GooglePlayServicesUnavailableException e) {
             Console.w(TAG, "Unable to report share to analytics", e);
         }

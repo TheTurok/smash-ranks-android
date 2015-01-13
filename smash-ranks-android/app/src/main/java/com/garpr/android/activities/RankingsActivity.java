@@ -407,11 +407,10 @@ public class RankingsActivity extends BaseListActivity implements
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
 
-        final ListFilter.Listener listener = new ListFilter.Listener(this) {
+        final ListFilter.Listener<ListItem> listener = new ListFilter.Listener<ListItem>(this) {
             @Override
-            @SuppressWarnings("unchecked")
-            public void onFilterComplete(final ArrayList list) {
-                mListItemsShown = (ArrayList<ListItem>) list;
+            public void onFilterComplete(final ArrayList<ListItem> list) {
+                mListItemsShown = list;
                 notifyDataSetChanged();
             }
         };

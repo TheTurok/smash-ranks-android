@@ -22,9 +22,7 @@
             android:layout_marginTop="@dimen/root_padding_double"
             android:layout_width="wrap_content"
             android:text="@string/gar_pr"
-            android:textSize="32sp"
-            tools:ignore="UnusedAttribute"
-            style="@style/fontFamily_medium" />
+            style="@style/garpr_text" />
         <ImageView
             android:id="@+id/activity_onboarding_orb"
             android:layout_gravity="center"

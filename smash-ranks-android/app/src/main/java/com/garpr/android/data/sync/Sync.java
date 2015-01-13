@@ -18,7 +18,7 @@ import com.garpr.android.misc.Console;
 public final class Sync {
 
 
-    private static final String TAG = Sync.class.getSimpleName();
+    private static final String TAG = "Sync";
 
 
 

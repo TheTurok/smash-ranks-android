@@ -44,7 +44,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
-    private static final String TAG = RegionsFragment.class.getSimpleName();
+    private static final String TAG = "RegionsFragment";
 
 
     private ArrayList<ListItem> mListItems;

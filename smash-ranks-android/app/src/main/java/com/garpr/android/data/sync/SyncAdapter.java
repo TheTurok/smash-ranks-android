@@ -44,9 +44,9 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
         Heartbeat {
 
 
-    private static final String CNAME = SyncAdapter.class.getCanonicalName();
+    private static final String CNAME = "com.garpr.android.data.sync.SyncAdapter";
     private static final String KEY_LAST_SYNC = "KEY_LAST_SYNC";
-    private static final String TAG = SyncAdapter.class.getSimpleName();
+    private static final String TAG = "SyncAdapter";
 
     private boolean mIsAlive;
 

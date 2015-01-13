@@ -27,9 +27,9 @@ public final class Players {
 
 
     private static final SimpleDateFormat sDateFormat;
-    private static final String CNAME = Players.class.getCanonicalName();
+    private static final String CNAME = "com.garpr.android.data.Players";
     private static final String KEY_ROSTER_UPDATE = "KEY_ROSTER_UPDATE";
-    private static final String TAG = Players.class.getSimpleName();
+    private static final String TAG = "Players";
 
 
 
@@ -324,7 +324,7 @@ public final class Players {
     public static abstract class PlayersCallback extends Callback<Player> {
 
 
-        private static final String TAG = PlayersCallback.class.getSimpleName();
+        private static final String TAG = "PlayersCallback";
 
 
         public PlayersCallback(final Heartbeat heartbeat) {
@@ -393,7 +393,7 @@ public final class Players {
     private static abstract class RankingsCallback extends Callback<Player> {
 
 
-        private static final String TAG = RankingsCallback.class.getSimpleName();
+        private static final String TAG = "RankingsCallback";
 
 
         private RankingsCallback(final Heartbeat heartbeat) {
@@ -461,7 +461,7 @@ public final class Players {
     public static abstract class RosterUpdateCallback extends Callback<Player> {
 
 
-        private static final String TAG = RosterUpdateCallback.class.getSimpleName();
+        private static final String TAG = "RosterUpdateCallback";
 
 
         public RosterUpdateCallback(final Heartbeat heartbeat) {

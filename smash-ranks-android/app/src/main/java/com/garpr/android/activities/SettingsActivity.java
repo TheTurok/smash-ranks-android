@@ -33,7 +33,7 @@ import static android.provider.Settings.EXTRA_AUTHORITIES;
 public class SettingsActivity extends BaseActivity {
 
 
-    private static final String TAG = SettingsActivity.class.getSimpleName();
+    private static final String TAG = "SettingsActivity";
 
     private CheckedTextView mSyncChargingLabel;
     private CheckedTextView mSyncWifiLabel;

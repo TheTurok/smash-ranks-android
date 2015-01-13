@@ -43,7 +43,7 @@ abstract class BaseActivity extends ActionBarActivity implements
         Toolbar.OnMenuItemClickListener {
 
 
-    private static final String TAG = BaseActivity.class.getSimpleName();
+    private static final String TAG = "BaseActivity";
 
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean mIsAlive;

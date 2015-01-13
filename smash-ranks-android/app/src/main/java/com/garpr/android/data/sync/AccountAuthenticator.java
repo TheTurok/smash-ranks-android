@@ -16,7 +16,7 @@ import android.os.Bundle;
 final class AccountAuthenticator extends AbstractAccountAuthenticator {
 
 
-    private static final String TAG = AccountAuthenticator.class.getSimpleName();
+    private static final String TAG = "AccountAuthenticator";
 
 
 

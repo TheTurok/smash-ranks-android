@@ -32,11 +32,11 @@ import java.util.Collections;
 public class HeadToHeadActivity extends BaseListActivity {
 
 
-    private static final String CNAME = HeadToHeadActivity.class.getCanonicalName();
+    private static final String CNAME = "com.garpr.android.activities.HeadToHeadActivity";
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
     private static final String EXTRA_OPPONENT_ID = CNAME + ".EXTRA_OPPONENT_ID";
     private static final String EXTRA_OPPONENT_NAME = CNAME + ".EXTRA_OPPONENT_NAME";
-    private static final String TAG = HeadToHeadActivity.class.getSimpleName();
+    private static final String TAG = "HeadToHeadActivity";
 
     private ArrayList<ListItem> mListItems;
     private Player mPlayer;

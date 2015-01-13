@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public final class Matches {
 
 
-    private static final String TAG = Matches.class.getSimpleName();
+    private static final String TAG = "Matches";
 
 
 
@@ -66,7 +66,7 @@ public final class Matches {
     public static abstract class MatchesCallback extends Callback<Match> {
 
 
-        private static final String TAG = MatchesCallback.class.getSimpleName();
+        private static final String TAG = "MatchesCallback";
 
         private final String mPlayerId;
 

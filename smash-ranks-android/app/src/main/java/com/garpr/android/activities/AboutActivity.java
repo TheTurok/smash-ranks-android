@@ -17,7 +17,7 @@ import com.garpr.android.misc.Constants;
 public class AboutActivity extends BaseActivity {
 
 
-    private static final String TAG = AboutActivity.class.getSimpleName();
+    private static final String TAG = "AboutActivity";
 
     private WebView mWebView;
 

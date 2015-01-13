@@ -16,10 +16,10 @@ import org.json.JSONObject;
 public final class User {
 
 
-    private static final String CNAME = User.class.getCanonicalName();
+    private static final String CNAME = "com.garpr.android.data.User";
     private static final String KEY_PLAYER = "KEY_PLAYER";
     private static final String KEY_REGION = "KEY_REGION";
-    private static final String TAG = User.class.getSimpleName();
+    private static final String TAG = "User";
 
     private static User sUser;
 

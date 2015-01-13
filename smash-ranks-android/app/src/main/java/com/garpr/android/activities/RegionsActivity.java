@@ -18,7 +18,7 @@ public class RegionsActivity extends BaseFragmentActivity implements
         RegionsFragment.RegionSaveListener {
 
 
-    private static final String TAG = RegionsActivity.class.getSimpleName();
+    private static final String TAG = "RegionsActivity";
 
 
 

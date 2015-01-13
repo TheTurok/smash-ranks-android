@@ -25,7 +25,7 @@ public class ConsoleActivity extends BaseListActivity implements
         Console.Listener {
 
 
-    private static final String TAG = ConsoleActivity.class.getSimpleName();
+    private static final String TAG = "ConsoleActivity";
 
     private MenuItem mClearLog;
 

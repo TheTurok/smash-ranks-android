@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public final class Regions {
 
 
-    private static final String TAG = Regions.class.getSimpleName();
+    private static final String TAG = "Regions";
 
 
 
@@ -151,7 +151,7 @@ public final class Regions {
     public static abstract class RegionsCallback extends Callback<Region> {
 
 
-        private static final String TAG = RegionsCallback.class.getSimpleName();
+        private static final String TAG = "RegionsCallback";
 
 
         public RegionsCallback(final Heartbeat heartbeat) {

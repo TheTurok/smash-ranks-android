@@ -22,7 +22,7 @@ public final class Settings {
 
 
     private static final String KEY_REGION = "KEY_REGION";
-    private static final String TAG = Settings.class.getSimpleName();
+    private static final String TAG = "Settings";
 
     private static final LinkedList<WeakReference<OnRegionChangedListener>> sRegionListeners;
     private static final Object sRegionLock;

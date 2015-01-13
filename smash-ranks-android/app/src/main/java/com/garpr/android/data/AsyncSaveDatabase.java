@@ -12,7 +12,7 @@ import java.util.ArrayList;
 abstract class AsyncSaveDatabase<T> extends AsyncTask<Void, Void, Void> {
 
 
-    private static final String TAG = AsyncSaveDatabase.class.getSimpleName();
+    private static final String TAG = "AsyncSaveDatabase";
 
     private final ArrayList<T> mItems;
     private final String mTableName;

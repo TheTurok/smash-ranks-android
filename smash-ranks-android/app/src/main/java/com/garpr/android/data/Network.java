@@ -12,7 +12,7 @@ import com.garpr.android.misc.Heartbeat;
 final class Network {
 
 
-    private static final String TAG = Network.class.getSimpleName();
+    private static final String TAG = "Network";
 
 
 

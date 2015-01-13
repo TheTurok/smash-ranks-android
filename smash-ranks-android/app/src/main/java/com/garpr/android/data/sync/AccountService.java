@@ -15,7 +15,7 @@ import com.garpr.android.misc.Console;
 public final class AccountService extends Service {
 
 
-    private static final String TAG = AccountService.class.getSimpleName();
+    private static final String TAG = "AccountService";
 
     private AccountAuthenticator mAuthenticator;
 

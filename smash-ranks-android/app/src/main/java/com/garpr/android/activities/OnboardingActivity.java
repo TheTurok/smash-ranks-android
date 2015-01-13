@@ -34,10 +34,10 @@ public class OnboardingActivity extends BaseActivity implements
     private static final int ONBOARDING_FRAGMENT_COUNT = 2;
     private static final int ONBOARDING_FRAGMENT_PLAYERS = 1;
     private static final int ONBOARDING_FRAGMENT_REGIONS = 0;
-    private static final String CNAME = OnboardingActivity.class.getCanonicalName();
+    private static final String CNAME = "com.garpr.android.activities.OnboardingActivity";
     private static final String KEY_ONBOARDING_COMPLETE = "KEY_ONBOARDING_COMPLETE";
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
-    private static final String TAG = OnboardingActivity.class.getSimpleName();
+    private static final String TAG = "OnboardingActivity";
 
     private boolean mReportToAnalytics;
     private LinearLayout mRoot;

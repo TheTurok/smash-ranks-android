@@ -49,7 +49,7 @@ public class RankingsActivity extends BaseListActivity implements
     private static final int COMPARATOR_ALPHABETICAL = 1;
     private static final int COMPARATOR_RANK = 2;
     private static final String KEY_COMPARATOR = "KEY_COMPARATOR";
-    private static final String TAG = RankingsActivity.class.getSimpleName();
+    private static final String TAG = "RankingsActivity";
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;

@@ -52,10 +52,10 @@ public class PlayerActivity extends BaseListActivity implements
 
     private static final int PREVIOUSLY_SHOWING_LOSES = 1;
     private static final int PREVIOUSLY_SHOWING_WINS = 2;
-    private static final String CNAME = PlayerActivity.class.getCanonicalName();
+    private static final String CNAME = "com.garpr.android.activities.PlayerActivity";
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
     private static final String KEY_PREVIOUSLY_SHOWING = "KEY_PREVIOUSLY_SHOWING";
-    private static final String TAG = PlayerActivity.class.getSimpleName();
+    private static final String TAG = "PlayerActivity";
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;

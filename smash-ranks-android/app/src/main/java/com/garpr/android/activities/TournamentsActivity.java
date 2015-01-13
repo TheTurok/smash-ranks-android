@@ -43,7 +43,7 @@ public class TournamentsActivity extends BaseListActivity implements
     private static final int COMPARATOR_CHRONOLOGICAL = 1;
     private static final int COMPARATOR_REVERSE_CHRONOLOGICAL = 2;
     private static final String KEY_COMPARATOR = "KEY_COMPARATOR";
-    private static final String TAG = TournamentsActivity.class.getSimpleName();
+    private static final String TAG = "TournamentsActivity";
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;

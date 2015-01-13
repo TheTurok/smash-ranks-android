@@ -17,7 +17,7 @@ public final class Database extends SQLiteOpenHelper implements
 
     private static final int VERSION = 1;
     private static final Object sLock;
-    private static final String TAG = Database.class.getSimpleName();
+    private static final String TAG = "Database";
 
     private static Database sInstance;
     private static int sAttachments;

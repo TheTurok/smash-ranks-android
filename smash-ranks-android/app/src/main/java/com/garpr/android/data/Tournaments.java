@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public final class Tournaments {
 
 
-    private static final String TAG = Tournaments.class.getSimpleName();
+    private static final String TAG = "Tournaments";
 
 
 
@@ -152,7 +152,7 @@ public final class Tournaments {
     public static abstract class TournamentsCallback extends Callback<Tournament> {
 
 
-        private static final String TAG = TournamentsCallback.class.getSimpleName();
+        private static final String TAG = "TournamentsCallback";
 
 
         public TournamentsCallback(final Heartbeat heartbeat) {

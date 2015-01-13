@@ -94,7 +94,8 @@ public class LogMessage implements Parcelable {
 
     @Override
     public String toString() {
-        return tag + ": " + message;
+        final Context context = App.getContext();
+        return context.getString(R.string.x_colon_y, tag, message);
     }
 
 

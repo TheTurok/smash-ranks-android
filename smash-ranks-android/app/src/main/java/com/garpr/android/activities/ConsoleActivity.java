@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -214,17 +216,19 @@ public class ConsoleActivity extends BaseListActivity implements
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             final int itemViewType = getItemViewType(position);
             final LogMessage logMessage = Console.getLogMessage(position);
+            final Spanned tagAndMessage = Html.fromHtml(getString(R.string.x_bold_colon_y,
+                    logMessage.getTag(), logMessage.getMessage()));
 
             switch (itemViewType) {
                 case LogMessageViewHolder.VIEW_TYPE:
                     final LogMessageViewHolder lmvh = (LogMessageViewHolder) holder;
-                    lmvh.mTagAndMessage.setText(logMessage.getMessage());
+                    lmvh.mTagAndMessage.setText(tagAndMessage);
                     formatTextViewPerLevel(logMessage, lmvh.mTagAndMessage);
                     break;
 
                 case LogMessageWithStackTraceViewHolder.VIEW_TYPE:
                     final LogMessageWithStackTraceViewHolder lmwstvh = (LogMessageWithStackTraceViewHolder) holder;
-                    lmwstvh.mTagAndMessage.setText(logMessage.getMessage());
+                    lmwstvh.mTagAndMessage.setText(tagAndMessage);
                     lmwstvh.mStackTrace.setText(logMessage.getStackTrace());
                     formatTextViewPerLevel(logMessage, lmwstvh.mTagAndMessage);
                     formatTextViewPerLevel(logMessage, lmwstvh.mStackTrace);

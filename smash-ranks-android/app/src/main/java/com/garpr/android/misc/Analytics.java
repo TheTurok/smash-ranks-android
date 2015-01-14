@@ -23,7 +23,7 @@ import java.util.Map;
 public final class Analytics {
 
 
-    private static final Object sTrackerLock;
+    private static final Object TRACKER_LOCK;
     private static final String TRACKING_ID = "UA-57286718-1";
 
     private static Tracker sTracker;
@@ -32,7 +32,7 @@ public final class Analytics {
 
 
     static {
-        sTrackerLock = new Object();
+        TRACKER_LOCK = new Object();
     }
 
 
@@ -45,7 +45,7 @@ public final class Analytics {
     private static Tracker getTracker() throws GooglePlayServicesUnavailableException {
         throwIfGooglePlayServicesAreUnavailable();
 
-        synchronized (sTrackerLock) {
+        synchronized (TRACKER_LOCK) {
             if (sTracker == null) {
                 final Context context = App.getContext();
                 final GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);

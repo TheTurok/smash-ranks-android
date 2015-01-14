@@ -177,6 +177,9 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
     @Override
     public void onPerformSync(final Account account, final Bundle extras, final String authority,
             final ContentProviderClient provider, final SyncResult syncResult) {
+        Console.d(TAG, "onPerformSync(\"" + account + "\", \"" + extras + "\", \"" + authority +
+                "\", \"" + provider + "\", \"" + syncResult + "\")");
+
         final SharedPreferences sPreferences = Settings.get(CNAME);
         long lastSync = sPreferences.getLong(KEY_LAST_SYNC, 0L);
 
@@ -200,6 +203,7 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
 
     @Override
     public void onSyncCanceled() {
+        Console.d(TAG, "onSyncCanceled()");
         mIsAlive = false;
         super.onSyncCanceled();
     }

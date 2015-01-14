@@ -42,6 +42,17 @@
         </activity>
 
         <activity
+            android:label="@string/no_gorgonite_johns"
+            android:launchMode="singleTop"
+            android:name=".activities.GorgoniteActivity"
+            android:parentActivityName=".activities.ConsoleActivity"
+            tools:ignore="UnusedAttribute">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.ConsoleActivity" />
+        </activity>
+
+        <activity
             android:label="@string/gar_pr"
             android:launchMode="singleTop"
             android:name=".activities.OnboardingActivity"

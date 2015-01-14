@@ -321,7 +321,7 @@ public class HeadToHeadActivity extends BaseListActivity {
     }
 
 
-    private final class MatchesAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
+    private final class MatchesAdapter extends BaseListAdapter {
 
 
         private final int mColorLose;

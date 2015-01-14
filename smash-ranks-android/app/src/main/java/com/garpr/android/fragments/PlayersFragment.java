@@ -60,60 +60,6 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     }
 
 
-    private void createListItems() {
-        mListItems = new ArrayList<>();
-
-        char lastCharacter = ' ';
-        boolean lastCharacterIsSet = false;
-
-        boolean digitTitleAdded = false;
-        boolean otherTitleAdded = false;
-
-        for (final Player player : mPlayers) {
-            final String name = player.getName();
-            char character = name.charAt(0);
-
-            final boolean characterIsLetter = Character.isLetter(character);
-
-            if (characterIsLetter) {
-                character = Character.toUpperCase(character);
-            }
-
-            if (!lastCharacterIsSet || character != lastCharacter) {
-                lastCharacter = character;
-                lastCharacterIsSet = true;
-
-                String listItemTitle = null;
-
-                if (characterIsLetter) {
-                    listItemTitle = String.valueOf(Character.toUpperCase(character));
-                } else if (Character.isDigit(character)) {
-                    if (!digitTitleAdded) {
-                        digitTitleAdded = true;
-                        listItemTitle = getString(R.string.pound_sign);
-                    }
-                } else if (!otherTitleAdded) {
-                    otherTitleAdded = true;
-                    listItemTitle = getString(R.string.other);
-                }
-
-                if (listItemTitle != null) {
-                    final ListItem listItem = ListItem.createTitle(listItemTitle);
-                    mListItems.add(listItem);
-                }
-            }
-
-            final ListItem listItem = ListItem.createPlayer(player);
-            mListItems.add(listItem);
-        }
-
-        mListItems.trimToSize();
-        mListItemsShown = mListItems;
-
-        ListItem.setItemIds(mListItems);
-    }
-
-
     public void clearSelectedPlayer() {
         if (mPlayers != null && !mPlayers.isEmpty() && mSelectedPlayer != null) {
             final int indexOf = mPlayers.indexOf(mSelectedPlayer);
@@ -128,6 +74,87 @@ public class PlayersFragment extends BaseListToolbarFragment implements
                 mGo.setEnabled(false);
             }
         }
+    }
+
+
+    private ArrayList<ListItem> createDigitListItems() {
+        final ArrayList<ListItem> digits = new ArrayList<>(mPlayers.size());
+
+        for (final Player player : mPlayers) {
+            final String name = player.getName();
+
+            if (Character.isDigit(name.charAt(0))) {
+                digits.add(ListItem.createPlayer(player));
+            }
+        }
+
+        if (!digits.isEmpty()) {
+            digits.add(0, ListItem.createTitle(getString(R.string.pound_sign)));
+        }
+
+        return digits;
+    }
+
+
+    private ArrayList<ListItem> createLetterListItems() {
+        final ArrayList<ListItem> letters = new ArrayList<>(mPlayers.size());
+
+        char lastLetter = ' ';
+        boolean lastLetterIsSet = false;
+
+        for (final Player player : mPlayers) {
+            final String name = player.getName();
+            char letter = name.charAt(0);
+
+            if (Character.isLetter(letter)) {
+                letter = Character.toUpperCase(letter);
+
+                if (!lastLetterIsSet || lastLetter != letter) {
+                    lastLetterIsSet = true;
+                    lastLetter = letter;
+                    letters.add(ListItem.createTitle(String.valueOf(letter)));
+                }
+
+                letters.add(ListItem.createPlayer(player));
+            }
+        }
+
+        return letters;
+    }
+
+
+    private void createListItems() {
+        final ArrayList<ListItem> letters = createLetterListItems();
+        final ArrayList<ListItem> digits = createDigitListItems();
+        final ArrayList<ListItem> others = createOtherListItems();
+
+        mListItems = new ArrayList<>(letters.size() + digits.size() + others.size());
+        mListItems.addAll(letters);
+        mListItems.addAll(digits);
+        mListItems.addAll(others);
+        mListItems.trimToSize();
+
+        ListItem.setItemIds(mListItems);
+        mListItemsShown = mListItems;
+    }
+
+
+    private ArrayList<ListItem> createOtherListItems() {
+        final ArrayList<ListItem> other = new ArrayList<>(mPlayers.size());
+
+        for (final Player player : mPlayers) {
+            final String name = player.getName();
+
+            if (!Character.isLetterOrDigit(name.charAt(0))) {
+                other.add(ListItem.createPlayer(player));
+            }
+        }
+
+        if (!other.isEmpty()) {
+            other.add(0, ListItem.createTitle(getString(R.string.other)));
+        }
+
+        return other;
     }
 
 
@@ -545,11 +572,27 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     }
 
 
-    private final class PlayersAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
+    private final class PlayersAdapter extends BaseListAdapter {
 
 
         private PlayersAdapter() {
             super(PlayersFragment.this, getRecyclerView());
+        }
+
+
+        private void bindPlayerViewHolder(final PlayerViewHolder holder, final ListItem listItem) {
+            holder.mName.setText(listItem.mPlayer.getName());
+
+            if (listItem.mPlayer.equals(mSelectedPlayer)) {
+                holder.mName.setChecked(true);
+            } else {
+                holder.mName.setChecked(false);
+            }
+        }
+
+
+        private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
+            holder.mTitle.setText(listItem.mTitle);
         }
 
 
@@ -575,18 +618,17 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             final ListItem listItem = mListItemsShown.get(position);
 
-            if (listItem.isPlayer()) {
-                final PlayerViewHolder viewHolder = (PlayerViewHolder) holder;
-                viewHolder.mName.setText(listItem.mPlayer.getName());
+            switch (listItem.mType) {
+                case PLAYER:
+                    bindPlayerViewHolder((PlayerViewHolder) holder, listItem);
+                    break;
 
-                if (listItem.mPlayer.equals(mSelectedPlayer)) {
-                    viewHolder.mName.setChecked(true);
-                } else {
-                    viewHolder.mName.setChecked(false);
-                }
-            } else if (listItem.isTitle()) {
-                final TitleViewHolder viewHolder = (TitleViewHolder) holder;
-                viewHolder.mTitle.setText(listItem.mTitle);
+                case TITLE:
+                    bindTitleViewHolder((TitleViewHolder) holder, listItem);
+                    break;
+
+                default:
+                    throw new RuntimeException("Illegal ListItem Type: " + listItem.mType);
             }
         }
 

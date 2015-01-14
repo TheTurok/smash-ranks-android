@@ -16,7 +16,7 @@ public final class Database extends SQLiteOpenHelper implements
 
 
     private static final int VERSION = 1;
-    private static final Object sLock;
+    private static final Object ATTACHMENTS_LOCK;
     private static final String TAG = "Database";
 
     private static Database sInstance;
@@ -27,7 +27,7 @@ public final class Database extends SQLiteOpenHelper implements
 
 
     static {
-        sLock = new Object();
+        ATTACHMENTS_LOCK = new Object();
     }
 
 
@@ -58,7 +58,7 @@ public final class Database extends SQLiteOpenHelper implements
 
 
     static SQLiteDatabase start() {
-        synchronized (sLock) {
+        synchronized (ATTACHMENTS_LOCK) {
             ++sAttachments;
 
             if (sDatabase == null) {
@@ -71,7 +71,7 @@ public final class Database extends SQLiteOpenHelper implements
 
 
     static void stop() {
-        synchronized (sLock) {
+        synchronized (ATTACHMENTS_LOCK) {
             if (sAttachments > 0) {
                 --sAttachments;
             }

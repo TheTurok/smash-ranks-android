@@ -567,7 +567,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
-    private final class RegionsAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
+    private final class RegionsAdapter extends BaseListAdapter {
 
 
         private RegionsAdapter() {

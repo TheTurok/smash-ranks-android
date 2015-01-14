@@ -513,11 +513,22 @@ public class TournamentsActivity extends BaseListActivity implements
     }
 
 
-    private final class TournamentsAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
+    private final class TournamentsAdapter extends BaseListAdapter {
 
 
         private TournamentsAdapter() {
             super(TournamentsActivity.this, getRecyclerView());
+        }
+
+
+        private void bindDateViewHolder(final DateViewHolder holder, final ListItem listItem) {
+            holder.mDate.setText(listItem.mDate);
+        }
+
+
+        private void bindTournamentViewHolder(final TournamentViewHolder holder, final ListItem listItem) {
+            holder.mDate.setText(listItem.mTournament.getDayOfMonth());
+            holder.mName.setText(listItem.mTournament.getName());
         }
 
 
@@ -543,13 +554,17 @@ public class TournamentsActivity extends BaseListActivity implements
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             final ListItem listItem = mListItemsShown.get(position);
 
-            if (listItem.isDate()) {
-                final DateViewHolder viewHolder = (DateViewHolder) holder;
-                viewHolder.mDate.setText(listItem.mDate);
-            } else if (listItem.isTournament()) {
-                final TournamentViewHolder viewHolder = (TournamentViewHolder) holder;
-                viewHolder.mDate.setText(listItem.mTournament.getDayOfMonth());
-                viewHolder.mName.setText(listItem.mTournament.getName());
+            switch (listItem.mType) {
+                case DATE:
+                    bindDateViewHolder((DateViewHolder) holder, listItem);
+                    break;
+
+                case TOURNAMENT:
+                    bindTournamentViewHolder((TournamentViewHolder) holder, listItem);
+                    break;
+
+                default:
+                    throw new RuntimeException("Illegal ListItem Type: " + listItem.mType);
             }
         }
 

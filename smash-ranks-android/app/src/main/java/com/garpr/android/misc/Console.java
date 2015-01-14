@@ -13,7 +13,7 @@ import java.util.LinkedList;
 public final class Console {
 
 
-    private static final int LOG_MESSAGES_MAX_SIZE = 64;
+    private static final int LOG_MESSAGES_MAX_SIZE = 96;
     private static final LinkedList<LogMessage> LOG_MESSAGES;
     private static final LinkedList<WeakReference<Listener>> LOG_LISTENERS;
     private static long sLogMessageIdPointer;

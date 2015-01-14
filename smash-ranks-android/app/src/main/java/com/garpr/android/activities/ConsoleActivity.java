@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.garpr.android.R;
 import com.garpr.android.misc.BaseListAdapter;
@@ -27,8 +26,11 @@ public class ConsoleActivity extends BaseListActivity implements
         Console.Listener {
 
 
+    private static final int PULLS = 5;
     private static final String TAG = "ConsoleActivity";
 
+    private boolean mPulled;
+    private int mPulls;
     private MenuItem mClearLog;
 
 
@@ -111,8 +113,13 @@ public class ConsoleActivity extends BaseListActivity implements
     @Override
     public void onRefresh() {
         super.onRefresh();
-        Toast.makeText(this, R.string.no_gorgonite_johns, Toast.LENGTH_SHORT).show();
         setLoading(false);
+        ++mPulls;
+
+        if (!mPulled && mPulls >= PULLS) {
+            mPulled = true;
+            GorgoniteActivity.start(this);
+        }
     }
 
 
@@ -145,7 +152,7 @@ public class ConsoleActivity extends BaseListActivity implements
 
 
 
-    private final class ConsoleAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
+    private final class ConsoleAdapter extends BaseListAdapter {
 
 
         private final int mDebugTextColor;
@@ -200,26 +207,26 @@ public class ConsoleActivity extends BaseListActivity implements
         @Override
         public int getItemViewType(final int position) {
             final LogMessage logMessage = Console.getLogMessage(position);
-            final int itemViewType;
+            final int viewType;
 
             if (logMessage.hasStackTrace()) {
-                itemViewType = LogMessageWithStackTraceViewHolder.VIEW_TYPE;
+                viewType = LogMessageWithStackTraceViewHolder.VIEW_TYPE;
             } else {
-                itemViewType = LogMessageViewHolder.VIEW_TYPE;
+                viewType = LogMessageViewHolder.VIEW_TYPE;
             }
 
-            return itemViewType;
+            return viewType;
         }
 
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-            final int itemViewType = getItemViewType(position);
+            final int viewType = getItemViewType(position);
             final LogMessage logMessage = Console.getLogMessage(position);
             final Spanned tagAndMessage = Html.fromHtml(getString(R.string.x_bold_colon_y,
                     logMessage.getTag(), logMessage.getMessage()));
 
-            switch (itemViewType) {
+            switch (viewType) {
                 case LogMessageViewHolder.VIEW_TYPE:
                     final LogMessageViewHolder lmvh = (LogMessageViewHolder) holder;
                     lmvh.mTagAndMessage.setText(tagAndMessage);
@@ -235,7 +242,7 @@ public class ConsoleActivity extends BaseListActivity implements
                     break;
 
                 default:
-                    throw new RuntimeException("Unknown view type: " + itemViewType);
+                    throw new RuntimeException("Illegal viewType: " + viewType);
             }
         }
 

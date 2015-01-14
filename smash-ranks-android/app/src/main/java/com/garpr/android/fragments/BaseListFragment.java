@@ -116,6 +116,7 @@ abstract class BaseListFragment extends BaseFragment implements
     protected void setAdapter(final BaseListAdapter adapter) {
         mErrorView.setVisibility(View.GONE);
         mAdapter = adapter;
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
         setLoading(false);
     }

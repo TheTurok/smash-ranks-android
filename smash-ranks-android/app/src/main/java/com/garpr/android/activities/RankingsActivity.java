@@ -633,6 +633,26 @@ public class RankingsActivity extends BaseListActivity implements
         }
 
 
+        private void bindPlayerViewHolder(final PlayerViewHolder holder, final ListItem listItem) {
+            holder.mName.setText(listItem.mPlayer.getName());
+            holder.mRank.setText(String.valueOf(listItem.mPlayer.getRank()));
+            holder.mRating.setText(listItem.mPlayer.getRatingTruncated());
+
+            if (mInUsersRegion && mUserPlayer != null) {
+                if (listItem.mPlayer.equals(mUserPlayer)) {
+                    holder.mRoot.setBackgroundColor(mBgHighlight);
+                } else {
+                    holder.mRoot.setBackgroundColor(mBgGray);
+                }
+            }
+        }
+
+
+        private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
+            holder.mTitle.setText(listItem.mTitle);
+        }
+
+
         @Override
         public int getItemCount() {
             return mListItemsShown.size();
@@ -655,22 +675,17 @@ public class RankingsActivity extends BaseListActivity implements
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             final ListItem listItem = mListItemsShown.get(position);
 
-            if (listItem.isPlayer()) {
-                final PlayerViewHolder viewHolder = (PlayerViewHolder) holder;
-                viewHolder.mName.setText(listItem.mPlayer.getName());
-                viewHolder.mRank.setText(String.valueOf(listItem.mPlayer.getRank()));
-                viewHolder.mRating.setText(listItem.mPlayer.getRatingTruncated());
+            switch (listItem.mType) {
+                case PLAYER:
+                    bindPlayerViewHolder((PlayerViewHolder) holder, listItem);
+                    break;
 
-                if (mInUsersRegion && mUserPlayer != null) {
-                    if (listItem.mPlayer.equals(mUserPlayer)) {
-                        viewHolder.mRoot.setBackgroundColor(mBgHighlight);
-                    } else {
-                        viewHolder.mRoot.setBackgroundColor(mBgGray);
-                    }
-                }
-            } else if (listItem.isTitle()) {
-                final TitleViewHolder viewHolder = (TitleViewHolder) holder;
-                viewHolder.mTitle.setText(listItem.mTitle);
+                case TITLE:
+                    bindTitleViewHolder((TitleViewHolder) holder, listItem);
+                    break;
+
+                default:
+                    throw new RuntimeException("Illegal ListItem Type: " + listItem.mType);
             }
         }
 

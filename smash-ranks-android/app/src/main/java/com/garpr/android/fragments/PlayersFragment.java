@@ -208,6 +208,12 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     @Override
+    protected String getFragmentName() {
+        return TAG;
+    }
+
+
+    @Override
     protected int getOptionsMenu() {
         return R.menu.fragment_players;
     }
@@ -575,6 +581,9 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     private final class PlayersAdapter extends BaseListAdapter {
 
 
+        private static final String TAG = "PlayersAdapter";
+
+
         private PlayersAdapter() {
             super(PlayersFragment.this, getRecyclerView());
         }
@@ -593,6 +602,12 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
         private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
             holder.mTitle.setText(listItem.mTitle);
+        }
+
+
+        @Override
+        public String getAdapterName() {
+            return TAG;
         }
 
 

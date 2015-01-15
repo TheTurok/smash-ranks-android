@@ -43,8 +43,6 @@ abstract class BaseActivity extends ActionBarActivity implements
         Toolbar.OnMenuItemClickListener {
 
 
-    private static final String TAG = "BaseActivity";
-
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean mIsAlive;
     private DrawerLayout mDrawerLayout;
@@ -378,7 +376,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             try {
                 Analytics.report(activityName).sendScreenView();
             } catch (final GooglePlayServicesUnavailableException e) {
-                Console.w(TAG, "Unable to report screen view for " + activityName + " to analytics", e);
+                Console.w(activityName, "Unable to report screen view to analytics", e);
             }
         }
     }

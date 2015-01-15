@@ -104,6 +104,13 @@
                             style="@style/settings_title" />
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/activity_settings_server"
+                        style="@style/settings_container">
+                        <TextView
+                            android:text="@string/server_backend_by_ivan_van"
+                            style="@style/settings_title" />
+                    </LinearLayout>
+                    <LinearLayout
                         android:id="@+id/activity_settings_console"
                         style="@style/settings_container">
                         <TextView
@@ -126,7 +133,7 @@
                     </LinearLayout>
                 </LinearLayout>
                 <ImageButton
-                    android:background="@drawable/bg_orb"
+                    android:background="@drawable/bg_press"
                     android:id="@+id/activity_settings_orb"
                     android:layout_gravity="center"
                     android:layout_height="wrap_content"

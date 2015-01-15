@@ -21,10 +21,12 @@ import android.widget.TextView;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
+import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.GooglePlayServicesUnavailableException;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
-
-import java.util.Random;
 
 import static android.provider.Settings.ACTION_SYNC_SETTINGS;
 import static android.provider.Settings.EXTRA_AUTHORITIES;
@@ -43,10 +45,10 @@ public class SettingsActivity extends BaseActivity {
     private LinearLayout mConsole;
     private LinearLayout mGitHub;
     private LinearLayout mRegion;
+    private LinearLayout mServer;
     private LinearLayout mSync;
     private LinearLayout mSyncCharging;
     private LinearLayout mSyncWifi;
-    private Random mRandom;
     private TextView mRegionName;
     private TextView mSyncChargingDesc;
     private TextView mSyncStatus;
@@ -70,6 +72,7 @@ public class SettingsActivity extends BaseActivity {
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
         mOrb = (ImageButton) findViewById(R.id.activity_settings_orb);
+        mServer = (LinearLayout) findViewById(R.id.activity_settings_server);
         mSync = (LinearLayout) findViewById(R.id.activity_settings_sync);
         mSyncCharging = (LinearLayout) findViewById(R.id.activity_settings_sync_charging);
         mSyncChargingDesc = (TextView) findViewById(R.id.activity_settings_sync_charging_desc);
@@ -223,7 +226,7 @@ public class SettingsActivity extends BaseActivity {
         mAuthor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                openLink(Constants.AUTHOR_URL);
+                openLink(Constants.CHARLES_TWITTER_URL);
             }
         });
 
@@ -231,6 +234,13 @@ public class SettingsActivity extends BaseActivity {
             @Override
             public void onClick(final View v) {
                 openLink(Constants.GITHUB_URL);
+            }
+        });
+
+        mServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                openLink(Constants.IVAN_TWITTER_URL);
             }
         });
 
@@ -255,18 +265,20 @@ public class SettingsActivity extends BaseActivity {
 
 
     private void randomYoutubeVideo() {
-        if (mRandom == null) {
-            mRandom = new Random();
-        }
-
         int videoIndex;
 
         do {
-            videoIndex = mRandom.nextInt(Constants.RANDOM_YOUTUBE_VIDEOS.length);
+            videoIndex = Utils.RANDOM.nextInt(Constants.RANDOM_YOUTUBE_VIDEOS.length);
         } while (videoIndex < 0 || videoIndex >= Constants.RANDOM_YOUTUBE_VIDEOS.length);
 
         final String videoUrl = Constants.RANDOM_YOUTUBE_VIDEOS[videoIndex];
         openLink(videoUrl);
+
+        try {
+            Analytics.report(TAG).sendEvent(Constants.EASTER_EGG, Constants.ORB);
+        } catch (final GooglePlayServicesUnavailableException e) {
+            Console.w(TAG, "Unable to report orb easter egg to analytics", e);
+        }
     }
 
 

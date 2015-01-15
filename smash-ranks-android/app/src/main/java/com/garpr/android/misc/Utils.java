@@ -6,9 +6,20 @@ import android.view.MenuItem;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Random;
 
 
 public final class Utils {
+
+
+    public static final Random RANDOM;
+
+
+
+
+    static {
+        RANDOM = new Random();
+    }
 
 
     public static boolean areAnyMenuItemsNull(final MenuItem... items) {

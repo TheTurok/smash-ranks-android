@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:contentDescription="@string/no_gorgonite_johns"
-    android:id="@+id/activity_gorgonite_image"
-    android:scaleType="centerCrop"
-    android:src="@drawable/archer"
-    style="@style/root.no_padding" />
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/root.no_padding">
+    <ImageView
+        android:contentDescription="@string/no_gorgonite_johns"
+        android:id="@+id/activity_gorgonite_image"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/archer" />
+    <ImageView
+        android:background="@drawable/bg_press"
+        android:contentDescription="@string/close"
+        android:id="@+id/activity_gorgonite_close"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_width="?attr/actionBarSize"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_close" />
+</FrameLayout>

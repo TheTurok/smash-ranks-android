@@ -29,8 +29,9 @@ public final class SyncService extends Service {
 
     @Override
     public IBinder onBind(final Intent intent) {
-        Console.d(TAG, "onBind(\"" + intent + "\")");
-        return sAdapter.getSyncAdapterBinder();
+        final IBinder iBinder = sAdapter.getSyncAdapterBinder();
+        Console.d(TAG, "onBind(\"" + intent + "\"): " + iBinder);
+        return iBinder;
     }
 
 

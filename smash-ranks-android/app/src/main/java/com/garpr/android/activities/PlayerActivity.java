@@ -635,6 +635,8 @@ public class PlayerActivity extends BaseListActivity implements
     private final class MatchesAdapter extends BaseListAdapter {
 
 
+        private static final String TAG = "MatchesAdapter";
+
         private final int mBgGray;
         private final int mBgHighlight;
         private final int mColorLose;
@@ -648,6 +650,12 @@ public class PlayerActivity extends BaseListActivity implements
             mBgHighlight = resources.getColor(R.color.overlay_bright);
             mColorLose = resources.getColor(R.color.lose_pink);
             mColorWin = resources.getColor(R.color.win_green);
+        }
+
+
+        @Override
+        public String getAdapterName() {
+            return TAG;
         }
 
 

@@ -17,7 +17,8 @@
     <string name="clear">Clear</string>
     <string name="clear_cache">Clear cache</string>
     <string name="clear_console">Clear console</string>
-    <string name="close_drawer">Close Drawer</string>
+    <string name="close">Close</string>
+    <string name="close_drawer">Close drawer</string>
     <string name="clear_log">Clear log</string>
     <string name="console">Console</string>
     <string name="date">Date</string>
@@ -63,7 +64,7 @@
     <string name="okay">Okay</string>
     <string name="only_sync_on_wifi">Only sync on wifi</string>
     <string name="only_sync_when_charging">Only sync when charging</string>
-    <string name="open_drawer">Open Drawer</string>
+    <string name="open_drawer">Open drawer</string>
     <string name="open_source_on_github">Open source on GitHub</string>
     <string name="other">Other</string>
     <string name="periodic_sync">Periodic Sync</string>
@@ -91,6 +92,7 @@
     <string name="selected_tag">Selected tag</string>
     <string name="select_your_region">Select your region</string>
     <string name="select_your_tag">Select your tag</string>
+    <string name="server_backend_by_ivan_van">Server backend by Ivan Van</string>
     <string name="settings">Settings</string>
     <string name="skip">Skip</string>
     <string name="skip_">Skip!</string>

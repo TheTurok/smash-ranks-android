@@ -220,6 +220,12 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     @Override
+    protected String getFragmentName() {
+        return TAG;
+    }
+
+
+    @Override
     protected int getOptionsMenu() {
         final int optionsMenu;
 
@@ -570,6 +576,9 @@ public class RegionsFragment extends BaseListToolbarFragment {
     private final class RegionsAdapter extends BaseListAdapter {
 
 
+        private static final String TAG = "RegionsAdapter";
+
+
         private RegionsAdapter() {
             super(RegionsFragment.this, getRecyclerView());
         }
@@ -588,6 +597,12 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
         private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
             holder.mTitle.setText(listItem.mTitle);
+        }
+
+
+        @Override
+        public String getAdapterName() {
+            return TAG;
         }
 
 

@@ -621,6 +621,8 @@ public class RankingsActivity extends BaseListActivity implements
     private final class RankingsAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
 
 
+        private static final String TAG = "RankingsAdapter";
+
         private final int mBgGray;
         private final int mBgHighlight;
 
@@ -650,6 +652,12 @@ public class RankingsActivity extends BaseListActivity implements
 
         private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
             holder.mTitle.setText(listItem.mTitle);
+        }
+
+
+        @Override
+        public String getAdapterName() {
+            return TAG;
         }
 
 

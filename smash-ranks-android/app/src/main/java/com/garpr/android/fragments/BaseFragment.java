@@ -26,6 +26,9 @@ abstract class BaseFragment extends Fragment implements
     protected abstract int getContentView();
 
 
+    protected abstract String getFragmentName();
+
+
     protected LayoutInflater getLayoutInflater() {
         return getActivity().getLayoutInflater();
     }

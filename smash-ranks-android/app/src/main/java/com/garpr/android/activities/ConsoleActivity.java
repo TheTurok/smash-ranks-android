@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.garpr.android.BuildConfig;
 import com.garpr.android.R;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
@@ -58,8 +59,15 @@ public class ConsoleActivity extends BaseListActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setLoading(false);
-        setAdapter(new ConsoleAdapter());
+        final ConsoleAdapter adapter;
+
+        if (BuildConfig.DEBUG) {
+            adapter = new DebugConsoleAdapter();
+        } else {
+            adapter = new ReleaseConsoleAdapter();
+        }
+
+        setAdapter(adapter);
     }
 
 
@@ -152,7 +160,7 @@ public class ConsoleActivity extends BaseListActivity implements
 
 
 
-    private final class ConsoleAdapter extends BaseListAdapter {
+    private abstract class ConsoleAdapter extends BaseListAdapter {
 
 
         private final int mDebugTextColor;
@@ -170,7 +178,7 @@ public class ConsoleActivity extends BaseListActivity implements
         }
 
 
-        private void formatTextViewPerLevel(final LogMessage logMessage, final TextView textView) {
+        protected void formatTextViewPerLevel(final LogMessage logMessage, final TextView textView) {
             final Level level = logMessage.getLevel();
 
             switch (level) {
@@ -204,6 +212,21 @@ public class ConsoleActivity extends BaseListActivity implements
         }
 
 
+    }
+
+
+    private final class DebugConsoleAdapter extends ConsoleAdapter {
+
+
+        private static final String TAG = "DebugConsoleAdapter";
+
+
+        @Override
+        public String getAdapterName() {
+            return TAG;
+        }
+
+
         @Override
         public int getItemViewType(final int position) {
             final LogMessage logMessage = Console.getLogMessage(position);
@@ -234,7 +257,8 @@ public class ConsoleActivity extends BaseListActivity implements
                     break;
 
                 case LogMessageWithStackTraceViewHolder.VIEW_TYPE:
-                    final LogMessageWithStackTraceViewHolder lmwstvh = (LogMessageWithStackTraceViewHolder) holder;
+                    final LogMessageWithStackTraceViewHolder lmwstvh =
+                            (LogMessageWithStackTraceViewHolder) holder;
                     lmwstvh.mTagAndMessage.setText(tagAndMessage);
                     lmwstvh.mStackTrace.setText(logMessage.getStackTrace());
                     formatTextViewPerLevel(logMessage, lmwstvh.mTagAndMessage);
@@ -271,6 +295,48 @@ public class ConsoleActivity extends BaseListActivity implements
             }
 
             return holder;
+        }
+
+
+    }
+
+
+    private final class ReleaseConsoleAdapter extends ConsoleAdapter {
+
+
+        private static final String TAG = "ReleaseConsoleAdapter";
+
+
+        @Override
+        public String getAdapterName() {
+            return TAG;
+        }
+
+
+        @Override
+        public int getItemViewType(final int position) {
+            return LogMessageViewHolder.VIEW_TYPE;
+        }
+
+
+        @Override
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+            final LogMessage logMessage = Console.getLogMessage(position);
+            final Spanned tagAndMessage = Html.fromHtml(getString(R.string.x_bold_colon_y,
+                    logMessage.getTag(), logMessage.getMessage()));
+
+            final LogMessageViewHolder lmvh = (LogMessageViewHolder) holder;
+            lmvh.mTagAndMessage.setText(tagAndMessage);
+            formatTextViewPerLevel(logMessage, lmvh.mTagAndMessage);
+        }
+
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
+                final int viewType) {
+            final LayoutInflater inflater = getLayoutInflater();
+            final View view = inflater.inflate(R.layout.model_log_message, parent, false);
+            return new LogMessageViewHolder(view);
         }
 
 

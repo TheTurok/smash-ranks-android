@@ -516,6 +516,9 @@ public class TournamentsActivity extends BaseListActivity implements
     private final class TournamentsAdapter extends BaseListAdapter {
 
 
+        private static final String TAG = "TournamentsAdapter";
+
+
         private TournamentsAdapter() {
             super(TournamentsActivity.this, getRecyclerView());
         }
@@ -529,6 +532,12 @@ public class TournamentsActivity extends BaseListActivity implements
         private void bindTournamentViewHolder(final TournamentViewHolder holder, final ListItem listItem) {
             holder.mDate.setText(listItem.mTournament.getDayOfMonth());
             holder.mName.setText(listItem.mTournament.getName());
+        }
+
+
+        @Override
+        public String getAdapterName() {
+            return TAG;
         }
 
 

@@ -324,6 +324,8 @@ public class HeadToHeadActivity extends BaseListActivity {
     private final class MatchesAdapter extends BaseListAdapter {
 
 
+        private static final String TAG = "MatchesAdapter";
+
         private final int mColorLose;
         private final int mColorWin;
 
@@ -357,6 +359,12 @@ public class HeadToHeadActivity extends BaseListActivity {
             } else {
                 holder.mName.setTextColor(mColorLose);
             }
+        }
+
+
+        @Override
+        public String getAdapterName() {
+            return TAG;
         }
 
 

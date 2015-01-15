@@ -61,14 +61,14 @@ abstract class BaseListFragment extends BaseFragment implements
 
     protected void notifyDataSetChanged() {
         if (mAdapter != null) {
-            mAdapter.notifyDataSetChanged();
+            mAdapter.dataSetChanged();
         }
     }
 
 
     protected void notifyItemChanged(final int position) {
         if (mAdapter != null) {
-            mAdapter.notifyItemChanged(position);
+            mAdapter.itemChanged(position);
         }
     }
 

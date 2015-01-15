@@ -8,12 +8,13 @@ public final class Constants {
 
     public static final String ABOUT_URL = "http://www.garpr.com/#/about";
     public static final String API_URL = "http://api.garpr.com";
-    public static final String AUTHOR_URL = "https://twitter.com/scootrnova";
+    public static final String CHARLES_TWITTER_URL = "https://twitter.com/scootrnova";
     public static final String COMPLETED = "completed";
     public static final String DATE = "date";
     public static final String DAY_OF_MONTH_FORMAT = "d";
     public static final String DEBUG = "debug";
     public static final String DISPLAY_NAME = "display_name";
+    public static final String EASTER_EGG = "easter_egg";
     public static final String ERROR = "error";
     public static final String EXCEPTION = "exception";
     public static final String FALSE = "false";
@@ -24,6 +25,7 @@ public final class Constants {
     public static final String GITHUB_URL = "https://github.com/airokay/smash-ranks-android";
     public static final String HEAD_TO_HEAD = "head_to_head";
     public static final String ID = "id";
+    public static final String IVAN_TWITTER_URL = "https://twitter.com/garsh0p";
     public static final String JSON = "json";
     public static final String LAST_SYNC = "last_sync";
     public static final String LOSE = "lose";
@@ -40,6 +42,7 @@ public final class Constants {
     public static final String OPPONENT = "opponent";
     public static final String OPPONENT_ID = "opponent_id";
     public static final String OPPONENT_NAME = "opponent_name";
+    public static final String ORB = "orb";
     public static final String PERIODIC_SYNC = "periodic_sync";
     public static final String PLAYER = "player";
     public static final String PLAYER_HEAD_TO_HEAD = "player_head_to_head";

@@ -95,8 +95,8 @@ public class TournamentsActivity extends BaseListActivity implements
 
         final TournamentsCallback callback = new TournamentsCallback(this) {
             @Override
-            public void error(final Exception e) {
-                Console.e(TAG, "Exception when retrieving tournaments!", e);
+            public void response(final Exception e) {
+                Console.e(TAG, "Exception when retrieving tournaments", e);
                 showError();
 
                 try {
@@ -144,13 +144,8 @@ public class TournamentsActivity extends BaseListActivity implements
     }
 
 
-    private void hideMenuItems() {
-        Utils.hideMenuItems(mSearch, mSort);
-    }
-
-
     private boolean isMenuNull() {
-        return Utils.areAnyMenuItemsNull(mSearch, mSort, mSortChronological, mSortReverseChronological);
+        return Utils.areAnyObjectsNull(mSearch, mSort, mSortChronological, mSortReverseChronological);
     }
 
 

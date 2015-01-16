@@ -2,17 +2,14 @@ package com.garpr.android.data;
 
 
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 
 import com.garpr.android.misc.Console;
 
 import java.util.ArrayList;
 
 
-abstract class AsyncSaveDatabase<T> extends AsyncTask<Void, Void, Void> {
+abstract class AsyncSaveDatabase<T> extends AsyncRunnable {
 
-
-    private static final String TAG = "AsyncSaveDatabase";
 
     private final ArrayList<T> mItems;
     private final String mTableName;
@@ -32,27 +29,25 @@ abstract class AsyncSaveDatabase<T> extends AsyncTask<Void, Void, Void> {
 
 
     @Override
-    protected Void doInBackground(final Void... params) {
+    public final void run() {
         final SQLiteDatabase database = Database.start();
         clear(database);
 
         database.beginTransaction();
 
         for (final T item : mItems) {
-            transact(mTableName, item, database);
+            transact(database, mTableName, item);
         }
 
         database.setTransactionSuccessful();
         database.endTransaction();
         Database.stop();
 
-        Console.d(TAG, "Saved " + mItems.size() + " objects to the " + mTableName + " database");
-
-        return null;
+        Console.d(getAsyncRunnableName(), "Saved " + mItems.size() + " objects to the " + mTableName + " database");
     }
 
 
-    abstract void transact(final String tableName, final T item, final SQLiteDatabase database);
+    abstract void transact(final SQLiteDatabase database, final String tableName, final T item);
 
 
 }

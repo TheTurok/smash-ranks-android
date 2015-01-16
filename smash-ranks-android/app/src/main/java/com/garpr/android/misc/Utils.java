@@ -22,13 +22,13 @@ public final class Utils {
     }
 
 
-    public static boolean areAnyMenuItemsNull(final MenuItem... items) {
-        if (items == null || items.length == 0) {
+    public static boolean areAnyObjectsNull(final Object... objects) {
+        if (objects == null || objects.length == 0) {
             return true;
         }
 
-        for (final MenuItem item : items) {
-            if (item == null) {
+        for (final Object object : objects) {
+            if (object == null) {
                 return true;
             }
         }

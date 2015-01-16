@@ -165,7 +165,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
         final RegionsCallback callback = new RegionsCallback(this) {
             @Override
-            public void error(final Exception e) {
+            public void response(final Exception e) {
                 Console.e(TAG, "Exception when retrieving regions!", e);
                 showError();
 

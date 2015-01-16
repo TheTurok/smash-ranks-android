@@ -83,21 +83,6 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
     private void checkForRosterUpdate(final long lastSync) {
         final RosterUpdateCallback callback = new RosterUpdateCallback(this) {
             @Override
-            public void error(final Exception e) {
-                Console.e(TAG, "Exception when retrieving roster while syncing!", e);
-
-                try {
-                    final Event event = createAnalyticsEvent(lastSync);
-                    event.setExtra(e);
-                    event.setExtra(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
-                    sendAnalyticsEvent(event);
-                } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Console.w(TAG, "Unable to report rankings exception event to analytics when syncing", gpsue);
-                }
-            }
-
-
-            @Override
             public void newRosterAvailable() {
                 Notifications.showRankingsUpdated();
 
@@ -106,7 +91,7 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
                     event.setExtra(Constants.STATUS, Constants.NEW_ROSTER);
                     sendAnalyticsEvent(event);
                 } catch (final GooglePlayServicesUnavailableException e) {
-                    Console.w(TAG, "Unable to report new roster event to analytics when syncing", e);
+                    Console.w(TAG, "Unable to report new roster event to analytics", e);
                 }
             }
 
@@ -118,7 +103,22 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
                     event.setExtra(Constants.STATUS, Constants.SAME_ROSTER);
                     sendAnalyticsEvent(event);
                 } catch (final GooglePlayServicesUnavailableException e) {
-                    Console.w(TAG, "Unable to report same roster event to analytics when syncing", e);
+                    Console.w(TAG, "Unable to report same roster event to analytics", e);
+                }
+            }
+
+
+            @Override
+            public void response(final Exception e) {
+                Console.e(TAG, "Exception when retrieving roster while syncing!", e);
+
+                try {
+                    final Event event = createAnalyticsEvent(lastSync);
+                    event.setExtra(e);
+                    event.setExtra(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
+                    sendAnalyticsEvent(event);
+                } catch (final GooglePlayServicesUnavailableException gpsue) {
+                    Console.w(TAG, "Unable to report roster exception event to analytics", gpsue);
                 }
             }
         };

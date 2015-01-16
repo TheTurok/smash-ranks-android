@@ -9,12 +9,14 @@ import com.android.volley.VolleyError;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.models.Player;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,7 +75,7 @@ public final class Players {
 
     public static void getAll(final PlayersCallback callback) {
         final AsyncReadPlayersDatabase task = new AsyncReadPlayersDatabase(callback);
-        task.execute();
+        task.start();
     }
 
 
@@ -86,8 +88,8 @@ public final class Players {
     public static void getRankings(final PlayersCallback callback) {
         final PlayersCallback callbackWrapper0 = new PlayersCallback(callback.getHeartbeat()) {
             @Override
-            public void error(final Exception e) {
-                callback.error(e);
+            public void response(final Exception e) {
+                callback.response(e);
             }
 
 
@@ -100,10 +102,10 @@ public final class Players {
                 } else {
                     Console.d(TAG, "Rankings were not found in the list of players");
 
-                    final RankingsCallback callbackWrapper1 = new RankingsCallback(getHeartbeat()) {
+                    final RankingsCallback callbackWrapper1 = new RankingsCallback(callback.getHeartbeat()) {
                         @Override
-                        public void error(final Exception e) {
-                            callback.error(e);
+                        public void response(final Exception e) {
+                            callback.response(e);
                         }
 
 
@@ -165,13 +167,9 @@ public final class Players {
         final ArrayList<Player> players = new ArrayList<>(playersLength);
 
         for (int i = 0; i < playersLength; ++i) {
-            try {
-                final JSONObject playerJSON = playersJSON.getJSONObject(i);
-                final Player player = new Player(playerJSON);
-                players.add(player);
-            } catch (final JSONException e) {
-                Console.e(TAG, "Exception when building Player at index " + i, e);
-            }
+            final JSONObject playerJSON = playersJSON.getJSONObject(i);
+            final Player player = new Player(playerJSON);
+            players.add(player);
         }
 
         players.trimToSize();
@@ -224,13 +222,13 @@ public final class Players {
 
     private static void savePlayers(final ArrayList<Player> players) {
         final AsyncSavePlayersDatabase task = new AsyncSavePlayersDatabase(players);
-        task.execute();
+        task.start();
     }
 
 
     private static void saveRankings(final ArrayList<Player> players) {
         final AsyncSaveRankingsDatabase task = new AsyncSaveRankingsDatabase(players);
-        task.execute();
+        task.start();
     }
 
 
@@ -254,6 +252,9 @@ public final class Players {
     private static final class AsyncReadPlayersDatabase extends AsyncReadDatabase<Player> {
 
 
+        private static final String TAG = "AsyncReadPlayersDatabase";
+
+
         private AsyncReadPlayersDatabase(final PlayersCallback callback) {
             super(callback, getTableName());
         }
@@ -262,6 +263,12 @@ public final class Players {
         @Override
         Player createItem(final JSONObject json) throws JSONException {
             return new Player(json);
+        }
+
+
+        @Override
+        String getAsyncRunnableName() {
+            return TAG;
         }
 
 
@@ -277,6 +284,9 @@ public final class Players {
     private static final class AsyncSavePlayersDatabase extends AsyncSaveDatabase<Player> {
 
 
+        private static final String TAG = "AsyncSavePlayersDatabase";
+
+
         private AsyncSavePlayersDatabase(final ArrayList<Player> players) {
             super(players, getTableName());
         }
@@ -289,7 +299,13 @@ public final class Players {
 
 
         @Override
-        void transact(final String tableName, final Player item, final SQLiteDatabase database) {
+        String getAsyncRunnableName() {
+            return TAG;
+        }
+
+
+        @Override
+        void transact(final SQLiteDatabase database, final String tableName, final Player item) {
             final ContentValues values = createContentValues(item);
             database.insert(tableName, null, values);
         }
@@ -301,6 +317,8 @@ public final class Players {
     private static class AsyncSaveRankingsDatabase extends AsyncSaveDatabase<Player> {
 
 
+        private static final String TAG = "AsyncSaveRankingsDatabase";
+
         private final String mWhereClause;
 
 
@@ -311,7 +329,13 @@ public final class Players {
 
 
         @Override
-        void transact(final String tableName, final Player item, final SQLiteDatabase database) {
+        String getAsyncRunnableName() {
+            return TAG;
+        }
+
+
+        @Override
+        void transact(final SQLiteDatabase database, final String tableName, final Player item) {
             final ContentValues values = createContentValues(item);
             final String[] whereArgs = { item.getId() };
             database.update(tableName, values, mWhereClause, whereArgs);
@@ -321,67 +345,52 @@ public final class Players {
     }
 
 
-    public static abstract class PlayersCallback extends Callback<Player> {
+    public static abstract class PlayersCallback extends CallbackWithUi<Player> {
 
 
         private static final String TAG = "PlayersCallback";
 
 
-        public PlayersCallback(final Heartbeat heartbeat) {
+        public PlayersCallback(final HeartbeatWithUi heartbeat) {
             super(heartbeat);
         }
 
 
         @Override
-        public final void onErrorResponse(final VolleyError error) {
-            Console.e(TAG, "Exception when downloading players", error);
-
-            if (isAlive()) {
-                error(error);
-            }
+        String getCallbackName() {
+            return TAG;
         }
 
 
         @Override
-        public final void onResponse(final JSONObject json) {
+        final void onItemResponse(final Player item) {
+            final ArrayList<Player> players = new ArrayList<>(1);
+            players.add(item);
+            onListResponse(players);
+        }
+
+
+        @Override
+        final void onJSONResponse(final JSONObject json) {
             try {
                 final ArrayList<Player> players = parseJSON(json);
                 Console.d(TAG, "Read in " + players.size() + " Player objects from players JSON response");
 
                 if (players.isEmpty()) {
-                    final JSONException e = new JSONException("No players grabbed from players JSON response");
-                    Console.e(TAG, "No players available", e);
-
-                    if (isAlive()) {
-                        error(e);
-                    }
+                    responseOnUi(new JSONException("No players grabbed from players JSON response"));
                 } else {
                     savePlayers(players);
-
-                    if (isAlive()) {
-                        response(players);
-                    } else {
-                        Console.d(TAG, "Players response canceled because the listener is dead");
-                    }
+                    responseOnUi(players);
                 }
             } catch (final JSONException e) {
-                Console.e(TAG, "Exception when parsing players JSON response", e);
-
-                if (isAlive()) {
-                    error(e);
-                }
+                responseOnUi(e);
             }
         }
 
 
         @Override
         public final void response(final Player item) {
-            final ArrayList<Player> list = new ArrayList<>(1);
-            list.add(item);
-
-            if (isAlive()) {
-                response(list);
-            }
+            throw new UnsupportedOperationException();
         }
 
 
@@ -390,68 +399,53 @@ public final class Players {
 
 
 
-    private static abstract class RankingsCallback extends Callback<Player> {
+    private static abstract class RankingsCallback extends CallbackWithUi<Player> {
 
 
         private static final String TAG = "RankingsCallback";
 
 
-        private RankingsCallback(final Heartbeat heartbeat) {
+        private RankingsCallback(final HeartbeatWithUi heartbeat) {
             super(heartbeat);
         }
 
 
         @Override
-        public final void onErrorResponse(final VolleyError error) {
-            Console.e(TAG, "Exception when downloading rankings", error);
-
-            if (isAlive()) {
-                error(error);
-            }
+        String getCallbackName() {
+            return TAG;
         }
 
 
         @Override
-        public final void onResponse(final JSONObject response) {
+        final void onItemResponse(final Player item) {
+            final ArrayList<Player> items = new ArrayList<>(1);
+            items.add(item);
+            onListResponse(items);
+        }
+
+
+        @Override
+        final void onJSONResponse(final JSONObject json) {
             try {
-                final ArrayList<Player> rankings = parseJSON(response);
+                final ArrayList<Player> rankings = parseJSON(json);
                 Console.d(TAG, "Read in " + rankings.size() + " Player objects from rankings JSON response");
 
                 if (rankings.isEmpty()) {
-                    final JSONException e = new JSONException("No players grabbed from rankings JSON response");
-                    Console.e(TAG, "No players available", e);
-
-                    if (isAlive()) {
-                        error(e);
-                    }
+                    responseOnUi(new JSONException("No players grabbed from rankings JSON response"));
                 } else {
-                    parseRosterUpdate(response);
+                    parseRosterUpdate(json);
                     saveRankings(rankings);
-
-                    if (isAlive()) {
-                        response(rankings);
-                    } else {
-                        Console.d(TAG, "Rankings response canceled because the listener is dead");
-                    }
+                    responseOnUi(rankings);
                 }
             } catch (final JSONException e) {
-                Console.e(TAG, "Exception when parsing rankings JSON response", e);
-
-                if (isAlive()) {
-                    error(e);
-                }
+                responseOnUi(e);
             }
         }
 
 
         @Override
         public final void response(final Player item) {
-            final ArrayList<Player> list = new ArrayList<>(1);
-            list.add(item);
-
-            if (isAlive()) {
-                response(list);
-            }
+            throw new UnsupportedOperationException();
         }
 
 
@@ -466,15 +460,36 @@ public final class Players {
 
         public RosterUpdateCallback(final Heartbeat heartbeat) {
             super(heartbeat);
+        }
 
+
+        @Override
+        String getCallbackName() {
+            return TAG;
         }
 
 
         private void getPlayersFromNetwork(final ArrayList<Player> rankings) {
-            final PlayersCallback callback = new PlayersCallback(getHeartbeat()) {
+            final WeakReference<Heartbeat> heartbeat = new WeakReference<>(getHeartbeat());
+
+            final HeartbeatWithUi heartbeatWithUi = new HeartbeatWithUi() {
                 @Override
-                public void error(final Exception e) {
-                    RosterUpdateCallback.this.error(e);
+                public boolean isAlive() {
+                    final Heartbeat hb = heartbeat.get();
+                    return hb != null && hb.isAlive();
+                }
+
+
+                @Override
+                public void runOnUi(final Runnable action) {
+                    action.run();
+                }
+            };
+
+            final PlayersCallback callback = new PlayersCallback(heartbeatWithUi) {
+                @Override
+                public void response(final Exception e) {
+                    RosterUpdateCallback.this.response(e);
                 }
 
 
@@ -494,6 +509,8 @@ public final class Players {
 
                     if (isAlive()) {
                         newRosterAvailable();
+                    } else {
+                        Console.w(TAG, "A new roster is available but the listener is dead");
                     }
                 }
             };
@@ -504,68 +521,69 @@ public final class Players {
 
         @Override
         public final void onErrorResponse(final VolleyError error) {
-            Console.e(TAG, "Exception when downloading roster", error);
-
             if (isAlive()) {
-                error(error);
+                response(error);
+            } else {
+                Console.e(TAG, "Exception when downloading roster", error);
             }
         }
 
 
         @Override
-        public final void onResponse(final JSONObject response) {
+        final void onItemResponse(final Player item) {
+            throw new UnsupportedOperationException();
+        }
+
+
+        @Override
+        final void onJSONResponse(final JSONObject json) {
             final long lastUpdate = getMostRecentRosterUpdate();
 
             try {
-                final long currentUpdate = parseRosterUpdate(response);
+                final long currentUpdate = parseRosterUpdate(json);
 
                 if (currentUpdate > lastUpdate) {
-                    Console.d(TAG, "A new roster is available");
-                    final ArrayList<Player> rankings = parseJSON(response);
+                    Console.d(TAG, "A new roster is available: " + currentUpdate + " vs " + lastUpdate);
+                    final ArrayList<Player> rankings = parseJSON(json);
 
                     if (rankings.isEmpty()) {
-                        Console.d(TAG, "But the roster's players were empty??");
-                        error(new Exception("empty roster"));
+                        response(new Exception("empty roster"));
                     } else {
                         getPlayersFromNetwork(rankings);
                     }
+                } else if (isAlive()) {
+                    noNewRoster();
                 } else {
-                    Console.d(TAG, "There is no new roster");
-
-                    if (isAlive()) {
-                        noNewRoster();
-                    }
+                    Console.w(TAG, "There is no new roster and the listener is dead");
                 }
             } catch (final JSONException e) {
-                Console.e(TAG, "Exception when parsing roster JSON response", e);
-
-                if (isAlive()) {
-                    error(e);
-                }
+                response(e);
             }
+        }
+
+
+        @Override
+        final void onListResponse(final ArrayList<Player> list) {
+            throw new UnsupportedOperationException();
         }
 
 
         @Override
         public final void response(final Player item) {
-            // this method intentionally left blank
+            throw new UnsupportedOperationException();
         }
 
 
         @Override
-        public void response(final ArrayList<Player> list) {
-            // this method intentionally left blank
+        public final void response(final ArrayList<Player> list) {
+            throw new UnsupportedOperationException();
         }
 
 
-        public void newRosterAvailable() {
-            // this method intentionally left blank (children can override)
-        }
+        public abstract void newRosterAvailable();
 
 
-        public void noNewRoster() {
-            // this method intentionally left blank (children can override)
-        }
+        public abstract void noNewRoster();
 
 
     }

@@ -91,7 +91,7 @@ public class HeadToHeadActivity extends BaseListActivity {
 
         final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
             @Override
-            public void error(final Exception e) {
+            public void response(final Exception e) {
                 Console.e(TAG, "Exception when fetching head to head matches for "
                         + mPlayer.getName() + " and " + mOpponentName, e);
                 showError();

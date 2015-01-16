@@ -4,10 +4,9 @@ package com.garpr.android.data;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.android.volley.VolleyError;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.models.Region;
 
 import org.json.JSONArray;
@@ -53,7 +52,7 @@ public final class Regions {
 
     public static void get(final RegionsCallback callback) {
         final AsyncReadRegionsDatabase task = new AsyncReadRegionsDatabase(callback);
-        task.execute();
+        task.start();
     }
 
 
@@ -79,13 +78,9 @@ public final class Regions {
         final ArrayList<Region> regions = new ArrayList<>(regionsLength);
 
         for (int i = 0; i < regionsLength; ++i) {
-            try {
-                final JSONObject regionJSON = regionsJSON.getJSONObject(i);
-                final Region region = new Region(regionJSON);
-                regions.add(region);
-            } catch (final JSONException e) {
-                Console.e(TAG, "Exception when building Region at index " + i, e);
-            }
+            final JSONObject regionJSON = regionsJSON.getJSONObject(i);
+            final Region region = new Region(regionJSON);
+            regions.add(region);
         }
 
         regions.trimToSize();
@@ -95,13 +90,16 @@ public final class Regions {
 
     private static void save(final ArrayList<Region> regions) {
         final AsyncSaveRegionsDatabase task = new AsyncSaveRegionsDatabase(regions);
-        task.execute();
+        task.start();
     }
 
 
 
 
     private static final class AsyncReadRegionsDatabase extends AsyncReadDatabase<Region> {
+
+
+        private static final String TAG = "AsyncReadRegionsDatabase";
 
 
         private AsyncReadRegionsDatabase(final RegionsCallback callback) {
@@ -112,6 +110,12 @@ public final class Regions {
         @Override
         Region createItem(final JSONObject json) throws JSONException {
             return new Region(json);
+        }
+
+
+        @Override
+        String getAsyncRunnableName() {
+            return TAG;
         }
 
 
@@ -127,6 +131,9 @@ public final class Regions {
     private static final class AsyncSaveRegionsDatabase extends AsyncSaveDatabase<Region> {
 
 
+        private static final String TAG = "AsyncSaveRegionsDatabase";
+
+
         private AsyncSaveRegionsDatabase(final ArrayList<Region> regions) {
             super(regions, getTableName());
         }
@@ -139,7 +146,13 @@ public final class Regions {
 
 
         @Override
-        void transact(final String tableName, final Region item, final SQLiteDatabase database) {
+        String getAsyncRunnableName() {
+            return TAG;
+        }
+
+
+        @Override
+        void transact(final SQLiteDatabase database, final String tableName, final Region item) {
             final ContentValues values = createContentValues(item);
             database.insert(tableName, null, values);
         }
@@ -148,67 +161,52 @@ public final class Regions {
     }
 
 
-    public static abstract class RegionsCallback extends Callback<Region> {
+    public static abstract class RegionsCallback extends CallbackWithUi<Region> {
 
 
         private static final String TAG = "RegionsCallback";
 
 
-        public RegionsCallback(final Heartbeat heartbeat) {
+        public RegionsCallback(final HeartbeatWithUi heartbeat) {
             super(heartbeat);
         }
 
 
         @Override
-        public final void onErrorResponse(final VolleyError error) {
-            Console.e(TAG, "Exception when downloading regions", error);
-
-            if (isAlive()) {
-                error(error);
-            }
+        String getCallbackName() {
+            return TAG;
         }
 
 
         @Override
-        public final void onResponse(final JSONObject json) {
+        final void onItemResponse(final Region item) {
+            final ArrayList<Region> regions = new ArrayList<>(1);
+            regions.add(item);
+            onListResponse(regions);
+        }
+
+
+        @Override
+        final void onJSONResponse(final JSONObject json) {
             try {
                 final ArrayList<Region> regions = parseJSON(json);
                 Console.d(TAG, "Read in " + regions.size() + " regions from JSON response");
 
                 if (regions.isEmpty()) {
-                    final JSONException e = new JSONException("No regions grabbed from JSON response");
-                    Console.e(TAG, "No regions available", e);
-
-                    if (isAlive()) {
-                        error(e);
-                    }
+                    responseOnUi(new JSONException("No regions grabbed from JSON response"));
                 } else {
                     save(regions);
-
-                    if (isAlive()) {
-                        response(regions);
-                    } else {
-                        Console.d(TAG, "Regions response canceled because the listener is dead");
-                    }
+                    responseOnUi(regions);
                 }
             } catch (final JSONException e) {
-                Console.e(TAG, "Exception when parsing regions JSON response", e);
-
-                if (isAlive()) {
-                    error(e);
-                }
+                responseOnUi(e);
             }
         }
 
 
         @Override
         public final void response(final Region item) {
-            final ArrayList<Region> list = new ArrayList<>(1);
-            list.add(item);
-
-            if (isAlive()) {
-                response(list);
-            }
+            throw new UnsupportedOperationException();
         }
 
 

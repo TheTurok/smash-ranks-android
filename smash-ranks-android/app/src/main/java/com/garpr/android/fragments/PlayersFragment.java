@@ -163,7 +163,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
         final PlayersCallback callback = new PlayersCallback(this) {
             @Override
-            public void error(final Exception e) {
+            public void response(final Exception e) {
                 Console.e(TAG, "Exception when retrieving players!", e);
                 showError();
 
@@ -698,7 +698,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     private static final class TitleViewHolder extends RecyclerView.ViewHolder {
 
 
-        private TextView mTitle;
+        private final TextView mTitle;
 
 
         private TitleViewHolder(final View view) {

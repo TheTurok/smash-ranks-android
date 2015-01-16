@@ -25,7 +25,7 @@ abstract class Callback<T> implements
     }
 
 
-    public abstract void error(final Exception e);
+    abstract String getCallbackName();
 
 
     Heartbeat getHeartbeat() {
@@ -39,10 +39,28 @@ abstract class Callback<T> implements
     }
 
 
-    public abstract void response(final T item);
+    abstract void onItemResponse(final T item);
+
+
+    abstract void onJSONResponse(final JSONObject json);
+
+
+    abstract void onListResponse(final ArrayList<T> list);
+
+
+    @Override
+    public final void onResponse(final JSONObject response) {
+        onJSONResponse(response);
+    }
 
 
     public abstract void response(final ArrayList<T> list);
+
+
+    public abstract void response(final Exception e);
+
+
+    public abstract void response(final T item);
 
 
 }

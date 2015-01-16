@@ -24,10 +24,11 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
+import com.garpr.android.fragments.BaseFragment;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.GooglePlayServicesUnavailableException;
-import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.misc.Notifications;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
@@ -38,7 +39,8 @@ import com.garpr.android.models.Region;
  * necessary boilerplate.
  */
 abstract class BaseActivity extends ActionBarActivity implements
-        Heartbeat,
+        BaseFragment.Listener,
+        HeartbeatWithUi,
         Settings.OnRegionChangedListener,
         Toolbar.OnMenuItemClickListener {
 
@@ -403,6 +405,16 @@ abstract class BaseActivity extends ActionBarActivity implements
 
     protected boolean reportToAnalytics() {
         return true;
+    }
+
+
+    @Override
+    public void runOnUi(final Runnable action) {
+        if (isAlive()) {
+            runOnUiThread(action);
+        } else {
+            Console.w(getActivityName(), "Activity is dead; unable to run action on UI thread");
+        }
     }
 
 

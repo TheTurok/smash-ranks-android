@@ -179,8 +179,8 @@ public class RankingsActivity extends BaseListActivity implements
 
         final PlayersCallback callback = new PlayersCallback(this) {
             @Override
-            public void error(final Exception e) {
-                Console.e(TAG, "Exception when retrieving rankings!", e);
+            public void response(final Exception e) {
+                Console.e(TAG, "Exception when retrieving rankings", e);
                 showError();
 
                 try {
@@ -229,13 +229,8 @@ public class RankingsActivity extends BaseListActivity implements
     }
 
 
-    private void hideMenuItems() {
-        Utils.hideMenuItems(mSearch, mSort);
-    }
-
-
     private boolean isMenuNull() {
-        return Utils.areAnyMenuItemsNull(mSearch, mSort, mSortAlphabetical, mSortRank);
+        return Utils.areAnyObjectsNull(mSearch, mSort, mSortAlphabetical, mSortRank);
     }
 
 

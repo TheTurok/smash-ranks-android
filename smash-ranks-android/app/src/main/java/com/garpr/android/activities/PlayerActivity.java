@@ -110,7 +110,7 @@ public class PlayerActivity extends BaseListActivity implements
 
         final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
             @Override
-            public void error(final Exception e) {
+            public void response(final Exception e) {
                 Console.e(TAG, "Exception when fetching matches for " + mPlayer.getName(), e);
                 showError();
 
@@ -156,13 +156,8 @@ public class PlayerActivity extends BaseListActivity implements
     }
 
 
-    private void hideMenuItems() {
-        Utils.hideMenuItems(mSearch, mShare, mShow);
-    }
-
-
     private boolean isMenuNull() {
-        return Utils.areAnyMenuItemsNull(mSearch, mShare, mShow, mShowAll, mShowLoses, mShowWins);
+        return Utils.areAnyObjectsNull(mSearch, mShare, mShow, mShowAll, mShowLoses, mShowWins);
     }
 
 

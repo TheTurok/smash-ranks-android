@@ -4,10 +4,9 @@ package com.garpr.android.data;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.android.volley.VolleyError;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.models.Tournament;
 
 import org.json.JSONArray;
@@ -53,7 +52,7 @@ public final class Tournaments {
 
     public static void get(final TournamentsCallback callback) {
         final AsyncReadTournamentsDatabase task = new AsyncReadTournamentsDatabase(callback);
-        task.execute();
+        task.start();
     }
 
 
@@ -79,13 +78,9 @@ public final class Tournaments {
         final ArrayList<Tournament> tournaments = new ArrayList<>(tournamentsLength);
 
         for (int i = 0; i < tournamentsLength; ++i) {
-            try {
-                final JSONObject tournamentJSON = tournamentsJSON.getJSONObject(i);
-                final Tournament tournament = new Tournament(tournamentJSON);
-                tournaments.add(tournament);
-            } catch (final JSONException e) {
-                Console.e(TAG, "Exception when building Tournament at index " + i, e);
-            }
+            final JSONObject tournamentJSON = tournamentsJSON.getJSONObject(i);
+            final Tournament tournament = new Tournament(tournamentJSON);
+            tournaments.add(tournament);
         }
 
         tournaments.trimToSize();
@@ -95,13 +90,16 @@ public final class Tournaments {
 
     private static void save(final ArrayList<Tournament> tournaments) {
         final AsyncSaveTournamentsDatabase task = new AsyncSaveTournamentsDatabase(tournaments);
-        task.execute();
+        task.start();
     }
 
 
 
 
     private static final class AsyncReadTournamentsDatabase extends AsyncReadDatabase<Tournament> {
+
+
+        private static final String TAG = "AsyncReadTournamentsDatabase";
 
 
         private AsyncReadTournamentsDatabase(final TournamentsCallback callback) {
@@ -112,6 +110,12 @@ public final class Tournaments {
         @Override
         Tournament createItem(final JSONObject json) throws JSONException {
             return new Tournament(json);
+        }
+
+
+        @Override
+        String getAsyncRunnableName() {
+            return TAG;
         }
 
 
@@ -127,6 +131,9 @@ public final class Tournaments {
     private static final class AsyncSaveTournamentsDatabase extends AsyncSaveDatabase<Tournament> {
 
 
+        private static final String TAG = "AsyncSaveTournamentsDatabase";
+
+
         private AsyncSaveTournamentsDatabase(final ArrayList<Tournament> tournaments) {
             super(tournaments, getTableName());
         }
@@ -139,8 +146,13 @@ public final class Tournaments {
 
 
         @Override
-        void transact(final String tableName, final Tournament item,
-                final SQLiteDatabase database) {
+        String getAsyncRunnableName() {
+            return TAG;
+        }
+
+
+        @Override
+        void transact(final SQLiteDatabase database, final String tableName, final Tournament item) {
             final ContentValues values = createContentValues(item);
             database.insert(tableName, null, values);
         }
@@ -149,67 +161,52 @@ public final class Tournaments {
     }
 
 
-    public static abstract class TournamentsCallback extends Callback<Tournament> {
+    public static abstract class TournamentsCallback extends CallbackWithUi<Tournament> {
 
 
         private static final String TAG = "TournamentsCallback";
 
 
-        public TournamentsCallback(final Heartbeat heartbeat) {
+        public TournamentsCallback(final HeartbeatWithUi heartbeat) {
             super(heartbeat);
         }
 
 
         @Override
-        public final void onErrorResponse(final VolleyError error) {
-            Console.e(TAG, "Exception when downloading tournaments!", error);
-
-            if (isAlive()) {
-                error(error);
-            }
+        String getCallbackName() {
+            return TAG;
         }
 
 
         @Override
-        public final void onResponse(final JSONObject json) {
+        final void onItemResponse(final Tournament item) {
+            final ArrayList<Tournament> tournaments = new ArrayList<>(1);
+            tournaments.add(item);
+            onListResponse(tournaments);
+        }
+
+
+        @Override
+        final void onJSONResponse(final JSONObject json) {
             try {
                 final ArrayList<Tournament> tournaments = parseJSON(json);
                 Console.d(TAG, "Read in " + tournaments.size() + " Tournament objects from JSON response");
 
                 if (tournaments.isEmpty()) {
-                    final JSONException e = new JSONException("No tournaments grabbed from JSON response");
-                    Console.e(TAG, "No tournaments available", e);
-
-                    if (isAlive()) {
-                        error(e);
-                    }
+                    responseOnUi(new JSONException("No tournaments grabbed from JSON response"));
                 } else {
                     save(tournaments);
-
-                    if (isAlive()) {
-                        response(tournaments);
-                    } else {
-                        Console.d(TAG, "Tournaments response canceled because the listener is dead");
-                    }
+                    responseOnUi(tournaments);
                 }
             } catch (final JSONException e) {
-                Console.e(TAG, "Exception when parsing tournaments JSON response", e);
-
-                if (isAlive()) {
-                    error(e);
-                }
+                responseOnUi(e);
             }
         }
 
 
         @Override
         public final void response(final Tournament item) {
-            final ArrayList<Tournament> list = new ArrayList<>(1);
-            list.add(item);
-
-            if (isAlive()) {
-                response(list);
-            }
+            throw new UnsupportedOperationException();
         }
 
 

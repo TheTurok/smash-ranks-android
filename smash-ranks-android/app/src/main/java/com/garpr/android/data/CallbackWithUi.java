@@ -40,7 +40,7 @@ abstract class CallbackWithUi<T> extends Callback<T> {
     }
 
 
-    void responseOnUi(final Exception e) {
+    final void responseOnUi(final Exception e) {
         if (isAlive()) {
             final Runnable action = new Runnable() {
                 @Override
@@ -60,7 +60,7 @@ abstract class CallbackWithUi<T> extends Callback<T> {
     }
 
 
-    void responseOnUi(final T item) {
+    final void responseOnUi(final T item) {
         if (isAlive()) {
             final Runnable action = new Runnable() {
                 @Override
@@ -80,7 +80,7 @@ abstract class CallbackWithUi<T> extends Callback<T> {
     }
 
 
-    void responseOnUi(final ArrayList<T> list) {
+    final void responseOnUi(final ArrayList<T> list) {
         if (isAlive()) {
             final Runnable action = new Runnable() {
                 @Override

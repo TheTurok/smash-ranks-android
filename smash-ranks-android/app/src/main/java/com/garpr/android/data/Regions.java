@@ -68,7 +68,7 @@ public final class Regions {
 
 
     static String getTableName() {
-        return TAG;
+        return TAG.toLowerCase();
     }
 
 

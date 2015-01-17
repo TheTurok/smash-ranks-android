@@ -19,6 +19,7 @@ import com.garpr.android.BuildConfig;
 import com.garpr.android.R;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.LogMessage;
 import com.garpr.android.models.LogMessage.Level;
 
@@ -27,10 +28,12 @@ public class ConsoleActivity extends BaseListActivity implements
         Console.Listener {
 
 
-    private static final int PULLS = 5;
+    private static final int MINIMUM_PULLS = 3;
+    private static final int MAXIMUM_PULLS = 9;
     private static final String TAG = "ConsoleActivity";
 
     private boolean mPulled;
+    private int mNeededPulls;
     private int mPulls;
     private MenuItem mClearLog;
 
@@ -58,6 +61,10 @@ public class ConsoleActivity extends BaseListActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        do {
+            mNeededPulls = Utils.RANDOM.nextInt(MAXIMUM_PULLS);
+        } while (mNeededPulls < MINIMUM_PULLS || mNeededPulls > MAXIMUM_PULLS);
 
         final ConsoleAdapter adapter;
 
@@ -124,7 +131,7 @@ public class ConsoleActivity extends BaseListActivity implements
         setLoading(false);
         ++mPulls;
 
-        if (!mPulled && mPulls >= PULLS) {
+        if (!mPulled && mPulls >= mNeededPulls) {
             mPulled = true;
             GorgoniteActivity.start(this);
         }
@@ -147,14 +154,14 @@ public class ConsoleActivity extends BaseListActivity implements
 
 
     @Override
-    public String toString() {
-        return TAG;
+    protected boolean showDrawerIndicator() {
+        return false;
     }
 
 
     @Override
-    protected boolean showDrawerIndicator() {
-        return false;
+    public String toString() {
+        return TAG;
     }
 
 
@@ -232,7 +239,7 @@ public class ConsoleActivity extends BaseListActivity implements
             final LogMessage logMessage = Console.getLogMessage(position);
             final int viewType;
 
-            if (logMessage.hasStackTrace()) {
+            if (logMessage.isThrowable()) {
                 viewType = LogMessageWithStackTraceViewHolder.VIEW_TYPE;
             } else {
                 viewType = LogMessageViewHolder.VIEW_TYPE;
@@ -322,11 +329,18 @@ public class ConsoleActivity extends BaseListActivity implements
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             final LogMessage logMessage = Console.getLogMessage(position);
-            final Spanned tagAndMessage = Html.fromHtml(getString(R.string.x_bold_colon_y,
-                    logMessage.getTag(), logMessage.getMessage()));
+            final String text;
+
+            if (logMessage.isThrowable()) {
+                text = getString(R.string.x_bold_colon_y_paren_z, logMessage.getTag(),
+                        logMessage.getMessage(), logMessage.getThrowableMessage());
+            } else {
+                text = getString(R.string.x_bold_colon_y, logMessage.getTag(),
+                        logMessage.getMessage());
+            }
 
             final LogMessageViewHolder lmvh = (LogMessageViewHolder) holder;
-            lmvh.mTagAndMessage.setText(tagAndMessage);
+            lmvh.mTagAndMessage.setText(Html.fromHtml(text));
             formatTextViewPerLevel(logMessage, lmvh.mTagAndMessage);
         }
 

@@ -43,7 +43,8 @@ abstract class AsyncSaveDatabase<T> extends AsyncRunnable {
         database.endTransaction();
         Database.stop();
 
-        Console.d(getAsyncRunnableName(), "Saved " + mItems.size() + " objects to the " + mTableName + " database");
+        Console.d(getAsyncRunnableName(), "Saved " + mItems.size() + " objects to the "
+                + mTableName + " database");
     }
 
 

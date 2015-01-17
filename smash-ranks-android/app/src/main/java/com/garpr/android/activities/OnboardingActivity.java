@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.crashlytics.android.Crashlytics;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
@@ -164,10 +165,14 @@ public class OnboardingActivity extends BaseActivity implements
         mReportToAnalytics = true;
 
         if (onboardingCompleted()) {
+            Crashlytics.setBool(Constants.SKIPPED_ONBOARDING, true);
+
             mReportToAnalytics = false;
             RankingsActivity.start(this);
             finish();
         } else {
+            Crashlytics.setBool(Constants.SKIPPED_ONBOARDING, false);
+
             findViews();
             prepareViews();
         }

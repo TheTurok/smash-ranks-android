@@ -130,6 +130,7 @@
     <string name="win">Win</string>
     <string name="won">Won</string>
     <string name="x_bold_colon_y"><![CDATA[<b>%1$s</b>]]>: %2$s</string>
+    <string name="x_bold_colon_y_paren_z"><![CDATA[<b>%1$s</b>]]>: %2$s (%3$s)</string>
     <string name="x_build_y">%1$s (build %2$d)</string>
     <string name="x_colon_y">%1$s: %2$y</string>
     <string name="x_em_dash_y">%1$d &#8212; %2$d</string>

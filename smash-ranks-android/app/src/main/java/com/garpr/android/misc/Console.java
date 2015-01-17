@@ -30,15 +30,19 @@ public final class Console {
     private static void add(final Level level, final String tag, final String msg,
             final Throwable tr) {
         final String stackTrace;
+        final String throwableMessage;
 
         if (tr == null) {
             stackTrace = null;
+            throwableMessage = null;
         } else {
             stackTrace = Log.getStackTraceString(tr);
+            throwableMessage = tr.getMessage();
         }
 
         synchronized (LOG_MESSAGES) {
-            LOG_MESSAGES.addFirst(new LogMessage(level, sLogMessageIdPointer++, tag, msg, stackTrace));
+            LOG_MESSAGES.addFirst(new LogMessage(level, sLogMessageIdPointer++, tag, msg,
+                    stackTrace, throwableMessage));
 
             while (LOG_MESSAGES.size() > LOG_MESSAGES_MAX_SIZE) {
                 LOG_MESSAGES.removeLast();

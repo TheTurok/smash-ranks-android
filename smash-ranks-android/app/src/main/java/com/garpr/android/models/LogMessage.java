@@ -18,17 +18,19 @@ public class LogMessage implements Parcelable {
     private final String message;
     private final String stackTrace;
     private final String tag;
+    private final String throwableMessage;
 
 
 
 
     public LogMessage(final Level level, final long id, final String tag, final String message,
-            final String stackTrace) {
+            final String stackTrace, final String throwableMessage) {
         this.level = level;
         this.id = id;
         this.tag = tag;
         this.message = message;
         this.stackTrace = stackTrace;
+        this.throwableMessage = throwableMessage;
     }
 
 
@@ -38,6 +40,7 @@ public class LogMessage implements Parcelable {
         message = source.readString();
         stackTrace = source.readString();
         tag = source.readString();
+        throwableMessage = source.readString();
     }
 
 
@@ -49,11 +52,20 @@ public class LogMessage implements Parcelable {
             isEqual = true;
         } else if (o instanceof LogMessage) {
             final LogMessage lm = (LogMessage) o;
-            isEqual = level.equals(lm.getLevel()) && id == lm.getId() &&
-                    message.equals(lm.getMessage()) && tag.equals(lm.getTag()) &&
-                    (hasStackTrace() && lm.hasStackTrace() &&
-                            stackTrace.equals(lm.getStackTrace()) ||
-                            !hasStackTrace() && !lm.hasStackTrace());
+
+            if (level.equals(lm.getLevel()) && id == lm.getId() &&
+                    message.equals(lm.getMessage()) && tag.equals(lm.getTag())) {
+                if (isThrowable() && lm.isThrowable()) {
+                    isEqual = stackTrace.equals(lm.getStackTrace()) &&
+                            throwableMessage.equals(lm.getThrowableMessage());
+                } else if (!isThrowable() && !lm.isThrowable()) {
+                    isEqual = true;
+                } else {
+                    isEqual = false;
+                }
+            } else {
+                isEqual = false;
+            }
         } else {
             isEqual = false;
         }
@@ -87,8 +99,13 @@ public class LogMessage implements Parcelable {
     }
 
 
-    public boolean hasStackTrace() {
-        return Utils.validStrings(stackTrace);
+    public String getThrowableMessage() {
+        return throwableMessage;
+    }
+
+
+    public boolean isThrowable() {
+        return Utils.validStrings(stackTrace, throwableMessage);
     }
 
 
@@ -120,6 +137,7 @@ public class LogMessage implements Parcelable {
         dest.writeString(message);
         dest.writeString(stackTrace);
         dest.writeString(tag);
+        dest.writeString(throwableMessage);
     }
 
 

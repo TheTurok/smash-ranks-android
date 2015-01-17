@@ -57,9 +57,15 @@ public final class Database extends SQLiteOpenHelper implements
     }
 
 
+    private static void logAttachments() {
+        Console.d(TAG, "There are now " + sAttachments + " database attachment(s)");
+    }
+
+
     static SQLiteDatabase start() {
         synchronized (ATTACHMENTS_LOCK) {
             ++sAttachments;
+            logAttachments();
 
             if (sDatabase == null) {
                 sDatabase = sInstance.getWritableDatabase();
@@ -74,6 +80,7 @@ public final class Database extends SQLiteOpenHelper implements
         synchronized (ATTACHMENTS_LOCK) {
             if (sAttachments > 0) {
                 --sAttachments;
+                logAttachments();
             }
 
             if (sAttachments <= 0) {
@@ -112,6 +119,12 @@ public final class Database extends SQLiteOpenHelper implements
     @Override
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         Console.d(TAG, "Database being upgraded from " + oldVersion + " to " + newVersion);
+    }
+
+
+    @Override
+    public String toString() {
+        return TAG;
     }
 
 

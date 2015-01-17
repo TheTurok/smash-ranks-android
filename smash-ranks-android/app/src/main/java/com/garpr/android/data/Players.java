@@ -28,7 +28,7 @@ import static android.content.SharedPreferences.Editor;
 public final class Players {
 
 
-    private static final SimpleDateFormat sDateFormat;
+    private static final SimpleDateFormat DATE_PARSER;
     private static final String CNAME = "com.garpr.android.data.Players";
     private static final String KEY_ROSTER_UPDATE = "KEY_ROSTER_UPDATE";
     private static final String TAG = "Players";
@@ -37,7 +37,7 @@ public final class Players {
 
 
     static {
-        sDateFormat = new SimpleDateFormat(Constants.ROSTER_DATE_FORMAT);
+        DATE_PARSER = new SimpleDateFormat(Constants.ROSTER_DATE_FORMAT);
     }
 
 
@@ -147,7 +147,7 @@ public final class Players {
 
 
     static String getTableName() {
-        return TAG + '_' + Settings.getRegion().getId();
+        return (TAG + '_' + Settings.getRegion().getId()).toLowerCase();
     }
 
 
@@ -181,7 +181,7 @@ public final class Players {
         final String dateString = json.getString(Constants.TIME);
 
         try {
-            final Date date = sDateFormat.parse(dateString);
+            final Date date = DATE_PARSER.parse(dateString);
             final long time = date.getTime();
 
             final Editor editor = Settings.edit(CNAME);
@@ -211,10 +211,11 @@ public final class Players {
 
 
     public static void save(final Player player) {
-        final SQLiteDatabase database = Database.start();
         final ContentValues values = createContentValues(player);
         final String whereClause = Constants.ID + " = ?";
         final String[] whereArgs = { player.getId() };
+
+        final SQLiteDatabase database = Database.start();
         database.update(getTableName(), values, whereClause, whereArgs);
         Database.stop();
     }

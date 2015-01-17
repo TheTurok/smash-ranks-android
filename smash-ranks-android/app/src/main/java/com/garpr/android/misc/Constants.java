@@ -36,8 +36,11 @@ public final class Constants {
     public static final String MONTH_FORMAT = "LLLL";
     public static final String NAME = "name";
     public static final String NETWORK_EXCEPTION = "network_exception";
+    public static final String NEW_REGION = "new_region";
     public static final String NEW_ROSTER = "new_roster";
     public static final String NORCAL = "norcal";
+    public static final String NULL = "null";
+    public static final String OLD_REGION = "old_region";
     public static final String ONBOARDING = "onboarding";
     public static final String OPPONENT = "opponent";
     public static final String OPPONENT_ID = "opponent_id";
@@ -61,6 +64,7 @@ public final class Constants {
     public static final String SETTINGS = "settings";
     public static final String SHARE = "share";
     public static final String SKIPPED = "skipped";
+    public static final String SKIPPED_ONBOARDING = "skipped_onboarding";
     public static final String STATUS = "status";
     public static final String SYNC = "sync";
     public static final String TIME = "time";

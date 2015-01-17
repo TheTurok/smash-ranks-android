@@ -68,7 +68,7 @@ public final class Tournaments {
 
 
     static String getTableName() {
-        return TAG + '_' + Settings.getRegion().getId();
+        return (TAG + '_' + Settings.getRegion().getId()).toLowerCase();
     }
 
 

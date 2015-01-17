@@ -22,10 +22,10 @@ import java.util.Date;
 public class Tournament implements Parcelable {
 
 
-    private static final SimpleDateFormat dateParser;
-    private static final SimpleDateFormat dayOfMonthFormatter;
-    private static final SimpleDateFormat monthFormatter;
-    private static final SimpleDateFormat yearFormatter;
+    private static final SimpleDateFormat DATE_PARSER;
+    private static final SimpleDateFormat DAY_OF_MONTH_FORMATTER;
+    private static final SimpleDateFormat MONTH_FORMATTER;
+    private static final SimpleDateFormat YEAR_FORMATTER;
 
     private Date date;
     private String dayOfMonth;
@@ -39,10 +39,10 @@ public class Tournament implements Parcelable {
 
 
     static {
-        dateParser = new SimpleDateFormat(Constants.TOURNAMENT_DATE_FORMAT);
-        dayOfMonthFormatter = new SimpleDateFormat(Constants.DAY_OF_MONTH_FORMAT);
-        monthFormatter = new SimpleDateFormat(Constants.MONTH_FORMAT);
-        yearFormatter = new SimpleDateFormat(Constants.YEAR_FORMAT);
+        DATE_PARSER = new SimpleDateFormat(Constants.TOURNAMENT_DATE_FORMAT);
+        DAY_OF_MONTH_FORMATTER = new SimpleDateFormat(Constants.DAY_OF_MONTH_FORMAT);
+        MONTH_FORMATTER = new SimpleDateFormat(Constants.MONTH_FORMAT);
+        YEAR_FORMATTER = new SimpleDateFormat(Constants.YEAR_FORMAT);
     }
 
 
@@ -58,7 +58,7 @@ public class Tournament implements Parcelable {
         }
 
         try {
-            date = dateParser.parse(dateString);
+            date = DATE_PARSER.parse(dateString);
         } catch (final ParseException e) {
             throw new JSONException("Couldn't parse the date: \"" + dateString + "\"");
         }
@@ -81,7 +81,7 @@ public class Tournament implements Parcelable {
         dateString = source.readString();
 
         try {
-            date = dateParser.parse(dateString);
+            date = DATE_PARSER.parse(dateString);
         } catch (final ParseException e) {
             throw new RuntimeException("Couldn't parse the date: \"" + dateString + "\"");
         }
@@ -118,7 +118,7 @@ public class Tournament implements Parcelable {
 
     public String getDayOfMonth() {
         if (!Utils.validStrings(dayOfMonth)) {
-            dayOfMonth = dayOfMonthFormatter.format(date);
+            dayOfMonth = DAY_OF_MONTH_FORMATTER.format(date);
         }
 
         return dayOfMonth;
@@ -132,7 +132,7 @@ public class Tournament implements Parcelable {
 
     public String getMonth() {
         if (!Utils.validStrings(month)) {
-            month = monthFormatter.format(date);
+            month = MONTH_FORMATTER.format(date);
         }
 
         return month;
@@ -152,7 +152,7 @@ public class Tournament implements Parcelable {
 
     public String getYear() {
         if (!Utils.validStrings(year)) {
-            year = yearFormatter.format(date);
+            year = YEAR_FORMATTER.format(date);
         }
 
         return year;

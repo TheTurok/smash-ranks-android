@@ -33,7 +33,6 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.models.Region;
 
 import java.util.ArrayList;
@@ -169,11 +168,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
                 Console.e(TAG, "Exception when retrieving regions!", e);
                 showError();
 
-                try {
-                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.REGIONS);
-                } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Console.w(TAG, "Unable to report regions exception to analytics", gpsue);
-                }
+                Analytics.report(e, Constants.REGIONS).send();
             }
 
 

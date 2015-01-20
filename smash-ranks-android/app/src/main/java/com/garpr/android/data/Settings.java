@@ -39,7 +39,7 @@ public final class Settings {
     }
 
 
-    public static void addRegionListener(final OnRegionChangedListener listener) {
+    public static void attachRegionListener(final OnRegionChangedListener listener) {
         synchronized (REGION_LISTENERS) {
             boolean addListener = true;
 
@@ -64,8 +64,35 @@ public final class Settings {
 
             if (addListener) {
                 REGION_LISTENERS.add(new WeakReference<>(listener));
-                Console.d(TAG, "Added RegionListener, there are now " + REGION_LISTENERS.size()
-                        + " listener(s)");
+                Console.d(TAG, "Added RegionListener (" + listener.toString() + "), there are now "
+                        + REGION_LISTENERS.size() + " listener(s)");
+            }
+        }
+    }
+
+
+    public static void detachRegionListener(final OnRegionChangedListener listener) {
+        synchronized (REGION_LISTENERS) {
+            if (REGION_LISTENERS.isEmpty()) {
+                Console.d(TAG, "Went to remove a RegionListener but there are none");
+            } else {
+                for (int i = 0; i < REGION_LISTENERS.size(); ) {
+                    final WeakReference<OnRegionChangedListener> r = REGION_LISTENERS.get(i);
+                    final OnRegionChangedListener l = r.get();
+
+                    if (l == null) {
+                        Console.d(TAG, "Removing dead RegionListener at index " + i +
+                                ". There are now " + REGION_LISTENERS.size() + " listener(s)");
+                        REGION_LISTENERS.remove(i);
+                    } else if (l == listener) {
+                        Console.d(TAG, "Removing RegionListener (" + listener.toString() +
+                                ") at index " + i + ". There are now " + REGION_LISTENERS.size()
+                                + " listener(s)");
+                        REGION_LISTENERS.remove(i);
+                    } else {
+                        ++i;
+                    }
+                }
             }
         }
     }
@@ -135,32 +162,6 @@ public final class Settings {
                                 ". There are now " + REGION_LISTENERS.size() + " listener(s)");
                     } else {
                         l.onRegionChanged(sRegion);
-                        ++i;
-                    }
-                }
-            }
-        }
-    }
-
-
-    public static void removeRegionListener(final OnRegionChangedListener listener) {
-        synchronized (REGION_LISTENERS) {
-            if (REGION_LISTENERS.isEmpty()) {
-                Console.d(TAG, "Went to remove a RegionListener but there are none");
-            } else {
-                for (int i = 0; i < REGION_LISTENERS.size(); ) {
-                    final WeakReference<OnRegionChangedListener> r = REGION_LISTENERS.get(i);
-                    final OnRegionChangedListener l = r.get();
-
-                    if (l == null) {
-                        Console.d(TAG, "Removing dead RegionListener at index " + i +
-                                ". There are now " + REGION_LISTENERS.size() + " listener(s)");
-                        REGION_LISTENERS.remove(i);
-                    } else if (l == listener) {
-                        Console.d(TAG, "Removing RegionListener at index " + i + ". There are now "
-                                + REGION_LISTENERS.size() + " listener(s)");
-                        REGION_LISTENERS.remove(i);
-                    } else {
                         ++i;
                     }
                 }

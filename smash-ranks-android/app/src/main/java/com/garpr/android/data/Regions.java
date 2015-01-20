@@ -25,16 +25,8 @@ public final class Regions {
 
 
     public static void clear() {
-        final SQLiteDatabase database = Database.start();
-        clear(database);
-        Database.stop();
-    }
-
-
-    static void clear(final SQLiteDatabase database) {
         final String tableName = getTableName();
-        Database.dropTable(database, tableName);
-        Database.createTable(database, tableName);
+        Database.truncateTable(tableName);
     }
 
 
@@ -140,8 +132,8 @@ public final class Regions {
 
 
         @Override
-        void clear(final SQLiteDatabase database) {
-            Regions.clear(database);
+        void clear() {
+            Regions.clear();
         }
 
 
@@ -173,7 +165,7 @@ public final class Regions {
 
 
         @Override
-        String getCallbackName() {
+        final String getCallbackName() {
             return TAG;
         }
 

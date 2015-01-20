@@ -37,7 +37,7 @@ abstract class AsyncReadDatabase<T> extends AsyncRunnable {
     @Override
     public final void run() {
         final SQLiteDatabase database = Database.start();
-        Database.createTable(database, mTableName);
+        Database.createTable(mTableName);
 
         final String[] columns = { Constants.JSON };
         final Cursor cursor = database.query(mTableName, columns, null, null, null, null, null);

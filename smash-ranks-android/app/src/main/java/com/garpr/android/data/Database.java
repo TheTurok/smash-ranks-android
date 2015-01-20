@@ -31,7 +31,7 @@ public final class Database extends SQLiteOpenHelper implements
     }
 
 
-    static void createTable(final SQLiteDatabase database, final String tableName) {
+    private static void createTable(final SQLiteDatabase database, final String tableName) {
         Console.d(TAG, "Creating \"" + tableName + "\" database table");
         final String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " ("
                 + Constants.ID + " TEXT NOT NULL, "
@@ -42,10 +42,10 @@ public final class Database extends SQLiteOpenHelper implements
     }
 
 
-    static void dropTable(final SQLiteDatabase database, final String tableName) {
-        Console.d(TAG, "Dropping \"" + tableName + "\" database table");
-        final String sql = "DROP TABLE IF EXISTS " + tableName + ";";
-        database.execSQL(sql);
+    static void createTable(final String tableName) {
+        final SQLiteDatabase database = start();
+        createTable(database, tableName);
+        stop();
     }
 
 
@@ -53,7 +53,7 @@ public final class Database extends SQLiteOpenHelper implements
         final Context context = App.getContext();
         final String packageName = context.getPackageName();
         sInstance = new Database(context, packageName);
-        Settings.addRegionListener(sInstance);
+        Settings.attachRegionListener(sInstance);
     }
 
 
@@ -96,6 +96,16 @@ public final class Database extends SQLiteOpenHelper implements
     }
 
 
+    static void truncateTable(final String tableName) {
+        Console.d(TAG, "Truncating \"" + tableName + "\" database table");
+
+        final SQLiteDatabase database = start();
+        final String sql = "DELETE FROM " + tableName + ";";
+        database.execSQL(sql);
+        stop();
+    }
+
+
     private Database(final Context context, final String name) {
         super(context, name, null, VERSION);
     }
@@ -109,10 +119,8 @@ public final class Database extends SQLiteOpenHelper implements
 
     @Override
     public void onRegionChanged(final Region region) {
-        final SQLiteDatabase database = start();
-        createTable(database, Players.getTableName());
-        createTable(database, Tournaments.getTableName());
-        stop();
+        createTable(Players.getTableName());
+        createTable(Tournaments.getTableName());
     }
 
 

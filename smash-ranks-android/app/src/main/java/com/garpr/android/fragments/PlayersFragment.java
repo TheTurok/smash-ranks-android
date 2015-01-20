@@ -25,7 +25,6 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.ListFilter;
 import com.garpr.android.models.Player;
 
@@ -167,11 +166,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
                 Console.e(TAG, "Exception when retrieving players!", e);
                 showError();
 
-                try {
-                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.PLAYERS);
-                } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Console.w(TAG, "Unable to report players exception to analytics", gpsue);
-                }
+                Analytics.report(e, Constants.PLAYERS).send();
             }
 
 

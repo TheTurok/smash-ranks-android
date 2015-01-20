@@ -20,6 +20,7 @@ import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
@@ -27,7 +28,7 @@ import com.garpr.android.data.User;
 import com.garpr.android.fragments.BaseFragment;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
-import com.garpr.android.misc.GooglePlayServicesUnavailableException;
+import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.misc.Notifications;
 import com.garpr.android.models.Player;
@@ -302,7 +303,7 @@ abstract class BaseActivity extends ActionBarActivity implements
             }
         }
 
-        Settings.addRegionListener(this);
+        Settings.attachRegionListener(this);
     }
 
 
@@ -325,7 +326,7 @@ abstract class BaseActivity extends ActionBarActivity implements
         super.onDestroy();
         mIsAlive = false;
         App.cancelNetworkRequests(this);
-        Settings.removeRegionListener(this);
+        Settings.detachRegionListener(this);
     }
 
 
@@ -373,14 +374,15 @@ abstract class BaseActivity extends ActionBarActivity implements
         }
 
         if (reportToAnalytics()) {
-            final String activityName = getActivityName();
-
-            try {
-                Analytics.report(activityName).sendScreenView();
-            } catch (final GooglePlayServicesUnavailableException e) {
-                Console.w(activityName, "Unable to report screen view to analytics", e);
-            }
+            Analytics.report(getActivityName()).send();
         }
+    }
+
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Crashlytics.setString(Constants.CURRENT_ACTIVITY, getActivityName());
     }
 
 

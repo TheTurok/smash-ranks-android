@@ -25,16 +25,8 @@ public final class Tournaments {
 
 
     public static void clear() {
-        final SQLiteDatabase database = Database.start();
-        clear(database);
-        Database.stop();
-    }
-
-
-    static void clear(final SQLiteDatabase database) {
         final String tableName = getTableName();
-        Database.dropTable(database, tableName);
-        Database.createTable(database, tableName);
+        Database.truncateTable(tableName);
     }
 
 
@@ -140,8 +132,8 @@ public final class Tournaments {
 
 
         @Override
-        void clear(final SQLiteDatabase database) {
-            Tournaments.clear(database);
+        void clear() {
+            Tournaments.clear();
         }
 
 
@@ -173,7 +165,7 @@ public final class Tournaments {
 
 
         @Override
-        String getCallbackName() {
+        final String getCallbackName() {
             return TAG;
         }
 

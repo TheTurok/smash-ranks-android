@@ -8,10 +8,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.garpr.android.R;
 import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.Console;
-import com.garpr.android.misc.GooglePlayServicesUnavailableException;
+import com.garpr.android.misc.Constants;
 
 
 public class GorgoniteActivity extends Activity {
@@ -45,11 +45,14 @@ public class GorgoniteActivity extends Activity {
         prepareViews();
         Toast.makeText(this, R.string.no_gorgonite_johns, Toast.LENGTH_LONG).show();
 
-        try {
-            Analytics.report(TAG).sendScreenView();
-        } catch (final GooglePlayServicesUnavailableException e) {
-            Console.w(TAG, "Unable to report screen view for " + TAG + " to analytics", e);
-        }
+        Analytics.report(TAG).send();
+    }
+
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Crashlytics.setString(Constants.CURRENT_ACTIVITY, TAG);
     }
 
 

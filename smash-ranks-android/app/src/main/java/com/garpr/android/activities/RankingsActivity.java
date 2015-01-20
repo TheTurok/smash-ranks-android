@@ -28,7 +28,6 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.ListFilter;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
@@ -183,11 +182,7 @@ public class RankingsActivity extends BaseListActivity implements
                 Console.e(TAG, "Exception when retrieving rankings", e);
                 showError();
 
-                try {
-                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
-                } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Console.w(TAG, "Unable to report rankings exception to analytics", gpsue);
-                }
+                Analytics.report(e, Constants.RANKINGS).send();
             }
 
 

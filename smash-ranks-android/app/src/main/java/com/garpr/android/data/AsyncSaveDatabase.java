@@ -23,7 +23,7 @@ abstract class AsyncSaveDatabase<T> extends AsyncRunnable {
     }
 
 
-    void clear(final SQLiteDatabase database) {
+    void clear() {
         // this method intentionally left blank (children can override)
     }
 
@@ -31,7 +31,7 @@ abstract class AsyncSaveDatabase<T> extends AsyncRunnable {
     @Override
     public final void run() {
         final SQLiteDatabase database = Database.start();
-        clear(database);
+        clear();
 
         database.beginTransaction();
 

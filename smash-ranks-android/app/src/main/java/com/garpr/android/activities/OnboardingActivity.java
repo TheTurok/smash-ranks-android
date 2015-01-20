@@ -19,9 +19,8 @@ import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.Console;
+import com.garpr.android.misc.Analytics.Event;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.NonSwipeableViewPager;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
@@ -57,27 +56,20 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     private void finishOnboarding(final boolean savePlayer) {
+        final Event event = Analytics.report(Constants.ONBOARDING)
+                .putExtra(Constants.REGION, mSelectedRegion.getName());
+
         if (savePlayer) {
             final Player player = mPlayersFragment.getSelectedPlayer();
             User.setPlayer(player);
 
-            try {
-                Analytics.report(TAG)
-                        .setExtra(Constants.PLAYER, player.getName())
-                        .setExtra(Constants.REGION, mSelectedRegion.getName())
-                        .sendEvent(Constants.ONBOARDING, Constants.COMPLETED);
-            } catch (final GooglePlayServicesUnavailableException e) {
-                Console.w(TAG, "Unable to report onboarding completion to analytics", e);
-            }
+            event.putExtra(Constants.ONBOARDING_STATUS, Constants.COMPLETED)
+                    .putExtra(Constants.PLAYER, player.getName());
         } else {
-            try {
-                Analytics.report(TAG)
-                        .setExtra(Constants.REGION, mSelectedRegion.getName())
-                        .sendEvent(Constants.ONBOARDING, Constants.SKIPPED);
-            } catch (final GooglePlayServicesUnavailableException e) {
-                Console.w(TAG, "Unable to report onboarding skip to analytics", e);
-            }
+            event.putExtra(Constants.ONBOARDING_STATUS, Constants.SKIPPED);
         }
+
+        event.send();
 
         final Editor editor = Settings.edit(CNAME);
         editor.putBoolean(KEY_ONBOARDING_COMPLETE, true);

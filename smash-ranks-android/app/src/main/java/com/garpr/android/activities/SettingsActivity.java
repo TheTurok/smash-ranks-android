@@ -22,9 +22,7 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 
@@ -274,11 +272,7 @@ public class SettingsActivity extends BaseActivity {
         final String videoUrl = Constants.RANDOM_YOUTUBE_VIDEOS[videoIndex];
         openLink(videoUrl);
 
-        try {
-            Analytics.report(TAG).sendEvent(Constants.EASTER_EGG, Constants.ORB);
-        } catch (final GooglePlayServicesUnavailableException e) {
-            Console.w(TAG, "Unable to report orb easter egg to analytics", e);
-        }
+        Analytics.report(Constants.EASTER_EGG).putExtra(Constants.WHICH, Constants.ORB).send();
     }
 
 

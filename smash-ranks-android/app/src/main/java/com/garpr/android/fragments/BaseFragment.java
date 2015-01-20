@@ -53,7 +53,7 @@ public abstract class BaseFragment extends Fragment implements
         super.onActivityCreated(savedInstanceState);
 
         if (listenForRegionChanges()) {
-            Settings.addRegionListener(this);
+            Settings.attachRegionListener(this);
         }
     }
 
@@ -81,7 +81,7 @@ public abstract class BaseFragment extends Fragment implements
         App.cancelNetworkRequests(this);
 
         if (listenForRegionChanges()) {
-            Settings.removeRegionListener(this);
+            Settings.detachRegionListener(this);
         }
     }
 

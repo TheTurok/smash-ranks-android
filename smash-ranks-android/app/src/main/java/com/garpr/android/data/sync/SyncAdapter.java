@@ -25,7 +25,6 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Analytics.Event;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.Notifications;
 
@@ -85,41 +84,20 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
             @Override
             public void newRosterAvailable() {
                 Notifications.showRankingsUpdated();
-
-                try {
-                    final Event event = createAnalyticsEvent(lastSync);
-                    event.setExtra(Constants.STATUS, Constants.NEW_ROSTER);
-                    sendAnalyticsEvent(event);
-                } catch (final GooglePlayServicesUnavailableException e) {
-                    Console.w(TAG, "Unable to report new roster event to analytics", e);
-                }
+                sendAnalyticsEvent(lastSync, Constants.NEW_ROSTER, null);
             }
 
 
             @Override
             public void noNewRoster() {
-                try {
-                    final Event event = createAnalyticsEvent(lastSync);
-                    event.setExtra(Constants.STATUS, Constants.SAME_ROSTER);
-                    sendAnalyticsEvent(event);
-                } catch (final GooglePlayServicesUnavailableException e) {
-                    Console.w(TAG, "Unable to report same roster event to analytics", e);
-                }
+                sendAnalyticsEvent(lastSync, Constants.SAME_ROSTER, null);
             }
 
 
             @Override
             public void response(final Exception e) {
                 Console.e(TAG, "Exception when retrieving roster while syncing!", e);
-
-                try {
-                    final Event event = createAnalyticsEvent(lastSync);
-                    event.setExtra(e);
-                    event.setExtra(Constants.NETWORK_EXCEPTION, Constants.RANKINGS);
-                    sendAnalyticsEvent(event);
-                } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Console.w(TAG, "Unable to report roster exception event to analytics", gpsue);
-                }
+                sendAnalyticsEvent(lastSync, Constants.EXCEPTION, e);
             }
         };
 
@@ -127,7 +105,7 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
     }
 
 
-    private Event createAnalyticsEvent(final long lastSync) throws GooglePlayServicesUnavailableException {
+    private Event sendAnalyticsEvent(final long lastSync, final String result, final Exception e) {
         final Date lastTimeAndDate = new Date(lastSync);
         final String lastTimeAndDateString = lastTimeAndDate.toString();
 
@@ -135,9 +113,17 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
         final Date timeAndDate = new Date(now);
         final String timeAndDateString = timeAndDate.toString();
 
-        final Event event = Analytics.report(TAG)
-                .setExtra(Constants.LAST_SYNC, lastTimeAndDateString)
-                .setExtra(Constants.TIME, timeAndDateString);
+        final Event event;
+
+        if (e == null) {
+            event = Analytics.report(Constants.PERIODIC_SYNC);
+        } else {
+            event = Analytics.report(e, Constants.PERIODIC_SYNC);
+        }
+
+        event.putExtra(Constants.LAST_SYNC, lastTimeAndDateString)
+                .putExtra(Constants.SYNC_RESULT, result)
+                .putExtra(Constants.TIME, timeAndDateString);
 
         final Editor editor = Settings.edit(CNAME);
         editor.putLong(KEY_LAST_SYNC, now);
@@ -206,11 +192,6 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
         Console.d(TAG, "onSyncCanceled()");
         mIsAlive = false;
         super.onSyncCanceled();
-    }
-
-
-    private void sendAnalyticsEvent(final Event event) throws GooglePlayServicesUnavailableException {
-        event.sendEvent(Constants.SYNC, Constants.PERIODIC_SYNC);
     }
 
 

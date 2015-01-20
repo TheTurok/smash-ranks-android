@@ -20,7 +20,6 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Tournament;
@@ -92,15 +91,11 @@ public class HeadToHeadActivity extends BaseListActivity {
         final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
             @Override
             public void response(final Exception e) {
-                Console.e(TAG, "Exception when fetching head to head matches for "
-                        + mPlayer.getName() + " and " + mOpponentName, e);
+                Console.e(TAG, "Exception when fetching head to head matches for " +
+                        mPlayer.getName() + " and " + mOpponentName, e);
                 showError();
 
-                try {
-                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.HEAD_TO_HEAD);
-                } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Console.w(TAG, "Unable to report matches exception to analytics", gpsue);
-                }
+                Analytics.report(e, Constants.HEAD_TO_HEAD).send();
             }
 
 

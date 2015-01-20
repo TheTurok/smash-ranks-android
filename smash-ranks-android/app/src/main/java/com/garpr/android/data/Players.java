@@ -48,16 +48,8 @@ public final class Players {
 
 
     public static void clear() {
-        final SQLiteDatabase database = Database.start();
-        clear(database);
-        Database.stop();
-    }
-
-
-    static void clear(final SQLiteDatabase database) {
         final String tableName = getTableName();
-        Database.dropTable(database, tableName);
-        Database.createTable(database, tableName);
+        Database.truncateTable(tableName);
     }
 
 
@@ -294,8 +286,8 @@ public final class Players {
 
 
         @Override
-        void clear(final SQLiteDatabase database) {
-            Players.clear(database);
+        void clear() {
+            Players.clear();
         }
 
 
@@ -358,7 +350,7 @@ public final class Players {
 
 
         @Override
-        String getCallbackName() {
+        final String getCallbackName() {
             return TAG;
         }
 
@@ -412,7 +404,7 @@ public final class Players {
 
 
         @Override
-        String getCallbackName() {
+        final String getCallbackName() {
             return TAG;
         }
 
@@ -465,7 +457,7 @@ public final class Players {
 
 
         @Override
-        String getCallbackName() {
+        final String getCallbackName() {
             return TAG;
         }
 

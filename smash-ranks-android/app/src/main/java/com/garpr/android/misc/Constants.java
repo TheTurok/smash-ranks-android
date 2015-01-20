@@ -10,6 +10,7 @@ public final class Constants {
     public static final String API_URL = "http://api.garpr.com";
     public static final String CHARLES_TWITTER_URL = "https://twitter.com/scootrnova";
     public static final String COMPLETED = "completed";
+    public static final String CURRENT_ACTIVITY = "current_activity";
     public static final String DATE = "date";
     public static final String DAY_OF_MONTH_FORMAT = "d";
     public static final String DEBUG = "debug";
@@ -17,6 +18,8 @@ public final class Constants {
     public static final String EASTER_EGG = "easter_egg";
     public static final String ERROR = "error";
     public static final String EXCEPTION = "exception";
+    public static final String EXCEPTION_LOCATION = "exception_location";
+    public static final String EXCEPTION_MESSAGE = "exception_message";
     public static final String FALSE = "false";
     public static final String FAIL = "fail";
     public static final String FAILURE = "failure";
@@ -35,13 +38,13 @@ public final class Constants {
     public static final String MIMETYPE_TEXT_PLAIN = "text/plain";
     public static final String MONTH_FORMAT = "LLLL";
     public static final String NAME = "name";
-    public static final String NETWORK_EXCEPTION = "network_exception";
     public static final String NEW_REGION = "new_region";
     public static final String NEW_ROSTER = "new_roster";
     public static final String NORCAL = "norcal";
     public static final String NULL = "null";
     public static final String OLD_REGION = "old_region";
     public static final String ONBOARDING = "onboarding";
+    public static final String ONBOARDING_STATUS = "onboarding_status";
     public static final String OPPONENT = "opponent";
     public static final String OPPONENT_ID = "opponent_id";
     public static final String OPPONENT_NAME = "opponent_name";
@@ -67,6 +70,7 @@ public final class Constants {
     public static final String SKIPPED_ONBOARDING = "skipped_onboarding";
     public static final String STATUS = "status";
     public static final String SYNC = "sync";
+    public static final String SYNC_RESULT = "sync_result";
     public static final String TIME = "time";
     public static final String TOURNAMENT = "tournament";
     public static final String TOURNAMENTS = "tournaments";
@@ -76,6 +80,7 @@ public final class Constants {
     public static final String TOURNAMENT_NAME = "tournament_name";
     public static final String TRUE = "true";
     public static final String WEB_URL = "http://garpr.com/#/";
+    public static final String WHICH = "which";
     public static final String WIN = "win";
     public static final String YEAR_FORMAT = "yyyy";
 

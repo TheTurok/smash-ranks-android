@@ -29,7 +29,6 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.GooglePlayServicesUnavailableException;
 import com.garpr.android.misc.ListFilter;
 import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.misc.ResultCodes;
@@ -114,11 +113,7 @@ public class PlayerActivity extends BaseListActivity implements
                 Console.e(TAG, "Exception when fetching matches for " + mPlayer.getName(), e);
                 showError();
 
-                try {
-                    Analytics.report(TAG).setExtra(e).sendEvent(Constants.NETWORK_EXCEPTION, Constants.MATCHES);
-                } catch (final GooglePlayServicesUnavailableException gpsue) {
-                    Console.w(TAG, "Unable to report matches exception to analytics", gpsue);
-                }
+                Analytics.report(e, Constants.MATCHES).send();
             }
 
 
@@ -401,12 +396,7 @@ public class PlayerActivity extends BaseListActivity implements
         }
 
         startActivity(mShareIntent);
-
-        try {
-            Analytics.report(TAG).sendEvent(Constants.SHARE, Constants.PLAYER_MATCHES);
-        } catch (final GooglePlayServicesUnavailableException e) {
-            Console.w(TAG, "Unable to report share to analytics", e);
-        }
+        Analytics.report(Constants.SHARE).putExtra(Constants.PLAYER_MATCHES, mPlayer.getName()).send();
     }
 
 
@@ -416,7 +406,7 @@ public class PlayerActivity extends BaseListActivity implements
         for (int i = 0; i < mListItems.size(); ++i) {
             final ListItem listItem = mListItems.get(i);
 
-            if (listItem.isMatch() && listItem.mMatch.getResult() == result) {
+            if (listItem.isMatch() && listItem.mMatch.getResult().equals(result)) {
                 ListItem tournament = null;
 
                 for (int j = i - 1; tournament == null; --j) {

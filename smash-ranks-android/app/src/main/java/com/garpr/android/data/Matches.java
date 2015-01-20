@@ -68,7 +68,7 @@ public final class Matches {
 
 
         @Override
-        String getCallbackName() {
+        final String getCallbackName() {
             return TAG;
         }
 

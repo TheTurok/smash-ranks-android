@@ -11,6 +11,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.garpr.android.data.Database;
+import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 
 import io.fabric.sdk.android.Fabric;
@@ -64,10 +66,18 @@ public final class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
         sContext = getApplicationContext();
+        Fabric.with(sContext, new Crashlytics());
+
+        if (BuildConfig.DEBUG) {
+            Crashlytics.setBool(Constants.DEBUG, true);
+        } else {
+            Crashlytics.setBool(Constants.DEBUG, false);
+        }
+
         sRequestQueue = Volley.newRequestQueue(sContext);
         Database.initialize();
+        Analytics.initialize();
     }
 
 

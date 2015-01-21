@@ -30,7 +30,7 @@ import static android.provider.Settings.ACTION_SYNC_SETTINGS;
 import static android.provider.Settings.EXTRA_AUTHORITIES;
 
 
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends BaseToolbarActivity {
 
 
     private static final String TAG = "SettingsActivity";

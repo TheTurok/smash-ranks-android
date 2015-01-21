@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class HeadToHeadActivity extends BaseListActivity {
+public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
     private static final String CNAME = "com.garpr.android.activities.HeadToHeadActivity";

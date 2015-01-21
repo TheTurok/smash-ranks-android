@@ -24,12 +24,13 @@ import com.garpr.android.R;
 import com.garpr.android.data.Matches;
 import com.garpr.android.data.Matches.MatchesCallback;
 import com.garpr.android.data.Players;
+import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.ListFilter;
+import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
@@ -44,7 +45,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class PlayerActivity extends BaseListActivity implements
+public class PlayerActivity extends BaseToolbarListActivity implements
         MenuItemCompat.OnActionExpandListener,
         SearchView.OnQueryTextListener {
 
@@ -333,7 +334,7 @@ public class PlayerActivity extends BaseListActivity implements
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
 
-        final ListFilter.Listener<ListItem> listener = new ListFilter.Listener<ListItem>(this) {
+        final ListUtils.FilterListener<ListItem> listener = new ListUtils.FilterListener<ListItem>(this) {
             @Override
             public void onFilterComplete(final ArrayList<ListItem> list) {
                 mListItemsShown = list;
@@ -341,7 +342,7 @@ public class PlayerActivity extends BaseListActivity implements
             }
         };
 
-        mFilter = ListFilter.createSpecialFilter(mListItems, listener);
+        mFilter = ListUtils.createSpecialFilter(mListItems, listener);
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
         if (isMenuNull()) {
@@ -396,7 +397,9 @@ public class PlayerActivity extends BaseListActivity implements
         }
 
         startActivity(mShareIntent);
-        Analytics.report(Constants.SHARE).putExtra(Constants.PLAYER_MATCHES, mPlayer.getName()).send();
+        Analytics.report(Constants.SHARE).putExtra(Constants.REGION, Settings.getRegion().getName())
+                .putExtra(Constants.WHAT, Constants.PLAYER_MATCHES)
+                .putExtra(Constants.WHO, mPlayer.getName()).send();
     }
 
 
@@ -450,7 +453,7 @@ public class PlayerActivity extends BaseListActivity implements
 
 
 
-    private static final class ListItem implements ListFilter.SpecialFilterable {
+    private static final class ListItem implements ListUtils.SpecialFilterable {
 
 
         private long mId;
@@ -509,23 +512,23 @@ public class PlayerActivity extends BaseListActivity implements
 
 
         @Override
-        public String getLowerCaseName() {
-            final String lowerCaseName;
+        public String getName() {
+            final String name;
 
             switch (mType) {
                 case MATCH:
-                    lowerCaseName = mMatch.getOpponentName().toLowerCase();
+                    name = mMatch.getOpponentName();
                     break;
 
                 case TOURNAMENT:
-                    lowerCaseName = mTournament.getName().toLowerCase();
+                    name = mTournament.getName();
                     break;
 
                 default:
                     throw new IllegalStateException("ListItem Type is invalid");
             }
 
-            return lowerCaseName;
+            return name;
         }
 
 

@@ -7,15 +7,17 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
-public final class ListFilter {
+public final class ListUtils {
 
 
-    public static Filter createBasicFilter(final ArrayList<? extends BasicFilterable> list, final Listener listener) {
+    public static Filter createBasicFilter(final ArrayList<? extends BasicFilterable> list,
+            final FilterListener listener) {
         return new BasicFilter(list, listener);
     }
 
 
-    public static Filter createSpecialFilter(final ArrayList<? extends SpecialFilterable> list, final Listener listener) {
+    public static Filter createSpecialFilter(final ArrayList<? extends SpecialFilterable> list,
+            final FilterListener listener) {
         return new SpecialFilter(list, listener);
     }
 
@@ -26,10 +28,10 @@ public final class ListFilter {
 
 
         private final ArrayList<T> mList;
-        private final Listener mListener;
+        private final ListUtils.FilterListener mListener;
 
 
-        private BaseFilter(final ArrayList<T> list, final Listener listener) {
+        private BaseFilter(final ArrayList<T> list, final ListUtils.FilterListener listener) {
             mList = list;
             mListener = listener;
         }
@@ -68,7 +70,7 @@ public final class ListFilter {
 
 
         @SuppressWarnings("unchecked")
-        private BasicFilter(final ArrayList<? extends BasicFilterable> list, final Listener listener) {
+        private BasicFilter(final ArrayList<? extends BasicFilterable> list, final ListUtils.FilterListener listener) {
             super((ArrayList<BasicFilterable>) list, listener);
         }
 
@@ -79,7 +81,7 @@ public final class ListFilter {
             final ArrayList<BasicFilterable> newList = new ArrayList<>(oldList.size());
 
             for (final BasicFilterable item : oldList) {
-                final String name = item.getLowerCaseName();
+                final String name = item.getName().toLowerCase();
 
                 if (name.contains(query)) {
                     newList.add(item);
@@ -93,13 +95,13 @@ public final class ListFilter {
     }
 
 
-    public abstract static class Listener<T extends BasicFilterable> {
+    public abstract static class FilterListener<T extends BasicFilterable> {
 
 
         private final WeakReference<Heartbeat> mHeartbeat;
 
 
-        public Listener(final Heartbeat heartbeat) {
+        public FilterListener(final Heartbeat heartbeat) {
             mHeartbeat = new WeakReference<>(heartbeat);
         }
 
@@ -120,7 +122,7 @@ public final class ListFilter {
 
 
         @SuppressWarnings("unchecked")
-        private SpecialFilter(final ArrayList<? extends SpecialFilterable> list, final Listener listener) {
+        private SpecialFilter(final ArrayList<? extends SpecialFilterable> list, final ListUtils.FilterListener listener) {
             super((ArrayList<SpecialFilterable>) list, listener);
         }
 
@@ -134,7 +136,7 @@ public final class ListFilter {
                 final SpecialFilterable item = oldList.get(i);
 
                 if (item.isBasicItem()) {
-                    final String name = item.getLowerCaseName();
+                    final String name = item.getName().toLowerCase();
 
                     if (name.contains(query)) {
                         SpecialFilterable title = null;
@@ -166,7 +168,7 @@ public final class ListFilter {
     public interface BasicFilterable {
 
 
-        public String getLowerCaseName();
+        public String getName();
 
 
     }

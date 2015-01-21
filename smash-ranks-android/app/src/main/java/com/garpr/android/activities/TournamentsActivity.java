@@ -24,7 +24,7 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.ListFilter;
+import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 import com.garpr.android.models.Tournament;
@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 
-public class TournamentsActivity extends BaseListActivity implements
+public class TournamentsActivity extends BaseToolbarListActivity implements
         MenuItemCompat.OnActionExpandListener,
         SearchView.OnQueryTextListener {
 
@@ -286,7 +286,7 @@ public class TournamentsActivity extends BaseListActivity implements
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
 
-        final ListFilter.Listener<ListItem> listener = new ListFilter.Listener<ListItem>(this) {
+        final ListUtils.FilterListener<ListItem> listener = new ListUtils.FilterListener<ListItem>(this) {
             @Override
             public void onFilterComplete(final ArrayList<ListItem> list) {
                 mListItemsShown = list;
@@ -294,7 +294,7 @@ public class TournamentsActivity extends BaseListActivity implements
             }
         };
 
-        mFilter = ListFilter.createSpecialFilter(mListItems, listener);
+        mFilter = ListUtils.createSpecialFilter(mListItems, listener);
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
@@ -336,7 +336,7 @@ public class TournamentsActivity extends BaseListActivity implements
 
 
 
-    private final static class ListItem implements ListFilter.SpecialFilterable {
+    private final static class ListItem implements ListUtils.SpecialFilterable {
 
 
         private long mId;
@@ -395,23 +395,23 @@ public class TournamentsActivity extends BaseListActivity implements
 
 
         @Override
-        public String getLowerCaseName() {
-            final String lowerCaseName;
+        public String getName() {
+            final String name;
 
             switch (mType) {
                 case DATE:
-                    lowerCaseName = mDate.toLowerCase();
+                    name = mDate;
                     break;
 
                 case TOURNAMENT:
-                    lowerCaseName = mTournament.getName().toLowerCase();
+                    name = mTournament.getName();
                     break;
 
                 default:
                     throw new IllegalStateException("ListItem Type is invalid");
             }
 
-            return lowerCaseName;
+            return name;
         }
 
 

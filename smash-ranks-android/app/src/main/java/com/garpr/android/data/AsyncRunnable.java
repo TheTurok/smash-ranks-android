@@ -14,6 +14,7 @@ abstract class AsyncRunnable implements Runnable {
         Console.d(getAsyncRunnableName(), "Starting AsyncRunnable thread");
 
         final Thread thread = new Thread(this);
+        thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
     }
 

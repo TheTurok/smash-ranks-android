@@ -8,13 +8,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.garpr.android.R;
-import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.Constants;
 
 
-public class GorgoniteActivity extends Activity {
+public class GorgoniteActivity extends BaseActivity {
 
 
     private static final String TAG = "GorginiteActivity";
@@ -38,21 +35,23 @@ public class GorgoniteActivity extends Activity {
 
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gorgonite);
-        findViews();
-        prepareViews();
-        Toast.makeText(this, R.string.no_gorgonite_johns, Toast.LENGTH_LONG).show();
-
-        Analytics.report(TAG).send();
+    protected String getActivityName() {
+        return TAG;
     }
 
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        Crashlytics.setString(Constants.CURRENT_ACTIVITY, TAG);
+    protected int getContentView() {
+        return R.layout.activity_gorgonite;
+    }
+
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        findViews();
+        prepareViews();
+        Toast.makeText(this, R.string.no_gorgonite_johns, Toast.LENGTH_LONG).show();
     }
 
 

@@ -25,7 +25,7 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.ListFilter;
+import com.garpr.android.misc.ListUtils;
 import com.garpr.android.models.Player;
 
 import java.util.ArrayList;
@@ -373,7 +373,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
 
-        final ListFilter.Listener<ListItem> listener = new ListFilter.Listener<ListItem>(this) {
+        final ListUtils.FilterListener<ListItem> listener = new ListUtils.FilterListener<ListItem>(this) {
             @Override
             public void onFilterComplete(final ArrayList<ListItem> list) {
                 mListItemsShown = list;
@@ -381,7 +381,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
             }
         };
 
-        mFilter = ListFilter.createSpecialFilter(mListItems, listener);
+        mFilter = ListUtils.createSpecialFilter(mListItems, listener);
 
         findToolbarItems();
         mGo.setVisible(true);
@@ -406,7 +406,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
 
-    private static final class ListItem implements ListFilter.SpecialFilterable {
+    private static final class ListItem implements ListUtils.SpecialFilterable {
 
 
         private long mId;
@@ -465,23 +465,23 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
         @Override
-        public String getLowerCaseName() {
-            final String lowerCaseName;
+        public String getName() {
+            final String name;
 
             switch (mType) {
                 case PLAYER:
-                    lowerCaseName = mPlayer.getName().toLowerCase();
+                    name = mPlayer.getName();
                     break;
 
                 case TITLE:
-                    lowerCaseName = mTitle.toLowerCase();
+                    name = mTitle;
                     break;
 
                 default:
                     throw new IllegalStateException("ListItem Type is invalid");
             }
 
-            return lowerCaseName;
+            return name;
         }
 
 

@@ -92,18 +92,6 @@ public class OnboardingActivity extends BaseActivity implements
     }
 
 
-    @Override
-    protected boolean isNavigationDrawerEnabled() {
-        return false;
-    }
-
-
-    @Override
-    protected boolean isToolbarEnabled() {
-        return false;
-    }
-
-
     private void nextOnboardingStep() {
         switch (mPager.getCurrentItem()) {
             case ONBOARDING_FRAGMENT_REGIONS:

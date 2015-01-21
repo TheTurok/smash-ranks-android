@@ -28,7 +28,7 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.ListFilter;
+import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
 import com.garpr.android.misc.Utils;
@@ -40,7 +40,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 
-public class RankingsActivity extends BaseListActivity implements
+public class RankingsActivity extends BaseToolbarListActivity implements
         MenuItemCompat.OnActionExpandListener,
         SearchView.OnQueryTextListener {
 
@@ -397,7 +397,7 @@ public class RankingsActivity extends BaseListActivity implements
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
 
-        final ListFilter.Listener<ListItem> listener = new ListFilter.Listener<ListItem>(this) {
+        final ListUtils.FilterListener<ListItem> listener = new ListUtils.FilterListener<ListItem>(this) {
             @Override
             public void onFilterComplete(final ArrayList<ListItem> list) {
                 mListItemsShown = list;
@@ -405,7 +405,7 @@ public class RankingsActivity extends BaseListActivity implements
             }
         };
 
-        mFilter = ListFilter.createSpecialFilter(mListItems, listener);
+        mFilter = ListUtils.createSpecialFilter(mListItems, listener);
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
@@ -441,7 +441,7 @@ public class RankingsActivity extends BaseListActivity implements
 
 
 
-    private static final class ListItem implements ListFilter.SpecialFilterable {
+    private static final class ListItem implements ListUtils.SpecialFilterable {
 
 
         private long mId;
@@ -500,23 +500,23 @@ public class RankingsActivity extends BaseListActivity implements
 
 
         @Override
-        public String getLowerCaseName() {
-            final String lowerCaseName;
+        public String getName() {
+            final String name;
 
             switch (mType) {
                 case PLAYER:
-                    lowerCaseName = mPlayer.getName().toLowerCase();
+                    name = mPlayer.getName();
                     break;
 
                 case TITLE:
-                    lowerCaseName = mTitle.toLowerCase();
+                    name = mTitle;
                     break;
 
                 default:
                     throw new IllegalStateException("ListItem Type is invalid");
             }
 
-            return lowerCaseName;
+            return name;
         }
 
 

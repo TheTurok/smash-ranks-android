@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import com.garpr.android.R;
 
 
-abstract class BaseFragmentActivity extends BaseActivity {
+abstract class BaseFragmentActivity extends BaseToolbarActivity {
 
 
     private Fragment mFragment;

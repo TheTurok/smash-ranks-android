@@ -24,7 +24,7 @@ import com.garpr.android.models.LogMessage;
 import com.garpr.android.models.LogMessage.Level;
 
 
-public class ConsoleActivity extends BaseListActivity implements
+public class ConsoleActivity extends BaseToolbarListActivity implements
         Console.Listener {
 
 

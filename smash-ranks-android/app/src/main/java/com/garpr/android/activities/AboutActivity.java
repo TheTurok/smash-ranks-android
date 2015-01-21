@@ -14,7 +14,7 @@ import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 
 
-public class AboutActivity extends BaseActivity {
+public class AboutActivity extends BaseToolbarActivity {
 
 
     private static final String TAG = "AboutActivity";

@@ -236,12 +236,6 @@ public class OnboardingActivity extends BaseActivity implements
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
-
-
 
 
     private final class OnboardingFragmentAdapter extends FragmentPagerAdapter {

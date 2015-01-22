@@ -71,10 +71,4 @@ public class AboutActivity extends BaseToolbarActivity {
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
-
-
 }

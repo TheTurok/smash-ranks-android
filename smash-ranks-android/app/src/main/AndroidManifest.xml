@@ -31,7 +31,7 @@
         </activity>
 
         <activity
-            android:label="@string/log_console"
+            android:label="@string/log_console_title_case"
             android:launchMode="singleTop"
             android:name=".activities.ConsoleActivity"
             android:parentActivityName=".activities.SettingsActivity"

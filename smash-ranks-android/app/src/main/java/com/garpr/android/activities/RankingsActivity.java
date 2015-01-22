@@ -39,6 +39,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import static com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
+import static com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+import static com.garpr.android.misc.ListUtils.SpecialFilterable;
+
 
 public class RankingsActivity extends BaseToolbarListActivity implements
         MenuItemCompat.OnActionExpandListener,
@@ -73,50 +77,32 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     }
 
 
+    @SuppressWarnings("unchecked")
     private void createAlphabeticalListItems() {
-        char lastCharacter = ' ';
-        boolean lastCharacterIsSet = false;
-
-        boolean digitTitleAdded = false;
-        boolean otherTitleAdded = false;
-
         for (final Player player : mPlayers) {
-            final String name = player.getName();
-            char character = name.charAt(0);
-
-            final boolean characterIsLetter = Character.isLetter(character);
-
-            if (characterIsLetter) {
-                character = Character.toUpperCase(character);
-            }
-
-            if (!lastCharacterIsSet || character != lastCharacter) {
-                lastCharacter = character;
-                lastCharacterIsSet = true;
-
-                String listItemTitle = null;
-
-                if (characterIsLetter) {
-                    listItemTitle = String.valueOf(Character.toUpperCase(character));
-                } else if (Character.isDigit(character)) {
-                    if (!digitTitleAdded) {
-                        digitTitleAdded = true;
-                        listItemTitle = getString(R.string.pound_sign);
-                    }
-                } else if (!otherTitleAdded) {
-                    otherTitleAdded = true;
-                    listItemTitle = getString(R.string.other);
-                }
-
-                if (listItemTitle != null) {
-                    final ListItem listItem = ListItem.createTitle(listItemTitle);
-                    mListItems.add(listItem);
-                }
-            }
-
-            final ListItem listItem = ListItem.createPlayer(player);
-            mListItems.add(listItem);
+            mListItems.add(ListItem.createPlayer(player));
         }
+
+        final AlphabeticalSectionCreator creator = new AlphabeticalSectionCreator() {
+            @Override
+            public AlphabeticallyComparable createDigitSection() {
+                return ListItem.createTitle(getString(R.string.pound_sign));
+            }
+
+
+            @Override
+            public AlphabeticallyComparable createLetterSection(final String letter) {
+                return ListItem.createTitle(letter);
+            }
+
+
+            @Override
+            public AlphabeticallyComparable createOtherSection() {
+                return ListItem.createTitle(getString(R.string.other));
+            }
+        };
+
+        mListItems = (ArrayList<ListItem>) ListUtils.createAlphabeticalList(mListItems, creator);
     }
 
 
@@ -433,15 +419,9 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
 
 
-
-
-    private static final class ListItem implements ListUtils.SpecialFilterable {
+    private static final class ListItem implements AlphabeticallyComparable, SpecialFilterable {
 
 
         private long mId;
@@ -496,6 +476,12 @@ public class RankingsActivity extends BaseToolbarListActivity implements
             }
 
             return isEqual;
+        }
+
+
+        @Override
+        public char getFirstCharOfName() {
+            return getName().charAt(0);
         }
 
 

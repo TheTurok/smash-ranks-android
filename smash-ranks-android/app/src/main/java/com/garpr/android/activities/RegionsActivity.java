@@ -60,10 +60,4 @@ public class RegionsActivity extends BaseFragmentActivity implements
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
-
-
 }

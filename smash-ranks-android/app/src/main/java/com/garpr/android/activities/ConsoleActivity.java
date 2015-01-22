@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
@@ -129,11 +130,14 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
     public void onRefresh() {
         super.onRefresh();
         setLoading(false);
-        ++mPulls;
 
-        if (!mPulled && mPulls >= mNeededPulls) {
-            mPulled = true;
-            GorgoniteActivity.start(this);
+        if (!mPulled) {
+            ++mPulls;
+
+            if (mPulls >= mNeededPulls) {
+                mPulled = true;
+                GorgoniteActivity.start(this);
+            }
         }
     }
 
@@ -150,18 +154,20 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
         super.prepareViews();
         final RecyclerView recyclerView = getRecyclerView();
         recyclerView.setVerticalScrollBarEnabled(false);
+
+        final Resources resources = getResources();
+        final int topAndBottom = resources.getDimensionPixelSize(R.dimen.root_padding_half);
+        final int start = ViewCompat.getPaddingStart(recyclerView);
+        final int end = ViewCompat.getPaddingEnd(recyclerView);
+        ViewCompat.setPaddingRelative(recyclerView, start, topAndBottom, end, topAndBottom);
+
+        recyclerView.requestLayout();
     }
 
 
     @Override
     protected boolean showDrawerIndicator() {
         return false;
-    }
-
-
-    @Override
-    public String toString() {
-        return TAG;
     }
 
 

@@ -2,7 +2,6 @@ package com.garpr.android.activities;
 
 
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -176,12 +175,6 @@ abstract class BaseToolbarActivity extends BaseActivity implements
     }
 
 
-    private void initializeToolbar() {
-        setSupportActionBar(mToolbar);
-        mToolbar.setOnMenuItemClickListener(this);
-    }
-
-
     protected boolean isDrawerClosed() {
         return !isDrawerOpen();
     }
@@ -219,7 +212,7 @@ abstract class BaseToolbarActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         findViews();
 
-        initializeToolbar();
+        setSupportActionBar(mToolbar);
         initializeNavigationDrawer();
     }
 
@@ -230,6 +223,7 @@ abstract class BaseToolbarActivity extends BaseActivity implements
 
         if (menuResId != 0) {
             mToolbar.inflateMenu(menuResId);
+            mToolbar.setOnMenuItemClickListener(this);
         }
 
         return super.onCreateOptionsMenu(menu);

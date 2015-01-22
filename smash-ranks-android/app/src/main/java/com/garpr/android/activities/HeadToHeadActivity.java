@@ -155,12 +155,6 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
-
-
 
 
     private static final class ListItem {

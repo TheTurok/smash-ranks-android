@@ -159,4 +159,10 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
+    @Override
+    public String toString() {
+        return getActivityName();
+    }
+
+
 }

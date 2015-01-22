@@ -328,12 +328,6 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
-
-
 
 
     private final static class ListItem implements ListUtils.SpecialFilterable {

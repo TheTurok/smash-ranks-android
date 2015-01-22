@@ -68,10 +68,4 @@ public class GorgoniteActivity extends BaseActivity {
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
-
-
 }

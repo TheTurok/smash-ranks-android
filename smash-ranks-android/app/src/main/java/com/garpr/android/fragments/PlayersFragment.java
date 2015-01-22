@@ -26,6 +26,9 @@ import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
+import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
+import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+import com.garpr.android.misc.ListUtils.SpecialFilterable;
 import com.garpr.android.models.Player;
 
 import java.util.ArrayList;
@@ -76,84 +79,36 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     }
 
 
-    private ArrayList<ListItem> createDigitListItems() {
-        final ArrayList<ListItem> digits = new ArrayList<>(mPlayers.size());
-
-        for (final Player player : mPlayers) {
-            final String name = player.getName();
-
-            if (Character.isDigit(name.charAt(0))) {
-                digits.add(ListItem.createPlayer(player));
-            }
-        }
-
-        if (!digits.isEmpty()) {
-            digits.add(0, ListItem.createTitle(getString(R.string.pound_sign)));
-        }
-
-        return digits;
-    }
-
-
-    private ArrayList<ListItem> createLetterListItems() {
-        final ArrayList<ListItem> letters = new ArrayList<>(mPlayers.size());
-
-        char lastLetter = ' ';
-        boolean lastLetterIsSet = false;
-
-        for (final Player player : mPlayers) {
-            final String name = player.getName();
-            char letter = name.charAt(0);
-
-            if (Character.isLetter(letter)) {
-                letter = Character.toUpperCase(letter);
-
-                if (!lastLetterIsSet || lastLetter != letter) {
-                    lastLetterIsSet = true;
-                    lastLetter = letter;
-                    letters.add(ListItem.createTitle(String.valueOf(letter)));
-                }
-
-                letters.add(ListItem.createPlayer(player));
-            }
-        }
-
-        return letters;
-    }
-
-
+    @SuppressWarnings("unchecked")
     private void createListItems() {
-        final ArrayList<ListItem> letters = createLetterListItems();
-        final ArrayList<ListItem> digits = createDigitListItems();
-        final ArrayList<ListItem> others = createOtherListItems();
+        mListItems = new ArrayList<>(mPlayers.size());
 
-        mListItems = new ArrayList<>(letters.size() + digits.size() + others.size());
-        mListItems.addAll(letters);
-        mListItems.addAll(digits);
-        mListItems.addAll(others);
-        mListItems.trimToSize();
+        for (final Player player : mPlayers) {
+            mListItems.add(ListItem.createPlayer(player));
+        }
 
+        final AlphabeticalSectionCreator creator = new AlphabeticalSectionCreator() {
+            @Override
+            public AlphabeticallyComparable createDigitSection() {
+                return ListItem.createTitle(getString(R.string.pound_sign));
+            }
+
+
+            @Override
+            public AlphabeticallyComparable createLetterSection(final String letter) {
+                return ListItem.createTitle(letter);
+            }
+
+
+            @Override
+            public AlphabeticallyComparable createOtherSection() {
+                return ListItem.createTitle(getString(R.string.other));
+            }
+        };
+
+        mListItems = (ArrayList<ListItem>) ListUtils.createAlphabeticalList(mListItems, creator);
         ListItem.setItemIds(mListItems);
         mListItemsShown = mListItems;
-    }
-
-
-    private ArrayList<ListItem> createOtherListItems() {
-        final ArrayList<ListItem> other = new ArrayList<>(mPlayers.size());
-
-        for (final Player player : mPlayers) {
-            final String name = player.getName();
-
-            if (!Character.isLetterOrDigit(name.charAt(0))) {
-                other.add(ListItem.createPlayer(player));
-            }
-        }
-
-        if (!other.isEmpty()) {
-            other.add(0, ListItem.createTitle(getString(R.string.other)));
-        }
-
-        return other;
     }
 
 
@@ -398,15 +353,9 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
 
 
-
-
-    private static final class ListItem implements ListUtils.SpecialFilterable {
+    private static final class ListItem implements AlphabeticallyComparable, SpecialFilterable {
 
 
         private long mId;
@@ -461,6 +410,12 @@ public class PlayersFragment extends BaseListToolbarFragment implements
             }
 
             return isEqual;
+        }
+
+
+        @Override
+        public char getFirstCharOfName() {
+            return getName().charAt(0);
         }
 
 

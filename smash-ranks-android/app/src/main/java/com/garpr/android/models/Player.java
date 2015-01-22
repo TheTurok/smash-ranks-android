@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.Utils;
 
 import org.json.JSONArray;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 
-public class Player implements Parcelable {
+public class Player implements AlphabeticallyComparable, Parcelable {
 
 
     private ArrayList<Match> matches;
@@ -84,6 +85,12 @@ public class Player implements Parcelable {
         }
 
         return isEqual;
+    }
+
+
+    @Override
+    public char getFirstCharOfName() {
+        return name.charAt(0);
     }
 
 

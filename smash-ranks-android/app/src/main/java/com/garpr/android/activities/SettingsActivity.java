@@ -295,10 +295,4 @@ public class SettingsActivity extends BaseToolbarActivity {
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
-
-
 }

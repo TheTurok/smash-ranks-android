@@ -33,6 +33,9 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.ListUtils;
+import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
+import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.models.Region;
 
 import java.util.ArrayList;
@@ -44,7 +47,6 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
     private static final String TAG = "RegionsFragment";
-
 
     private ArrayList<ListItem> mListItems;
     private FrameLayout mFrame;
@@ -85,52 +87,34 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
+    @SuppressWarnings("unchecked")
     private void createListItems(final ArrayList<Region> regions) {
-        mListItems = new ArrayList<>();
-
-        char lastCharacter = ' ';
-        boolean lastCharacterIsSet = false;
-
-        boolean digitTitleAdded = false;
-        boolean otherTitleAdded = false;
+        mListItems = new ArrayList<>(regions.size());
 
         for (final Region region : regions) {
-            final String name = region.getName();
-            char character = name.charAt(0);
-
-            final boolean characterIsLetter = Character.isLetter(character);
-
-            if (characterIsLetter) {
-                character = Character.toUpperCase(character);
-            }
-
-            if (!lastCharacterIsSet || character != lastCharacter) {
-                lastCharacter = character;
-                lastCharacterIsSet = true;
-
-                String listItemTitle = null;
-
-                if (characterIsLetter) {
-                    listItemTitle = String.valueOf(Character.toUpperCase(character));
-                } else if (Character.isDigit(character)) {
-                    if (!digitTitleAdded) {
-                        digitTitleAdded = true;
-                        listItemTitle = getString(R.string.pound_sign);
-                    }
-                } else if (!otherTitleAdded) {
-                    otherTitleAdded = true;
-                    listItemTitle = getString(R.string.other);
-                }
-
-                if (listItemTitle != null) {
-                    mListItems.add(ListItem.createTitle(listItemTitle));
-                }
-            }
-
             mListItems.add(ListItem.createRegion(region));
         }
 
-        mListItems.trimToSize();
+        final AlphabeticalSectionCreator creator = new AlphabeticalSectionCreator() {
+            @Override
+            public AlphabeticallyComparable createDigitSection() {
+                return ListItem.createTitle(getString(R.string.pound_sign));
+            }
+
+
+            @Override
+            public AlphabeticallyComparable createLetterSection(final String letter) {
+                return ListItem.createTitle(letter);
+            }
+
+
+            @Override
+            public AlphabeticallyComparable createOtherSection() {
+                return ListItem.createTitle(getString(R.string.other));
+            }
+        };
+
+        mListItems = (ArrayList<ListItem>) ListUtils.createAlphabeticalList(mListItems, creator);
     }
 
 
@@ -261,8 +245,8 @@ public class RegionsFragment extends BaseListToolbarFragment {
         final int bottom = frameHeight - distanceFromTop + rootPadding;
 
         final int start = ViewCompat.getPaddingStart(recyclerView);
-        final int top = recyclerView.getPaddingTop();
         final int end = ViewCompat.getPaddingEnd(recyclerView);
+        final int top = recyclerView.getPaddingTop();
         ViewCompat.setPaddingRelative(recyclerView, start, top, end, bottom);
         recyclerView.requestLayout();
     }
@@ -434,15 +418,9 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
 
 
-
-
-    private static final class ListItem {
+    private static final class ListItem implements AlphabeticallyComparable {
 
 
         private Region mRegion;
@@ -489,6 +467,12 @@ public class RegionsFragment extends BaseListToolbarFragment {
             }
 
             return isEqual;
+        }
+
+
+        @Override
+        public char getFirstCharOfName() {
+            return toString().charAt(0);
         }
 
 

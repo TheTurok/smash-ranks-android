@@ -66,3 +66,6 @@
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
+
+-keep class com.flurry.** { *; }
+-dontwarn com.flurry.**

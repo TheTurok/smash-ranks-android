@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,7 +13,7 @@ import org.json.JSONObject;
 import java.util.Comparator;
 
 
-public class Region implements Parcelable {
+public class Region implements AlphabeticallyComparable, Parcelable {
 
 
     private String id;
@@ -47,6 +48,12 @@ public class Region implements Parcelable {
         }
 
         return isEqual;
+    }
+
+
+    @Override
+    public char getFirstCharOfName() {
+        return name.charAt(0);
     }
 
 

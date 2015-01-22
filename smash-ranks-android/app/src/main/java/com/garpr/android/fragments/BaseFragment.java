@@ -102,6 +102,12 @@ public abstract class BaseFragment extends Fragment implements
     }
 
 
+    @Override
+    public String toString() {
+        return getFragmentName();
+    }
+
+
 
 
     public interface Listener {

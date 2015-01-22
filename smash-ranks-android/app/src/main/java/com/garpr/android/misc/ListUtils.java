@@ -10,6 +10,19 @@ import java.util.ArrayList;
 public final class ListUtils {
 
 
+    public static ArrayList<? extends AlphabeticallyComparable> createAlphabeticalList(
+            final ArrayList<? extends AlphabeticallyComparable> list,
+            final AlphabeticalSectionCreator creator) {
+        final ArrayList<AlphabeticallyComparable> newList = new ArrayList<>(list.size());
+        sortOutLetters(list, newList, creator);
+        sortOutDigits(list, newList, creator);
+        sortOutOthers(list, newList, creator);
+
+        newList.trimToSize();
+        return newList;
+    }
+
+
     public static Filter createBasicFilter(final ArrayList<? extends BasicFilterable> list,
             final FilterListener listener) {
         return new BasicFilter(list, listener);
@@ -19,6 +32,65 @@ public final class ListUtils {
     public static Filter createSpecialFilter(final ArrayList<? extends SpecialFilterable> list,
             final FilterListener listener) {
         return new SpecialFilter(list, listener);
+    }
+
+
+    private static void sortOutDigits(final ArrayList<? extends AlphabeticallyComparable> oldList,
+            final ArrayList<AlphabeticallyComparable> newList, final AlphabeticalSectionCreator creator) {
+        final int size = newList.size();
+
+        for (final AlphabeticallyComparable item : oldList) {
+            final char character = item.getFirstCharOfName();
+
+            if (Character.isDigit(character)) {
+                newList.add(item);
+            }
+        }
+
+        if (size < newList.size()) {
+            newList.add(size, creator.createDigitSection());
+        }
+    }
+
+
+    private static void sortOutLetters(final ArrayList<? extends AlphabeticallyComparable> oldList,
+            final ArrayList<AlphabeticallyComparable> newList, final AlphabeticalSectionCreator creator) {
+        char lastLetter = ' ';
+        boolean lastLetterIsSet = false;
+
+        for (final AlphabeticallyComparable item : oldList) {
+            final char character = item.getFirstCharOfName();
+
+            if (Character.isLetter(character)) {
+                final char letter = Character.toUpperCase(character);
+
+                if (!lastLetterIsSet || lastLetter != letter) {
+                    lastLetterIsSet = true;
+                    lastLetter = letter;
+                    newList.add(creator.createLetterSection(String.valueOf(letter)));
+                }
+
+                newList.add(item);
+            }
+        }
+    }
+
+
+    private static void sortOutOthers(final ArrayList<? extends AlphabeticallyComparable> oldList,
+            final ArrayList<AlphabeticallyComparable> newList, final AlphabeticalSectionCreator creator) {
+        final int size = newList.size();
+
+        for (final AlphabeticallyComparable item : oldList) {
+            final char character = item.getFirstCharOfName();
+
+            if (!Character.isLetterOrDigit(character)) {
+                newList.add(item);
+            }
+        }
+
+        if (size < newList.size()) {
+            newList.add(size, creator.createOtherSection());
+        }
     }
 
 
@@ -160,6 +232,30 @@ public final class ListUtils {
 
             return newList;
         }
+
+
+    }
+
+
+    public interface AlphabeticallyComparable {
+
+
+        public char getFirstCharOfName();
+
+
+    }
+
+
+    public interface AlphabeticalSectionCreator {
+
+
+        public AlphabeticallyComparable createDigitSection();
+
+
+        public AlphabeticallyComparable createLetterSection(final String letter);
+
+
+        public AlphabeticallyComparable createOtherSection();
 
 
     }

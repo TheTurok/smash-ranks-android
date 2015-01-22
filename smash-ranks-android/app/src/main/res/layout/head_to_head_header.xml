@@ -9,5 +9,5 @@
     android:paddingLeft="@dimen/root_padding"
     android:paddingRight="@dimen/root_padding"
     android:paddingTop="@dimen/root_padding_half"
-    tools:text="1 - 3"
+    tools:text="1 &#8212; 3"
     style="@style/header_text" />

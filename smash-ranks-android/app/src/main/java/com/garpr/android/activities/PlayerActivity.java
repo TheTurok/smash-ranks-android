@@ -445,12 +445,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     }
 
 
-    @Override
-    public String toString() {
-        return TAG;
-    }
-
-
 
 
     private static final class ListItem implements ListUtils.SpecialFilterable {

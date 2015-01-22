@@ -76,18 +76,37 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
         }
 
         setAdapter(adapter);
+        Console.attachListener(this);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Console.detachListener(this);
     }
 
 
     @Override
     public void onLogMessagesChanged() {
-        notifyDataSetChanged();
+        final Runnable action = new Runnable() {
+            @Override
+            public void run() {
+                if (!isAlive()) {
+                    return;
+                }
 
-        if (Console.hasLogMessages()) {
-            mClearLog.setEnabled(true);
-        } else {
-            mClearLog.setEnabled(false);
-        }
+                notifyDataSetChanged();
+
+                if (Console.hasLogMessages()) {
+                    mClearLog.setEnabled(true);
+                } else {
+                    mClearLog.setEnabled(false);
+                }
+            }
+        };
+
+        runOnUi(action);
     }
 
 
@@ -108,13 +127,6 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        Console.detachListener(this);
-    }
-
-
-    @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         mClearLog = menu.findItem(R.id.activity_console_menu_clear_log);
 
@@ -129,6 +141,7 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
     @Override
     public void onRefresh() {
         super.onRefresh();
+        notifyDataSetChanged();
         setLoading(false);
 
         if (!mPulled) {
@@ -145,7 +158,7 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        Console.attachListener(this);
+        notifyDataSetChanged();
     }
 
 

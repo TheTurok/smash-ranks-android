@@ -7,5 +7,10 @@
     <dimen name="floating_action_button_enabled">24dp</dimen>
     <dimen name="navigation_drawer_banner_height">128dp</dimen>
     <dimen name="navigation_drawer_width">320dp</dimen>
+    <dimen name="root_padding">20dp</dimen>
+    <dimen name="root_padding_double">40dp</dimen>
+    <dimen name="root_padding_eighth">3dp</dimen>
+    <dimen name="root_padding_fourth">5dp</dimen>
+    <dimen name="root_padding_half">10dp</dimen>
 
 </resources>

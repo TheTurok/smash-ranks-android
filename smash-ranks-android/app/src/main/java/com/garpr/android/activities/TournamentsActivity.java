@@ -416,7 +416,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
         private boolean isDate() {
-            return mType == Type.DATE;
+            return mType.equals(Type.DATE);
         }
 
 
@@ -427,7 +427,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
         private boolean isTournament() {
-            return mType == Type.TOURNAMENT;
+            return mType.equals(Type.TOURNAMENT);
         }
 
 

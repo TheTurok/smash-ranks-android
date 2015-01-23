@@ -49,12 +49,12 @@ public enum Result implements Parcelable {
 
 
     public boolean isLose() {
-        return this == LOSE;
+        return equals(LOSE);
     }
 
 
     public boolean isWin() {
-        return this == WIN;
+        return equals(WIN);
     }
 
 

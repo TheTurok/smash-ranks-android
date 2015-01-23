@@ -14,7 +14,7 @@ import com.garpr.android.R;
 public class GorgoniteActivity extends BaseActivity {
 
 
-    private static final String TAG = "GorginiteActivity";
+    private static final String TAG = "GorgoniteActivity";
 
     private ImageView mClose;
     private ImageView mImage;

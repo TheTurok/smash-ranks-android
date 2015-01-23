@@ -220,17 +220,17 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
         private boolean isDate() {
-            return mType == Type.DATE;
+            return mType.equals(Type.DATE);
         }
 
 
         private boolean isHeader() {
-            return mType == Type.HEADER;
+            return mType.equals(Type.HEADER);
         }
 
 
         private boolean isTournament() {
-            return mType == Type.TOURNAMENT;
+            return mType.equals(Type.TOURNAMENT);
         }
 
 

@@ -477,12 +477,12 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
         private boolean isRegion() {
-            return mType == Type.REGION;
+            return mType.equals(Type.REGION);
         }
 
 
         private boolean isTitle() {
-            return mType == Type.TITLE;
+            return mType.equals(Type.TITLE);
         }
 
 

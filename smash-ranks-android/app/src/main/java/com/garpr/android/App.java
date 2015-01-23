@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.garpr.android.data.Database;
 import com.garpr.android.misc.Analytics;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 
@@ -20,6 +21,8 @@ import io.fabric.sdk.android.Fabric;
 
 public final class App extends Application {
 
+
+    private static final String TAG = "App";
 
     private static Context sContext;
     private static RequestQueue sRequestQueue;
@@ -87,7 +90,16 @@ public final class App extends Application {
 
         if (level >= TRIM_MEMORY_BACKGROUND) {
             SQLiteDatabase.releaseMemory();
+            Console.clearLogMessages();
+
+            Console.d(TAG, "onTrimMemory(" + level + ")");
         }
+    }
+
+
+    @Override
+    public String toString() {
+        return TAG;
     }
 
 

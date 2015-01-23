@@ -447,7 +447,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
         private boolean isPlayer() {
-            return mType == Type.PLAYER;
+            return mType.equals(Type.PLAYER);
         }
 
 
@@ -458,7 +458,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
         private boolean isTitle() {
-            return mType == Type.TITLE;
+            return mType.equals(Type.TITLE);
         }
 
 

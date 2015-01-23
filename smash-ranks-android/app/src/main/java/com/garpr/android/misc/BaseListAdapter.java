@@ -3,6 +3,7 @@ package com.garpr.android.misc;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 
 public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
@@ -18,7 +19,7 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
 
 
 
-    public BaseListAdapter(final Listener listener, final RecyclerView recyclerView) {
+    protected BaseListAdapter(final Listener listener, final RecyclerView recyclerView) {
         mListener = listener;
         mRecyclerView = recyclerView;
         setHasStableIds(true);
@@ -93,6 +94,14 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
 
 
     @Override
+    public abstract void onBindViewHolder(final T holder, final int position);
+
+
+    @Override
+    public abstract T onCreateViewHolder(final ViewGroup parent, final int viewType);
+
+
+    @Override
     public final void onClick(final View v) {
         final int position = mRecyclerView.getChildPosition(v);
         mListener.onItemClick(v, position);
@@ -102,8 +111,13 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
     @Override
     public final boolean onLongClick(final View v) {
         final int position = mRecyclerView.getChildPosition(v);
-        mListener.onItemLongClick(v, position);
-        return true;
+        return mListener.onItemLongClick(v, position);
+    }
+
+
+    @Override
+    public String toString() {
+        return getAdapterName();
     }
 
 
@@ -115,7 +129,7 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
         public void onItemClick(final View view, final int position);
 
 
-        public void onItemLongClick(final View view, final int position);
+        public boolean onItemLongClick(final View view, final int position);
 
 
     }

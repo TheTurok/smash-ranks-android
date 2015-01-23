@@ -33,6 +33,7 @@ abstract class BaseActivity extends ActionBarActivity implements
 
 
     private boolean mIsAlive;
+    private boolean mIsFirstResume;
 
 
 
@@ -64,6 +65,11 @@ abstract class BaseActivity extends ActionBarActivity implements
     }
 
 
+    protected boolean isFirstResume() {
+        return mIsFirstResume;
+    }
+
+
     /**
      * This method's code was taken from the Android documentation:
      * https://developer.android.com/training/implementing-navigation/ancestral.html
@@ -85,6 +91,7 @@ abstract class BaseActivity extends ActionBarActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIsAlive = true;
+        mIsFirstResume = true;
         setContentView(getContentView());
         Settings.attachRegionListener(this);
     }
@@ -111,6 +118,13 @@ abstract class BaseActivity extends ActionBarActivity implements
         }
 
         return true;
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mIsFirstResume = false;
     }
 
 

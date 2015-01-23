@@ -9,6 +9,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +23,6 @@ import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.LogMessage;
-import com.garpr.android.models.LogMessage.Level;
 
 
 public class ConsoleActivity extends BaseToolbarListActivity implements
@@ -89,6 +89,10 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
 
     @Override
     public void onLogMessagesChanged() {
+        if (!isAlive()) {
+            return;
+        }
+
         final Runnable action = new Runnable() {
             @Override
             public void run() {
@@ -158,7 +162,10 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        notifyDataSetChanged();
+
+        if (!isFirstResume()) {
+            notifyDataSetChanged();
+        }
     }
 
 
@@ -191,7 +198,7 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
 
         private final int mDebugTextColor;
         private final int mErrorTextColor;
-        private final int mWarningTextColor;
+        private final int mWarnTextColor;
 
 
         private ConsoleAdapter() {
@@ -200,28 +207,26 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
             final Resources res = getResources();
             mDebugTextColor = res.getColor(R.color.white);
             mErrorTextColor = res.getColor(R.color.console_error);
-            mWarningTextColor = res.getColor(R.color.console_warning);
+            mWarnTextColor = res.getColor(R.color.console_warn);
         }
 
 
         protected void formatTextViewPerLevel(final LogMessage logMessage, final TextView textView) {
-            final Level level = logMessage.getLevel();
-
-            switch (level) {
-                case DEBUG:
+            switch (logMessage.getPriority()) {
+                case Log.DEBUG:
                     textView.setTextColor(mDebugTextColor);
                     break;
 
-                case ERROR:
+                case Log.ERROR:
                     textView.setTextColor(mErrorTextColor);
                     break;
 
-                case WARNING:
-                    textView.setTextColor(mWarningTextColor);
+                case Log.WARN:
+                    textView.setTextColor(mWarnTextColor);
                     break;
 
                 default:
-                    throw new RuntimeException("Unknown Level: " + level);
+                    throw new RuntimeException("Unknown priority: " + logMessage.getPriority());
             }
         }
 

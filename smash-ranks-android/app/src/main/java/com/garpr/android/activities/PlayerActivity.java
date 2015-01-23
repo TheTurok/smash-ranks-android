@@ -533,12 +533,12 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
         private boolean isMatch() {
-            return mType == Type.MATCH;
+            return mType.equals(Type.MATCH);
         }
 
 
         private boolean isTournament() {
-            return mType == Type.TOURNAMENT;
+            return mType.equals(Type.TOURNAMENT);
         }
 
 

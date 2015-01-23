@@ -4,6 +4,7 @@ package com.garpr.android.models;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
@@ -13,7 +14,7 @@ import com.garpr.android.misc.Utils;
 public class LogMessage implements Parcelable {
 
 
-    private final Level level;
+    private final int priority;
     private final long id;
     private final String message;
     private final String stackTrace;
@@ -23,9 +24,19 @@ public class LogMessage implements Parcelable {
 
 
 
-    public LogMessage(final Level level, final long id, final String tag, final String message,
+    private void throwIfPriorityIsInvalid() {
+        if (!(priority == Log.DEBUG || priority == Log.WARN || priority == Log.ERROR)) {
+            throw new IllegalArgumentException("priority must be either Log.DEBUG (" + Log.DEBUG
+                    + "), Log.WARN (" + Log.WARN + "), or Log.ERROR (" + Log.ERROR + ")");
+        }
+    }
+
+
+    public LogMessage(final int priority, final long id, final String tag, final String message,
             final String stackTrace, final String throwableMessage) {
-        this.level = level;
+        this.priority = priority;
+        throwIfPriorityIsInvalid();
+
         this.id = id;
         this.tag = tag;
         this.message = message;
@@ -35,7 +46,9 @@ public class LogMessage implements Parcelable {
 
 
     private LogMessage(final Parcel source) {
-        level = Level.create(source.readInt());
+        priority = source.readInt();
+        throwIfPriorityIsInvalid();
+
         id = source.readLong();
         message = source.readString();
         stackTrace = source.readString();
@@ -53,7 +66,7 @@ public class LogMessage implements Parcelable {
         } else if (o instanceof LogMessage) {
             final LogMessage lm = (LogMessage) o;
 
-            if (level.equals(lm.getLevel()) && id == lm.getId() &&
+            if (priority == lm.getPriority() && id == lm.getId() &&
                     message.equals(lm.getMessage()) && tag.equals(lm.getTag())) {
                 if (isThrowable() && lm.isThrowable()) {
                     isEqual = stackTrace.equals(lm.getStackTrace()) &&
@@ -74,11 +87,6 @@ public class LogMessage implements Parcelable {
     }
 
 
-    public Level getLevel() {
-        return level;
-    }
-
-
     public long getId() {
         return id;
     }
@@ -86,6 +94,11 @@ public class LogMessage implements Parcelable {
 
     public String getMessage() {
         return message;
+    }
+
+
+    public int getPriority() {
+        return priority;
     }
 
 
@@ -101,6 +114,21 @@ public class LogMessage implements Parcelable {
 
     public String getThrowableMessage() {
         return throwableMessage;
+    }
+
+
+    public boolean isPriorityDebug() {
+        return priority == Log.DEBUG;
+    }
+
+
+    public boolean isPriorityError() {
+        return priority == Log.ERROR;
+    }
+
+
+    public boolean isPriorityWarn() {
+        return priority == Log.WARN;
     }
 
 
@@ -132,7 +160,7 @@ public class LogMessage implements Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeInt(level.ordinal());
+        dest.writeInt(priority);
         dest.writeLong(id);
         dest.writeString(message);
         dest.writeString(stackTrace);
@@ -153,56 +181,6 @@ public class LogMessage implements Parcelable {
             return new LogMessage[size];
         }
     };
-
-
-
-
-    public static enum Level {
-        DEBUG, ERROR, WARNING;
-
-
-        private static Level create(final int ordinal) {
-            final Level level;
-
-            if (ordinal == DEBUG.ordinal()) {
-                level = DEBUG;
-            } else if (ordinal == ERROR.ordinal()) {
-                level = ERROR;
-            } else if (ordinal == WARNING.ordinal()) {
-                level = WARNING;
-            } else {
-                throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
-            }
-
-            return level;
-        }
-
-
-        @Override
-        public String toString() {
-            final int resId;
-
-            switch (this) {
-                case DEBUG:
-                    resId = R.string.debug;
-                    break;
-
-                case ERROR:
-                    resId = R.string.error;
-                    break;
-
-                case WARNING:
-                    resId = R.string.warning;
-                    break;
-
-                default:
-                    throw new IllegalStateException("Level type is invalid");
-            }
-
-            final Context context = App.getContext();
-            return context.getString(resId);
-        }
-    }
 
 
 }

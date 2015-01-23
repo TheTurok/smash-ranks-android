@@ -3,8 +3,8 @@ package com.garpr.android.misc;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.garpr.android.models.LogMessage;
-import com.garpr.android.models.LogMessage.Level;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
@@ -27,7 +27,7 @@ public final class Console {
     }
 
 
-    private static void add(final Level level, final String tag, final String msg,
+    private static void add(final int priority, final String tag, final String msg,
             final Throwable tr) {
         final String stackTrace;
         final String throwableMessage;
@@ -41,7 +41,7 @@ public final class Console {
         }
 
         synchronized (LOG_MESSAGES) {
-            LOG_MESSAGES.addFirst(new LogMessage(level, sLogMessageIdPointer++, tag, msg,
+            LOG_MESSAGES.addFirst(new LogMessage(priority, sLogMessageIdPointer++, tag, msg,
                     stackTrace, throwableMessage));
 
             while (LOG_MESSAGES.size() > LOG_MESSAGES_MAX_SIZE) {
@@ -97,14 +97,15 @@ public final class Console {
 
 
     public static void d(final String tag, final String msg) {
-        Log.d(tag, msg);
-        add(Level.DEBUG, tag, msg, null);
+        Crashlytics.log(Log.DEBUG, tag, msg);
+        add(Log.DEBUG, tag, msg, null);
     }
 
 
     public static void d(final String tag, final String msg, final Throwable tr) {
-        Log.d(tag, msg, tr);
-        add(Level.DEBUG, tag, msg, tr);
+        Crashlytics.logException(tr);
+        Crashlytics.log(Log.DEBUG, tag, msg);
+        add(Log.DEBUG, tag, msg, tr);
     }
 
 
@@ -139,14 +140,15 @@ public final class Console {
 
 
     public static void e(final String tag, final String msg) {
-        Log.e(tag, msg);
-        add(Level.ERROR, tag, msg, null);
+        Crashlytics.log(Log.ERROR, tag, msg);
+        add(Log.ERROR, tag, msg, null);
     }
 
 
     public static void e(final String tag, final String msg, final Throwable tr) {
-        Log.e(tag, msg, tr);
-        add(Level.ERROR, tag, msg, tr);
+        Crashlytics.logException(tr);
+        Crashlytics.log(Log.ERROR, tag, msg);
+        add(Log.ERROR, tag, msg, tr);
     }
 
 
@@ -198,14 +200,15 @@ public final class Console {
 
 
     public static void w(final String tag, final String msg) {
-        Log.w(tag, msg);
-        add(Level.WARNING, tag, msg, null);
+        Crashlytics.log(Log.WARN, tag, msg);
+        add(Log.WARN, tag, msg, null);
     }
 
 
     public static void w(final String tag, final String msg, final Throwable tr) {
-        Log.w(tag, msg, tr);
-        add(Level.WARNING, tag, msg, tr);
+        Crashlytics.logException(tr);
+        Crashlytics.log(Log.WARN, tag, msg);
+        add(Log.WARN, tag, msg, tr);
     }
 
 

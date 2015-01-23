@@ -513,7 +513,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
         private boolean isPlayer() {
-            return mType == Type.PLAYER;
+            return mType.equals(Type.PLAYER);
         }
 
 
@@ -524,7 +524,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
         private boolean isTitle() {
-            return mType == Type.TITLE;
+            return mType.equals(Type.TITLE);
         }
 
 

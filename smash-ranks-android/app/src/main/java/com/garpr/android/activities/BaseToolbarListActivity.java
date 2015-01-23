@@ -89,8 +89,9 @@ abstract class BaseToolbarListActivity extends BaseToolbarActivity implements
 
 
     @Override
-    public void onItemLongClick(final View view, final int position) {
+    public boolean onItemLongClick(final View view, final int position) {
         // this method intentionally left blank (children can override)
+        return false;
     }
 
 

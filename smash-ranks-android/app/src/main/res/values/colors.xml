@@ -3,7 +3,7 @@
 
     <color name="black">#000000</color>
     <color name="console_error">#FF6666</color>
-    <color name="console_warning">#FFB8B8</color>
+    <color name="console_warn">#FFCCCC</color>
     <color name="gray">#303030</color>
     <color name="gray_dark">#212121</color>
     <color name="gray_darker">#161616</color>

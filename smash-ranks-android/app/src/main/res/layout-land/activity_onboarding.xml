@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_onboarding_root"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     style="@style/root.no_padding">
-    <RelativeLayout
+    <View
         android:background="@color/gray_dark"
-        android:gravity="center_vertical"
+        android:id="@+id/activity_onboarding_top"
+        android:layout_height="@dimen/status_bar_height"
+        android:layout_width="match_parent"
+        android:visibility="gone" />
+    <LinearLayout
         android:layout_height="match_parent"
-        android:layout_width="wrap_content"
-        tools:ignore="UnusedAttribute">
-        <TextView
-            android:gravity="center"
-            android:id="@+id/activity_onboarding_title"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/root_padding_double"
-            android:layout_marginLeft="@dimen/root_padding_double"
-            android:layout_marginRight="@dimen/root_padding_double"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:background="@color/gray_dark"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent"
             android:layout_width="wrap_content"
-            android:paddingLeft="@dimen/root_padding_double"
-            android:paddingRight="@dimen/root_padding_double"
-            android:text="@string/gar_pr"
-            style="@style/garpr_text" />
-        <ImageView
-            android:id="@+id/activity_onboarding_orb"
-            android:layout_below="@id/activity_onboarding_title"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:scaleType="centerInside"
-            android:src="@drawable/smash_orb"
-            tools:ignore="ContentDescription" />
-    </RelativeLayout>
-    <com.garpr.android.misc.NonSwipeableViewPager
-        android:id="@+id/activity_onboarding_pager"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_width="0dp" />
+            tools:ignore="UnusedAttribute">
+            <TextView
+                android:gravity="center"
+                android:id="@+id/activity_onboarding_title"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/root_padding_double"
+                android:layout_marginLeft="@dimen/root_padding_double"
+                android:layout_marginRight="@dimen/root_padding_double"
+                android:layout_width="wrap_content"
+                android:paddingLeft="@dimen/root_padding_double"
+                android:paddingRight="@dimen/root_padding_double"
+                android:text="@string/gar_pr"
+                style="@style/garpr_text" />
+            <ImageView
+                android:id="@+id/activity_onboarding_orb"
+                android:layout_below="@id/activity_onboarding_title"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/smash_orb"
+                tools:ignore="ContentDescription" />
+        </RelativeLayout>
+        <com.garpr.android.misc.NonSwipeableViewPager
+            android:id="@+id/activity_onboarding_pager"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_width="0dp" />
+    </LinearLayout>
 </LinearLayout>

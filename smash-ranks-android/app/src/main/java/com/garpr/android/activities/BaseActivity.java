@@ -2,12 +2,18 @@ package com.garpr.android.activities;
 
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup.MarginLayoutParams;
 
 import com.crashlytics.android.Crashlytics;
 import com.garpr.android.App;
@@ -38,13 +44,59 @@ abstract class BaseActivity extends ActionBarActivity implements
 
 
 
+    protected void applyStatusBarHeightAsHeight(final View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            throw new IllegalStateException("Status bars can't be transparent before API " +
+                    Build.VERSION_CODES.LOLLIPOP + ". This device is " + Build.VERSION.SDK_INT);
+        }
+
+        final LayoutParams params = view.getLayoutParams();
+        params.height = getStatusBarHeight();
+        view.setLayoutParams(params);
+    }
+
+
+    protected void applyStatusBarHeightAsTopMargin(final View view, final boolean positive) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            throw new IllegalStateException("Status bars can't be transparent before API " +
+                    Build.VERSION_CODES.LOLLIPOP + ". This device is " + Build.VERSION.SDK_INT);
+        }
+
+        final MarginLayoutParams params = (MarginLayoutParams) view.getLayoutParams();
+        final int statusBarHeight = getStatusBarHeight();
+
+        if (positive) {
+            params.topMargin = statusBarHeight;
+        } else {
+            params.topMargin = (-1) * statusBarHeight;
+        }
+
+        view.setLayoutParams(params);
+    }
+
+
+    protected void applyStatusBarHeightAsTopPadding(final View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            throw new IllegalStateException("Status bars can't be transparent before API " +
+                    Build.VERSION_CODES.LOLLIPOP + ". This device is " + Build.VERSION.SDK_INT);
+        }
+
+        final int start = ViewCompat.getPaddingStart(view);
+        final int top = getStatusBarHeight();
+        final int end = ViewCompat.getPaddingEnd(view);
+        final int bottom = view.getPaddingBottom();
+        ViewCompat.setPaddingRelative(view, start, top, end, bottom);
+        view.requestLayout();
+    }
+
+
     protected abstract String getActivityName();
 
 
     protected abstract int getContentView();
 
 
-    protected int getStatusBarHeight() {
+    private int getStatusBarHeight() {
         final Resources res = getResources();
         final int statusBarHeightResId = res.getIdentifier("status_bar_height", "dimen", "android");
         final int statusBarHeight;
@@ -67,6 +119,21 @@ abstract class BaseActivity extends ActionBarActivity implements
 
     protected boolean isFirstResume() {
         return mIsFirstResume;
+    }
+
+
+    protected boolean isOrientationLandscape() {
+        return isOrientation(Configuration.ORIENTATION_LANDSCAPE);
+    }
+
+
+    protected boolean isOrientationPortrait() {
+        return isOrientation(Configuration.ORIENTATION_PORTRAIT);
+    }
+
+
+    private boolean isOrientation(final int orientation) {
+        return getResources().getConfiguration().orientation == orientation;
     }
 
 

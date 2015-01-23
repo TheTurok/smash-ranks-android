@@ -7,9 +7,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewCompat;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
@@ -40,18 +39,18 @@ public class OnboardingActivity extends BaseActivity implements
     private static final String TAG = "OnboardingActivity";
 
     private boolean mReportToAnalytics;
-    private LinearLayout mRoot;
     private NonSwipeableViewPager mPager;
     private PlayersFragment mPlayersFragment;
     private Region mSelectedRegion;
     private RegionsFragment mRegionsFragment;
+    private View mTop;
 
 
 
 
     private void findViews() {
         mPager = (NonSwipeableViewPager) findViewById(R.id.activity_onboarding_pager);
-        mRoot = (LinearLayout) findViewById(R.id.activity_onboarding_root);
+        mTop = findViewById(R.id.activity_onboarding_top);
     }
 
 
@@ -222,8 +221,12 @@ public class OnboardingActivity extends BaseActivity implements
 
     private void prepareViews() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            final int statusBarHeight = getStatusBarHeight();
-            ViewCompat.setPaddingRelative(mRoot, 0, statusBarHeight, 0, 0);
+            if (isOrientationLandscape()) {
+                applyStatusBarHeightAsHeight(mTop);
+                mTop.setVisibility(View.VISIBLE);
+            } else {
+                applyStatusBarHeightAsTopPadding(mTop);
+            }
         }
 
         mPager.setAdapter(new OnboardingFragmentAdapter());

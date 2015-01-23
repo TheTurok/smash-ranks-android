@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -96,11 +95,8 @@ abstract class BaseToolbarActivity extends BaseActivity implements
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            final int statusBarHeight = getStatusBarHeight();
-            final ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mDrawerContents.getLayoutParams();
-            params.topMargin = -statusBarHeight;
-
-            mDrawerLayout.setStatusBarBackground(R.color.gray_dark);
+            applyStatusBarHeightAsTopMargin(mDrawerContents, false);
+            mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.gray_dark));
         }
 
         if (User.hasPlayer()) {

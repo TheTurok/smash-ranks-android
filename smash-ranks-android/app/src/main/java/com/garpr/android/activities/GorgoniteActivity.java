@@ -3,9 +3,11 @@ package com.garpr.android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.garpr.android.R;
@@ -16,8 +18,7 @@ public class GorgoniteActivity extends BaseActivity {
 
     private static final String TAG = "GorgoniteActivity";
 
-    private ImageView mClose;
-    private ImageView mImage;
+    private ImageButton mClose;
 
 
 
@@ -29,8 +30,7 @@ public class GorgoniteActivity extends BaseActivity {
 
 
     private void findViews() {
-        mClose = (ImageView) findViewById(R.id.activity_gorgonite_close);
-        mImage = (ImageView) findViewById(R.id.activity_gorgonite_image);
+        mClose = (ImageButton) findViewById(R.id.activity_gorgonite_close);
     }
 
 
@@ -56,15 +56,16 @@ public class GorgoniteActivity extends BaseActivity {
 
 
     private void prepareViews() {
-        final View.OnClickListener close = new View.OnClickListener() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            applyStatusBarHeightAsTopMargin(mClose, true);
+        }
+
+        mClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 finish();
             }
-        };
-
-        mClose.setOnClickListener(close);
-        mImage.setOnClickListener(close);
+        });
     }
 
 

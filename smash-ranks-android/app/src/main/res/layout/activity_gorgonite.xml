@@ -2,12 +2,11 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
     <ImageView
         android:contentDescription="@string/no_gorgonite_johns"
-        android:id="@+id/activity_gorgonite_image"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/archer" />
-    <ImageView
+    <ImageButton
         android:background="@drawable/bg_press"
         android:contentDescription="@string/close"
         android:id="@+id/activity_gorgonite_close"

@@ -6,27 +6,32 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.AbsListView;
 
 import com.garpr.android.R;
 
 
 /**
- * An extension of the support library's {@link SwipeRefreshLayout} view that allows for its
- * single child view to be something other than a typical Android {@link AbsListView}.
- * <p/>
- * This is talked about a bit more on Stack Overflow: http://stackoverflow.com/a/24266857/823952
- * <p/>
- * Without this class, SwipeRefreshLayout has an annoying issue with not allowing its child
- * ListView to scroll up. So you'll be able to scroll down, but then once you try to go up, you
- * wouldn't be able to!
- * <p/>
- * Maybe at a future date Google will fix this issue with a new version of the support library...
+ * An extension of the support library's {@link SwipeRefreshLayout} that works around a few bugs.
+ * Note that this class was made with support library v21.0.3 in mind. So it's possible that a
+ * new one will have fix this stuff: https://developer.android.com/tools/support-library/index.html
+ *
+ * 1. Normally, a SwipeRefreshLayout only allows one child view, and that one child view must be
+ * either an {@link AbsListView} or a {@link RecyclerView}. And if you break this paradigm, then
+ * your list will be incapable of scrolling up. So in order to take advantage of this cool fix,
+ * you have to use the {@link #setScrollingView(View)} method. This is talked about a bit more
+ * on Stack Overflow: http://stackoverflow.com/q/23053799
+ *
+ * 2. If you try to use {@link SwipeRefreshLayout#setRefreshing(boolean)} early on in your
+ * Activity's / Fragment's lifecycle, then the little spinner won't show appear on screen. I've
+ * supplied the work around for this in this class's overridden {@link #setRefreshing(boolean)}.
+ * https://code.google.com/p/android/issues/detail?id=77712
  */
 public final class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
 
 
-    private RecyclerView mRecyclerView;
+    private View mTarget;
 
 
 
@@ -42,46 +47,46 @@ public final class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
 
 
     @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        setColorSchemeResources(R.color.indigo_dark, R.color.indigo, R.color.indigo_bright);
-    }
-
-
-    @Override
     public boolean canChildScrollUp() {
         final boolean canChildScrollUp;
 
-        if (mRecyclerView == null) {
+        if (mTarget == null) {
             canChildScrollUp = super.canChildScrollUp();
         } else {
-            // -1 means to check scrolling up
-            canChildScrollUp = ViewCompat.canScrollVertically(mRecyclerView, -1);
+            // -1 means to check scrolling up (1 would check scrolling down)
+            canChildScrollUp = ViewCompat.canScrollVertically(mTarget, -1);
         }
 
         return canChildScrollUp;
     }
 
 
-    /**
-     * Normally we'd just use {@link #setRefreshing(boolean)} instead, but there's a bug with that:
-     * https://code.google.com/p/android/issues/detail?id=77712 hopefully in a future version of
-     * the appcompat library, we can get rid of this work around.
-     */
-    public void postSetRefreshing(final boolean isLoading) {
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setRefreshing(isLoading);
-            }
-        };
-
-        post(runnable);
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        setColorSchemeResources(R.color.indigo_bright, R.color.indigo, R.color.indigo_dark);
     }
 
 
-    public void setRecyclerView(final RecyclerView recyclerView) {
-        mRecyclerView = recyclerView;
+    @Override
+    public void setRefreshing(final boolean refreshing) {
+        final Runnable action = new Runnable() {
+            @Override
+            public void run() {
+                FlexibleSwipeRefreshLayout.super.setRefreshing(refreshing);
+            }
+        };
+
+        post(action);
+    }
+
+
+    public void setScrollingView(final View target) throws IllegalArgumentException {
+        if (target instanceof AbsListView || target instanceof RecyclerView) {
+            mTarget = target;
+        } else {
+            throw new IllegalArgumentException("target must be either an AbsListView or a RecyclerView");
+        }
     }
 
 

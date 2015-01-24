@@ -11,6 +11,7 @@
     <color name="gray_lighter">#888888</color>
     <color name="gray_lightest">#BBBBBB</color>
     <color name="indigo">#311B52</color>
+    <color name="indigo_brighter">#A797E5</color>
     <color name="indigo_bright">#7E66D8</color>
     <color name="indigo_dark">#210054</color>
     <color name="lose_pink">#EC407A</color>

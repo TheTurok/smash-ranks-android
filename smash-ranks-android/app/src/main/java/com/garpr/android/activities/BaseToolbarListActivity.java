@@ -105,7 +105,7 @@ abstract class BaseToolbarListActivity extends BaseToolbarActivity implements
         mErrorLine.setText(getErrorText());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRefreshLayout.setOnRefreshListener(this);
-        mRefreshLayout.setRecyclerView(mRecyclerView);
+        mRefreshLayout.setScrollingView(mRecyclerView);
     }
 
 
@@ -125,7 +125,7 @@ abstract class BaseToolbarListActivity extends BaseToolbarActivity implements
 
     protected void setLoading(final boolean isLoading) {
         mIsLoading = isLoading;
-        mRefreshLayout.postSetRefreshing(isLoading);
+        mRefreshLayout.setRefreshing(isLoading);
     }
 
 

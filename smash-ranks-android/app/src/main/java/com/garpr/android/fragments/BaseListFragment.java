@@ -105,7 +105,7 @@ abstract class BaseListFragment extends BaseFragment implements
         mErrorLine.setText(getErrorText());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRefreshLayout.setOnRefreshListener(this);
-        mRefreshLayout.setRecyclerView(mRecyclerView);
+        mRefreshLayout.setScrollingView(mRecyclerView);
     }
 
 
@@ -125,7 +125,7 @@ abstract class BaseListFragment extends BaseFragment implements
 
     protected void setLoading(final boolean isLoading) {
         mIsLoading = isLoading;
-        mRefreshLayout.postSetRefreshing(isLoading);
+        mRefreshLayout.setRefreshing(isLoading);
     }
 
 

@@ -129,4 +129,10 @@ public final class User {
     }
 
 
+    private User() {
+        // this constructor is intentionally blank (this prevents it from being accidentally
+        // used elsewhere)
+    }
+
+
 }

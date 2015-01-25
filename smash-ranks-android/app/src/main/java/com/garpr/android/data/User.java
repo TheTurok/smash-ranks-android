@@ -1,9 +1,12 @@
 package com.garpr.android.data;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.garpr.android.App;
+import com.garpr.android.R;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
@@ -132,6 +135,31 @@ public final class User {
     private User() {
         // this constructor is intentionally blank (this prevents it from being accidentally
         // used elsewhere)
+    }
+
+
+    @Override
+    public String toString() {
+        final String player;
+
+        if (mPlayer == null) {
+            player = null;
+        } else {
+            final JSONObject playerJSON = mPlayer.toJSON();
+            player = playerJSON.toString();
+        }
+
+        final String region;
+
+        if (mRegion == null) {
+            region = null;
+        } else {
+            final JSONObject regionJSON = mRegion.toJSON();
+            region = regionJSON.toString();
+        }
+
+        final Context context = App.getContext();
+        return context.getString(R.string.player_x_region_y, player, region);
     }
 
 

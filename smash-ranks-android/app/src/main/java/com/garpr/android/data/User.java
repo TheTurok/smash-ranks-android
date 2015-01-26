@@ -115,6 +115,10 @@ public final class User {
             sUser = new User();
         }
 
+        final JSONObject playerJSON = player.toJSON();
+        final String playerString = playerJSON.toString();
+        Console.d(TAG, "User's player has been set: " + playerString);
+
         sUser.mPlayer = player;
         saveUser();
     }

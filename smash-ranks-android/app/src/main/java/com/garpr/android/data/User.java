@@ -140,26 +140,22 @@ public final class User {
 
     @Override
     public String toString() {
-        final String player;
+        final String playerString;
 
-        if (mPlayer == null) {
-            player = null;
+        if (hasPlayer()) {
+            final Player player = getPlayer();
+            final JSONObject playerJSON = player.toJSON();
+            playerString = playerJSON.toString();
         } else {
-            final JSONObject playerJSON = mPlayer.toJSON();
-            player = playerJSON.toString();
+            playerString = null;
         }
 
-        final String region;
-
-        if (mRegion == null) {
-            region = null;
-        } else {
-            final JSONObject regionJSON = mRegion.toJSON();
-            region = regionJSON.toString();
-        }
+        final Region region = getRegion();
+        final JSONObject regionJSON = region.toJSON();
+        final String regionString = regionJSON.toString();
 
         final Context context = App.getContext();
-        return context.getString(R.string.player_x_region_y, player, region);
+        return context.getString(R.string.player_x_region_y, playerString, regionString);
     }
 
 

@@ -59,7 +59,7 @@ public final class Settings {
                     } else {
                         ++i;
                     }
-                } while (i < REGION_LISTENERS.size() && addListener);
+                } while (i < REGION_LISTENERS.size());
             }
 
             if (addListener) {

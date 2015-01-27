@@ -157,19 +157,19 @@ abstract class BaseActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(getContentView());
         mIsAlive = true;
         mIsFirstResume = true;
-        setContentView(getContentView());
         Settings.attachRegionListener(this);
     }
 
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mIsAlive = false;
         App.cancelNetworkRequests(this);
         Settings.detachRegionListener(this);
+        super.onDestroy();
     }
 
 

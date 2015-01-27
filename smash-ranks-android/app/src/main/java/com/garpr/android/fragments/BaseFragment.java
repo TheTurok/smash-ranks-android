@@ -69,20 +69,22 @@ public abstract class BaseFragment extends Fragment implements
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
             final Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        final View view = inflater.inflate(getContentView(), container, false);
         mIsAlive = true;
-        return inflater.inflate(getContentView(), container, false);
+        return view;
     }
 
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         mIsAlive = false;
         App.cancelNetworkRequests(this);
 
         if (listenForRegionChanges()) {
             Settings.detachRegionListener(this);
         }
+
+        super.onDestroyView();
     }
 
 

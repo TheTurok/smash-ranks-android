@@ -69,7 +69,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
         final int currentMargin = MarginLayoutParamsCompat.getMarginEnd(params);
 
         final Resources res = getResources();
-        final int duration = res.getInteger(android.R.integer.config_shortAnimTime);
+        final int duration = res.getInteger(android.R.integer.config_mediumAnimTime);
 
         final ValueAnimator animator = ValueAnimator.ofInt(currentMargin, newMargin);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

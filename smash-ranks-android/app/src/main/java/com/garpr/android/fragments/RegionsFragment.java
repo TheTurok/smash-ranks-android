@@ -511,21 +511,6 @@ public class RegionsFragment extends BaseListToolbarFragment {
             REGION, TITLE;
 
 
-            private static Type create(final int ordinal) {
-                final Type type;
-
-                if (ordinal == REGION.ordinal()) {
-                    type = REGION;
-                } else if (ordinal == TITLE.ordinal()) {
-                    type = TITLE;
-                } else {
-                    throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
-                }
-
-                return type;
-            }
-
-
             @Override
             public String toString() {
                 final int resId;
@@ -625,7 +610,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
             final LayoutInflater inflater = getLayoutInflater();
-            final ListItem.Type type = ListItem.Type.create(viewType);
+            final ListItem.Type type = ListItem.Type.values()[viewType];
 
             final View view;
             final RecyclerView.ViewHolder holder;

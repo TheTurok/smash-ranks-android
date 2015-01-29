@@ -33,21 +33,6 @@ public enum Result implements Parcelable {
     }
 
 
-    public static Result create(final int ordinal) {
-        final Result result;
-
-        if (ordinal == LOSE.ordinal()) {
-            result = LOSE;
-        } else if (ordinal == WIN.ordinal()) {
-            result = WIN;
-        } else {
-            throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
-        }
-
-        return result;
-    }
-
-
     public boolean isLose() {
         return equals(LOSE);
     }
@@ -104,7 +89,7 @@ public enum Result implements Parcelable {
         @Override
         public Result createFromParcel(final Parcel source) {
             final int ordinal = source.readInt();
-            return create(ordinal);
+            return values()[ordinal];
         }
 
 

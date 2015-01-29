@@ -573,21 +573,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
             MATCH, TOURNAMENT;
 
 
-            private static Type create(final int ordinal) {
-                final Type type;
-
-                if (ordinal == MATCH.ordinal()) {
-                    type = MATCH;
-                } else if (ordinal == TOURNAMENT.ordinal()) {
-                    type = TOURNAMENT;
-                } else {
-                    throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
-                }
-
-                return type;
-            }
-
-
             @Override
             public String toString() {
                 final int resId;
@@ -635,6 +620,35 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         }
 
 
+        private void bindMatchViewHolder(final MatchViewHolder holder, final int position,
+                final ListItem listItem) {
+            holder.mOpponent.setText(listItem.mMatch.getOpponentName());
+
+            if (listItem.mMatch.isWin()) {
+                holder.mOpponent.setTextColor(mColorWin);
+            } else {
+                holder.mOpponent.setTextColor(mColorLose);
+            }
+
+            if (mInUsersRegion && mUserPlayer != null) {
+                final String opponentId = listItem.mMatch.getOpponentId();
+
+                if (opponentId.equals(mUserPlayer.getId())) {
+                    holder.mRoot.setBackgroundColor(mBgHighlight);
+                } else {
+                    holder.mRoot.setBackgroundColor(mBgGray);
+                }
+            }
+        }
+
+
+        private void bindTournamentViewHolder(final TournamentViewHolder holder, final int position,
+                final ListItem listItem) {
+            holder.mDate.setText(listItem.mTournament.getDate());
+            holder.mName.setText(listItem.mTournament.getName());
+        }
+
+
         @Override
         public String getAdapterName() {
             return TAG;
@@ -663,29 +677,17 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             final ListItem listItem = mListItemsShown.get(position);
 
-            if (listItem.isMatch()) {
-                final MatchViewHolder viewHolder = (MatchViewHolder) holder;
-                viewHolder.mOpponent.setText(listItem.mMatch.getOpponentName());
+            switch (listItem.mType) {
+                case MATCH:
+                    bindMatchViewHolder((MatchViewHolder) holder, position, listItem);
+                    break;
 
-                if (listItem.mMatch.isWin()) {
-                    viewHolder.mOpponent.setTextColor(mColorWin);
-                } else {
-                    viewHolder.mOpponent.setTextColor(mColorLose);
-                }
+                case TOURNAMENT:
+                    bindTournamentViewHolder((TournamentViewHolder) holder, position, listItem);
+                    break;
 
-                if (mInUsersRegion && mUserPlayer != null) {
-                    final String opponentId = listItem.mMatch.getOpponentId();
-
-                    if (opponentId.equals(mUserPlayer.getId())) {
-                        viewHolder.mRoot.setBackgroundColor(mBgHighlight);
-                    } else {
-                        viewHolder.mRoot.setBackgroundColor(mBgGray);
-                    }
-                }
-            } else if (listItem.isTournament()) {
-                final TournamentViewHolder viewHolder = (TournamentViewHolder) holder;
-                viewHolder.mDate.setText(listItem.mTournament.getDate());
-                viewHolder.mName.setText(listItem.mTournament.getName());
+                default:
+                    throw new RuntimeException("Illegal ListItem Type detected: " + listItem.mType);
             }
         }
 
@@ -694,7 +696,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
             final LayoutInflater inflater = getLayoutInflater();
-            final ListItem.Type listItemType = ListItem.Type.create(viewType);
+            final ListItem.Type listItemType = ListItem.Type.values()[viewType];
 
             final View view;
             final RecyclerView.ViewHolder holder;

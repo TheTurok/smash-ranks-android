@@ -456,21 +456,6 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
             DATE, TOURNAMENT;
 
 
-            private static Type create(final int ordinal) {
-                final Type type;
-
-                if (ordinal == DATE.ordinal()) {
-                    type = DATE;
-                } else if (ordinal == TOURNAMENT.ordinal()) {
-                    type = TOURNAMENT;
-                } else {
-                    throw new IllegalArgumentException("Ordinal is invalid: \"" + ordinal + "\"");
-                }
-
-                return type;
-            }
-
-
             @Override
             public String toString() {
                 final int resId;
@@ -566,7 +551,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
             final LayoutInflater inflater = getLayoutInflater();
-            final ListItem.Type listItemType = ListItem.Type.create(viewType);
+            final ListItem.Type listItemType = ListItem.Type.values()[viewType];
 
             final View view;
             final RecyclerView.ViewHolder holder;

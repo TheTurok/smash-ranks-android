@@ -317,8 +317,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         mSort = menu.findItem(R.id.activity_rankings_menu_sort);
         mSortAlphabetical = menu.findItem(R.id.activity_rankings_menu_sort_alphabetical);
         mSortRank = menu.findItem(R.id.activity_rankings_menu_sort_rank);
-        MenuItemCompat.setOnActionExpandListener(mSearch, this);
 
+        MenuItemCompat.setOnActionExpandListener(mSearch, this);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearch);
         searchView.setQueryHint(getString(R.string.search_players));
         searchView.setOnQueryTextListener(this);
@@ -530,22 +530,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
         @Override
         public String toString() {
-            final String name;
-
-            switch (mType) {
-                case PLAYER:
-                    name = mPlayer.getName();
-                    break;
-
-                case TITLE:
-                    name = mTitle;
-                    break;
-
-                default:
-                    throw new IllegalStateException("ListItem Type is invalid");
-            }
-
-            return name;
+            return getName();
         }
 
 

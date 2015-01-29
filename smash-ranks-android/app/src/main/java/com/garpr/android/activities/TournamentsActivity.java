@@ -216,8 +216,8 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         mSort = menu.findItem(R.id.activity_tournaments_menu_sort);
         mSortChronological = menu.findItem(R.id.activity_tournaments_menu_sort_chronological);
         mSortReverseChronological = menu.findItem(R.id.activity_tournaments_menu_sort_reverse_chronological);
-        MenuItemCompat.setOnActionExpandListener(mSearch, this);
 
+        MenuItemCompat.setOnActionExpandListener(mSearch, this);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearch);
         searchView.setQueryHint(getString(R.string.search_tournaments));
         searchView.setOnQueryTextListener(this);
@@ -433,22 +433,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
         @Override
         public String toString() {
-            final String name;
-
-            switch (mType) {
-                case DATE:
-                    name = mDate;
-                    break;
-
-                case TOURNAMENT:
-                    name = mTournament.getName();
-                    break;
-
-                default:
-                    throw new IllegalStateException("ListItem Type is invalid");
-            }
-
-            return name;
+            return getName();
         }
 
 

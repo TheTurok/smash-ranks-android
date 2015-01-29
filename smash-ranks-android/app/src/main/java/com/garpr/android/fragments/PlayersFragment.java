@@ -464,22 +464,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
         @Override
         public String toString() {
-            final String title;
-
-            switch (mType) {
-                case PLAYER:
-                    title = mPlayer.getName();
-                    break;
-
-                case TITLE:
-                    title = mTitle;
-                    break;
-
-                default:
-                    throw new IllegalStateException("ListItem Type is invalid");
-            }
-
-            return title;
+            return getName();
         }
 
 

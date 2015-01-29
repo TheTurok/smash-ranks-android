@@ -240,7 +240,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
             switch (mType) {
                 case DATE:
-                    title = mMatch.getOpponentName();
+                    title = mDate;
                     break;
 
                 case HEADER:

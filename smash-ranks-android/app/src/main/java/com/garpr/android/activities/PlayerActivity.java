@@ -550,22 +550,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
         @Override
         public String toString() {
-            final String title;
-
-            switch (mType) {
-                case MATCH:
-                    title = mMatch.getOpponentName();
-                    break;
-
-                case TOURNAMENT:
-                    title = mTournament.getName();
-                    break;
-
-                default:
-                    throw new IllegalStateException("ListItem type is invalid");
-            }
-
-            return title;
+            return getName();
         }
 
 

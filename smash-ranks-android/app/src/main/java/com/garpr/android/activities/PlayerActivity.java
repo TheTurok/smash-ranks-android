@@ -31,6 +31,7 @@ import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
+import com.garpr.android.misc.ListUtils.FilterListener;
 import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
@@ -60,6 +61,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
     private Filter mFilter;
+    private FilterListener<ListItem> mFilterListener;
     private Intent mShareIntent;
     private MenuItem mSearch;
     private MenuItem mShare;
@@ -168,6 +170,14 @@ public class PlayerActivity extends BaseToolbarListActivity implements
             final int resultIndex = savedInstanceState.getInt(KEY_PREVIOUSLY_SHOWING, -1);
             mShowing = Result.values()[resultIndex];
         }
+
+        mFilterListener = new FilterListener<ListItem>(this) {
+            @Override
+            public void onFilterComplete(final ArrayList<ListItem> list) {
+                mListItemsShown = list;
+                notifyDataSetChanged();
+            }
+        };
 
         if (mPlayer.hasMatches()) {
             final ArrayList<Match> matches = mPlayer.getMatches();
@@ -320,16 +330,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     @Override
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
-
-        final ListUtils.FilterListener<ListItem> listener = new ListUtils.FilterListener<ListItem>(this) {
-            @Override
-            public void onFilterComplete(final ArrayList<ListItem> list) {
-                mListItemsShown = list;
-                notifyDataSetChanged();
-            }
-        };
-
-        mFilter = ListUtils.createSpecialFilter(mListItems, listener);
+        mFilter = ListUtils.createSpecialFilter(mListItems, mFilterListener);
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
@@ -414,6 +415,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
         mListItemsShown = listItems;
         notifyDataSetChanged();
+
+        mFilter = ListUtils.createSpecialFilter(mListItemsShown, mFilterListener);
     }
 
 

@@ -42,7 +42,6 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
-    private ArrayList<Tournament> mTournaments;
     private boolean mSetMenuItemsVisible;
     private Filter mFilter;
     private MenuItem mSearch;
@@ -57,11 +56,11 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
     }
 
 
-    private void createListItems() {
+    private void createListItems(final ArrayList<Tournament> tournaments) {
         mListItems = new ArrayList<>();
         String lastMonthAndYear = null;
 
-        for (final Tournament tournament : mTournaments) {
+        for (final Tournament tournament : tournaments) {
             final String monthAndYear = tournament.getMonthAndYear();
 
             if (!monthAndYear.equals(lastMonthAndYear)) {
@@ -94,9 +93,8 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
             @Override
             public void response(final ArrayList<Tournament> list) {
-                mTournaments = list;
-                Collections.sort(mTournaments, Tournament.CHRONOLOGICAL_ORDER);
-                createListItems();
+                Collections.sort(list, Tournament.CHRONOLOGICAL_ORDER);
+                createListItems(list);
                 setAdapter(new TournamentsAdapter());
             }
         };

@@ -58,6 +58,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
+    private ArrayList<ListItem> mLoseListItems;
+    private ArrayList<ListItem> mWinListItems;
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
     private Filter mFilter;
@@ -100,6 +102,40 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
         mListItems.trimToSize();
         mListItemsShown = mListItems;
+
+        mLoseListItems = createSortedListItems(Result.LOSE);
+        mWinListItems = createSortedListItems(Result.WIN);
+    }
+
+
+    private ArrayList<ListItem> createSortedListItems(final Result result) {
+        final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
+
+        for (int i = 0; i < mListItems.size(); ++i) {
+            final ListItem listItem = mListItems.get(i);
+
+            if (listItem.isMatch() && listItem.mMatch.getResult().equals(result)) {
+                ListItem tournament = null;
+
+                for (int j = i - 1; tournament == null; --j) {
+                    final ListItem li = mListItems.get(j);
+
+                    if (li.isTournament()) {
+                        tournament = li;
+                    }
+                }
+
+                // make sure we haven't already added this tournament to the list
+                if (!listItems.contains(tournament)) {
+                    listItems.add(tournament);
+                }
+
+                listItems.add(listItem);
+            }
+        }
+
+        listItems.trimToSize();
+        return listItems;
     }
 
 
@@ -207,7 +243,14 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
     @Override
     public boolean onMenuItemActionCollapse(final MenuItem item) {
-        mListItemsShown = mListItems;
+        if (Result.LOSE.equals(mShowing)) {
+            mListItemsShown = mLoseListItems;
+        } else if (Result.WIN.equals(mShowing)) {
+            mListItemsShown = mWinListItems;
+        } else {
+            mListItemsShown = mListItems;
+        }
+
         notifyDataSetChanged();
         return true;
     }
@@ -388,34 +431,16 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
     private void show(final Result result) {
         mShowing = result;
-        final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
 
-        for (int i = 0; i < mListItems.size(); ++i) {
-            final ListItem listItem = mListItems.get(i);
-
-            if (listItem.isMatch() && listItem.mMatch.getResult().equals(result)) {
-                ListItem tournament = null;
-
-                for (int j = i - 1; tournament == null; --j) {
-                    final ListItem li = mListItems.get(j);
-
-                    if (li.isTournament()) {
-                        tournament = li;
-                    }
-                }
-
-                // make sure we haven't already added this tournament to the list
-                if (!listItems.contains(tournament)) {
-                    listItems.add(tournament);
-                }
-
-                listItems.add(listItem);
-            }
+        if (result.equals(Result.LOSE)) {
+            mListItemsShown = mLoseListItems;
+        } else if (result.equals(Result.WIN)) {
+            mListItemsShown = mWinListItems;
+        } else {
+            throw new RuntimeException("Result is unknown: " + result);
         }
 
-        mListItemsShown = listItems;
         notifyDataSetChanged();
-
         mFilter = ListUtils.createSpecialFilter(mListItemsShown, mFilterListener);
     }
 

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="app_theme" parent="base_theme">
 
     </style>
 
     <style name="base_theme" parent="Theme.AppCompat">
+        <item name="android:colorAccent" tools:ignore="NewApi">@color/indigo_bright</item>
         <item name="colorAccent">@color/indigo_bright</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:windowActionBar">false</item>
@@ -13,7 +14,6 @@
         <item name="android:windowBackground">@color/gray_darker</item>
 
         <!-- theming for the Material Dialog library -->
-        <item name="md_accent_color">@color/indigo_bright</item>
         <item name="md_dark_theme">true</item>
     </style>
 

@@ -163,7 +163,7 @@ public class OnboardingActivity extends BaseActivity implements
         final Player player = mPlayersFragment.getSelectedPlayer();
 
         new MaterialDialog.Builder(this)
-                .callback(new MaterialDialog.SimpleCallback() {
+                .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(final MaterialDialog materialDialog) {
                         finishOnboarding(true);
@@ -206,7 +206,7 @@ public class OnboardingActivity extends BaseActivity implements
     @Override
     public void onSkipClick() {
         new MaterialDialog.Builder(this)
-                .callback(new MaterialDialog.SimpleCallback() {
+                .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(final MaterialDialog materialDialog) {
                         finishOnboarding(false);

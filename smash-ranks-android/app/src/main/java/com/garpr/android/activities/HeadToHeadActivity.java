@@ -154,6 +154,10 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
                 Collections.sort(list, Match.REVERSE_CHRONOLOGICAL_ORDER);
                 createListItems(list);
                 setAdapter(new MatchesAdapter());
+
+                if (mShowing != null) {
+                    show(mShowing);
+                }
             }
         };
 
@@ -188,6 +192,15 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.x_vs_y, mPlayer.getName(), mOpponentName));
+
+        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            final int resultIndex = savedInstanceState.getInt(KEY_PREVIOUSLY_SHOWING, Integer.MIN_VALUE);
+
+            if (resultIndex != Integer.MIN_VALUE) {
+                mShowing = Result.values()[resultIndex];
+            }
+        }
+
         fetchMatches();
     }
 

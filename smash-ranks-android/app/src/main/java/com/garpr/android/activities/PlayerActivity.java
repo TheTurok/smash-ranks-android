@@ -272,8 +272,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
             case R.id.activity_player_menu_show_all:
                 Utils.hideMenuItems(mShowAll);
                 Utils.showMenuItems(mShowLoses, mShowWins);
-                mListItemsShown = mListItems;
-                notifyDataSetChanged();
+                show(null);
                 break;
 
             case R.id.activity_player_menu_show_loses:
@@ -432,12 +431,12 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     private void show(final Result result) {
         mShowing = result;
 
-        if (result.equals(Result.LOSE)) {
+        if (Result.LOSE.equals(result)) {
             mListItemsShown = mLoseListItems;
-        } else if (result.equals(Result.WIN)) {
+        } else if (Result.WIN.equals(result)) {
             mListItemsShown = mWinListItems;
         } else {
-            throw new RuntimeException("Result is unknown: " + result);
+            mListItemsShown = mListItems;
         }
 
         notifyDataSetChanged();

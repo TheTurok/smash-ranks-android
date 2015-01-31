@@ -93,7 +93,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
             @Override
             public void response(final ArrayList<Tournament> list) {
-                Collections.sort(list, Tournament.CHRONOLOGICAL_ORDER);
+                Collections.sort(list, Tournament.REVERSE_CHRONOLOGICAL_ORDER);
                 createListItems(list);
                 setAdapter(new TournamentsAdapter());
             }

@@ -8,6 +8,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -20,8 +22,10 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
+import com.garpr.android.models.Result;
 import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
@@ -35,10 +39,20 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
     private static final String EXTRA_OPPONENT_ID = CNAME + ".EXTRA_OPPONENT_ID";
     private static final String EXTRA_OPPONENT_NAME = CNAME + ".EXTRA_OPPONENT_NAME";
+    private static final String KEY_PREVIOUSLY_SHOWING = "KEY_PREVIOUSLY_SHOWING";
     private static final String TAG = "HeadToHeadActivity";
 
     private ArrayList<ListItem> mListItems;
+    private ArrayList<ListItem> mListItemsShown;
+    private ArrayList<ListItem> mLoseListItems;
+    private ArrayList<ListItem> mWinListItems;
+    private boolean mSetMenuItemsVisible;
+    private MenuItem mShow;
+    private MenuItem mShowAll;
+    private MenuItem mShowLoses;
+    private MenuItem mShowWins;
     private Player mPlayer;
+    private Result mShowing;
     private String mOpponentId;
     private String mOpponentName;
 
@@ -80,8 +94,44 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
         final String header = getString(R.string.x_em_dash_y, wins, loses);
         mListItems.add(0, ListItem.createHeader(header));
-
         mListItems.trimToSize();
+        mListItemsShown = mListItems;
+
+        mLoseListItems = createSortedListItems(Result.LOSE);
+        mWinListItems = createSortedListItems(Result.WIN);
+    }
+
+
+    private ArrayList<ListItem> createSortedListItems(final Result result) {
+        final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
+
+        for (int i = 0; i < mListItems.size(); ++i) {
+            final ListItem listItem = mListItems.get(i);
+
+            if (listItem.isHeader()) {
+                listItems.add(listItem);
+            } else if (listItem.isTournament() && listItem.mMatch.getResult().equals(result)) {
+                ListItem date = null;
+
+                for (int j = i - 1; date == null; --j) {
+                    final ListItem li = mListItems.get(j);
+
+                    if (li.isDate()) {
+                        date = li;
+                    }
+                }
+
+                // make sure we haven't already added this date to the list
+                if (!listItems.contains(date)) {
+                    listItems.add(date);
+                }
+
+                listItems.add(listItem);
+            }
+        }
+
+        listItems.trimToSize();
+        return listItems;
     }
 
 
@@ -124,10 +174,66 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
     @Override
+    protected int getOptionsMenu() {
+        return R.menu.activity_head_to_head;
+    }
+
+
+    private boolean isMenuNull() {
+        return Utils.areAnyObjectsNull(mShow, mShowAll, mShowLoses, mShowWins);
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.x_vs_y, mPlayer.getName(), mOpponentName));
         fetchMatches();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.activity_head_to_head_menu_show_all:
+                Utils.hideMenuItems(mShowAll);
+                Utils.showMenuItems(mShowLoses, mShowWins);
+                show(null);
+                break;
+
+            case R.id.activity_head_to_head_menu_show_loses:
+                Utils.hideMenuItems(mShowLoses);
+                Utils.showMenuItems(mShowAll, mShowWins);
+                show(Result.LOSE);
+                break;
+
+            case R.id.activity_head_to_head_menu_show_wins:
+                Utils.hideMenuItems(mShowWins);
+                Utils.showMenuItems(mShowAll, mShowLoses);
+                show(Result.WIN);
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        mShow = menu.findItem(R.id.activity_head_to_head_menu_show);
+        mShowAll = menu.findItem(R.id.activity_head_to_head_menu_show_all);
+        mShowLoses = menu.findItem(R.id.activity_head_to_head_menu_show_loses);
+        mShowWins = menu.findItem(R.id.activity_head_to_head_menu_show_wins);
+
+        if (mSetMenuItemsVisible) {
+            showMenuItems();
+            mSetMenuItemsVisible = false;
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
 
@@ -142,6 +248,20 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
     @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (!isMenuNull()) {
+            if (Result.LOSE.equals(mShowing)) {
+                outState.putInt(KEY_PREVIOUSLY_SHOWING, Result.LOSE.ordinal());
+            } else if (Result.WIN.equals(mShowing)) {
+                outState.putInt(KEY_PREVIOUSLY_SHOWING, Result.WIN.ordinal());
+            }
+        }
+    }
+
+
+    @Override
     protected void readIntentData(final Intent intent) {
         mPlayer = intent.getParcelableExtra(EXTRA_PLAYER);
         mOpponentId = intent.getStringExtra(EXTRA_OPPONENT_ID);
@@ -150,8 +270,53 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
     @Override
+    protected void setAdapter(final BaseListAdapter adapter) {
+        super.setAdapter(adapter);
+
+        // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
+
+        if (isMenuNull()) {
+            mSetMenuItemsVisible = true;
+        } else {
+            showMenuItems();
+        }
+    }
+
+
+    @Override
     protected boolean showDrawerIndicator() {
         return false;
+    }
+
+
+    private void show(final Result result) {
+        mShowing = result;
+
+        if (Result.LOSE.equals(result)) {
+            mListItemsShown = mLoseListItems;
+        } else if (Result.WIN.equals(result)) {
+            mListItemsShown = mWinListItems;
+        } else {
+            mListItemsShown = mListItems;
+        }
+
+        notifyDataSetChanged();
+    }
+
+
+    private void showMenuItems() {
+        Utils.showMenuItems(mShow);
+
+        if (Result.LOSE.equals(mShowing)) {
+            Utils.hideMenuItems(mShowLoses);
+            Utils.showMenuItems(mShowAll, mShowWins);
+        } else if (Result.WIN.equals(mShowing)) {
+            Utils.hideMenuItems(mShowWins);
+            Utils.showMenuItems(mShowAll, mShowLoses);
+        } else {
+            Utils.hideMenuItems(mShowAll);
+            Utils.showMenuItems(mShowLoses, mShowWins);
+        }
     }
 
 
@@ -342,7 +507,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
         @Override
         public int getItemCount() {
-            return mListItems.size();
+            return mListItemsShown.size();
         }
 
 
@@ -354,13 +519,13 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
         @Override
         public int getItemViewType(final int position) {
-            return mListItems.get(position).mType.ordinal();
+            return mListItemsShown.get(position).mType.ordinal();
         }
 
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-            final ListItem listItem = mListItems.get(position);
+            final ListItem listItem = mListItemsShown.get(position);
 
             switch (listItem.mType) {
                 case DATE:

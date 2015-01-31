@@ -262,17 +262,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
             mSetMenuItemsVisible = false;
         }
 
-        if (Result.LOSE.equals(mShowing)) {
-            Utils.hideMenuItems(mShowLoses);
-            Utils.showMenuItems(mShowAll, mShowWins);
-        } else if (Result.WIN.equals(mShowing)) {
-            Utils.hideMenuItems(mShowWins);
-            Utils.showMenuItems(mShowAll, mShowLoses);
-        } else {
-            Utils.hideMenuItems(mShowAll);
-            Utils.showMenuItems(mShowLoses, mShowWins);
-        }
-
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -436,6 +425,17 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
     private void showMenuItems() {
         Utils.showMenuItems(mSearch, mShare, mShow);
+
+        if (Result.LOSE.equals(mShowing)) {
+            Utils.hideMenuItems(mShowLoses);
+            Utils.showMenuItems(mShowAll, mShowWins);
+        } else if (Result.WIN.equals(mShowing)) {
+            Utils.hideMenuItems(mShowWins);
+            Utils.showMenuItems(mShowAll, mShowLoses);
+        } else {
+            Utils.hideMenuItems(mShowAll);
+            Utils.showMenuItems(mShowLoses, mShowWins);
+        }
     }
 
 

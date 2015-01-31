@@ -251,8 +251,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         mShowAll = menu.findItem(R.id.activity_player_menu_show_all);
         mShowLoses = menu.findItem(R.id.activity_player_menu_show_loses);
         mShowWins = menu.findItem(R.id.activity_player_menu_show_wins);
-        MenuItemCompat.setOnActionExpandListener(mSearch, this);
 
+        MenuItemCompat.setOnActionExpandListener(mSearch, this);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearch);
         searchView.setQueryHint(getString(R.string.search_matches));
         searchView.setOnQueryTextListener(this);

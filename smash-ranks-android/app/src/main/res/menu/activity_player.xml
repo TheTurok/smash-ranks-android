@@ -28,9 +28,9 @@
                 android:id="@+id/activity_player_menu_show_wins"
                 android:title="@string/show_wins" />
             <item
-                android:enabled="false"
                 android:id="@+id/activity_player_menu_show_all"
-                android:title="@string/show_all" />
+                android:title="@string/show_all"
+                android:visible="false" />
         </menu>
     </item>
 </menu>

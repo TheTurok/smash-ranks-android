@@ -50,8 +50,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         SearchView.OnQueryTextListener {
 
 
-    private static final int PREVIOUSLY_SHOWING_LOSES = 1;
-    private static final int PREVIOUSLY_SHOWING_WINS = 2;
     private static final String CNAME = "com.garpr.android.activities.PlayerActivity";
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
     private static final String KEY_PREVIOUSLY_SHOWING = "KEY_PREVIOUSLY_SHOWING";
@@ -62,7 +60,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
     private Filter mFilter;
-    private int mPreviouslyShowing;
     private Intent mShareIntent;
     private MenuItem mSearch;
     private MenuItem mShare;
@@ -72,6 +69,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     private MenuItem mShowWins;
     private Player mPlayer;
     private Player mUserPlayer;
+    private Result mShowing;
 
 
 
@@ -167,7 +165,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         mUserPlayer = User.getPlayer();
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
-            mPreviouslyShowing = savedInstanceState.getInt(KEY_PREVIOUSLY_SHOWING, 0);
+            final int resultIndex = savedInstanceState.getInt(KEY_PREVIOUSLY_SHOWING, -1);
+            mShowing = Result.values()[resultIndex];
         }
 
         if (mPlayer.hasMatches()) {
@@ -263,11 +262,15 @@ public class PlayerActivity extends BaseToolbarListActivity implements
             mSetMenuItemsVisible = false;
         }
 
-        if (mPreviouslyShowing == PREVIOUSLY_SHOWING_LOSES ||
-                mPreviouslyShowing == PREVIOUSLY_SHOWING_WINS) {
-            mShowLoses.setEnabled(mPreviouslyShowing != PREVIOUSLY_SHOWING_LOSES);
-            mShowWins.setEnabled(mPreviouslyShowing != PREVIOUSLY_SHOWING_WINS);
-            mShowAll.setEnabled(true);
+        if (Result.LOSE.equals(mShowing)) {
+            Utils.hideMenuItems(mShowLoses);
+            Utils.showMenuItems(mShowAll, mShowWins);
+        } else if (Result.WIN.equals(mShowing)) {
+            Utils.hideMenuItems(mShowWins);
+            Utils.showMenuItems(mShowAll, mShowLoses);
+        } else {
+            Utils.hideMenuItems(mShowAll);
+            Utils.showMenuItems(mShowLoses, mShowWins);
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -310,10 +313,10 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         super.onSaveInstanceState(outState);
 
         if (!isMenuNull()) {
-            if (!mShowLoses.isEnabled()) {
-                outState.putInt(KEY_PREVIOUSLY_SHOWING, PREVIOUSLY_SHOWING_LOSES);
-            } else if (!mShowWins.isEnabled()) {
-                outState.putInt(KEY_PREVIOUSLY_SHOWING, PREVIOUSLY_SHOWING_WINS);
+            if (Result.LOSE.equals(mShowing)) {
+                outState.putInt(KEY_PREVIOUSLY_SHOWING, Result.LOSE.ordinal());
+            } else if (Result.WIN.equals(mShowing)) {
+                outState.putInt(KEY_PREVIOUSLY_SHOWING, Result.WIN.ordinal());
             }
         }
     }
@@ -354,14 +357,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         createListItems(matches);
         setAdapter(new MatchesAdapter());
 
-        switch (mPreviouslyShowing) {
-            case PREVIOUSLY_SHOWING_LOSES:
-                show(Result.LOSE);
-                break;
-
-            case PREVIOUSLY_SHOWING_WINS:
-                show(Result.WIN);
-                break;
+        if (mShowing != null) {
+            show(mShowing);
         }
     }
 
@@ -400,6 +397,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
     private void show(final Result result) {
+        mShowing = result;
         final ArrayList<ListItem> listItems = new ArrayList<>(mListItems.size());
 
         for (int i = 0; i < mListItems.size(); ++i) {

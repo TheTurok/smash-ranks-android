@@ -203,8 +203,11 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         mUserPlayer = User.getPlayer();
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
-            final int resultIndex = savedInstanceState.getInt(KEY_PREVIOUSLY_SHOWING, -1);
-            mShowing = Result.values()[resultIndex];
+            final int resultIndex = savedInstanceState.getInt(KEY_PREVIOUSLY_SHOWING, Integer.MIN_VALUE);
+
+            if (resultIndex != Integer.MIN_VALUE) {
+                mShowing = Result.values()[resultIndex];
+            }
         }
 
         mFilterListener = new FilterListener<ListItem>(this) {

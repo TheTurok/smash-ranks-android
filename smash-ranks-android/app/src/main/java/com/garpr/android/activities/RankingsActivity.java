@@ -37,9 +37,7 @@ import com.garpr.android.models.Region;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
-import static com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
 import static com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import static com.garpr.android.misc.ListUtils.SpecialFilterable;
 
@@ -49,9 +47,6 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         SearchView.OnQueryTextListener {
 
 
-    private static final int COMPARATOR_ALPHABETICAL = 1;
-    private static final int COMPARATOR_RANK = 2;
-    private static final String KEY_COMPARATOR = "KEY_COMPARATOR";
     private static final String TAG = "RankingsActivity";
 
     private ArrayList<ListItem> mListItems;
@@ -59,12 +54,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     private ArrayList<Player> mPlayers;
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
-    private Comparator<Player> mComparator;
     private Filter mFilter;
     private MenuItem mSearch;
-    private MenuItem mSort;
-    private MenuItem mSortAlphabetical;
-    private MenuItem mSortRank;
     private Player mUserPlayer;
 
 
@@ -77,57 +68,11 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     }
 
 
-    @SuppressWarnings("unchecked")
-    private void createAlphabeticalListItems() {
-        for (final Player player : mPlayers) {
-            mListItems.add(ListItem.createPlayer(player));
-        }
-
-        final AlphabeticalSectionCreator creator = new AlphabeticalSectionCreator() {
-            @Override
-            public AlphabeticallyComparable createDigitSection() {
-                return ListItem.createTitle(getString(R.string.pound_sign));
-            }
-
-
-            @Override
-            public AlphabeticallyComparable createLetterSection(final String letter) {
-                return ListItem.createTitle(letter);
-            }
-
-
-            @Override
-            public AlphabeticallyComparable createOtherSection() {
-                return ListItem.createTitle(getString(R.string.other));
-            }
-        };
-
-        mListItems = (ArrayList<ListItem>) ListUtils.createAlphabeticalList(mListItems, creator);
-    }
-
-
     private void createListItems() {
         mListItems = new ArrayList<>();
 
-        if (mComparator == Player.ALPHABETICAL_ORDER) {
-            createAlphabeticalListItems();
-        } else if (mComparator == Player.RANK_ORDER) {
-            createRankListItems();
-        } else {
-            throw new IllegalStateException("Comparator is an unknown value");
-        }
-
-        mListItems.trimToSize();
-        mListItemsShown = mListItems;
-
-        ListItem.setItemIds(mListItems);
-    }
-
-
-    private void createRankListItems() {
         final Resources resources = getResources();
         final int ranksPerSection = resources.getInteger(R.integer.ranks_per_section);
-
         final int mPlayersSize = mPlayers.size();
 
         for (int i = 0; i < mPlayersSize; ++i) {
@@ -156,6 +101,9 @@ public class RankingsActivity extends BaseToolbarListActivity implements
             final ListItem listItem = ListItem.createPlayer(player);
             mListItems.add(listItem);
         }
+
+        mListItems.trimToSize();
+        mListItemsShown = mListItems;
     }
 
 
@@ -175,7 +123,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
             @Override
             public void response(final ArrayList<Player> list) {
                 mPlayers = list;
-                Collections.sort(mPlayers, mComparator);
+                Collections.sort(mPlayers, Player.RANK_ORDER);
                 createListItems();
                 setAdapter(new RankingsAdapter());
             }
@@ -211,7 +159,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     private boolean isMenuNull() {
-        return Utils.areAnyObjectsNull(mSearch, mSort, mSortAlphabetical, mSortRank);
+        return Utils.areAnyObjectsNull(mSearch);
     }
 
 
@@ -238,23 +186,6 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         super.onCreate(savedInstanceState);
         mInUsersRegion = User.areWeInTheUsersRegion();
         mUserPlayer = User.getPlayer();
-
-        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
-            mComparator = Player.RANK_ORDER;
-        } else {
-            final int comparatorIndex = savedInstanceState.getInt(KEY_COMPARATOR, COMPARATOR_RANK);
-
-            switch (comparatorIndex) {
-                case COMPARATOR_ALPHABETICAL:
-                    mComparator = Player.ALPHABETICAL_ORDER;
-                    break;
-
-                case COMPARATOR_RANK:
-                default:
-                    mComparator = Player.RANK_ORDER;
-                    break;
-            }
-        }
 
         fetchRankings();
 
@@ -293,30 +224,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.activity_rankings_menu_sort_alphabetical:
-                sort(Player.ALPHABETICAL_ORDER);
-                break;
-
-            case R.id.activity_rankings_menu_sort_rank:
-                sort(Player.RANK_ORDER);
-                break;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-        return true;
-    }
-
-
-    @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         mSearch = menu.findItem(R.id.activity_rankings_menu_search);
-        mSort = menu.findItem(R.id.activity_rankings_menu_sort);
-        mSortAlphabetical = menu.findItem(R.id.activity_rankings_menu_sort_alphabetical);
-        mSortRank = menu.findItem(R.id.activity_rankings_menu_sort_rank);
 
         MenuItemCompat.setOnActionExpandListener(mSearch, this);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearch);
@@ -366,20 +275,6 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        if (mComparator != null) {
-            if (mComparator == Player.ALPHABETICAL_ORDER) {
-                outState.putInt(KEY_COMPARATOR, COMPARATOR_ALPHABETICAL);
-            } else if (mComparator == Player.RANK_ORDER) {
-                outState.putInt(KEY_COMPARATOR, COMPARATOR_RANK);
-            }
-        }
-    }
-
-
-    @Override
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
 
@@ -404,18 +299,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     private void showMenuItems() {
-        Utils.showMenuItems(mSearch, mSort);
-    }
-
-
-    private void sort(final Comparator<Player> sort) {
-        mComparator = sort;
-        mSortAlphabetical.setEnabled(sort != Player.ALPHABETICAL_ORDER);
-        mSortRank.setEnabled(sort != Player.RANK_ORDER);
-
-        Collections.sort(mPlayers, sort);
-        createListItems();
-        notifyDataSetChanged();
+        Utils.showMenuItems(mSearch);
     }
 
 
@@ -423,6 +307,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
     private static final class ListItem implements AlphabeticallyComparable, SpecialFilterable {
 
+
+        private static long sId;
 
         private long mId;
         private Player mPlayer;
@@ -432,6 +318,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
         private static ListItem createPlayer(final Player player) {
             final ListItem item = new ListItem();
+            item.mId = sId++;
             item.mPlayer = player;
             item.mType = Type.PLAYER;
 
@@ -441,17 +328,11 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
         private static ListItem createTitle(final String title) {
             final ListItem item = new ListItem();
+            item.mId = sId++;
             item.mTitle = title;
             item.mType = Type.TITLE;
 
             return item;
-        }
-
-
-        private static void setItemIds(final ArrayList<ListItem> listItems) {
-            for (int i = 0; i < listItems.size(); ++i) {
-                listItems.get(i).mId = (long) i;
-            }
         }
 
 

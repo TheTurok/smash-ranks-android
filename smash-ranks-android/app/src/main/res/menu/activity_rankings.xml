@@ -8,20 +8,4 @@
         android:visible="false"
         compat:actionViewClass="android.support.v7.widget.SearchView"
         compat:showAsAction="collapseActionView|ifRoom" />
-    <item
-        android:icon="@drawable/ic_sort"
-        android:id="@+id/activity_rankings_menu_sort"
-        android:title="@string/sort_"
-        android:visible="false"
-        compat:showAsAction="ifRoom">
-        <menu>
-            <item
-                android:id="@+id/activity_rankings_menu_sort_alphabetical"
-                android:title="@string/alphabetical_order" />
-            <item
-                android:enabled="false"
-                android:id="@+id/activity_rankings_menu_sort_rank"
-                android:title="@string/rank_order" />
-        </menu>
-    </item>
 </menu>

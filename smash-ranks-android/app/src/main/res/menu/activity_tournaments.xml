@@ -8,22 +8,4 @@
         android:visible="false"
         compat:actionViewClass="android.support.v7.widget.SearchView"
         compat:showAsAction="collapseActionView|ifRoom" />
-    <item
-        android:icon="@drawable/ic_sort"
-        android:id="@+id/activity_tournaments_menu_sort"
-        android:title="@string/sort_"
-        android:visible="false"
-        compat:showAsAction="ifRoom">
-        <menu>
-            <item
-                android:id="@+id/activity_tournaments_menu_sort_chronological"
-                android:title="@string/sort_chronologically"
-                android:titleCondensed="@string/chronologically" />
-            <item
-                android:enabled="false"
-                android:id="@+id/activity_tournaments_menu_sort_reverse_chronological"
-                android:title="@string/sort_reverse_chronologically"
-                android:titleCondensed="@string/reverse_chronologically" />
-        </menu>
-    </item>
 </menu>

@@ -31,7 +31,6 @@ import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 
 public class TournamentsActivity extends BaseToolbarListActivity implements
@@ -39,21 +38,14 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         SearchView.OnQueryTextListener {
 
 
-    private static final int COMPARATOR_CHRONOLOGICAL = 1;
-    private static final int COMPARATOR_REVERSE_CHRONOLOGICAL = 2;
-    private static final String KEY_COMPARATOR = "KEY_COMPARATOR";
     private static final String TAG = "TournamentsActivity";
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
     private ArrayList<Tournament> mTournaments;
-    private boolean mSetSearchVisible;
-    private Comparator<Tournament> mComparator;
+    private boolean mSetMenuItemsVisible;
     private Filter mFilter;
     private MenuItem mSearch;
-    private MenuItem mSort;
-    private MenuItem mSortChronological;
-    private MenuItem mSortReverseChronological;
 
 
 
@@ -84,8 +76,6 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
         mListItems.trimToSize();
         mListItemsShown = mListItems;
-
-        ListItem.setItemIds(mListItems);
     }
 
 
@@ -105,8 +95,9 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
             @Override
             public void response(final ArrayList<Tournament> list) {
                 mTournaments = list;
-                Collections.sort(mTournaments, mComparator);
-                setList();
+                Collections.sort(mTournaments, Tournament.CHRONOLOGICAL_ORDER);
+                createListItems();
+                setAdapter(new TournamentsAdapter());
             }
         };
 
@@ -140,31 +131,13 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
     private boolean isMenuNull() {
-        return Utils.areAnyObjectsNull(mSearch, mSort, mSortChronological, mSortReverseChronological);
+        return Utils.areAnyObjectsNull(mSearch);
     }
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
-            mComparator = Tournament.REVERSE_CHRONOLOGICAL_ORDER;
-        } else {
-            final int comparatorIndex = savedInstanceState.getInt(KEY_COMPARATOR, COMPARATOR_REVERSE_CHRONOLOGICAL);
-
-            switch (comparatorIndex) {
-                case COMPARATOR_CHRONOLOGICAL:
-                    mComparator = Tournament.CHRONOLOGICAL_ORDER;
-                    break;
-
-                case COMPARATOR_REVERSE_CHRONOLOGICAL:
-                default:
-                    mComparator = Tournament.REVERSE_CHRONOLOGICAL_ORDER;
-                    break;
-            }
-        }
-
         fetchTournaments();
     }
 
@@ -192,44 +165,17 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.activity_tournaments_menu_sort_chronological:
-                sort(Tournament.CHRONOLOGICAL_ORDER);
-                break;
-
-            case R.id.activity_tournaments_menu_sort_reverse_chronological:
-                sort(Tournament.REVERSE_CHRONOLOGICAL_ORDER);
-                break;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-        return true;
-    }
-
-
-    @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         mSearch = menu.findItem(R.id.activity_tournaments_menu_search);
-        mSort = menu.findItem(R.id.activity_tournaments_menu_sort);
-        mSortChronological = menu.findItem(R.id.activity_tournaments_menu_sort_chronological);
-        mSortReverseChronological = menu.findItem(R.id.activity_tournaments_menu_sort_reverse_chronological);
 
         MenuItemCompat.setOnActionExpandListener(mSearch, this);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearch);
         searchView.setQueryHint(getString(R.string.search_tournaments));
         searchView.setOnQueryTextListener(this);
 
-        if (mSetSearchVisible) {
+        if (mSetMenuItemsVisible) {
             showMenuItems();
-            mSetSearchVisible = false;
-        }
-
-        if (mComparator == Tournament.CHRONOLOGICAL_ORDER) {
-            mSortChronological.setEnabled(false);
-            mSortReverseChronological.setEnabled(true);
+            mSetMenuItemsVisible = false;
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -269,20 +215,6 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        if (mComparator != null) {
-            if (mComparator == Tournament.CHRONOLOGICAL_ORDER) {
-                outState.putInt(KEY_COMPARATOR, COMPARATOR_CHRONOLOGICAL);
-            } else if (mComparator == Tournament.REVERSE_CHRONOLOGICAL_ORDER) {
-                outState.putInt(KEY_COMPARATOR, COMPARATOR_REVERSE_CHRONOLOGICAL);
-            }
-        }
-    }
-
-
-    @Override
     protected void setAdapter(final BaseListAdapter adapter) {
         super.setAdapter(adapter);
 
@@ -299,32 +231,15 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
 
         if (isMenuNull()) {
-            mSetSearchVisible = true;
+            mSetMenuItemsVisible = true;
         } else {
             showMenuItems();
         }
     }
 
 
-    private void setList() {
-        createListItems();
-        setAdapter(new TournamentsAdapter());
-    }
-
-
     private void showMenuItems() {
-        Utils.showMenuItems(mSearch, mSort);
-    }
-
-
-    private void sort(final Comparator<Tournament> sort) {
-        mComparator = sort;
-        mSortChronological.setEnabled(sort != Tournament.CHRONOLOGICAL_ORDER);
-        mSortReverseChronological.setEnabled(sort != Tournament.REVERSE_CHRONOLOGICAL_ORDER);
-
-        Collections.sort(mTournaments, sort);
-        createListItems();
-        notifyDataSetChanged();
+        Utils.showMenuItems(mSearch);
     }
 
 
@@ -332,6 +247,8 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
     private final static class ListItem implements ListUtils.SpecialFilterable {
 
+
+        private static long sId;
 
         private long mId;
         private String mDate;
@@ -342,6 +259,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         private static ListItem createDate(final String monthAndYear) {
             final ListItem item = new ListItem();
             item.mDate = monthAndYear;
+            item.mId = sId++;
             item.mType = Type.DATE;
 
             return item;
@@ -350,17 +268,11 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
         private static ListItem createTournament(final Tournament tournament) {
             final ListItem item = new ListItem();
+            item.mId = sId++;
             item.mTournament = tournament;
             item.mType = Type.TOURNAMENT;
 
             return item;
-        }
-
-
-        private static void setItemIds(final ArrayList<ListItem> listItems) {
-            for (int i = 0; i < listItems.size(); ++i) {
-                listItems.get(i).mId = (long) i;
-            }
         }
 
 

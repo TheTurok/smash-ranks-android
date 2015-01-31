@@ -100,8 +100,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
         mListItems.trimToSize();
         mListItemsShown = mListItems;
-
-        ListItem.setItemIds(mListItems);
     }
 
 
@@ -220,24 +218,21 @@ public class PlayerActivity extends BaseToolbarListActivity implements
                 break;
 
             case R.id.activity_player_menu_show_all:
-                mShowAll.setEnabled(false);
-                mShowLoses.setEnabled(true);
-                mShowWins.setEnabled(true);
+                Utils.hideMenuItems(mShowAll);
+                Utils.showMenuItems(mShowLoses, mShowWins);
                 mListItemsShown = mListItems;
                 notifyDataSetChanged();
                 break;
 
             case R.id.activity_player_menu_show_loses:
-                mShowAll.setEnabled(true);
-                mShowLoses.setEnabled(false);
-                mShowWins.setEnabled(true);
+                Utils.hideMenuItems(mShowLoses);
+                Utils.showMenuItems(mShowAll, mShowWins);
                 show(Result.LOSE);
                 break;
 
             case R.id.activity_player_menu_show_wins:
-                mShowAll.setEnabled(true);
-                mShowLoses.setEnabled(true);
-                mShowWins.setEnabled(false);
+                Utils.hideMenuItems(mShowWins);
+                Utils.showMenuItems(mShowAll, mShowLoses);
                 show(Result.WIN);
                 break;
 
@@ -345,6 +340,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         mFilter = ListUtils.createSpecialFilter(mListItems, listener);
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
+
         if (isMenuNull()) {
             mSetMenuItemsVisible = true;
         } else {
@@ -450,6 +446,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     private static final class ListItem implements ListUtils.SpecialFilterable {
 
 
+        private static long sId;
+
         private long mId;
         private Match mMatch;
         private Tournament mTournament;
@@ -458,6 +456,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
         private static ListItem createMatch(final Match match) {
             final ListItem item = new ListItem();
+            item.mId = sId++;
             item.mMatch = match;
             item.mType = Type.MATCH;
 
@@ -467,17 +466,11 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
         private static ListItem createTournament(final Tournament tournament) {
             final ListItem item = new ListItem();
+            item.mId = sId++;
             item.mTournament = tournament;
             item.mType = Type.TOURNAMENT;
 
             return item;
-        }
-
-
-        private static void setItemIds(final ArrayList<ListItem> listItems) {
-            for (int i = 0; i < listItems.size(); ++i) {
-                listItems.get(i).mId = (long) i;
-            }
         }
 
 

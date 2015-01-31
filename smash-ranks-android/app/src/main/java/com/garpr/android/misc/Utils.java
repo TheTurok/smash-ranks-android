@@ -4,8 +4,6 @@ package com.garpr.android.misc;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.Random;
 
 

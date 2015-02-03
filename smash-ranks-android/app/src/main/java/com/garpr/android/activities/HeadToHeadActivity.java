@@ -141,8 +141,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
             @Override
             public void response(final Exception e) {
-                Console.e(TAG, "Exception when fetching head to head matches for " +
-                        mPlayer.getName() + " and " + mOpponentName, e);
+                Console.e(TAG, "Exception when fetching head to head matches", e);
                 showError();
 
                 Analytics.report(e, Constants.HEAD_TO_HEAD).send();

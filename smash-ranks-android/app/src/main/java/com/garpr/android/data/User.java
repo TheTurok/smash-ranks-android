@@ -73,7 +73,7 @@ public final class User {
             final String playerString = sPreferences.getString(KEY_PLAYER, null);
 
             if (Utils.validStrings(playerString)) {
-                Console.d(TAG, "Read in User's Player from SharedPreferences: " + playerString);
+                Console.d(TAG, "Read in User's Player from SharedPreferences");
                 final JSONObject playerJSON = new JSONObject(playerString);
                 sUser.mPlayer = new Player(playerJSON);
             } else {
@@ -115,9 +115,7 @@ public final class User {
             sUser = new User();
         }
 
-        final JSONObject playerJSON = player.toJSON();
-        final String playerString = playerJSON.toString();
-        Console.d(TAG, "User's player has been set: " + playerString);
+        Console.d(TAG, "User's Player has been set");
 
         sUser.mPlayer = player;
         saveUser();

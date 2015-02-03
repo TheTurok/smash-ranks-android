@@ -145,7 +145,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
             @Override
             public void response(final Exception e) {
-                Console.e(TAG, "Exception when fetching matches for " + mPlayer.getName(), e);
+                Console.e(TAG, "Exception when fetching matches", e);
                 showError();
 
                 Analytics.report(e, Constants.MATCHES).send();
@@ -426,8 +426,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
         startActivity(mShareIntent);
         Analytics.report(Constants.SHARE).putExtra(Constants.REGION, Settings.getRegion().getName())
-                .putExtra(Constants.WHAT, Constants.PLAYER_MATCHES)
-                .putExtra(Constants.WHO, mPlayer.getName()).send();
+                .putExtra(Constants.WHAT, Constants.PLAYER_MATCHES).send();
     }
 
 

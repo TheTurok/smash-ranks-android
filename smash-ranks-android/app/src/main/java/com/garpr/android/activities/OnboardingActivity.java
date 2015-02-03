@@ -62,8 +62,7 @@ public class OnboardingActivity extends BaseActivity implements
             final Player player = mPlayersFragment.getSelectedPlayer();
             User.setPlayer(player);
 
-            event.putExtra(Constants.ONBOARDING_STATUS, Constants.COMPLETED)
-                    .putExtra(Constants.PLAYER, player.getName());
+            event.putExtra(Constants.ONBOARDING_STATUS, Constants.COMPLETED);
         } else {
             event.putExtra(Constants.ONBOARDING_STATUS, Constants.SKIPPED);
         }
@@ -151,9 +150,13 @@ public class OnboardingActivity extends BaseActivity implements
             finish();
         } else {
             Crashlytics.setBool(Constants.SKIPPED_ONBOARDING, false);
-
             findViews();
-            prepareViews();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                prepareStatusBar();
+            }
+
+            mPager.setAdapter(new OnboardingFragmentAdapter());
         }
     }
 
@@ -221,17 +224,13 @@ public class OnboardingActivity extends BaseActivity implements
     }
 
 
-    private void prepareViews() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (isOrientationLandscape()) {
-                applyStatusBarHeightAsHeight(mTop);
-                mTop.setVisibility(View.VISIBLE);
-            } else {
-                applyStatusBarHeightAsTopPadding(mTop);
-            }
+    private void prepareStatusBar() {
+        if (isOrientationLandscape()) {
+            applyStatusBarHeightAsHeight(mTop);
+            mTop.setVisibility(View.VISIBLE);
+        } else {
+            applyStatusBarHeightAsTopPadding(mTop);
         }
-
-        mPager.setAdapter(new OnboardingFragmentAdapter());
     }
 
 

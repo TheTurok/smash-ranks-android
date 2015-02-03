@@ -44,13 +44,9 @@ public class RegionsActivity extends BaseFragmentActivity implements
         final RegionsFragment fragment = (RegionsFragment) getFragment();
         final Region region = fragment.getSelectedRegion();
         Settings.setRegion(region);
-        reportRegionChange(region);
         finish();
-    }
 
-
-    private void reportRegionChange(final Region region) {
-        Analytics.report(Constants.REGION_CHANGE).putExtra(Constants.REGION, region.getName()).send();
+        Analytics.report(Constants.REGION_CHANGE).send();
     }
 
 

@@ -165,7 +165,8 @@ public class OnboardingActivity extends BaseActivity implements
         new MaterialDialog.Builder(this)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
-                    public void onPositive(final MaterialDialog materialDialog) {
+                    public void onPositive(final MaterialDialog dialog) {
+                        super.onPositive(dialog);
                         finishOnboarding(true);
                     }
                 })
@@ -208,7 +209,8 @@ public class OnboardingActivity extends BaseActivity implements
         new MaterialDialog.Builder(this)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
-                    public void onPositive(final MaterialDialog materialDialog) {
+                    public void onPositive(final MaterialDialog dialog) {
+                        super.onPositive(dialog);
                         finishOnboarding(false);
                     }
                 })

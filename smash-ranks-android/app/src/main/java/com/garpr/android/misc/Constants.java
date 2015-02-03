@@ -95,7 +95,7 @@ public final class Constants {
             "https://www.youtube.com/watch?v=xRitJ1m8E1w", // the human abstract - patterns
             "https://www.youtube.com/watch?v=Al_0TsWKtZk", // chillin' at charles crew battle
             "https://www.youtube.com/watch?v=HkzMA1jrm00", // austin powers blackjack scene
-            "https://www.youtube.com/watch?v=IFlfHC1Rr8E", // bizzarro flame's up tilt kill KoC4
+            "https://www.youtube.com/watch?v=IFlfHC1Rr8E", // bizzarro flame's up tilt kill KoC 4
             "https://www.youtube.com/watch?v=SDnKE5J7ki8", // m2k vs amsa KoC 4
             "https://www.youtube.com/watch?v=UVJK98U99ZY", // algerian DI
             "https://www.youtube.com/watch?v=ZRbDl3duEqQ", // luigi was pissed today
@@ -107,7 +107,9 @@ public final class Constants {
             "https://www.youtube.com/watch?v=kmyJUtzkKy4", // boot stomp
             "https://www.youtube.com/watch?v=t5a4fZTNal8", // btbam - lay your ghosts to rest
             "https://www.youtube.com/watch?v=QKfGNdSxy5E", // lord vs s2j falcon round robin
-            "https://www.youtube.com/watch?v=U3mtUCizvf8" // ahmad vs gar money match
+            "https://www.youtube.com/watch?v=U3mtUCizvf8", // ahmad vs gar money match
+            "https://www.youtube.com/watch?v=lSxYS99TwaU", // fly vs silentwolf KoC 3
+            "https://www.youtube.com/watch?v=MlGM0BFv3JU" // westballz sacred combo
     };
 
 

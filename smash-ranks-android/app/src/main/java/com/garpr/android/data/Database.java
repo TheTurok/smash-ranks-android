@@ -100,7 +100,7 @@ public final class Database extends SQLiteOpenHelper implements
         Console.d(TAG, "Truncating \"" + tableName + "\" database table");
 
         final SQLiteDatabase database = start();
-        final String sql = "DELETE FROM " + tableName + ";";
+        final String sql = "DELETE FROM " + tableName + " IF EXISTS;";
         database.execSQL(sql);
         stop();
     }

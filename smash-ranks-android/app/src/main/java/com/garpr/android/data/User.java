@@ -21,11 +21,13 @@ public final class User {
 
     private static final String CNAME = "com.garpr.android.data.User";
     private static final String KEY_PLAYER = "KEY_PLAYER";
+    private static final String KEY_RANK = "KEY_RANK";
     private static final String KEY_REGION = "KEY_REGION";
     private static final String TAG = "User";
 
     private static User sUser;
 
+    private int mRank;
     private Player mPlayer;
     private Region mRegion;
 
@@ -41,6 +43,11 @@ public final class User {
 
     public static Player getPlayer() {
         return getUser().mPlayer;
+    }
+
+
+    public static int getRank() {
+        return getUser().mRank;
     }
 
 
@@ -64,6 +71,11 @@ public final class User {
     }
 
 
+    public static boolean hasRank() {
+        return getRank() != Integer.MIN_VALUE;
+    }
+
+
     private static void loadUser() {
         sUser = new User();
         final SharedPreferences sPreferences = Settings.get(CNAME);
@@ -78,6 +90,14 @@ public final class User {
                 sUser.mPlayer = new Player(playerJSON);
             } else {
                 Console.d(TAG, "User has no Player saved in SharedPreferences");
+            }
+
+            sUser.mRank = sPreferences.getInt(KEY_RANK, Integer.MIN_VALUE);
+
+            if (sUser.mRank == Integer.MIN_VALUE) {
+                Console.d(TAG, "User has no rank saved in SharedPreferences");
+            } else {
+                Console.d(TAG, "Read in User's rank from SharedPreferences (" + sUser.mRank + ")");
             }
 
             final String regionString = sPreferences.getString(KEY_REGION, null);

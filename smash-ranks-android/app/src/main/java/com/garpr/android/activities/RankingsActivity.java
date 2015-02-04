@@ -168,15 +168,10 @@ public class RankingsActivity extends BaseToolbarListActivity implements
             final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == ResultCodes.PLAYER_UPDATED) {
+        if (resultCode == ResultCodes.PLAYER_UPDATED && !isLoading()) {
             final Player player = data.getParcelableExtra(ResultData.PLAYER);
-
-            for (final Player p : mPlayers) {
-                if (p.equals(player)) {
-                    p.setMatches(player.getMatches());
-                    break;
-                }
-            }
+            final int indexOfPlayer = mPlayers.indexOf(player);
+            mPlayers.set(indexOfPlayer, player);
         }
     }
 

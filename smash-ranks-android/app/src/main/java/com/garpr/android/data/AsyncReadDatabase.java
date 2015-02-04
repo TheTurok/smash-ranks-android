@@ -41,11 +41,9 @@ abstract class AsyncReadDatabase<T> extends AsyncRunnable {
 
         final String[] columns = { Constants.JSON };
         final Cursor cursor = database.query(mTableName, columns, null, null, null, null, null);
-        cursor.moveToFirst();
-
         ArrayList<T> items = null;
 
-        if (!cursor.isAfterLast()) {
+        if (cursor.moveToFirst()) {
             try {
                 items = new ArrayList<>();
                 final int jsonIndex = cursor.getColumnIndexOrThrow(Constants.JSON);
@@ -55,9 +53,7 @@ abstract class AsyncReadDatabase<T> extends AsyncRunnable {
                     final JSONObject json = new JSONObject(string);
                     final T item = createItem(json);
                     items.add(item);
-
-                    cursor.moveToNext();
-                } while (!cursor.isAfterLast());
+                } while (cursor.moveToNext());
 
                 items.trimToSize();
             } catch (final JSONException e) {

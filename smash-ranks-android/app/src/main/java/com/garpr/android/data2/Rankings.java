@@ -1,7 +1,7 @@
 package com.garpr.android.data2;
 
 
-public class Rankings {
+public final class Rankings extends BaseContentProvider {
 
 
 

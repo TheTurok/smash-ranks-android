@@ -43,7 +43,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-base:6.5.87'
     compile 'com.mcxiaoke.volley:library:1.0.6'
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.2.1@aar') {
         transitive = true;
     }
 

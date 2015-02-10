@@ -18,7 +18,11 @@ public final class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
-
+        Matches.createTable(db);
+        Players.createTable(db);
+        Rankings.createTable(db);
+        Regions.createTable(db);
+        Tournaments.createTable(db);
     }
 
 

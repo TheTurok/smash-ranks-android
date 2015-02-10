@@ -51,6 +51,9 @@ public final class Constants {
     public static final String ORB = "orb";
     public static final String PERIODIC_SYNC = "periodic_sync";
     public static final String PLAYER = "player";
+    public static final String PLAYER_ID = "player_id";
+    public static final String PLAYER_1_ID = "player_1_id";
+    public static final String PLAYER_2_ID = "player_2_id";
     public static final String PLAYER_HEAD_TO_HEAD = "player_head_to_head";
     public static final String PLAYER_MATCHES = "player_matches";
     public static final String PLAYERS = "players";

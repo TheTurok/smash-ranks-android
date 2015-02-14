@@ -28,8 +28,8 @@ public class Tournament implements Parcelable {
     private static final SimpleDateFormat YEAR_FORMATTER;
 
     private Date date;
-    private String dayOfMonth;
     private String dateString;
+    private String dayOfMonth;
     private String id;
     private String month;
     private String name;

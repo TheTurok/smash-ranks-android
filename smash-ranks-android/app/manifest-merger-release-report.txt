@@ -27,7 +27,7 @@ ADDED from AndroidManifest.xml:8:5
 		ADDED from AndroidManifest.xml:8:22
 uses-permission#android.permission.INTERNET
 ADDED from AndroidManifest.xml:9:5
-MERGED from com.crashlytics.sdk.android:crashlytics:2.2.0:11:5
+MERGED from com.crashlytics.sdk.android:crashlytics:2.2.1:9:5
 	android:name
 		ADDED from AndroidManifest.xml:9:22
 uses-permission#android.permission.READ_SYNC_SETTINGS
@@ -40,7 +40,7 @@ ADDED from AndroidManifest.xml:11:5
 		ADDED from AndroidManifest.xml:11:22
 application
 ADDED from AndroidManifest.xml:13:5
-MERGED from com.afollestad:material-dialogs:0.6.2.2:12:5
+MERGED from com.afollestad:material-dialogs:0.6.3.0:12:5
 MERGED from com.android.support:appcompat-v7:21.0.3:16:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
@@ -50,12 +50,12 @@ MERGED from com.android.support:recyclerview-v7:21.0.3:17:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.google.android.gms:play-services-base:6.5.87:20:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
-MERGED from com.crashlytics.sdk.android:crashlytics:2.2.0:13:5
-MERGED from com.crashlytics.sdk.android:answers:1.1.0:11:5
-MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
-MERGED from com.crashlytics.sdk.android:beta:1.1.0:11:5
-MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
-MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from com.crashlytics.sdk.android:crashlytics:2.2.1:11:5
+MERGED from com.crashlytics.sdk.android:answers:1.1.1:9:5
+MERGED from io.fabric.sdk.android:fabric:1.1.1:9:5
+MERGED from io.fabric.sdk.android:fabric:1.1.1:9:5
+MERGED from com.crashlytics.sdk.android:beta:1.1.1:9:5
+MERGED from io.fabric.sdk.android:fabric:1.1.1:9:5
 	android:label
 		ADDED from AndroidManifest.xml:16:9
 	android:supportsRtl
@@ -265,7 +265,7 @@ MERGED from com.google.android.gms:play-services-base:6.5.87:21:9
 		ADDED from AndroidManifest.xml:161:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
-MERGED from com.afollestad:material-dialogs:0.6.2.2:8:5
+MERGED from com.afollestad:material-dialogs:0.6.3.0:8:5
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
@@ -275,12 +275,12 @@ MERGED from com.android.support:recyclerview-v7:21.0.3:15:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.google.android.gms:play-services-base:6.5.87:18:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
-MERGED from com.crashlytics.sdk.android:crashlytics:2.2.0:7:5
-MERGED from com.crashlytics.sdk.android:answers:1.1.0:7:5
-MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
-MERGED from com.crashlytics.sdk.android:beta:1.1.0:7:5
-MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
-MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from com.crashlytics.sdk.android:crashlytics:2.2.1:7:5
+MERGED from com.crashlytics.sdk.android:answers:1.1.1:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.1:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.1:7:5
+MERGED from com.crashlytics.sdk.android:beta:1.1.1:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.1:7:5
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0

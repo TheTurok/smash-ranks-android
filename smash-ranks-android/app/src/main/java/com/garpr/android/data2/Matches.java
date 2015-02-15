@@ -17,6 +17,7 @@ public final class Matches {
                 Constants.RESULT + " TEXT NOT NULL, " +
                 Constants.PLAYER_1_ID + " TEXT NOT NULL, " +
                 Constants.PLAYER_2_ID + " TEXT NOT NULL, " +
+                Constants.REGION + " TEXT NOT NULL, " +
                 Constants.TOURNAMENT_ID + " TEXT NOT NULL);";
 
         db.execSQL(sql);

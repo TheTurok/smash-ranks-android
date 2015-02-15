@@ -16,6 +16,7 @@ public final class Players {
         final String sql = "CREATE TABLE IF NOT EXISTS " + TAG + " (" +
                 Constants.ID + " TEXT NOT NULL, " +
                 Constants.NAME + " TEXT NOT NULL, " +
+                Constants.REGION + " TEXT NOT NULL, " +
                 "PRIMARY KEY (" + Constants.ID + "));";
 
         db.execSQL(sql);

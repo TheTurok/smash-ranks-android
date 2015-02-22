@@ -44,7 +44,7 @@ abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObj
     }
 
 
-    public abstract void onJSONResponse(final JSONObject json) throws JSONException;
+    abstract void onJSONResponse(final JSONObject json) throws JSONException;
 
 
     @Override

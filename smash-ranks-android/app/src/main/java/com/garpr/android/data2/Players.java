@@ -61,7 +61,7 @@ public final class Players {
 
 
         @Override
-        public void onJSONResponse(final JSONObject json) throws JSONException {
+        void onJSONResponse(final JSONObject json) throws JSONException {
             final JSONArray playersJSON = json.getJSONArray(Constants.PLAYERS);
             final int playersLength = playersJSON.length();
             final ArrayList<Player> players = new ArrayList<>(playersLength);

@@ -7,6 +7,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Player;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -59,8 +61,21 @@ public final class Players {
 
 
         @Override
-        public void onJSONResponse(final JSONObject json) {
+        public void onJSONResponse(final JSONObject json) throws JSONException {
+            final JSONArray playersJSON = json.getJSONArray(Constants.PLAYERS);
+            final int playersLength = playersJSON.length();
+            final ArrayList<Player> players = new ArrayList<>(playersLength);
+
+            for (int i = 0; i < playersLength; ++i) {
+                final JSONObject playerJSON = playersJSON.getJSONObject(i);
+                final Player player = new Player(playerJSON);
+                players.add(player);
+            }
+
             // TODO
+            // save the players to the database
+
+            mResponse.success(players);
         }
 
 

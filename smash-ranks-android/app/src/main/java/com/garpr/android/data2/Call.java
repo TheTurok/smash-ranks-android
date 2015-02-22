@@ -49,6 +49,10 @@ abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObj
 
     @Override
     public final void onResponse(final JSONObject response) {
+        if (!mResponse.isAlive()) {
+            Console.d(getCallName(), "Call canceled after response was received");
+        }
+
         try {
             onJSONResponse(response);
         } catch (final JSONException e) {

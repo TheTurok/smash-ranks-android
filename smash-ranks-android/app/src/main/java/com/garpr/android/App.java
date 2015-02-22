@@ -15,6 +15,7 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.misc.OkHttpStack;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -78,7 +79,7 @@ public final class App extends Application {
             Crashlytics.setBool(Constants.DEBUG, false);
         }
 
-        sRequestQueue = Volley.newRequestQueue(sContext);
+        sRequestQueue = Volley.newRequestQueue(sContext, new OkHttpStack());
         Database.initialize();
         Analytics.initialize();
     }

@@ -33,7 +33,7 @@ public final class Players {
 
 
     public static void get(final Response<ArrayList<Player>> response) {
-        new PlayersCall(response).start();
+        new PlayersCall(response).make();
     }
 
 
@@ -58,7 +58,7 @@ public final class Players {
 
 
         @Override
-        JsonObjectRequest makeRequest() {
+        JsonObjectRequest getRequest() {
             final String url = Constants.API_URL + '/' + Constants.PLAYERS;
             return new JsonObjectRequest(url, null, this, this);
         }

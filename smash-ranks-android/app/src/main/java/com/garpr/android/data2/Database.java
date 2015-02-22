@@ -36,6 +36,40 @@ public final class Database extends SQLiteOpenHelper {
     }
 
 
+    static SQLiteDatabase start() {
+        synchronized (ATTACHMENTS_LOCK) {
+            ++sAttachments;
+            logAttachments();
+
+            if (sDatabase == null) {
+                sDatabase = sInstance.getWritableDatabase();
+            }
+        }
+
+        return sDatabase;
+    }
+
+
+    static void stop() {
+        synchronized (ATTACHMENTS_LOCK) {
+            if (sAttachments > 0) {
+                --sAttachments;
+                logAttachments();
+            }
+
+            if (sAttachments <= 0) {
+                sAttachments = 0;
+
+                if (sDatabase != null) {
+                    sDatabase.close();
+                    sDatabase = null;
+                    sInstance.close();
+                }
+            }
+        }
+    }
+
+
     private Database(final Context context, final String name) {
         super(context, name, null, VERSION);
     }
@@ -72,37 +106,9 @@ public final class Database extends SQLiteOpenHelper {
     }
 
 
-    static SQLiteDatabase start() {
-        synchronized (ATTACHMENTS_LOCK) {
-            ++sAttachments;
-            logAttachments();
-
-            if (sDatabase == null) {
-                sDatabase = sInstance.getWritableDatabase();
-            }
-        }
-
-        return sDatabase;
-    }
-
-
-    static void stop() {
-        synchronized (ATTACHMENTS_LOCK) {
-            if (sAttachments > 0) {
-                --sAttachments;
-                logAttachments();
-            }
-
-            if (sAttachments <= 0) {
-                sAttachments = 0;
-
-                if (sDatabase != null) {
-                    sDatabase.close();
-                    sDatabase = null;
-                    sInstance.close();
-                }
-            }
-        }
+    @Override
+    public String toString() {
+        return TAG;
     }
 
 

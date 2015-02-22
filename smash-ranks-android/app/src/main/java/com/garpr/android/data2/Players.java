@@ -1,6 +1,7 @@
 package com.garpr.android.data2;
 
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -41,6 +42,9 @@ public final class Players {
     private final static class PlayersCall extends Call<ArrayList<Player>> {
 
 
+        private static final String TAG = "PlayersCall";
+
+
         private PlayersCall(final Response<ArrayList<Player>> response) throws
                 IllegalArgumentException {
             super(response);
@@ -49,7 +53,7 @@ public final class Players {
 
         @Override
         String getCallName() {
-            return PlayersCall.class.getSimpleName();
+            return TAG;
         }
 
 
@@ -72,8 +76,17 @@ public final class Players {
                 players.add(player);
             }
 
-            // TODO
-            // save the players to the database
+            final SQLiteDatabase database = Database.start();
+            database.beginTransaction();
+
+            for (final Player player : players) {
+                final ContentValues contentValues = player.toContentValues();
+                database.insert(Players.TAG, null, contentValues);
+            }
+
+            database.setTransactionSuccessful();
+            database.endTransaction();
+            Database.stop();
 
             mResponse.success(players);
         }

@@ -1,6 +1,7 @@
 package com.garpr.android.models;
 
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -153,6 +154,15 @@ public class Player implements AlphabeticallyComparable, Parcelable {
 
     public void setMatches(final ArrayList<Match> matches) {
         this.matches = matches;
+    }
+
+
+    public ContentValues toContentValues() {
+        final ContentValues contentValues = new ContentValues();
+        contentValues.put(Constants.ID, id);
+        contentValues.put(Constants.NAME, name);
+
+        return contentValues;
     }
 
 

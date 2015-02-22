@@ -63,6 +63,7 @@ public final class Constants {
     public static final String RATING = "rating";
     public static final String REGION = "region";
     public static final String REGION_CHANGE = "region_change";
+    public static final String REGION_ID = "region_id";
     public static final String REGIONS = "regions";
     public static final String RESULT = "result";
     public static final String ROSTER_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSSSSS";

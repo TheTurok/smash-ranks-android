@@ -9,7 +9,7 @@ import com.garpr.android.misc.Constants;
 public final class Players {
 
 
-    private static final String TAG = "Players";
+    static final String TAG = "Players";
 
 
     static void createTable(final SQLiteDatabase db) {

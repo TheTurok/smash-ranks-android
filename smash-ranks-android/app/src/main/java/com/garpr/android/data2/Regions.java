@@ -9,7 +9,7 @@ import com.garpr.android.misc.Constants;
 public final class Regions {
 
 
-    private static final String TAG = "Regions";
+    static final String TAG = "Regions";
 
 
     static void createTable(final SQLiteDatabase db) {

@@ -18,7 +18,7 @@ public final class Rankings {
                 Constants.RANK + " INTEGER NOT NULL, " +
                 Constants.RATING + " REAL NOT NULL, " +
                 Constants.REGION + " TEXT NOT NULL, " +
-                "PRIMARY KEY (" + Constants.PLAYER_ID + "));";
+                "FOREIGN KEY (" + Constants.PLAYER_ID + ") REFERENCES " + Players.TAG + "(" + Constants.ID + "));";
 
         db.execSQL(sql);
     }

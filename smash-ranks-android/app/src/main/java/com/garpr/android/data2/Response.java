@@ -48,8 +48,8 @@ public abstract class Response<T> implements Heartbeat {
     public abstract void error(final Exception e);
 
 
-    public final String getResponderName() {
-        return mTag;
+    public final Heartbeat getHeartbeat() {
+        return mHeartbeat.get();
     }
 
 
@@ -73,7 +73,7 @@ public abstract class Response<T> implements Heartbeat {
 
     @Override
     public final String toString() {
-        return getResponderName();
+        return mTag;
     }
 
 

@@ -36,13 +36,9 @@ public final class Players {
     }
 
 
-    public static void get(final Response<ArrayList<Player>> response) {
-        new PlayersCall(response).start();
-    }
-
-
-    public static void get(final Response<ArrayList<Player>> response, final String regionId) {
-        new PlayersCall(response, regionId).start();
+    public static void get(final Response<ArrayList<Player>> response, final String regionId,
+            final boolean clear) {
+        new PlayersCall(response, regionId, clear).start();
     }
 
 
@@ -53,16 +49,24 @@ public final class Players {
 
         private static final String TAG = "PlayersCall";
 
+        private final boolean mClear;
 
-        private PlayersCall(final Response<ArrayList<Player>> response) throws
-                IllegalArgumentException {
-            super(response);
+
+        private PlayersCall(final Response<ArrayList<Player>> response, final String regionId,
+                final boolean clear) throws IllegalArgumentException {
+            super(response, regionId);
+            mClear = clear;
         }
 
 
-        private PlayersCall(final Response<ArrayList<Player>> response, final String regionId) throws
-                IllegalArgumentException {
-            super(response, regionId);
+        private void clearThenMake() {
+            final SQLiteDatabase database = Database.start();
+            final String whereClause = Constants.REGION_ID + " = ?";
+            final String[] whereArgs = { mRegionId };
+            database.delete(Players.TAG, whereClause, whereArgs);
+            Database.stop();
+
+            super.make();
         }
 
 
@@ -81,6 +85,43 @@ public final class Players {
 
         @Override
         void make() {
+            if (mClear) {
+                clearThenMake();
+            } else {
+                readThenMake();
+            }
+        }
+
+
+        @Override
+        void onJSONResponse(final JSONObject json) throws JSONException {
+            final JSONArray playersJSON = json.getJSONArray(Constants.PLAYERS);
+            final int playersLength = playersJSON.length();
+            final ArrayList<Player> players = new ArrayList<>(playersLength);
+
+            for (int i = 0; i < playersLength; ++i) {
+                final JSONObject playerJSON = playersJSON.getJSONObject(i);
+                final Player player = new Player(playerJSON);
+                players.add(player);
+            }
+
+            final SQLiteDatabase database = Database.start();
+            database.beginTransaction();
+
+            for (final Player player : players) {
+                final ContentValues contentValues = player.toContentValues();
+                database.insert(Players.TAG, null, contentValues);
+            }
+
+            database.setTransactionSuccessful();
+            database.endTransaction();
+            Database.stop();
+
+            mResponse.success(players);
+        }
+
+
+        private void readThenMake() {
             final SQLiteDatabase database = Database.start();
             final String[] columns = { Constants.ID, Constants.NAME };
             final String selection = Constants.REGION_ID + " = ?";
@@ -113,34 +154,6 @@ public final class Players {
             } else {
                 mResponse.success(players);
             }
-        }
-
-
-        @Override
-        void onJSONResponse(final JSONObject json) throws JSONException {
-            final JSONArray playersJSON = json.getJSONArray(Constants.PLAYERS);
-            final int playersLength = playersJSON.length();
-            final ArrayList<Player> players = new ArrayList<>(playersLength);
-
-            for (int i = 0; i < playersLength; ++i) {
-                final JSONObject playerJSON = playersJSON.getJSONObject(i);
-                final Player player = new Player(playerJSON);
-                players.add(player);
-            }
-
-            final SQLiteDatabase database = Database.start();
-            database.beginTransaction();
-
-            for (final Player player : players) {
-                final ContentValues contentValues = player.toContentValues();
-                database.insert(Players.TAG, null, contentValues);
-            }
-
-            database.setTransactionSuccessful();
-            database.endTransaction();
-            Database.stop();
-
-            mResponse.success(players);
         }
 
 

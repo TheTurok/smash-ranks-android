@@ -53,6 +53,8 @@ abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObj
         final JsonObjectRequest request = getRequest();
         request.setTag(heartbeat);
 
+        Console.d(getCallName(), "Making call to " + request.getUrl());
+
         final RequestQueue requestQueue = App.getRequestQueue();
         requestQueue.add(request);
     }

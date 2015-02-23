@@ -21,6 +21,8 @@ public final class Players {
     static final String TAG = "Players";
 
 
+
+
     static void createTable(final SQLiteDatabase db) {
         final String sql = "CREATE TABLE IF NOT EXISTS " + TAG + " (" +
                 Constants.ID + " TEXT NOT NULL, " +
@@ -37,9 +39,14 @@ public final class Players {
     }
 
 
+    public static void get(final Response<ArrayList<Player>> response, final String regionId) {
+        new PlayersCall(response, regionId).make();
+    }
 
 
-    private final static class PlayersCall extends Call<ArrayList<Player>> {
+
+
+    private final static class PlayersCall extends RegionBasedCall<ArrayList<Player>> {
 
 
         private static final String TAG = "PlayersCall";
@@ -48,6 +55,12 @@ public final class Players {
         private PlayersCall(final Response<ArrayList<Player>> response) throws
                 IllegalArgumentException {
             super(response);
+        }
+
+
+        private PlayersCall(final Response<ArrayList<Player>> response, final String regionId) throws
+                IllegalArgumentException {
+            super(response, regionId);
         }
 
 

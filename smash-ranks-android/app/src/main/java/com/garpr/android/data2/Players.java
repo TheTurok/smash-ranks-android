@@ -36,12 +36,12 @@ public final class Players {
 
 
     public static void get(final Response<ArrayList<Player>> response) {
-        new PlayersCall(response).make();
+        new PlayersCall(response).start();
     }
 
 
     public static void get(final Response<ArrayList<Player>> response, final String regionId) {
-        new PlayersCall(response, regionId).make();
+        new PlayersCall(response, regionId).start();
     }
 
 
@@ -75,6 +75,15 @@ public final class Players {
         JsonObjectRequest getRequest() {
             final String url = getBaseUrl() + Constants.PLAYERS;
             return new JsonObjectRequest(url, null, this, this);
+        }
+
+
+        @Override
+        void make() {
+            // TODO
+            // read from database
+
+            super.make();
         }
 
 

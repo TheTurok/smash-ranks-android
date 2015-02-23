@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-abstract class Call<T> implements ErrorListener, Heartbeat, Listener<JSONObject> {
+abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObject> {
 
 
     protected final Response<T> mResponse;
@@ -43,17 +43,7 @@ abstract class Call<T> implements ErrorListener, Heartbeat, Listener<JSONObject>
     abstract JsonObjectRequest getRequest();
 
 
-    @Override
-    public final boolean isAlive() {
-        return mResponse.isAlive();
-    }
-
-
-    final void make() {
-        if (!isAlive()) {
-            return;
-        }
-
+    void make() {
         final Heartbeat heartbeat = mResponse.getHeartbeat();
 
         if (heartbeat == null || !heartbeat.isAlive()) {
@@ -72,14 +62,14 @@ abstract class Call<T> implements ErrorListener, Heartbeat, Listener<JSONObject>
     public final void onErrorResponse(final VolleyError error) {
         Console.e(getCallName(), "Network error", error);
 
-        if (!isAlive()) {
+        if (!mResponse.isAlive()) {
             return;
         }
 
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (isAlive()) {
+                if (mResponse.isAlive()) {
                     mResponse.error(error);
                 }
             }
@@ -94,14 +84,14 @@ abstract class Call<T> implements ErrorListener, Heartbeat, Listener<JSONObject>
 
     @Override
     public final void onResponse(final JSONObject response) {
-        if (!isAlive()) {
+        if (!mResponse.isAlive()) {
             return;
         }
 
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (isAlive()) {
+                if (mResponse.isAlive()) {
                     try {
                         onJSONResponse(response);
                     } catch (final JSONException e) {
@@ -112,6 +102,18 @@ abstract class Call<T> implements ErrorListener, Heartbeat, Listener<JSONObject>
         };
 
         new Thread(runnable).start();
+    }
+
+
+    @Override
+    public final void run() {
+        super.run();
+
+        if (!mResponse.isAlive()) {
+            return;
+        }
+
+        make();
     }
 
 

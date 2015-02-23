@@ -62,6 +62,13 @@ public class Player implements AlphabeticallyComparable, Parcelable {
     }
 
 
+    public Player(final String id, final String name) {
+        // TODO
+        this.id = id;
+        this.name = name;
+    }
+
+
     private Player(final Parcel source) {
         matches = source.createTypedArrayList(Match.CREATOR);
         rating = source.readFloat();

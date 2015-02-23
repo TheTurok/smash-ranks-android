@@ -2,6 +2,7 @@ package com.garpr.android.data2;
 
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -80,10 +81,38 @@ public final class Players {
 
         @Override
         void make() {
-            // TODO
-            // read from database
+            final SQLiteDatabase database = Database.start();
+            final String[] columns = { Constants.ID, Constants.NAME };
+            final String selection = Constants.REGION_ID + " = ?";
+            final String[] selectionArgs = { mRegionId };
+            final Cursor cursor = database.query(Players.TAG, columns, selection, selectionArgs,
+                    null, null, null);
 
-            super.make();
+            final ArrayList<Player> players;
+
+            if (cursor.moveToFirst()) {
+                players = new ArrayList<>();
+                final int idIndex = cursor.getColumnIndexOrThrow(Constants.ID);
+                final int nameIndex = cursor.getColumnIndexOrThrow(Constants.NAME);
+
+                do {
+                    final String id = cursor.getString(idIndex);
+                    final String name = cursor.getString(nameIndex);
+                    final Player player = new Player(id, name);
+                    players.add(player);
+                } while (cursor.moveToNext());
+            } else {
+                players = null;
+            }
+
+            cursor.close();
+            Database.stop();
+
+            if (players == null || players.isEmpty()) {
+                super.make();
+            } else {
+                mResponse.success(players);
+            }
         }
 
 

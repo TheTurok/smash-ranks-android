@@ -12,6 +12,8 @@ public final class Regions {
     static final String TAG = "Regions";
 
 
+
+
     static void createTable(final SQLiteDatabase db) {
         final String sql = "CREATE TABLE IF NOT EXISTS " + TAG + " (" +
                 Constants.ID + " TEXT NOT NULL, " +

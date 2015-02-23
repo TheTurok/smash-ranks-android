@@ -27,8 +27,9 @@ public final class Players {
         final String sql = "CREATE TABLE IF NOT EXISTS " + TAG + " (" +
                 Constants.ID + " TEXT NOT NULL, " +
                 Constants.NAME + " TEXT NOT NULL, " +
-                Constants.REGION + " TEXT NOT NULL, " +
-                "PRIMARY KEY (" + Constants.ID + "));";
+                Constants.REGION_ID + " TEXT NOT NULL, " +
+                "PRIMARY KEY (" + Constants.ID + "), " +
+                "FOREIGN KEY (" + Constants.REGION_ID + ") REFERENCES " + Regions.TAG + '(' + Constants.ID + "));";
 
         db.execSQL(sql);
     }

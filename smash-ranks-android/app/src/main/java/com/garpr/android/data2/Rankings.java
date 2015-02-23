@@ -9,7 +9,9 @@ import com.garpr.android.misc.Constants;
 public final class Rankings {
 
 
-    private static final String TAG = "Rankings";
+    static final String TAG = "Rankings";
+
+
 
 
     static void createTable(final SQLiteDatabase db) {
@@ -17,8 +19,9 @@ public final class Rankings {
                 Constants.PLAYER_ID + " TEXT NOT NULL, " +
                 Constants.RANK + " INTEGER NOT NULL, " +
                 Constants.RATING + " REAL NOT NULL, " +
-                Constants.REGION + " TEXT NOT NULL, " +
-                "FOREIGN KEY (" + Constants.PLAYER_ID + ") REFERENCES " + Players.TAG + "(" + Constants.ID + "));";
+                Constants.REGION_ID + " TEXT NOT NULL, " +
+                "FOREIGN KEY (" + Constants.PLAYER_ID + ") REFERENCES " + Players.TAG + '(' + Constants.ID + "), " +
+                "FOREIGN KEY (" + Constants.REGION_ID + ") REFERENCES " + Regions.TAG + '(' + Constants.ID + "));";
 
         db.execSQL(sql);
     }

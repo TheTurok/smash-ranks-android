@@ -12,13 +12,16 @@ public final class Tournaments {
     static final String TAG = "Tournaments";
 
 
+
+
     static void createTable(final SQLiteDatabase db) {
         final String sql = "CREATE TABLE IF NOT EXISTS " + TAG + " (" +
                 Constants.DATE + " TEXT NOT NULL, " +
                 Constants.ID + " TEXT NOT NULL, " +
                 Constants.NAME + " TEXT NOT NULL, " +
-                Constants.REGION + " TEXT NOT NULL, " +
-                "PRIMARY KEY (" + Constants.NAME + "));";
+                Constants.REGION_ID + " TEXT NOT NULL, " +
+                "PRIMARY KEY (" + Constants.NAME + "), " +
+                "FOREIGN KEY (" + Constants.REGION_ID + ") REFERENCES " + Regions.TAG + '(' + Constants.ID + "));";
 
         db.execSQL(sql);
     }

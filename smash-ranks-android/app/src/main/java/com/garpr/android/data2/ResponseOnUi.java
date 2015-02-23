@@ -21,18 +21,16 @@ public abstract class ResponseOnUi<T> extends Response<T> implements HeartbeatWi
 
     @Override
     public final void error(final Exception e) {
-        if (isAlive()) {
-            final Runnable action = new Runnable() {
-                @Override
-                public void run() {
-                    if (isAlive()) {
-                        errorOnUi(e);
-                    }
+        final Runnable action = new Runnable() {
+            @Override
+            public void run() {
+                if (isAlive()) {
+                    errorOnUi(e);
                 }
-            };
+            }
+        };
 
-            runOnUi(action);
-        }
+        runOnUi(action);
     }
 
 
@@ -58,18 +56,16 @@ public abstract class ResponseOnUi<T> extends Response<T> implements HeartbeatWi
 
     @Override
     public final void success(final T object) {
-        if (isAlive()) {
-            final Runnable action = new Runnable() {
-                @Override
-                public void run() {
-                    if (isAlive()) {
-                        successOnUi(object);
-                    }
+        final Runnable action = new Runnable() {
+            @Override
+            public void run() {
+                if (isAlive()) {
+                    successOnUi(object);
                 }
-            };
+            }
+        };
 
-            runOnUi(action);
-        }
+        runOnUi(action);
     }
 
 

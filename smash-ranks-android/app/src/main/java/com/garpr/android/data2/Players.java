@@ -73,7 +73,7 @@ public final class Players {
 
         @Override
         JsonObjectRequest getRequest() {
-            final String url = Constants.API_URL + '/' + Constants.PLAYERS;
+            final String url = getBaseUrl() + Constants.PLAYERS;
             return new JsonObjectRequest(url, null, this, this);
         }
 

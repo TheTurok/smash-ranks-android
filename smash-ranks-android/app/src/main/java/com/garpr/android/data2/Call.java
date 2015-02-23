@@ -8,6 +8,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.App;
 import com.garpr.android.misc.Console;
+import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 
 import org.json.JSONException;
@@ -30,6 +31,11 @@ abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObj
         }
 
         mResponse = response;
+    }
+
+
+    String getBaseUrl() {
+        return Constants.API_URL + '/';
     }
 
 

@@ -15,11 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObject> {
+abstract class Call<T> implements ErrorListener, Heartbeat, Listener<JSONObject> {
 
 
-    private Exception mException;
-    private JSONObject mJSONResponse;
     protected final Response<T> mResponse;
 
 
@@ -45,18 +43,28 @@ abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObj
     abstract JsonObjectRequest getRequest();
 
 
+    @Override
+    public final boolean isAlive() {
+        return mResponse.isAlive();
+    }
+
+
     final void make() {
+        if (!isAlive()) {
+            return;
+        }
+
         final Heartbeat heartbeat = mResponse.getHeartbeat();
 
-        if (mResponse.isAlive() && heartbeat != null && heartbeat.isAlive()) {
-            final JsonObjectRequest request = getRequest();
-            request.setTag(heartbeat);
-
-            final RequestQueue requestQueue = App.getRequestQueue();
-            requestQueue.add(request);
-        } else {
-            Console.d(getCallName(), "Call canceled before being queued");
+        if (heartbeat == null || !heartbeat.isAlive()) {
+            return;
         }
+
+        final JsonObjectRequest request = getRequest();
+        request.setTag(heartbeat);
+
+        final RequestQueue requestQueue = App.getRequestQueue();
+        requestQueue.add(request);
     }
 
 
@@ -64,12 +72,20 @@ abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObj
     public final void onErrorResponse(final VolleyError error) {
         Console.e(getCallName(), "Network error", error);
 
-        if (mResponse.isAlive()) {
-            mException = error;
-            start();
-        } else {
-            Console.d(getCallName(), "Call canceled after response was received");
+        if (!isAlive()) {
+            return;
         }
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (isAlive()) {
+                    mResponse.error(error);
+                }
+            }
+        };
+
+        new Thread(runnable).start();
     }
 
 
@@ -78,34 +94,24 @@ abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObj
 
     @Override
     public final void onResponse(final JSONObject response) {
-        if (mResponse.isAlive()) {
-            mJSONResponse = response;
-            start();
-        } else {
-            Console.d(getCallName(), "Call canceled after response was received");
+        if (!isAlive()) {
+            return;
         }
-    }
 
-
-    @Override
-    public final void run() {
-        super.run();
-
-        if (mResponse.isAlive()) {
-            if (mException != null) {
-                mResponse.error(mException);
-            } else if (mJSONResponse != null) {
-                try {
-                    onJSONResponse(mJSONResponse);
-                } catch (final JSONException e) {
-                    throw new RuntimeException(e);
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (isAlive()) {
+                    try {
+                        onJSONResponse(response);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            } else {
-                throw new IllegalStateException(getCallName() + " Thread started but no response data available");
             }
-        } else {
-            Console.d(getCallName(), "Call canceled after Thread began");
-        }
+        };
+
+        new Thread(runnable).start();
     }
 
 

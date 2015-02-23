@@ -36,6 +36,11 @@ public final class Players {
     }
 
 
+    public static void get(final Response<ArrayList<Player>> response, final boolean clear) {
+        new PlayersCall(response, clear).start();
+    }
+
+
     public static void get(final Response<ArrayList<Player>> response, final String regionId,
             final boolean clear) {
         new PlayersCall(response, regionId, clear).start();
@@ -50,6 +55,13 @@ public final class Players {
         private static final String TAG = "PlayersCall";
 
         private final boolean mClear;
+
+
+        private PlayersCall(final Response<ArrayList<Player>> response, final boolean clear)
+                throws IllegalArgumentException {
+            super(response);
+            mClear = clear;
+        }
 
 
         private PlayersCall(final Response<ArrayList<Player>> response, final String regionId,

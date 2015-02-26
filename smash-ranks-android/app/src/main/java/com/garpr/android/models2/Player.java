@@ -19,9 +19,15 @@ public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
 
 
     public Player(final String id, final String name, final Region region) {
+        this(id, name, region, null);
+    }
+
+
+    public Player(final String id, final String name, final Region region, final Rank rank) {
         mId = id;
         mName = name;
         mRegion = region;
+        mRank = rank;
     }
 
 

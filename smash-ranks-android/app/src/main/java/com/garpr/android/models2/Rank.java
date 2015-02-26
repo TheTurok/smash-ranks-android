@@ -1,8 +1,12 @@
 package com.garpr.android.models2;
 
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.garpr.android.App;
+import com.garpr.android.R;
 
 
 public class Rank implements Cloneable, Parcelable {
@@ -61,6 +65,13 @@ public class Rank implements Cloneable, Parcelable {
 
     public float getRating() {
         return mRating;
+    }
+
+
+    @Override
+    public String toString() {
+        final Context context = App.getContext();
+        return context.getString(R.string.rank_x_rating_y, mRank, mRating);
     }
 
 

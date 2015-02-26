@@ -15,16 +15,18 @@ public class Match implements Cloneable, Parcelable {
     private final Player mPlayer1;
     private final Player mPlayer2;
     private final Region mRegion;
+    private final Result mResult;
     private final Tournament mTournament;
 
 
 
 
     public Match(final Player player1, final Player player2, final Region region,
-            final Tournament tournament) {
+            final Result result, final Tournament tournament) {
         mPlayer1 = player1;
         mPlayer2 = player2;
         mRegion = region;
+        mResult = result;
         mTournament = tournament;
     }
 
@@ -33,6 +35,7 @@ public class Match implements Cloneable, Parcelable {
         mPlayer1 = source.readParcelable(Player.class.getClassLoader());
         mPlayer2 = source.readParcelable(Player.class.getClassLoader());
         mRegion = source.readParcelable(Region.class.getClassLoader());
+        mResult = source.readParcelable(Result.class.getClassLoader());
         mTournament = source.readParcelable(Tournament.class.getClassLoader());
     }
 
@@ -81,8 +84,28 @@ public class Match implements Cloneable, Parcelable {
     }
 
 
+    public Result getResult() {
+        return mResult;
+    }
+
+
     public Tournament getTournament() {
         return mTournament;
+    }
+
+
+    public boolean isLose() {
+        return mResult.isLose();
+    }
+
+
+    public boolean isResult(final Result result) {
+        return mResult.equals(result);
+    }
+
+
+    public boolean isWin() {
+        return mResult.isWin();
     }
 
 
@@ -112,6 +135,7 @@ public class Match implements Cloneable, Parcelable {
         dest.writeParcelable(mPlayer1, flags);
         dest.writeParcelable(mPlayer2, flags);
         dest.writeParcelable(mRegion, flags);
+        dest.writeParcelable(mResult, flags);
         dest.writeParcelable(mTournament, flags);
     }
 

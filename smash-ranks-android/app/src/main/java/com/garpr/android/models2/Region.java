@@ -4,13 +4,10 @@ package com.garpr.android.models2;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.garpr.android.misc.Constants;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 
 
-public class Region implements Cloneable, Parcelable {
+public class Region implements AlphabeticallyComparable, Cloneable, Parcelable {
 
 
     private final String mId;
@@ -56,6 +53,12 @@ public class Region implements Cloneable, Parcelable {
         }
 
         return isEqual;
+    }
+
+
+    @Override
+    public char getFirstCharOfName() {
+        return mName.charAt(0);
     }
 
 

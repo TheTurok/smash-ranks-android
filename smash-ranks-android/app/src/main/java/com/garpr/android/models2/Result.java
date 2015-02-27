@@ -81,14 +81,16 @@ public enum Result implements Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeInt(ordinal());
+        final int ordinal = ordinal();
+        dest.writeInt(ordinal);
     }
 
 
     public static final Creator<Result> CREATOR = new Creator<Result>() {
         @Override
         public Result createFromParcel(final Parcel source) {
-            return values()[source.readInt()];
+            final int ordinal = source.readInt();
+            return values()[ordinal];
         }
 
 

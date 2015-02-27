@@ -1,39 +1,47 @@
 package com.garpr.android.models2;
 
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
 
 
     private Rank mRank;
-    private final Region mRegion;
     private final String mId;
     private final String mName;
 
 
 
 
-    public Player(final String id, final String name, final Region region) {
-        this(id, name, region, null);
+    public Player(final JSONObject json) throws JSONException {
+        mId = json.getString(Constants.ID);
+        mName = json.getString(Constants.NAME);
     }
 
 
-    public Player(final String id, final String name, final Region region, final Rank rank) {
+    public Player(final String id, final String name) {
+        this(id, name, null);
+    }
+
+
+    public Player(final String id, final String name, final Rank rank) {
         mId = id;
         mName = name;
-        mRegion = region;
         mRank = rank;
     }
 
 
     private Player(final Parcel source) {
         mRank = source.readParcelable(Rank.class.getClassLoader());
-        mRegion = source.readParcelable(Region.class.getClassLoader());
         mId = source.readString();
         mName = source.readString();
     }
@@ -59,7 +67,7 @@ public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
         } else if (o instanceof Player) {
             final Player p = (Player) o;
 
-            if (mId.equals(p.getId()) && mName.equals(p.getName()) && mRegion.equals(p.getRegion())) {
+            if (mId.equals(p.getId()) && mName.equals(p.getName())) {
                 if (hasRank() && p.hasRank()) {
                     isEqual = mRank.equals(p.getRank());
                 } else if (!hasRank() && !p.hasRank()) {
@@ -99,11 +107,6 @@ public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
     }
 
 
-    public Region getRegion() {
-        return mRegion;
-    }
-
-
     public boolean hasRank() {
         return mRank != null;
     }
@@ -111,6 +114,16 @@ public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
 
     public void setRank(final Rank rank) {
         mRank = rank;
+    }
+
+
+    public ContentValues toContentValues(final String regionId) {
+        final ContentValues cv = new ContentValues();
+        cv.put(Constants.PLAYER_ID, mId);
+        cv.put(Constants.PLAYER_NAME, mName);
+        cv.put(Constants.REGION_ID, regionId);
+
+        return cv;
     }
 
 
@@ -137,7 +150,6 @@ public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeParcelable(mRank, flags);
-        dest.writeParcelable(mRegion, flags);
         dest.writeString(mId);
         dest.writeString(mName);
     }

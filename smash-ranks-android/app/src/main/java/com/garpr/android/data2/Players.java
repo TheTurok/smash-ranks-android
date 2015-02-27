@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.models.Player;
+import com.garpr.android.models2.Player;
+import com.garpr.android.models2.Region;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -121,8 +122,8 @@ public final class Players {
             database.beginTransaction();
 
             for (final Player player : players) {
-                final ContentValues contentValues = player.toContentValues();
-                database.insert(Players.TAG, null, contentValues);
+                final ContentValues cv = player.toContentValues(mRegionId);
+                database.insert(Players.TAG, null, cv);
             }
 
             database.setTransactionSuccessful();
@@ -135,18 +136,17 @@ public final class Players {
 
         private void readThenMake() {
             final SQLiteDatabase database = Database.start();
-            final String[] columns = { Constants.ID, Constants.NAME };
-            final String selection = Constants.REGION_ID + " = ?";
-            final String[] selectionArgs = { mRegionId };
-            final Cursor cursor = database.query(Players.TAG, columns, selection, selectionArgs,
-                    null, null, null);
+            final String sql = "SELECT " + Constants.PLAYER_ID + ", " + Constants.PLAYER_NAME +
+                    " FROM " + Players.TAG + " INNER JOIN " + Regions.TAG + " ON " + Players.TAG
+                    + '.' + Constants.REGION_ID + '=' + Regions.TAG + '.' + Constants.REGION_ID + ';';
+            final Cursor cursor = database.rawQuery(sql, null);
 
             final ArrayList<Player> players;
 
             if (cursor.moveToFirst()) {
                 players = new ArrayList<>();
-                final int idIndex = cursor.getColumnIndexOrThrow(Constants.ID);
-                final int nameIndex = cursor.getColumnIndexOrThrow(Constants.NAME);
+                final int idIndex = cursor.getColumnIndexOrThrow(Constants.PLAYER_ID);
+                final int nameIndex = cursor.getColumnIndexOrThrow(Constants.PLAYER_NAME);
 
                 do {
                     final String id = cursor.getString(idIndex);

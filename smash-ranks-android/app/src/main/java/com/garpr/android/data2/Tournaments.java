@@ -16,9 +16,9 @@ public final class Tournaments {
 
     static void createTable(final SQLiteDatabase db) {
         final String sql = "CREATE TABLE IF NOT EXISTS " + TAG + " (" +
-                Constants.DATE + " TEXT NOT NULL, " +
-                Constants.ID + " TEXT NOT NULL, " +
-                Constants.NAME + " TEXT NOT NULL, " +
+                Constants.TOURNAMENT_DATE + " TEXT NOT NULL, " +
+                Constants.TOURNAMENT_ID + " TEXT NOT NULL, " +
+                Constants.TOURNAMENT_NAME + " TEXT NOT NULL, " +
                 Constants.REGION_ID + " TEXT NOT NULL, " +
                 "PRIMARY KEY (" + Constants.NAME + "), " +
                 "FOREIGN KEY (" + Constants.REGION_ID + ") REFERENCES " + Regions.TAG + '(' + Constants.ID + "));";

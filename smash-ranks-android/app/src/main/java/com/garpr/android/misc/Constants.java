@@ -56,6 +56,7 @@ public final class Constants {
     public static final String PLAYER_2_ID = "player_2_id";
     public static final String PLAYER_HEAD_TO_HEAD = "player_head_to_head";
     public static final String PLAYER_MATCHES = "player_matches";
+    public static final String PLAYER_NAME = "player_name";
     public static final String PLAYERS = "players";
     public static final String RANK = "rank";
     public static final String RANKING = "ranking";
@@ -64,6 +65,7 @@ public final class Constants {
     public static final String REGION = "region";
     public static final String REGION_CHANGE = "region_change";
     public static final String REGION_ID = "region_id";
+    public static final String REGION_NAME = "region_name";
     public static final String REGIONS = "regions";
     public static final String RESULT = "result";
     public static final String ROSTER_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSSSSS";

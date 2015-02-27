@@ -95,16 +95,15 @@ public final class Regions {
 
             for (int i = 0; i < regionsLength; ++i) {
                 final JSONObject regionJSON = regionsJSON.getJSONObject(i);
-                final Region region = new Region(regionJSON);
-                regions.add(region);
+                regions.add(new Region(regionJSON));
             }
 
             final SQLiteDatabase database = Database.start();
             database.beginTransaction();
 
             for (final Region region : regions) {
-                final ContentValues contentValues = region.toContentValues();
-                database.insert(Players.TAG, null, contentValues);
+                final ContentValues cv = region.toContentValues();
+                database.insert(Players.TAG, null, cv);
             }
 
             database.setTransactionSuccessful();

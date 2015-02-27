@@ -1,10 +1,15 @@
 package com.garpr.android.models2;
 
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class Region implements AlphabeticallyComparable, Cloneable, Parcelable {
@@ -14,6 +19,12 @@ public class Region implements AlphabeticallyComparable, Cloneable, Parcelable {
     private final String mName;
 
 
+
+
+    public Region(final JSONObject json) throws JSONException {
+        mId = json.getString(Constants.ID);
+        mName = json.getString(Constants.NAME);
+    }
 
 
     public Region(final String id, final String name) {
@@ -69,6 +80,15 @@ public class Region implements AlphabeticallyComparable, Cloneable, Parcelable {
 
     public String getName() {
         return mName;
+    }
+
+
+    public ContentValues toContentValues() {
+        final ContentValues cv = new ContentValues();
+        cv.put(Constants.ID, mId);
+        cv.put(Constants.NAME, mName);
+
+        return cv;
     }
 
 

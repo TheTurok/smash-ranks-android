@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.models2.Region;
 import com.garpr.android.models2.Tournament;
 
 import org.json.JSONArray;
@@ -122,7 +121,10 @@ public final class Tournaments {
 
         private void readThenMake() {
             final SQLiteDatabase database = Database.start();
-            final Cursor cursor = database.query(Tournaments.TAG, null, null, null, null, null, null);
+            final String sql = "SELECT " + Constants.TOURNAMENT_DATE + ", " + Constants.TOURNAMENT_ID
+                    + ", " + Constants.TOURNAMENT_NAME + " FROM " + Tournaments.TAG + " WHERE " +
+                    Constants.REGION_ID + " = " + mRegionId;
+            final Cursor cursor = database.rawQuery(sql, null);
 
             final ArrayList<Tournament> tournaments;
 

@@ -137,8 +137,7 @@ public final class Players {
         private void readThenMake() {
             final SQLiteDatabase database = Database.start();
             final String sql = "SELECT " + Constants.PLAYER_ID + ", " + Constants.PLAYER_NAME +
-                    " FROM " + Players.TAG + " INNER JOIN " + Regions.TAG + " ON " + Players.TAG
-                    + '.' + Constants.REGION_ID + '=' + Regions.TAG + '.' + Constants.REGION_ID + ';';
+                    " FROM " + Players.TAG + " WHERE " + Constants.REGION_ID + " = " + mRegionId;
             final Cursor cursor = database.rawQuery(sql, null);
 
             final ArrayList<Player> players;

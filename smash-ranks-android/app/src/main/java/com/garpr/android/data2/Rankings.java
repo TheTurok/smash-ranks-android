@@ -124,7 +124,7 @@ public final class Rankings {
 
             for (final Player player : players) {
                 final ContentValues cv = player.toContentValues(mRegionId);
-                database.insert(Regions.TAG, null, cv);
+                database.insert(Rankings.TAG, null, cv);
             }
 
             database.setTransactionSuccessful();
@@ -138,11 +138,9 @@ public final class Rankings {
         private void readThenMake() {
             final SQLiteDatabase database = Database.start();
             final String sql = "SELECT " + Constants.PLAYER_ID + ", " + Constants.PLAYER_NAME +
-                    ", " + Constants.RANK + ", " + Constants.RATING + " FROM " + Players.TAG +
-                    " INNER JOIN " + Regions.TAG + " ON " + Players.TAG + '.' + Constants.REGION_ID
-                    + '=' + Regions.TAG + '.' + Constants.REGION_ID + " INNER JOIN " + Rankings.TAG
-                    + " ON " + Players.TAG + '.' + Constants.PLAYER_ID + '=' + Rankings.TAG +
-                    '.' + Constants.PLAYER_ID + ';';
+                    ", " + Constants.RANK + ", " + Constants.RATING + " WHERE " + Constants.REGION_ID
+                    + " = " + mRegionId + " INNER JOIN " + Rankings.TAG + " ON " + Players.TAG +
+                    '.' + Constants.PLAYER_ID + '=' + Rankings.TAG + '.' + Constants.PLAYER_ID + ';';
             final Cursor cursor = database.rawQuery(sql, null);
 
             final ArrayList<Player> players;

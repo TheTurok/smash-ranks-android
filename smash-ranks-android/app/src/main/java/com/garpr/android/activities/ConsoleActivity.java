@@ -60,6 +60,18 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
 
 
     @Override
+    protected void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+
+        if (Console.hasLogMessages()) {
+            mClearLog.setEnabled(true);
+        } else {
+            mClearLog.setEnabled(false);
+        }
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -101,12 +113,6 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
                 }
 
                 notifyDataSetChanged();
-
-                if (Console.hasLogMessages()) {
-                    mClearLog.setEnabled(true);
-                } else {
-                    mClearLog.setEnabled(false);
-                }
             }
         };
 

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.garpr.android.App;
 import com.garpr.android.data.Settings;
-import com.garpr.android.misc.Console;
 import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.models.Region;
 
@@ -98,8 +97,6 @@ public abstract class BaseFragment extends Fragment implements
     public void runOnUi(final Runnable action) {
         if (isAlive()) {
             mListener.runOnUi(action);
-        } else {
-            Console.w(getFragmentName(), "Fragment is dead; unable to run action on UI thread");
         }
     }
 

@@ -21,7 +21,6 @@ import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.fragments.BaseFragment;
 import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.misc.Notifications;
@@ -234,8 +233,6 @@ abstract class BaseActivity extends ActionBarActivity implements
     public void runOnUi(final Runnable action) {
         if (isAlive()) {
             runOnUiThread(action);
-        } else {
-            Console.w(getActivityName(), "Activity is dead; unable to run action on UI thread");
         }
     }
 

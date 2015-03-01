@@ -10,6 +10,9 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class Rank implements Cloneable, Parcelable {
 
@@ -18,6 +21,11 @@ public class Rank implements Cloneable, Parcelable {
     private final int mRank;
 
 
+
+
+    public Rank(final JSONObject json) throws JSONException {
+        // TODO
+    }
 
 
     public Rank(final float rating, final int rank) {

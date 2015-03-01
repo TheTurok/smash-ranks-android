@@ -10,6 +10,9 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class Match implements Cloneable, Parcelable {
 
@@ -20,6 +23,11 @@ public class Match implements Cloneable, Parcelable {
     private final Tournament mTournament;
 
 
+
+
+    public Match(final JSONObject json) throws JSONException {
+        // TODO
+    }
 
 
     public Match(final Player player1, final Player player2, final Result result,

@@ -11,6 +11,9 @@ import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,6 +46,11 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
         DAY_OF_MONTH_FORMATTER = new SimpleDateFormat(Constants.DAY_OF_MONTH_FORMAT, locale);
         MONTH_FORMATTER = new SimpleDateFormat(Constants.MONTH_FORMAT, locale);
         YEAR_FORMATTER = new SimpleDateFormat(Constants.YEAR_FORMAT, locale);
+    }
+
+
+    public Tournament(final JSONObject json) throws JSONException {
+        // TODO
     }
 
 

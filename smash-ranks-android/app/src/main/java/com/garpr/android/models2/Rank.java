@@ -1,12 +1,14 @@
 package com.garpr.android.models2;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
+import com.garpr.android.misc.Constants;
 
 
 public class Rank implements Cloneable, Parcelable {
@@ -65,6 +67,17 @@ public class Rank implements Cloneable, Parcelable {
 
     public float getRating() {
         return mRating;
+    }
+
+
+    public ContentValues toContentValues(final String playerId, final String regionId) {
+        final ContentValues cv = new ContentValues();
+        cv.put(Constants.PLAYER_ID, playerId);
+        cv.put(Constants.RANK, mRank);
+        cv.put(Constants.RATING, mRating);
+        cv.put(Constants.REGION_ID, regionId);
+
+        return cv;
     }
 
 

@@ -1,12 +1,14 @@
 package com.garpr.android.models2;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
+import com.garpr.android.misc.Constants;
 
 
 public class Match implements Cloneable, Parcelable {
@@ -98,6 +100,18 @@ public class Match implements Cloneable, Parcelable {
 
     public boolean isWin() {
         return mResult.isWin();
+    }
+
+
+    public ContentValues toContentValues(final String regionId) {
+        final ContentValues cv = new ContentValues();
+        cv.put(Constants.PLAYER_1_ID, mPlayer1.getId());
+        cv.put(Constants.PLAYER_2_ID, mPlayer2.getId());
+        cv.put(Constants.REGION_ID, regionId);
+        cv.put(Constants.RESULT, mResult.toString());
+        cv.put(Constants.TOURNAMENT_ID, mTournament.getId());
+
+        return cv;
     }
 
 

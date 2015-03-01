@@ -85,8 +85,8 @@ public class Region implements AlphabeticallyComparable, Cloneable, Parcelable {
 
     public ContentValues toContentValues() {
         final ContentValues cv = new ContentValues();
-        cv.put(Constants.ID, mId);
-        cv.put(Constants.NAME, mName);
+        cv.put(Constants.REGION_ID, mId);
+        cv.put(Constants.REGION_NAME, mName);
 
         return cv;
     }

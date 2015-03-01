@@ -1,6 +1,7 @@
 package com.garpr.android.models2;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -150,6 +151,17 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
 
     public String getYear() {
         return mYear;
+    }
+
+
+    public ContentValues toContentValues(final String regionId) {
+        final ContentValues cv = new ContentValues();
+        cv.put(Constants.TOURNAMENT_DATE, mDate);
+        cv.put(Constants.TOURNAMENT_ID, mId);
+        cv.put(Constants.TOURNAMENT_NAME, mName);
+        cv.put(Constants.REGION_ID, regionId);
+
+        return cv;
     }
 
 

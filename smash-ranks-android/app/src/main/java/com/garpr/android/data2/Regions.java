@@ -73,7 +73,8 @@ public final class Regions {
 
         @Override
         JsonObjectRequest getRequest() {
-            return null;
+            final String url = getBaseUrl() + Constants.REGIONS;
+            return new JsonObjectRequest(url, null, this, this);
         }
 
 
@@ -95,7 +96,8 @@ public final class Regions {
 
             for (int i = 0; i < regionsLength; ++i) {
                 final JSONObject regionJSON = regionsJSON.getJSONObject(i);
-                regions.add(new Region(regionJSON));
+                final Region region = new Region(regionJSON);
+                regions.add(region);
             }
 
             final SQLiteDatabase database = Database.start();
@@ -122,8 +124,8 @@ public final class Regions {
 
             if (cursor.moveToFirst()) {
                 regions = new ArrayList<>();
-                final int idIndex = cursor.getColumnIndexOrThrow(Constants.ID);
-                final int nameIndex = cursor.getColumnIndexOrThrow(Constants.NAME);
+                final int idIndex = cursor.getColumnIndexOrThrow(Constants.REGION_ID);
+                final int nameIndex = cursor.getColumnIndexOrThrow(Constants.REGION_NAME);
 
                 do {
                     final String id = cursor.getString(idIndex);
@@ -131,6 +133,8 @@ public final class Regions {
                     final Region region = new Region(id, name);
                     regions.add(region);
                 } while (cursor.moveToNext());
+
+                regions.trimToSize();
             } else {
                 regions = null;
             }

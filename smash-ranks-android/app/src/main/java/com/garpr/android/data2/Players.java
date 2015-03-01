@@ -50,7 +50,7 @@ public final class Players {
 
 
 
-    private final static class PlayersCall extends RegionBasedCall<ArrayList<Player>> {
+    private static final class PlayersCall extends RegionBasedCall<ArrayList<Player>> {
 
 
         private static final String TAG = "PlayersCall";
@@ -154,6 +154,8 @@ public final class Players {
                     final Player player = new Player(id, name);
                     players.add(player);
                 } while (cursor.moveToNext());
+
+                players.trimToSize();
             } else {
                 players = null;
             }

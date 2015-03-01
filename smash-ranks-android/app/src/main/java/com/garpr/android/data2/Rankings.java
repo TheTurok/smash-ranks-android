@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models2.Player;
+import com.garpr.android.models2.Ranking;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -137,8 +138,11 @@ public final class Rankings {
         private void readThenMake() {
             final SQLiteDatabase database = Database.start();
             final String sql = "SELECT " + Constants.PLAYER_ID + ", " + Constants.PLAYER_NAME +
-                    " FROM " + Players.TAG + " INNER JOIN " + Regions.TAG + " ON " + Players.TAG
-                    + '.' + Constants.REGION_ID + '=' + Regions.TAG + '.' + Constants.REGION_ID + ';';
+                    ", " + Constants.RANK + ", " + Constants.RATING + " FROM " + Players.TAG +
+                    " INNER JOIN " + Regions.TAG + " ON " + Players.TAG + '.' + Constants.REGION_ID
+                    + '=' + Regions.TAG + '.' + Constants.REGION_ID + " INNER JOIN " + Rankings.TAG
+                    + " ON " + Players.TAG + '.' + Constants.PLAYER_ID + '=' + Rankings.TAG +
+                    '.' + Constants.PLAYER_ID + ';';
             final Cursor cursor = database.rawQuery(sql, null);
 
             final ArrayList<Player> players;
@@ -147,11 +151,17 @@ public final class Rankings {
                 players = new ArrayList<>();
                 final int idIndex = cursor.getColumnIndexOrThrow(Constants.PLAYER_ID);
                 final int nameIndex = cursor.getColumnIndexOrThrow(Constants.PLAYER_NAME);
+                final int rankIndex = cursor.getColumnIndexOrThrow(Constants.RANK);
+                final int ratingIndex = cursor.getColumnIndexOrThrow(Constants.RATING);
 
                 do {
+                    final float rating = cursor.getFloat(ratingIndex);
+                    final int rank = cursor.getInt(rankIndex);
+                    final Ranking ranking = new Ranking(rating, rank);
+
                     final String id = cursor.getString(idIndex);
                     final String name = cursor.getString(nameIndex);
-                    final Player player = new Player(id, name);
+                    final Player player = new Player(id, name, ranking);
                     players.add(player);
                 } while (cursor.moveToNext());
 

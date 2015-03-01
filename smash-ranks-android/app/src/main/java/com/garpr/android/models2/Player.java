@@ -16,7 +16,7 @@ import org.json.JSONObject;
 public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
 
 
-    private Rank mRank;
+    private Ranking mRanking;
     private final String mId;
     private final String mName;
 
@@ -34,15 +34,15 @@ public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
     }
 
 
-    public Player(final String id, final String name, final Rank rank) {
+    public Player(final String id, final String name, final Ranking ranking) {
         mId = id;
         mName = name;
-        mRank = rank;
+        mRanking = ranking;
     }
 
 
     private Player(final Parcel source) {
-        mRank = source.readParcelable(Rank.class.getClassLoader());
+        mRanking = source.readParcelable(Ranking.class.getClassLoader());
         mId = source.readString();
         mName = source.readString();
     }
@@ -69,9 +69,9 @@ public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
             final Player p = (Player) o;
 
             if (mId.equals(p.getId()) && mName.equals(p.getName())) {
-                if (hasRank() && p.hasRank()) {
-                    isEqual = mRank.equals(p.getRank());
-                } else if (!hasRank() && !p.hasRank()) {
+                if (hasRanking() && p.hasRanking()) {
+                    isEqual = mRanking.equals(p.getRanking());
+                } else if (!hasRanking() && !p.hasRanking()) {
                     isEqual = true;
                 } else {
                     isEqual = false;
@@ -103,18 +103,18 @@ public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
     }
 
 
-    public Rank getRank() {
-        return mRank;
+    public Ranking getRanking() {
+        return mRanking;
     }
 
 
-    public boolean hasRank() {
-        return mRank != null;
+    public boolean hasRanking() {
+        return mRanking != null;
     }
 
 
-    public void setRank(final Rank rank) {
-        mRank = rank;
+    public void setRanking(final Ranking ranking) {
+        mRanking = ranking;
     }
 
 
@@ -150,7 +150,7 @@ public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeParcelable(mRank, flags);
+        dest.writeParcelable(mRanking, flags);
         dest.writeString(mId);
         dest.writeString(mName);
     }

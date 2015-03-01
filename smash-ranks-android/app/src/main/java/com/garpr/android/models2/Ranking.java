@@ -14,7 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class Rank implements Cloneable, Parcelable {
+public class Ranking implements Cloneable, Parcelable {
 
 
     private final float mRating;
@@ -23,19 +23,19 @@ public class Rank implements Cloneable, Parcelable {
 
 
 
-    public Rank(final JSONObject json) throws JSONException {
+    public Ranking(final JSONObject json) throws JSONException {
         mRating = (float) json.getDouble(Constants.RATING);
         mRank = json.getInt(Constants.RANK);
     }
 
 
-    public Rank(final float rating, final int rank) {
+    public Ranking(final float rating, final int rank) {
         mRating = rating;
         mRank = rank;
     }
 
 
-    private Rank(final Parcel source) {
+    private Ranking(final Parcel source) {
         mRating = source.readFloat();
         mRank = source.readInt();
     }
@@ -43,9 +43,9 @@ public class Rank implements Cloneable, Parcelable {
 
     @Override
     @SuppressWarnings("CloneDoesntDeclareCloneNotSupportedException")
-    public Rank clone() {
+    public Ranking clone() {
         try {
-            return (Rank) super.clone();
+            return (Ranking) super.clone();
         } catch (final CloneNotSupportedException e) {
             throw new IllegalStateException(e);
         }
@@ -58,8 +58,8 @@ public class Rank implements Cloneable, Parcelable {
 
         if (this == o) {
             isEqual = true;
-        } else if (o instanceof Rank) {
-            final Rank r = (Rank) o;
+        } else if (o instanceof Ranking) {
+            final Ranking r = (Ranking) o;
             isEqual = mRating == r.getRating() && mRank == r.getRank();
         } else {
             isEqual = false;
@@ -118,16 +118,16 @@ public class Rank implements Cloneable, Parcelable {
     }
 
 
-    public static final Creator<Rank> CREATOR = new Creator<Rank>() {
+    public static final Creator<Ranking> CREATOR = new Creator<Ranking>() {
         @Override
-        public Rank createFromParcel(final Parcel source) {
-            return new Rank(source);
+        public Ranking createFromParcel(final Parcel source) {
+            return new Ranking(source);
         }
 
 
         @Override
-        public Rank[] newArray(final int size) {
-            return new Rank[size];
+        public Ranking[] newArray(final int size) {
+            return new Ranking[size];
         }
     };
 

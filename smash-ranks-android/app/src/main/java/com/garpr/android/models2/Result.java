@@ -9,6 +9,9 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public enum Result implements Parcelable {
 
@@ -16,6 +19,12 @@ public enum Result implements Parcelable {
     LOSE, WIN;
 
 
+
+
+    public static Result create(final JSONObject json) throws JSONException {
+        final String resultString = json.getString(Constants.RESULT);
+        return create(resultString);
+    }
 
 
     public static Result create(final String resultString) {

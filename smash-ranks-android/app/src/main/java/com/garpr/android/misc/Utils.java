@@ -4,6 +4,9 @@ package com.garpr.android.misc;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Random;
 
 
@@ -32,6 +35,20 @@ public final class Utils {
         }
 
         return false;
+    }
+
+
+    public static String getJSONString(final JSONObject json, final String first,
+            final String second) throws JSONException {
+        final String string;
+
+        if (json.has(first)) {
+            string = json.getString(first);
+        } else {
+            string = json.getString(second);
+        }
+
+        return string;
     }
 
 

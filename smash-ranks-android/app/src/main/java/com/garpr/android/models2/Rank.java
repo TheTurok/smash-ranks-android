@@ -24,7 +24,8 @@ public class Rank implements Cloneable, Parcelable {
 
 
     public Rank(final JSONObject json) throws JSONException {
-        // TODO
+        mRating = (float) json.getDouble(Constants.RATING);
+        mRank = json.getInt(Constants.RANK);
     }
 
 

@@ -10,6 +10,7 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+import com.garpr.android.misc.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,14 +29,14 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
     private static final SimpleDateFormat MONTH_FORMATTER;
     private static final SimpleDateFormat YEAR_FORMATTER;
 
-    private final long mTime;
+    private long mTime;
     private final String mDate;
-    private final String mDay;
+    private String mDay;
     private final String mId;
-    private final String mMonth;
-    private final String mMonthAndYear;
+    private String mMonth;
+    private String mMonthAndYear;
     private final String mName;
-    private final String mYear;
+    private String mYear;
 
 
 
@@ -50,7 +51,15 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
 
 
     public Tournament(final JSONObject json) throws JSONException {
-        // TODO
+        mDate = Utils.getJSONString(json, Constants.TOURNAMENT_DATE, Constants.DATE);
+        mId = Utils.getJSONString(json, Constants.TOURNAMENT_ID, Constants.ID);
+        mName = Utils.getJSONString(json, Constants.TOURNAMENT_NAME, Constants.NAME);
+
+        try {
+            initializeDates();
+        } catch (final ParseException e) {
+            throw new JSONException(e.getMessage());
+        }
     }
 
 
@@ -60,15 +69,7 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
         mName = name;
 
         try {
-            final Date d = DATE_PARSER.parse(mDate);
-            mDay = DAY_OF_MONTH_FORMATTER.format(d);
-            mMonth = MONTH_FORMATTER.format(d);
-            mYear = YEAR_FORMATTER.format(d);
-
-            mTime = d.getTime();
-
-            final Context context = App.getContext();
-           mMonthAndYear = context.getString(R.string.x_y, mMonth, mYear);
+            initializeDates();
         } catch (final ParseException e) {
             throw new RuntimeException(e);
         }
@@ -159,6 +160,19 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
 
     public String getYear() {
         return mYear;
+    }
+
+
+    private void initializeDates() throws ParseException {
+        final Date d = DATE_PARSER.parse(mDate);
+        mDay = DAY_OF_MONTH_FORMATTER.format(d);
+        mMonth = MONTH_FORMATTER.format(d);
+        mYear = YEAR_FORMATTER.format(d);
+
+        mTime = d.getTime();
+
+        final Context context = App.getContext();
+        mMonthAndYear = context.getString(R.string.x_y, mMonth, mYear);
     }
 
 

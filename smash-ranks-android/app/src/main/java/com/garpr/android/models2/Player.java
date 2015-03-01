@@ -7,6 +7,7 @@ import android.os.Parcelable;
 
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+import com.garpr.android.misc.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,8 +24,8 @@ public class Player implements AlphabeticallyComparable, Cloneable, Parcelable {
 
 
     public Player(final JSONObject json) throws JSONException {
-        mId = json.getString(Constants.ID);
-        mName = json.getString(Constants.NAME);
+        mId = Utils.getJSONString(json, Constants.OPPONENT_ID, Constants.ID);
+        mName = Utils.getJSONString(json, Constants.OPPONENT_NAME, Constants.NAME);
     }
 
 

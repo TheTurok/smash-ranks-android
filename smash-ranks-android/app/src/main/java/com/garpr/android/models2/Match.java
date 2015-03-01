@@ -17,31 +17,34 @@ import org.json.JSONObject;
 public class Match implements Cloneable, Parcelable {
 
 
-    private final Player mPlayer1;
-    private final Player mPlayer2;
+    private final Player mOpponent;
+    private final Player mPlayer;
     private final Result mResult;
     private final Tournament mTournament;
 
 
 
 
-    public Match(final JSONObject json) throws JSONException {
-        // TODO
+    public Match(final JSONObject json, final Player player) throws JSONException {
+        mOpponent = new Player(json);
+        mPlayer = player;
+        mResult = Result.create(json);
+        mTournament = new Tournament(json);
     }
 
 
-    public Match(final Player player1, final Player player2, final Result result,
+    public Match(final Player opponent, final Player player, final Result result,
             final Tournament tournament) {
-        mPlayer1 = player1;
-        mPlayer2 = player2;
+        mOpponent = opponent;
+        mPlayer = player;
         mResult = result;
         mTournament = tournament;
     }
 
 
     private Match(final Parcel source) {
-        mPlayer1 = source.readParcelable(Player.class.getClassLoader());
-        mPlayer2 = source.readParcelable(Player.class.getClassLoader());
+        mOpponent = source.readParcelable(Player.class.getClassLoader());
+        mPlayer = source.readParcelable(Player.class.getClassLoader());
         mResult = source.readParcelable(Result.class.getClassLoader());
         mTournament = source.readParcelable(Tournament.class.getClassLoader());
     }
@@ -66,7 +69,7 @@ public class Match implements Cloneable, Parcelable {
             isEqual = true;
         } else if (o instanceof Match) {
             final Match m = (Match) o;
-            isEqual = mPlayer1.equals(m.getPlayer1()) && mPlayer2.equals(m.getPlayer2()) &&
+            isEqual = mOpponent.equals(m.getOpponent()) && mPlayer.equals(m.getPlayer()) &&
                     mResult.equals(m.getResult()) && mTournament.equals(m.getTournament());
         } else {
             isEqual = false;
@@ -76,13 +79,13 @@ public class Match implements Cloneable, Parcelable {
     }
 
 
-    public Player getPlayer1() {
-        return mPlayer1;
+    public Player getOpponent() {
+        return mOpponent;
     }
 
 
-    public Player getPlayer2() {
-        return mPlayer2;
+    public Player getPlayer() {
+        return mPlayer;
     }
 
 
@@ -113,8 +116,8 @@ public class Match implements Cloneable, Parcelable {
 
     public ContentValues toContentValues(final String regionId) {
         final ContentValues cv = new ContentValues();
-        cv.put(Constants.PLAYER_1_ID, mPlayer1.getId());
-        cv.put(Constants.PLAYER_2_ID, mPlayer2.getId());
+        cv.put(Constants.OPPONENT_ID, mOpponent.getId());
+        cv.put(Constants.PLAYER_ID, mPlayer.getId());
         cv.put(Constants.REGION_ID, regionId);
         cv.put(Constants.RESULT, mResult.toString());
         cv.put(Constants.TOURNAMENT_ID, mTournament.getId());
@@ -126,7 +129,7 @@ public class Match implements Cloneable, Parcelable {
     @Override
     public String toString() {
         final Context context = App.getContext();
-        return context.getString(R.string.x_vs_y, mPlayer1.getName(), mPlayer2.getName());
+        return context.getString(R.string.x_vs_y, mPlayer.getName(), mOpponent.getName());
     }
 
 
@@ -146,8 +149,8 @@ public class Match implements Cloneable, Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeParcelable(mPlayer1, flags);
-        dest.writeParcelable(mPlayer2, flags);
+        dest.writeParcelable(mOpponent, flags);
+        dest.writeParcelable(mPlayer, flags);
         dest.writeParcelable(mResult, flags);
         dest.writeParcelable(mTournament, flags);
     }

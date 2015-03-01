@@ -25,7 +25,6 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
     private static final SimpleDateFormat YEAR_FORMATTER;
 
     private final long mTime;
-    private final Region mRegion;
     private final String mDate;
     private final String mDay;
     private final String mId;
@@ -46,8 +45,7 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
     }
 
 
-    public Tournament(final Region region, final String date, final String id, final String name) {
-        mRegion = region;
+    public Tournament(final String date, final String id, final String name) {
         mDate = date;
         mId = id;
         mName = name;
@@ -70,7 +68,6 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
 
     private Tournament(final Parcel source) {
         mTime = source.readLong();
-        mRegion = source.readParcelable(Region.class.getClassLoader());
         mDate = source.readString();
         mDay = source.readString();
         mId = source.readString();
@@ -101,7 +98,7 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
         } else if (o instanceof Tournament) {
             final Tournament t = (Tournament) o;
             isEqual = mDate.equals(t.getDate()) && mId.equals(t.getId()) &&
-                    mName.equals(t.getName()) && mRegion.equals(t.getRegion());
+                    mName.equals(t.getName());
         } else {
             isEqual = false;
         }
@@ -146,11 +143,6 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
     }
 
 
-    public Region getRegion() {
-        return mRegion;
-    }
-
-
     public long getTime() {
         return mTime;
     }
@@ -184,7 +176,6 @@ public class Tournament implements AlphabeticallyComparable, Cloneable, Parcelab
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeLong(mTime);
-        dest.writeParcelable(mRegion, flags);
         dest.writeString(mDate);
         dest.writeString(mDay);
         dest.writeString(mId);

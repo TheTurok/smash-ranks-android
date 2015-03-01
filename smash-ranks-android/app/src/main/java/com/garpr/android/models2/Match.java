@@ -14,18 +14,16 @@ public class Match implements Cloneable, Parcelable {
 
     private final Player mPlayer1;
     private final Player mPlayer2;
-    private final Region mRegion;
     private final Result mResult;
     private final Tournament mTournament;
 
 
 
 
-    public Match(final Player player1, final Player player2, final Region region,
-            final Result result, final Tournament tournament) {
+    public Match(final Player player1, final Player player2, final Result result,
+            final Tournament tournament) {
         mPlayer1 = player1;
         mPlayer2 = player2;
-        mRegion = region;
         mResult = result;
         mTournament = tournament;
     }
@@ -34,7 +32,6 @@ public class Match implements Cloneable, Parcelable {
     private Match(final Parcel source) {
         mPlayer1 = source.readParcelable(Player.class.getClassLoader());
         mPlayer2 = source.readParcelable(Player.class.getClassLoader());
-        mRegion = source.readParcelable(Region.class.getClassLoader());
         mResult = source.readParcelable(Result.class.getClassLoader());
         mTournament = source.readParcelable(Tournament.class.getClassLoader());
     }
@@ -60,8 +57,7 @@ public class Match implements Cloneable, Parcelable {
         } else if (o instanceof Match) {
             final Match m = (Match) o;
             isEqual = mPlayer1.equals(m.getPlayer1()) && mPlayer2.equals(m.getPlayer2()) &&
-                    mRegion.equals(m.getRegion()) && mResult.equals(m.getResult()) &&
-                    mTournament.equals(m.getTournament());
+                    mResult.equals(m.getResult()) && mTournament.equals(m.getTournament());
         } else {
             isEqual = false;
         }
@@ -77,11 +73,6 @@ public class Match implements Cloneable, Parcelable {
 
     public Player getPlayer2() {
         return mPlayer2;
-    }
-
-
-    public Region getRegion() {
-        return mRegion;
     }
 
 
@@ -135,7 +126,6 @@ public class Match implements Cloneable, Parcelable {
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeParcelable(mPlayer1, flags);
         dest.writeParcelable(mPlayer2, flags);
-        dest.writeParcelable(mRegion, flags);
         dest.writeParcelable(mResult, flags);
         dest.writeParcelable(mTournament, flags);
     }

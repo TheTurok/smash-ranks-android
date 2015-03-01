@@ -18,15 +18,15 @@ public class Rank implements Cloneable, Parcelable {
 
 
 
-    public Rank(final int rank, final float rating) {
-        mRank = rank;
+    public Rank(final float rating, final int rank) {
         mRating = rating;
+        mRank = rank;
     }
 
 
     private Rank(final Parcel source) {
-        mRank = source.readInt();
         mRating = source.readFloat();
+        mRank = source.readInt();
     }
 
 
@@ -91,8 +91,8 @@ public class Rank implements Cloneable, Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeInt(mRank);
         dest.writeFloat(mRating);
+        dest.writeInt(mRank);
     }
 
 

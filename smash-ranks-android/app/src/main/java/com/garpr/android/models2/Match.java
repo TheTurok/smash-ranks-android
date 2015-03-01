@@ -60,7 +60,8 @@ public class Match implements Cloneable, Parcelable {
         } else if (o instanceof Match) {
             final Match m = (Match) o;
             isEqual = mPlayer1.equals(m.getPlayer1()) && mPlayer2.equals(m.getPlayer2()) &&
-                    mRegion.equals(m.getRegion()) && mTournament.equals(m.getTournament());
+                    mRegion.equals(m.getRegion()) && mResult.equals(m.getResult()) &&
+                    mTournament.equals(m.getTournament());
         } else {
             isEqual = false;
         }

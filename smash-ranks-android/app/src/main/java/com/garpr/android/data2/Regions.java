@@ -105,7 +105,7 @@ public final class Regions {
 
             for (final Region region : regions) {
                 final ContentValues cv = region.toContentValues();
-                database.insert(Players.TAG, null, cv);
+                database.insert(Regions.TAG, null, cv);
             }
 
             database.setTransactionSuccessful();

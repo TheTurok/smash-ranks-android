@@ -61,7 +61,9 @@ public final class Tournaments {
 
         private void clearThenMake() {
             final SQLiteDatabase database = Database.start();
-            database.delete(Tournaments.TAG, null, null);
+            final String whereClause = Constants.REGION_ID + " = ?";
+            final String[] whereArgs = { mRegionId };
+            database.delete(Tournaments.TAG, whereClause, whereArgs);
             Database.stop();
 
             super.make();

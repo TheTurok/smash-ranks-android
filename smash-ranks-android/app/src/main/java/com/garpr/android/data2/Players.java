@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models2.Player;
-import com.garpr.android.models2.Region;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -136,9 +135,11 @@ public final class Players {
 
         private void readThenMake() {
             final SQLiteDatabase database = Database.start();
-            final String sql = "SELECT " + Constants.PLAYER_ID + ", " + Constants.PLAYER_NAME +
-                    " FROM " + Players.TAG + " WHERE " + Constants.REGION_ID + " = " + mRegionId;
-            final Cursor cursor = database.rawQuery(sql, null);
+            final String[] columns = { Constants.PLAYER_ID, Constants.PLAYER_NAME };
+            final String selection = Constants.REGION_ID + " = ?";
+            final String selectionArgs[] = { mRegionId };
+            final Cursor cursor = database.query(Players.TAG, columns, selection, selectionArgs,
+                    null, null, null);
 
             final ArrayList<Player> players;
 

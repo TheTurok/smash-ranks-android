@@ -123,10 +123,12 @@ public final class Tournaments {
 
         private void readThenMake() {
             final SQLiteDatabase database = Database.start();
-            final String sql = "SELECT " + Constants.TOURNAMENT_DATE + ", " + Constants.TOURNAMENT_ID
-                    + ", " + Constants.TOURNAMENT_NAME + " FROM " + Tournaments.TAG + " WHERE " +
-                    Constants.REGION_ID + " = " + mRegionId;
-            final Cursor cursor = database.rawQuery(sql, null);
+            final String[] columns = { Constants.TOURNAMENT_DATE, Constants.TOURNAMENT_ID,
+                    Constants.TOURNAMENT_NAME };
+            final String selection = Constants.REGION_ID + " = ?";
+            final String[] selectionArgs = { mRegionId };
+            final Cursor cursor = database.query(Tournaments.TAG, columns, selection,
+                    selectionArgs, null, null, null);
 
             final ArrayList<Tournament> tournaments;
 

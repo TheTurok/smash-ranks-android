@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models2.Player;
 import com.garpr.android.models2.Ranking;
@@ -14,15 +15,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 
 public final class Rankings {
 
 
+    private static final SimpleDateFormat RANKINGS_DATE_PARSER;
+    private static final String CNAME = "com.garpr.android.data2.Rankings";
+    private static final String KEY_RANKINGS_DATE = "KEY_RANKINGS_DATE";
     static final String TAG = "Rankings";
 
+    private static long sRankingsDate;
 
+
+
+
+    static {
+        RANKINGS_DATE_PARSER = new SimpleDateFormat(Constants.RANKINGS_DATE_FORMAT, Locale.getDefault());
+    }
 
 
     static void createTable(final SQLiteDatabase db) {
@@ -46,6 +61,15 @@ public final class Rankings {
     public static void get(final Response<ArrayList<Player>> response, final String regionId,
             final boolean clear) {
         new RankingsCall(response, regionId, clear).start();
+    }
+
+
+    public static long getDate() {
+        if (sRankingsDate == 0L) {
+            sRankingsDate = Settings.get(CNAME).getLong(KEY_RANKINGS_DATE, 0L);
+        }
+
+        return sRankingsDate;
     }
 
 
@@ -109,6 +133,8 @@ public final class Rankings {
 
         @Override
         void onJSONResponse(final JSONObject json) throws JSONException {
+            parseRankingsDate(json);
+
             final JSONArray rankingsJSON = json.getJSONArray(Constants.RANKING);
             final int rankingsLength = rankingsJSON.length();
             final ArrayList<Player> players = new ArrayList<>(rankingsLength);
@@ -132,6 +158,21 @@ public final class Rankings {
             Database.stop();
 
             mResponse.success(players);
+        }
+
+
+        private void parseRankingsDate(final JSONObject json) throws JSONException {
+            final String rankingsDateString = json.getString(Constants.TIME);
+
+            try {
+                final Date rankingsDate = RANKINGS_DATE_PARSER.parse(rankingsDateString);
+                sRankingsDate = rankingsDate.getTime();
+
+                Settings.edit(CNAME).putLong(KEY_RANKINGS_DATE, sRankingsDate).apply();
+            } catch (final ParseException e) {
+                throw new JSONException("Exception when parsing rankings date: \"" +
+                        rankingsDateString + "\". " + e.getMessage());
+            }
         }
 
 

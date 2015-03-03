@@ -37,7 +37,7 @@ public final class Players {
 
 
     static {
-        DATE_PARSER = new SimpleDateFormat(Constants.ROSTER_DATE_FORMAT);
+        DATE_PARSER = new SimpleDateFormat(Constants.RANKINGS_DATE_FORMAT);
     }
 
 

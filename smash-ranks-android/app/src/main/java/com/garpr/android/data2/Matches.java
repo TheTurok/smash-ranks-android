@@ -10,6 +10,8 @@ import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models2.Match;
 import com.garpr.android.models2.Player;
+import com.garpr.android.models2.Result;
+import com.garpr.android.models2.Tournament;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -147,10 +149,14 @@ public final class Matches {
 
 
         private void readThenMake() {
-            // TODO
-
             final SQLiteDatabase database = Database.start();
-            final String sql = "";
+            final String sql = "SELECT " + Players.TAG + '.' + Constants.PLAYER_ID + ", " +
+                    Players.TAG + '.' + Constants.OPPONENT_ID + ", " + Players.TAG + '.' +
+                    Constants.OPPONENT_NAME + ", " + Constants.RESULT + ", " + Constants.TOURNAMENT_DATE
+                    + ", " + Constants.TOURNAMENT_ID + ", " + Constants.TOURNAMENT_NAME + " FROM "
+                    + Matches.TAG + " WHERE " + Players.TAG + '.' + Constants.PLAYER_ID + " = " +
+                    mPlayer.getId() + " INNER JOIN " + Matches.TAG + " ON " + Players.TAG + '.' +
+                    Constants.PLAYER_ID + ;
             final Cursor cursor = database.rawQuery(sql, null);
 
             final ArrayList<Match> matches;
@@ -158,14 +164,26 @@ public final class Matches {
             if (cursor.moveToFirst()) {
                 matches = new ArrayList<>();
                 final int opponentIdIndex = cursor.getColumnIndexOrThrow(Constants.OPPONENT_ID);
-                final int playerIdIndex = cursor.getColumnIndexOrThrow(Constants.PLAYER_ID);
-                final int playerNameIndex = cursor.getColumnIndexOrThrow(Constants.PLAYER_NAME);
+                final int opponentNameIndex = cursor.getColumnIndexOrThrow(Constants.OPPONENT_NAME);
+                final int resultIndex = cursor.getColumnIndexOrThrow(Constants.RESULT);
+                final int tournamentDateIndex = cursor.getColumnIndexOrThrow(Constants.TOURNAMENT_DATE);
+                final int tournamentIdIndex = cursor.getColumnIndexOrThrow(Constants.TOURNAMENT_ID);
+                final int tournamentNameIndex = cursor.getColumnIndexOrThrow(Constants.TOURNAMENT_NAME);
 
                 do {
+                    final String opponentId = cursor.getString(opponentIdIndex);
+                    final String opponentName = cursor.getString(opponentNameIndex);
+                    final Player opponent = new Player(opponentId, opponentName);
 
+                    final String resultString = cursor.getString(resultIndex);
+                    final Result result = Result.create(resultString);
 
-
-                    matches.add(null);
+                    final String tournamentDate = cursor.getString(tournamentDateIndex);
+                    final String tournamentId = cursor.getString(tournamentIdIndex);
+                    final String tournamentName = cursor.getString(tournamentNameIndex);
+                    final Tournament tournament = new Tournament(tournamentDate, tournamentId,
+                            tournamentName);
+                    matches.add(new Match(opponent, mPlayer, result, tournament));
                 } while (cursor.moveToNext());
 
                 matches.trimToSize();

@@ -11,6 +11,8 @@ import com.garpr.android.misc.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Comparator;
+
 
 public class Player implements AlphabeticallyComparable, Parcelable {
 
@@ -110,6 +112,22 @@ public class Player implements AlphabeticallyComparable, Parcelable {
     public String toString() {
         return getName();
     }
+
+
+    public static final Comparator<Player> ALPHABETICAL_ORDER = new Comparator<Player>() {
+        @Override
+        public int compare(final Player p0, final Player p1) {
+            return p0.getName().compareToIgnoreCase(p1.getName());
+        }
+    };
+
+
+    public static final Comparator<Player> RANK_ORDER = new Comparator<Player>() {
+        @Override
+        public int compare(final Player p0, final Player p1) {
+            return p0.getRank() - p1.getRank();
+        }
+    };
 
 
 

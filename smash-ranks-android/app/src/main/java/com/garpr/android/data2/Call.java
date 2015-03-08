@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObject> {
+abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
 
 
     protected final Response<T> mResponse;
@@ -104,18 +104,6 @@ abstract class Call<T> extends Thread implements ErrorListener, Listener<JSONObj
         };
 
         new Thread(runnable).start();
-    }
-
-
-    @Override
-    public final void run() {
-        super.run();
-
-        if (!mResponse.isAlive()) {
-            return;
-        }
-
-        make();
     }
 
 

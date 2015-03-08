@@ -24,7 +24,7 @@ public class Region implements AlphabeticallyComparable, Parcelable {
 
     public Region(final JSONObject json) throws JSONException {
         mId = json.getString(Constants.ID);
-        mName = json.getString(Constants.NAME);
+        mName = json.getString(Constants.DISPLAY_NAME);
     }
 
 
@@ -75,6 +75,20 @@ public class Region implements AlphabeticallyComparable, Parcelable {
         result = 31 * result + mName.hashCode();
 
         return result;
+    }
+
+
+    public JSONObject toJSON() {
+        try {
+            final JSONObject json = new JSONObject();
+            json.put(Constants.ID, mId);
+            json.put(Constants.DISPLAY_NAME, mName);
+
+            return json;
+        } catch (final JSONException e) {
+            // this should never happen
+            throw new RuntimeException(e);
+        }
     }
 
 

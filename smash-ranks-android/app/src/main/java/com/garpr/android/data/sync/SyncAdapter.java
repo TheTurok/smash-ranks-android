@@ -18,8 +18,8 @@ import android.support.v4.net.ConnectivityManagerCompat;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
-import com.garpr.android.data.Players;
-import com.garpr.android.data.Players.RosterUpdateCallback;
+import com.garpr.android.data.Rankings;
+import com.garpr.android.data.Response;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Analytics.Event;
@@ -80,28 +80,28 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
 
 
     private void checkForRosterUpdate(final long lastSync) {
-        final RosterUpdateCallback callback = new RosterUpdateCallback(this) {
+        final Response<Rankings.Result> response = new Response<Rankings.Result>(TAG, this) {
             @Override
-            public void newRosterAvailable() {
-                Notifications.showRankingsUpdated();
-                sendAnalyticsEvent(lastSync, Constants.NEW_ROSTER, null);
-            }
-
-
-            @Override
-            public void noNewRoster() {
-                sendAnalyticsEvent(lastSync, Constants.SAME_ROSTER, null);
-            }
-
-
-            @Override
-            public void response(final Exception e) {
+            public void error(final Exception e) {
                 Console.e(TAG, "Exception when retrieving roster while syncing!", e);
                 sendAnalyticsEvent(lastSync, Constants.EXCEPTION, e);
             }
+
+
+            @Override
+            public void success(final Rankings.Result result) {
+                if (Rankings.Result.NO_UPDATE.equals(result)) {
+                    sendAnalyticsEvent(lastSync, Constants.SAME_ROSTER, null);
+                } else if (Rankings.Result.UPDATE_AVAILABLE.equals(result)) {
+                    Notifications.showRankingsUpdated();
+                    sendAnalyticsEvent(lastSync, Constants.NEW_ROSTER, null);
+                } else {
+                    throw new RuntimeException("Invalid Rankings.Result: " + result);
+                }
+            }
         };
 
-        Players.checkForRosterUpdate(callback);
+        Rankings.checkForUpdates(response);
     }
 
 

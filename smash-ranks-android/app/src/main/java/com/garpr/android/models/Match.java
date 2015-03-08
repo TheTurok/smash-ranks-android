@@ -7,10 +7,11 @@ import android.os.Parcelable;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
-import com.garpr.android.misc.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Comparator;
 
 
 public class Match implements Parcelable {
@@ -25,12 +26,12 @@ public class Match implements Parcelable {
 
     public Match(final JSONObject json, final Player player) throws JSONException {
         final Player opponent = new Player(json);
-        final String result = json.getString(Constants.RESULT);
+        final Result result = Result.create(json);
 
-        if (Constants.LOSE.equalsIgnoreCase(result)) {
+        if (result.isLose()) {
             mLoser = player;
             mWinner = opponent;
-        } else if (Constants.WIN.equalsIgnoreCase(result)) {
+        } else if (result.isWin()) {
             mLoser = opponent;
             mWinner = player;
         } else {
@@ -79,6 +80,22 @@ public class Match implements Parcelable {
     }
 
 
+    public Player getOtherPlayer(final Player player) {
+        final Player otherPlayer;
+
+        if (player.equals(mLoser)) {
+            otherPlayer = mWinner;
+        } else if (player.equals(mWinner)) {
+            otherPlayer = mLoser;
+        } else {
+            // this should never happen
+            throw new RuntimeException();
+        }
+
+        return otherPlayer;
+    }
+
+
     public Tournament getTournament() {
         return mTournament;
     }
@@ -101,11 +118,37 @@ public class Match implements Parcelable {
     }
 
 
+    public boolean isLoser(final Player player) {
+        return mLoser.equals(player);
+    }
+
+
+    public boolean isWinner(final Player player) {
+        return mWinner.equals(player);
+    }
+
+
     @Override
     public String toString() {
         final Context context = App.getContext();
         return context.getString(R.string.x_vs_y, mWinner.getName(), mLoser.getName());
     }
+
+
+    public static final Comparator<Match> CHRONOLOGICAL_ORDER = new Comparator<Match>() {
+        @Override
+        public int compare(final Match m0, final Match m1) {
+            return m0.getTournament().getDateWrapper().getDate().compareTo(m1.getTournament().getDateWrapper().getDate());
+        }
+    };
+
+
+    public static final Comparator<Match> REVERSE_CHRONOLOGICAL_ORDER = new Comparator<Match>() {
+        @Override
+        public int compare(final Match m0, final Match m1) {
+            return CHRONOLOGICAL_ORDER.compare(m1, m0);
+        }
+    };
 
 
 

@@ -73,7 +73,7 @@ public class DateWrapper implements Parcelable {
             isEqual = true;
         } else if (o instanceof DateWrapper) {
             final DateWrapper dw = (DateWrapper) o;
-            isEqual = mDate.equals(dw.getDateWrapper());
+            isEqual = mDate.equals(dw.getDate());
         } else {
             isEqual = false;
         }
@@ -82,7 +82,7 @@ public class DateWrapper implements Parcelable {
     }
 
 
-    public Date getDateWrapper() {
+    public Date getDate() {
         return mDate;
     }
 

@@ -22,8 +22,7 @@ import android.widget.TextView;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Matches;
-import com.garpr.android.data.Matches.MatchesCallback;
-import com.garpr.android.data.Players;
+import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
 import com.garpr.android.misc.Analytics;
@@ -97,7 +96,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
                 mListItems.add(ListItem.createTournament(tournament));
             }
 
-            mListItems.add(ListItem.createMatch(match));
+            mListItems.add(ListItem.createMatch(match, mPlayer));
         }
 
         mListItems.trimToSize();
@@ -114,7 +113,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         for (int i = 0; i < mListItems.size(); ++i) {
             final ListItem listItem = mListItems.get(i);
 
-            if (listItem.isMatch() && listItem.mMatch.getResult().equals(result)) {
+            if (listItem.isMatch() && ((listItem.mMatch.isLoser(mPlayer) && result.isLose())
+                    || (listItem.mMatch.isWinner(mPlayer) && result.isWin()))) {
                 ListItem tournament = null;
 
                 for (int j = i - 1; tournament == null; --j) {
@@ -142,9 +142,9 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     private void fetchMatches() {
         setLoading(true);
 
-        final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
+        final ResponseOnUi<ArrayList<Match>> response = new ResponseOnUi<ArrayList<Match>>(TAG, this) {
             @Override
-            public void response(final Exception e) {
+            public void errorOnUi(final Exception e) {
                 Console.e(TAG, "Exception when fetching matches", e);
                 showError();
 
@@ -153,10 +153,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
             @Override
-            public void response(final ArrayList<Match> list) {
+            public void successOnUi(final ArrayList<Match> list) {
                 setList(list);
-                mPlayer.setMatches(list);
-                Players.save(mPlayer);
 
                 final Intent data = new Intent();
                 data.putExtra(ResultData.PLAYER, mPlayer);
@@ -164,7 +162,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
             }
         };
 
-        Matches.getMatches(callback);
+        Matches.get(response, mPlayer);
     }
 
 
@@ -218,12 +216,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
             }
         };
 
-        if (mPlayer.hasMatches()) {
-            final ArrayList<Match> matches = mPlayer.getMatches();
-            setList(matches);
-        } else {
-            fetchMatches();
-        }
+        fetchMatches();
     }
 
 
@@ -238,7 +231,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     @Override
     public void onItemClick(final View view, final int position) {
         final ListItem listItem = mListItemsShown.get(position);
-        final Player opponent = listItem.mMatch.getOpponent();
+        final Player opponent = listItem.mMatch.getOtherPlayer(mPlayer);
         HeadToHeadActivity.start(this, mPlayer, opponent);
     }
 
@@ -476,14 +469,16 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
         private long mId;
         private Match mMatch;
+        private Player mOpponent;
         private Tournament mTournament;
         private Type mType;
 
 
-        private static ListItem createMatch(final Match match) {
+        private static ListItem createMatch(final Match match, final Player player) {
             final ListItem item = new ListItem();
             item.mId = sId++;
             item.mMatch = match;
+            item.mOpponent = match.getOtherPlayer(player);
             item.mType = Type.MATCH;
 
             return item;
@@ -530,7 +525,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
             switch (mType) {
                 case MATCH:
-                    name = mMatch.getOpponentName();
+                    name = mOpponent.getName();
                     break;
 
                 case TOURNAMENT:
@@ -626,18 +621,17 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
         private void bindMatchViewHolder(final MatchViewHolder holder, final int position,
                 final ListItem listItem) {
-            holder.mOpponent.setText(listItem.mMatch.getOpponentName());
+            final Player opponent = listItem.mMatch.getOtherPlayer(mPlayer);
+            holder.mOpponent.setText(opponent.getName());
 
-            if (listItem.mMatch.isWin()) {
+            if (listItem.mMatch.isWinner(mPlayer)) {
                 holder.mOpponent.setTextColor(mColorWin);
             } else {
                 holder.mOpponent.setTextColor(mColorLose);
             }
 
             if (mInUsersRegion && mUserPlayer != null) {
-                final String opponentId = listItem.mMatch.getOpponentId();
-
-                if (opponentId.equals(mUserPlayer.getId())) {
+                if (opponent.getId().equals(mUserPlayer.getId())) {
                     holder.mRoot.setBackgroundColor(mBgHighlight);
                 } else {
                     holder.mRoot.setBackgroundColor(mBgGray);
@@ -648,7 +642,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
         private void bindTournamentViewHolder(final TournamentViewHolder holder, final int position,
                 final ListItem listItem) {
-            holder.mDate.setText(listItem.mTournament.getDate());
+            holder.mDate.setText(listItem.mTournament.getDateWrapper().getRawDate());
             holder.mName.setText(listItem.mTournament.getName());
         }
 

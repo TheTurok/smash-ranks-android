@@ -18,8 +18,8 @@ import android.widget.TextView;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
+import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Tournaments;
-import com.garpr.android.data.Tournaments.TournamentsCallback;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
@@ -61,7 +61,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         String lastMonthAndYear = null;
 
         for (final Tournament tournament : tournaments) {
-            final String monthAndYear = tournament.getMonthAndYear();
+            final String monthAndYear = tournament.getDateWrapper().getMonthAndYear();
 
             if (!monthAndYear.equals(lastMonthAndYear)) {
                 lastMonthAndYear = monthAndYear;
@@ -81,9 +81,9 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
     private void fetchTournaments() {
         setLoading(true);
 
-        final TournamentsCallback callback = new TournamentsCallback(this) {
+        final ResponseOnUi<ArrayList<Tournament>> response = new ResponseOnUi<ArrayList<Tournament>>(TAG, this) {
             @Override
-            public void response(final Exception e) {
+            public void errorOnUi(final Exception e) {
                 Console.e(TAG, "Exception when retrieving tournaments", e);
                 showError();
 
@@ -92,14 +92,14 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
             @Override
-            public void response(final ArrayList<Tournament> list) {
+            public void successOnUi(final ArrayList<Tournament> list) {
                 Collections.sort(list, Tournament.REVERSE_CHRONOLOGICAL_ORDER);
                 createListItems(list);
                 setAdapter(new TournamentsAdapter());
             }
         };
 
-        Tournaments.get(callback);
+        Tournaments.getAll(response);
     }
 
 
@@ -199,7 +199,6 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
         if (!isLoading()) {
             MenuItemCompat.collapseActionView(mSearch);
-            Tournaments.clear();
             fetchTournaments();
         }
     }
@@ -394,7 +393,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
         private void bindTournamentViewHolder(final TournamentViewHolder holder, final ListItem listItem) {
-            holder.mDate.setText(listItem.mTournament.getDayOfMonth());
+            holder.mDate.setText(listItem.mTournament.getDateWrapper().getDay());
             holder.mName.setText(listItem.mTournament.getName());
         }
 

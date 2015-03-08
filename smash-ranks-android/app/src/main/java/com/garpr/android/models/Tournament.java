@@ -114,7 +114,7 @@ public class Tournament implements AlphabeticallyComparable, Parcelable {
     public static final Comparator<Tournament> CHRONOLOGICAL_ORDER = new Comparator<Tournament>() {
         @Override
         public int compare(final Tournament t0, final Tournament t1) {
-            return t0.mDateWrapper.getDateWrapper().compareTo(t1.getDateWrapper().getDateWrapper());
+            return t0.getDateWrapper().getDate().compareTo(t1.getDateWrapper().getDate());
         }
     };
 

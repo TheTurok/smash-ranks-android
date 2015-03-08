@@ -17,12 +17,13 @@ import android.widget.TextView;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Matches;
-import com.garpr.android.data.Matches.MatchesCallback;
+import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Utils;
+import com.garpr.android.models.HeadToHeadBundle;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Result;
@@ -46,6 +47,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     private ArrayList<ListItem> mLoseListItems;
     private ArrayList<ListItem> mWinListItems;
     private boolean mSetMenuItemsVisible;
+    private HeadToHeadBundle mBundle;
     private MenuItem mShow;
     private MenuItem mShowAll;
     private MenuItem mShowLoses;
@@ -65,30 +67,26 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     }
 
 
-    private void createListItems(final ArrayList<Match> matches) {
+    private void createListItems() {
         mListItems = new ArrayList<>();
-        int wins = 0, loses = 0;
         Tournament lastTournament = null;
 
-        for (final Match match : matches) {
-            if (match.isWin()) {
-                ++wins;
-            } else {
-                ++loses;
-            }
+        final ArrayList<Match> matches = mBundle.getMatches();
+        Collections.sort(matches, Match.REVERSE_CHRONOLOGICAL_ORDER);
 
+        for (final Match match : matches) {
             final Tournament tournament = match.getTournament();
 
             if (!tournament.equals(lastTournament)) {
                 lastTournament = tournament;
-                final String monthAndYear = tournament.getMonthAndYear();
+                final String monthAndYear = tournament.getDateWrapper().getMonthAndYear();
                 mListItems.add(ListItem.createDate(monthAndYear));
             }
 
             mListItems.add(ListItem.createTournament(match));
         }
 
-        final String header = getString(R.string.x_em_dash_y, wins, loses);
+        final String header = getString(R.string.x_em_dash_y, mBundle.getWins(), mBundle.getLosses());
         mListItems.add(0, ListItem.createHeader(header));
         mListItems.trimToSize();
         mListItemsShown = mListItems;
@@ -106,7 +104,8 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
             if (listItem.isHeader()) {
                 listItems.add(listItem);
-            } else if (listItem.isTournament() && listItem.mMatch.getResult().equals(result)) {
+            } else if (listItem.isTournament() && ((listItem.mMatch.isLoser(mPlayer) &&
+                    result.isLose()) || (listItem.mMatch.isWinner(mPlayer) && result.isWin()))) {
                 ListItem date = null;
 
                 for (int j = i - 1; date == null; --j) {
@@ -134,9 +133,9 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     private void fetchMatches() {
         setLoading(true);
 
-        final MatchesCallback callback = new MatchesCallback(this, mPlayer.getId()) {
+        final ResponseOnUi<HeadToHeadBundle> response = new ResponseOnUi<HeadToHeadBundle>(TAG, this) {
             @Override
-            public void response(final Exception e) {
+            public void errorOnUi(final Exception e) {
                 Console.e(TAG, "Exception when fetching head to head matches", e);
                 showError();
 
@@ -145,9 +144,9 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
             @Override
-            public void response(final ArrayList<Match> list) {
-                Collections.sort(list, Match.REVERSE_CHRONOLOGICAL_ORDER);
-                createListItems(list);
+            public void successOnUi(final HeadToHeadBundle object) {
+                mBundle = object;
+                createListItems();
                 setAdapter(new MatchesAdapter());
 
                 if (mShowing != null) {
@@ -156,7 +155,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
             }
         };
 
-        Matches.getHeadToHeadMatches(mOpponent.getId(), callback);
+        Matches.getHeadToHead(response, mPlayer, mOpponent);
     }
 
 
@@ -495,10 +494,10 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
         private void bindTournamentViewHolder(final TournamentViewHolder holder, final ListItem listItem) {
             final Tournament tournament = listItem.mMatch.getTournament();
-            holder.mDate.setText(tournament.getDayOfMonth());
+            holder.mDate.setText(tournament.getDateWrapper().getDay());
             holder.mName.setText(tournament.getName());
 
-            if (listItem.mMatch.isWin()) {
+            if (listItem.mMatch.isWinner(mPlayer)) {
                 holder.mName.setTextColor(mColorWin);
             } else {
                 holder.mName.setTextColor(mColorLose);

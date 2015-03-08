@@ -27,7 +27,7 @@ import android.widget.TextView;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Regions;
-import com.garpr.android.data.Regions.RegionsCallback;
+import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
@@ -146,9 +146,9 @@ public class RegionsFragment extends BaseListToolbarFragment {
     private void fetchRegions() {
         setLoading(true);
 
-        final RegionsCallback callback = new RegionsCallback(this) {
+        final ResponseOnUi<ArrayList<Region>> response = new ResponseOnUi<ArrayList<Region>>(TAG, this) {
             @Override
-            public void response(final Exception e) {
+            public void errorOnUi(final Exception e) {
                 Console.e(TAG, "Exception when retrieving regions!", e);
                 showError();
 
@@ -157,14 +157,14 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
             @Override
-            public void response(final ArrayList<Region> list) {
+            public void successOnUi(final ArrayList<Region> list) {
                 Collections.sort(list, Region.ALPHABETICAL_ORDER);
                 createListItems(list);
                 setAdapter(new RegionsAdapter());
             }
         };
 
-        Regions.get(callback);
+        Regions.get(response);
     }
 
 
@@ -336,7 +336,6 @@ public class RegionsFragment extends BaseListToolbarFragment {
         super.onRefresh();
 
         if (!isLoading()) {
-            Regions.clear();
             fetchRegions();
         }
     }

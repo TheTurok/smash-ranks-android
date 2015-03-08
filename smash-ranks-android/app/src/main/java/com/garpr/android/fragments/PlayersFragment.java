@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Players;
-import com.garpr.android.data.Players.PlayersCallback;
+import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
@@ -115,9 +115,9 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     private void fetchPlayers() {
         setLoading(true);
 
-        final PlayersCallback callback = new PlayersCallback(this) {
+        final ResponseOnUi<ArrayList<Player>> response = new ResponseOnUi<ArrayList<Player>>(TAG, this) {
             @Override
-            public void response(final Exception e) {
+            public void errorOnUi(final Exception e) {
                 Console.e(TAG, "Exception when retrieving players!", e);
                 showError();
 
@@ -126,12 +126,12 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
             @Override
-            public void response(final ArrayList<Player> list) {
+            public void successOnUi(final ArrayList<Player> list) {
                 setList(list);
             }
         };
 
-        Players.getAll(callback);
+        Players.get(response);
     }
 
 
@@ -289,7 +289,6 @@ public class PlayersFragment extends BaseListToolbarFragment implements
                 MenuItemCompat.collapseActionView(mSearch);
             }
 
-            Players.clear();
             refresh();
         }
     }

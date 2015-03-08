@@ -4,6 +4,7 @@ package com.garpr.android.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.Utils;
@@ -21,6 +22,8 @@ public class Player implements AlphabeticallyComparable, Parcelable {
     private final int mRank;
     private final String mId;
     private final String mName;
+    private String mProfileUrl;
+    private final String mRatingTruncated;
 
 
 
@@ -30,6 +33,7 @@ public class Player implements AlphabeticallyComparable, Parcelable {
         mName = Utils.getJSONString(json, Constants.OPPONENT_NAME, Constants.NAME);
         mRating = (float) json.optDouble(Constants.RATING, Float.MIN_VALUE);
         mRank = json.optInt(Constants.RANK, Integer.MIN_VALUE);
+        mRatingTruncated = String.format("%.3f", mRating);
     }
 
 
@@ -38,6 +42,7 @@ public class Player implements AlphabeticallyComparable, Parcelable {
         mName = name;
         mRating = Float.MIN_VALUE;
         mRank = Integer.MIN_VALUE;
+        mRatingTruncated = null;
     }
 
 
@@ -46,6 +51,8 @@ public class Player implements AlphabeticallyComparable, Parcelable {
         mRank = source.readInt();
         mId = source.readString();
         mName = source.readString();
+        mProfileUrl = source.readString();
+        mRatingTruncated = source.readString();
     }
 
 
@@ -57,18 +64,7 @@ public class Player implements AlphabeticallyComparable, Parcelable {
             isEqual = true;
         } else if (o instanceof Player) {
             final Player p = (Player) o;
-
-            if (mId.equals(p.getId()) && mName.equals(p.getName())) {
-                if (hasCompetitionValues() && p.hasCompetitionValues()) {
-                    isEqual = mRank == p.getRank() && mRating == p.getRating();
-                } else if (!hasCompetitionValues() && !p.hasCompetitionValues()) {
-                    isEqual = true;
-                } else {
-                    isEqual = false;
-                }
-            } else {
-                isEqual = false;
-            }
+            isEqual = mId.equals(p.getId()) && mName.equals(p.getName());
         } else {
             isEqual = false;
         }
@@ -93,6 +89,17 @@ public class Player implements AlphabeticallyComparable, Parcelable {
     }
 
 
+    public String getProfileUrl() {
+        if (!Utils.validStrings(mProfileUrl)) {
+            final Region region = Settings.getRegion();
+            final String regionName = region.getName().toLowerCase();
+            mProfileUrl = Constants.WEB_URL + regionName + '/' + Constants.PLAYERS + '/' + mId;
+        }
+
+        return mProfileUrl;
+    }
+
+
     public int getRank() {
         return mRank;
     }
@@ -100,6 +107,11 @@ public class Player implements AlphabeticallyComparable, Parcelable {
 
     public float getRating() {
         return mRating;
+    }
+
+
+    public String getRatingTruncated() {
+        return mRatingTruncated;
     }
 
 
@@ -116,8 +128,23 @@ public class Player implements AlphabeticallyComparable, Parcelable {
         result = 31 * result + mRank;
         result = 31 * result + mId.hashCode();
         result = 31 * result + mName.hashCode();
+        result = 31 * result + (mRatingTruncated != null ? mRatingTruncated.hashCode() : 0);
 
         return result;
+    }
+
+
+    public JSONObject toJSON() {
+        try {
+            final JSONObject json = new JSONObject();
+            json.put(Constants.ID, mId);
+            json.put(Constants.NAME, mName);
+
+            return json;
+        } catch (final JSONException e) {
+            // this should never happen
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -163,6 +190,8 @@ public class Player implements AlphabeticallyComparable, Parcelable {
         dest.writeInt(mRank);
         dest.writeString(mId);
         dest.writeString(mName);
+        dest.writeString(mProfileUrl);
+        dest.writeString(mRatingTruncated);
     }
 
 

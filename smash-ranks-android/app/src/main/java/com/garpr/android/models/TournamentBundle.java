@@ -1,4 +1,4 @@
-package com.garpr.android.models2;
+package com.garpr.android.models;
 
 
 import android.content.Context;

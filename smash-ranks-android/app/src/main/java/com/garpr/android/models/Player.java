@@ -1,81 +1,51 @@
 package com.garpr.android.models;
 
 
-import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.Utils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 
 
 public class Player implements AlphabeticallyComparable, Parcelable {
 
 
-    private ArrayList<Match> matches;
-    private float rating;
-    private int rank;
-    private String id;
-    private String name;
-    private String profileUrl;
+    private final float mRating;
+    private final int mRank;
+    private final String mId;
+    private final String mName;
 
 
 
 
     public Player(final JSONObject json) throws JSONException {
-        id = json.getString(Constants.ID);
-        name = json.getString(Constants.NAME);
-
-        if (json.has(Constants.RATING) && json.has(Constants.RANK)) {
-            setCompetitionValues(json);
-
-            if (json.has(Constants.MATCHES)) {
-                final JSONArray matchesJSON = json.getJSONArray(Constants.MATCHES);
-                final int matchesLength = matchesJSON.length();
-                matches = new ArrayList<>(matchesLength);
-
-                for (int i = 0; i < matchesLength; ++i) {
-                    final JSONObject matchJSON = matchesJSON.getJSONObject(i);
-                    final Match match = new Match(matchJSON);
-                    matches.add(match);
-                }
-
-                if (matches.isEmpty()) {
-                    matches = null;
-                } else {
-                    matches.trimToSize();
-                }
-            }
-        } else {
-            rating = Float.MIN_VALUE;
-            rank = Integer.MIN_VALUE;
-        }
+        mId = Utils.getJSONString(json, Constants.OPPONENT_ID, Constants.ID);
+        mName = Utils.getJSONString(json, Constants.OPPONENT_NAME, Constants.NAME);
+        mRating = (float) json.optDouble(Constants.RATING, Float.MIN_VALUE);
+        mRank = json.optInt(Constants.RANK, Integer.MIN_VALUE);
     }
 
 
     public Player(final String id, final String name) {
-        // TODO
-        this.id = id;
-        this.name = name;
+        mId = id;
+        mName = name;
+        mRating = Float.MIN_VALUE;
+        mRank = Integer.MIN_VALUE;
     }
 
 
     private Player(final Parcel source) {
-        matches = source.createTypedArrayList(Match.CREATOR);
-        rating = source.readFloat();
-        rank = source.readInt();
-        id = source.readString();
-        name = source.readString();
-        profileUrl = source.readString();
+        mRating = source.readFloat();
+        mRank = source.readInt();
+        mId = source.readString();
+        mName = source.readString();
     }
 
 
@@ -87,7 +57,18 @@ public class Player implements AlphabeticallyComparable, Parcelable {
             isEqual = true;
         } else if (o instanceof Player) {
             final Player p = (Player) o;
-            isEqual = id.equals(p.getId());
+
+            if (mId.equals(p.getId()) && mName.equals(p.getName())) {
+                if (hasCompetitionValues() && p.hasCompetitionValues()) {
+                    isEqual = mRank == p.getRank() && mRating == p.getRating();
+                } else if (!hasCompetitionValues() && !p.hasCompetitionValues()) {
+                    isEqual = true;
+                } else {
+                    isEqual = false;
+                }
+            } else {
+                isEqual = false;
+            }
         } else {
             isEqual = false;
         }
@@ -98,107 +79,45 @@ public class Player implements AlphabeticallyComparable, Parcelable {
 
     @Override
     public char getFirstCharOfName() {
-        return name.charAt(0);
+        return mName.charAt(0);
     }
 
 
     public String getId() {
-        return id;
-    }
-
-
-    public ArrayList<Match> getMatches() {
-        return matches;
+        return mId;
     }
 
 
     public String getName() {
-        return name;
-    }
-
-
-    public String getProfileUrl() {
-        if (!Utils.validStrings(profileUrl)) {
-            final Region region = Settings.getRegion();
-            final String regionName = region.getName().toLowerCase();
-            profileUrl = Constants.WEB_URL + regionName + '/' + Constants.PLAYERS + '/' + id;
-        }
-
-        return profileUrl;
+        return mName;
     }
 
 
     public int getRank() {
-        return rank;
+        return mRank;
     }
 
 
     public float getRating() {
-        return rating;
-    }
-
-
-    public String getRatingTruncated() {
-        return String.format("%.3f", rating);
+        return mRating;
     }
 
 
     public boolean hasCompetitionValues() {
-        return rank != Integer.MIN_VALUE && rating != Float.MIN_VALUE;
+        return mRank != Integer.MIN_VALUE && mRating != Float.MIN_VALUE;
     }
 
 
-    public boolean hasMatches() {
-        return matches != null && !matches.isEmpty();
-    }
+    @Override
+    public int hashCode() {
+        // this method was automatically generated by Android Studio
 
+        int result = (mRating != +0.0f ? Float.floatToIntBits(mRating) : 0);
+        result = 31 * result + mRank;
+        result = 31 * result + mId.hashCode();
+        result = 31 * result + mName.hashCode();
 
-    public void setCompetitionValues(final JSONObject json) throws JSONException {
-        rating = (float) json.getDouble(Constants.RATING);
-        rank = json.getInt(Constants.RANK);
-    }
-
-
-    public void setMatches(final ArrayList<Match> matches) {
-        this.matches = matches;
-    }
-
-
-    public ContentValues toContentValues() {
-        final ContentValues contentValues = new ContentValues();
-        contentValues.put(Constants.ID, id);
-        contentValues.put(Constants.NAME, name);
-
-        return contentValues;
-    }
-
-
-    public JSONObject toJSON() {
-        try {
-            final JSONObject json = new JSONObject();
-            json.put(Constants.ID, id);
-            json.put(Constants.NAME, name);
-
-            if (hasCompetitionValues()) {
-                json.put(Constants.RANK, rank);
-                json.put(Constants.RATING, rating);
-
-                if (hasMatches()) {
-                    final JSONArray matchesJSON = new JSONArray();
-
-                    for (final Match match : matches) {
-                        final JSONObject matchJSON = match.toJSON();
-                        matchesJSON.put(matchJSON);
-                    }
-
-                    json.put(Constants.MATCHES, matchesJSON);
-                }
-            }
-
-            return json;
-        } catch (final JSONException e) {
-            throw new RuntimeException(e);
-        }
+        return result;
     }
 
 
@@ -240,12 +159,10 @@ public class Player implements AlphabeticallyComparable, Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeTypedList(matches);
-        dest.writeFloat(rating);
-        dest.writeInt(rank);
-        dest.writeString(id);
-        dest.writeString(name);
-        dest.writeString(profileUrl);
+        dest.writeFloat(mRating);
+        dest.writeInt(mRank);
+        dest.writeString(mId);
+        dest.writeString(mName);
     }
 
 

@@ -1,10 +1,9 @@
-package com.garpr.android.data2;
+package com.garpr.android.data;
 
 
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.models2.Player;
+import com.garpr.android.models.Player;
 
 import org.json.JSONArray;
 import org.json.JSONException;

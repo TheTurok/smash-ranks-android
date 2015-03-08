@@ -1,10 +1,11 @@
 package com.garpr.android.data;
 
 
-import com.garpr.android.misc.Console;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.HeartbeatWithUi;
+import com.garpr.android.models.HeadToHeadBundle;
 import com.garpr.android.models.Match;
+import com.garpr.android.models.Player;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,91 +17,137 @@ import java.util.ArrayList;
 public final class Matches {
 
 
-    private static void get(final String suffix, final MatchesCallback callback) {
-        final String url = Network.makeUrl(suffix);
-        Network.sendRequest(url, callback);
+    public static void get(final Response<ArrayList<Match>> response, final Player player) {
+        new MatchesCall(response, player).make();
     }
 
 
-    public static void getHeadToHeadMatches(final String opponentId, final MatchesCallback callback) {
-        final String suffix = Constants.MATCHES + '/' + callback.mPlayerId + '?' +
-                Constants.OPPONENT + '=' + opponentId;
-        get(suffix, callback);
+    public static void get(final Response<ArrayList<Match>> response, final String regionId,
+            final Player player) {
+        new MatchesCall(response, regionId, player).make();
     }
 
 
-    public static void getMatches(final MatchesCallback callback) {
-        final String suffix = Constants.MATCHES + '/' + callback.mPlayerId;
-        get(suffix, callback);
+    public static void getHeadToHead(final Response<HeadToHeadBundle> response, final Player player,
+            final Player opponent) {
+        new HeadToHeadCall(response, player, opponent).make();
     }
 
 
-    private static ArrayList<Match> parseJSON(final JSONObject json) throws JSONException {
-        final JSONArray matchesJSON = json.getJSONArray(Constants.MATCHES);
-        final int matchesLength = matchesJSON.length();
-        final ArrayList<Match> matches = new ArrayList<>(matchesLength);
+    public static void getHeadToHead(final Response<HeadToHeadBundle> response, final Player player,
+            final Player opponent, final String regionId) {
+        new HeadToHeadCall(response, player, opponent, regionId).make();
+    }
 
-        for (int i = 0; i < matchesLength; ++i) {
-            final JSONObject matchJSON = matchesJSON.getJSONObject(i);
-            final Match match = new Match(matchJSON);
-            matches.add(match);
+
+
+
+    private static final class HeadToHeadCall extends RegionBasedCall<HeadToHeadBundle> {
+
+
+        private static final String TAG = "HeadToHeadCall";
+
+        private final Player mOpponent;
+        private final Player mPlayer;
+
+
+        private HeadToHeadCall(final Response<HeadToHeadBundle> response, final Player player,
+                final Player opponent) throws IllegalArgumentException {
+            this(response, player, opponent, Settings.getRegion().getId());
         }
 
-        matches.trimToSize();
-        return matches;
-    }
 
+        private HeadToHeadCall(final Response<HeadToHeadBundle> response, final Player player,
+                final Player opponent, final String regionId) throws IllegalArgumentException {
+            super(response, regionId);
 
+            if (player == null) {
+                throw new IllegalArgumentException("player is null");
+            } else if (opponent == null) {
+                throw new IllegalArgumentException("opponent is null");
+            }
 
-
-    public static abstract class MatchesCallback extends CallbackWithUi<Match> {
-
-
-        private static final String TAG = "MatchesCallback";
-
-        private final String mPlayerId;
-
-
-        public MatchesCallback(final HeartbeatWithUi heartbeat, final String playerId) {
-            super(heartbeat);
-            mPlayerId = playerId;
+            mPlayer = player;
+            mOpponent = opponent;
         }
 
 
         @Override
-        final String getCallbackName() {
+        String getCallName() {
             return TAG;
         }
 
 
         @Override
-        final void onItemResponse(final Match item) {
-            final ArrayList<Match> items = new ArrayList<>(1);
-            items.add(item);
-            onListResponse(items);
+        JsonObjectRequest getRequest() {
+            final String url = getBaseUrl() + Constants.MATCHES + '/' + mPlayer.getId() + '?' +
+                    Constants.OPPONENT + '=' + mOpponent.getId();
+            return new JsonObjectRequest(url, null, this, this);
         }
 
 
         @Override
-        final void onJSONResponse(final JSONObject json) {
-            try {
-                final ArrayList<Match> matches = parseJSON(json);
-                Console.d(TAG, "Read in " + matches.size() + " Match objects from JSON response");
+        void onJSONResponse(final JSONObject json) throws JSONException {
+            final HeadToHeadBundle headToHeadBundle = new HeadToHeadBundle(json);
+            mResponse.success(headToHeadBundle);
+        }
 
-                if (matches.isEmpty()) {
-                    responseOnUi(new JSONException("No matches grabbed from JSON response for Player " + mPlayerId));
-                } else {
-                    responseOnUi(matches);
-                }
-            } catch (final JSONException e) {
-                responseOnUi(e);
+
+    }
+
+
+    private static final class MatchesCall extends RegionBasedCall<ArrayList<Match>> {
+
+
+        private static final String TAG = "MatchesCall";
+
+        private final Player mPlayer;
+
+
+        private MatchesCall(final Response<ArrayList<Match>> response, final Player player)
+                throws IllegalArgumentException {
+            this(response, Settings.getRegion().getId(), player);
+        }
+
+
+        private MatchesCall(final Response<ArrayList<Match>> response, final String regionId,
+                final Player player) {
+            super(response, regionId);
+
+            if (player == null) {
+                throw new IllegalArgumentException("player is null");
             }
+
+            mPlayer = player;
         }
 
 
         @Override
-        public final void response(final Match item) {
-            throw new UnsupportedOperationException();
+        String getCallName() {
+            return TAG;
+        }
+
+
+        @Override
+        JsonObjectRequest getRequest() {
+            final String url = getBaseUrl() + Constants.MATCHES + '/' + mPlayer.getId();
+            return new JsonObjectRequest(url, null, this, this);
+        }
+
+
+        @Override
+        void onJSONResponse(final JSONObject json) throws JSONException {
+            final JSONArray matchesJSON = json.getJSONArray(Constants.MATCHES);
+            final int matchesLength = matchesJSON.length();
+            final ArrayList<Match> matches = new ArrayList<>(matchesLength);
+
+            for (int i = 0; i < matchesLength; ++i) {
+                final JSONObject matchJSON = matchesJSON.getJSONObject(i);
+                final Match match = new Match(matchJSON, mPlayer);
+                matches.add(match);
+            }
+
+            mResponse.success(matches);
         }
 
 

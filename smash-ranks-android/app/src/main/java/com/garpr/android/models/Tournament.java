@@ -1,96 +1,48 @@
 package com.garpr.android.models;
 
 
-import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.garpr.android.App;
-import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
 
 
-public class Tournament implements Parcelable {
+public class Tournament implements AlphabeticallyComparable, Parcelable {
 
 
-    private static final SimpleDateFormat DATE_PARSER;
-    private static final SimpleDateFormat DAY_OF_MONTH_FORMATTER;
-    private static final SimpleDateFormat MONTH_FORMATTER;
-    private static final SimpleDateFormat YEAR_FORMATTER;
-
-    private Date date;
-    private String dateString;
-    private String dayOfMonth;
-    private String id;
-    private String month;
-    private String name;
-    private String year;
+    private final DateWrapper mDateWrapper;
+    private final String mId;
+    private final String mName;
 
 
 
 
-    static {
-        DATE_PARSER = new SimpleDateFormat(Constants.TOURNAMENT_DATE_FORMAT);
-        DAY_OF_MONTH_FORMATTER = new SimpleDateFormat(Constants.DAY_OF_MONTH_FORMAT);
-        MONTH_FORMATTER = new SimpleDateFormat(Constants.MONTH_FORMAT);
-        YEAR_FORMATTER = new SimpleDateFormat(Constants.YEAR_FORMAT);
-    }
+    public Tournament(final JSONObject json) throws JSONException {
+        mId = Utils.getJSONString(json, Constants.TOURNAMENT_ID, Constants.ID);
+        mName = Utils.getJSONString(json, Constants.TOURNAMENT_NAME, Constants.NAME);
 
-
-    public Tournament(JSONObject json) throws JSONException {
-        if (json.has(Constants.TOURNAMENT)) {
-            json = json.getJSONObject(Constants.TOURNAMENT);
-        }
-
-        if (json.has(Constants.TOURNAMENT_DATE)) {
-            dateString = json.getString(Constants.TOURNAMENT_DATE);
-        } else {
-            dateString = json.getString(Constants.DATE);
-        }
+        final String date = Utils.getJSONString(json, Constants.TOURNAMENT_DATE, Constants.DATE);
 
         try {
-            date = DATE_PARSER.parse(dateString);
+            mDateWrapper = new DateWrapper(date);
         } catch (final ParseException e) {
-            throw new JSONException("Couldn't parse the date: \"" + dateString + "\"");
-        }
-
-        if (json.has(Constants.TOURNAMENT_ID)) {
-            id = json.getString(Constants.TOURNAMENT_ID);
-        } else {
-            id = json.getString(Constants.ID);
-        }
-
-        if (json.has(Constants.TOURNAMENT_NAME)) {
-            name = json.getString(Constants.TOURNAMENT_NAME);
-        } else {
-            name = json.getString(Constants.NAME);
+            throw new JSONException(e.getMessage());
         }
     }
 
 
     private Tournament(final Parcel source) {
-        dateString = source.readString();
-
-        try {
-            date = DATE_PARSER.parse(dateString);
-        } catch (final ParseException e) {
-            throw new RuntimeException("Couldn't parse the date: \"" + dateString + "\"");
-        }
-
-        dayOfMonth = source.readString();
-        id = source.readString();
-        month = source.readString();
-        name = source.readString();
-        year = source.readString();
+        mDateWrapper = source.readParcelable(DateWrapper.class.getClassLoader());
+        mId = source.readString();
+        mName = source.readString();
     }
 
 
@@ -102,7 +54,8 @@ public class Tournament implements Parcelable {
             isEqual = true;
         } else if (o instanceof Tournament) {
             final Tournament t = (Tournament) o;
-            isEqual = id.equals(t.getId());
+            isEqual = mDateWrapper.equals(t.getDateWrapper()) && mId.equals(t.getId()) &&
+                    mName.equals(t.getName());
         } else {
             isEqual = false;
         }
@@ -111,65 +64,36 @@ public class Tournament implements Parcelable {
     }
 
 
-    public String getDate() {
-        return dateString;
+    @Override
+    public char getFirstCharOfName() {
+        return mName.charAt(0);
     }
 
 
-    public String getDayOfMonth() {
-        if (!Utils.validStrings(dayOfMonth)) {
-            dayOfMonth = DAY_OF_MONTH_FORMATTER.format(date);
-        }
-
-        return dayOfMonth;
+    public DateWrapper getDateWrapper() {
+        return mDateWrapper;
     }
 
 
     public String getId() {
-        return id;
-    }
-
-
-    public String getMonth() {
-        if (!Utils.validStrings(month)) {
-            month = MONTH_FORMATTER.format(date);
-        }
-
-        return month;
-    }
-
-
-    public String getMonthAndYear() {
-        final Context context = App.getContext();
-        return context.getString(R.string.x_y, getMonth(), getYear());
+        return mId;
     }
 
 
     public String getName() {
-        return name;
+        return mName;
     }
 
 
-    public String getYear() {
-        if (!Utils.validStrings(year)) {
-            year = YEAR_FORMATTER.format(date);
-        }
+    @Override
+    public int hashCode() {
+        // this method was automatically generated by Android Studio
 
-        return year;
-    }
+        int result = mDateWrapper.hashCode();
+        result = 31 * result + mId.hashCode();
+        result = 31 * result + mName.hashCode();
 
-
-    public JSONObject toJSON() {
-        try {
-            final JSONObject json = new JSONObject();
-            json.put(Constants.DATE, dateString);
-            json.put(Constants.ID, id);
-            json.put(Constants.NAME, name);
-
-            return json;
-        } catch (final JSONException e) {
-            throw new RuntimeException(e);
-        }
+        return result;
     }
 
 
@@ -190,7 +114,7 @@ public class Tournament implements Parcelable {
     public static final Comparator<Tournament> CHRONOLOGICAL_ORDER = new Comparator<Tournament>() {
         @Override
         public int compare(final Tournament t0, final Tournament t1) {
-            return t0.date.compareTo(t1.date);
+            return t0.mDateWrapper.getDateWrapper().compareTo(t1.getDateWrapper().getDateWrapper());
         }
     };
 
@@ -219,16 +143,13 @@ public class Tournament implements Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeString(dateString);
-        dest.writeString(dayOfMonth);
-        dest.writeString(id);
-        dest.writeString(month);
-        dest.writeString(name);
-        dest.writeString(year);
+        dest.writeParcelable(mDateWrapper, flags);
+        dest.writeString(mId);
+        dest.writeString(mName);
     }
 
 
-    public static final Creator<Tournament> CREATOR = new Creator<Tournament>(){
+    public static final Creator<Tournament> CREATOR = new Creator<Tournament>() {
         @Override
         public Tournament createFromParcel(final Parcel source) {
             return new Tournament(source);

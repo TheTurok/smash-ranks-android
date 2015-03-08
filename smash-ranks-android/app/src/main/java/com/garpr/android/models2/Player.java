@@ -34,6 +34,18 @@ public class Player implements AlphabeticallyComparable, Parcelable {
     }
 
 
+    public Player(final String id, final String name) {
+        this(id, name, null);
+    }
+
+
+    public Player(final String id, final String name, final Ranking ranking) {
+        mId = id;
+        mName = name;
+        mRanking = ranking;
+    }
+
+
     private Player(final Parcel source) {
         mRanking = source.readParcelable(Ranking.class.getClassLoader());
         mId = source.readString();

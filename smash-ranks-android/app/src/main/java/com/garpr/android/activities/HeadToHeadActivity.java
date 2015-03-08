@@ -37,8 +37,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
     private static final String CNAME = "com.garpr.android.activities.HeadToHeadActivity";
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
-    private static final String EXTRA_OPPONENT_ID = CNAME + ".EXTRA_OPPONENT_ID";
-    private static final String EXTRA_OPPONENT_NAME = CNAME + ".EXTRA_OPPONENT_NAME";
+    private static final String EXTRA_OPPONENT = CNAME + ".EXTRA_OPPONENT";
     private static final String KEY_PREVIOUSLY_SHOWING = "KEY_PREVIOUSLY_SHOWING";
     private static final String TAG = "HeadToHeadActivity";
 
@@ -51,20 +50,17 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     private MenuItem mShowAll;
     private MenuItem mShowLoses;
     private MenuItem mShowWins;
+    private Player mOpponent;
     private Player mPlayer;
     private Result mShowing;
-    private String mOpponentId;
-    private String mOpponentName;
 
 
 
 
-    public static void start(final Activity activity, final Player player, final String opponentId,
-            final String opponentName) {
+    public static void start(final Activity activity, final Player opponent, final Player player) {
         final Intent intent = new Intent(activity, HeadToHeadActivity.class);
+        intent.putExtra(EXTRA_OPPONENT, opponent);
         intent.putExtra(EXTRA_PLAYER, player);
-        intent.putExtra(EXTRA_OPPONENT_ID, opponentId);
-        intent.putExtra(EXTRA_OPPONENT_NAME, opponentName);
         activity.startActivity(intent);
     }
 
@@ -160,7 +156,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
             }
         };
 
-        Matches.getHeadToHeadMatches(mOpponentId, callback);
+        Matches.getHeadToHeadMatches(mOpponent.getId(), callback);
     }
 
 
@@ -190,7 +186,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.x_vs_y, mPlayer.getName(), mOpponentName));
+        setTitle(getString(R.string.x_vs_y, mPlayer.getName(), mOpponent.getName()));
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
             final int resultIndex = savedInstanceState.getInt(KEY_PREVIOUSLY_SHOWING, Integer.MIN_VALUE);
@@ -275,9 +271,8 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
     @Override
     protected void readIntentData(final Intent intent) {
+        mOpponent = intent.getParcelableExtra(EXTRA_OPPONENT);
         mPlayer = intent.getParcelableExtra(EXTRA_PLAYER);
-        mOpponentId = intent.getStringExtra(EXTRA_OPPONENT_ID);
-        mOpponentName = intent.getStringExtra(EXTRA_OPPONENT_NAME);
     }
 
 

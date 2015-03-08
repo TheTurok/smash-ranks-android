@@ -140,6 +140,11 @@ public class Player implements AlphabeticallyComparable, Parcelable {
             json.put(Constants.ID, mId);
             json.put(Constants.NAME, mName);
 
+            if (hasCompetitionValues()) {
+                json.put(Constants.RANK, mRank);
+                json.put(Constants.RATING, mRating);
+            }
+
             return json;
         } catch (final JSONException e) {
             // this should never happen

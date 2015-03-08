@@ -57,19 +57,19 @@ public final class Rankings {
     private static abstract class BaseRankingsCall<T> extends RegionBasedCall<T> {
 
 
-        protected BaseRankingsCall(final Response<T> response) throws IllegalArgumentException {
+        BaseRankingsCall(final Response<T> response) throws IllegalArgumentException {
             super(response);
         }
 
 
-        protected BaseRankingsCall(final Response<T> response, final String regionId) throws
+        BaseRankingsCall(final Response<T> response, final String regionId) throws
                 IllegalArgumentException {
             super(response, regionId);
         }
 
 
         @Override
-        final JsonObjectRequest getRequest() {
+        JsonObjectRequest getRequest() {
             final String url = getBaseUrl() + Constants.RANKINGS;
             return new JsonObjectRequest(url, null, this, this);
         }

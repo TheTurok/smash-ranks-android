@@ -4,6 +4,7 @@ package com.garpr.android.data2;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.models2.HeadToHeadBundle;
 import com.garpr.android.models2.Match;
 import com.garpr.android.models2.Player;
 
@@ -28,6 +29,72 @@ public final class Matches {
     }
 
 
+    public static void getHeadToHead(final Response<HeadToHeadBundle> response, final Player player,
+            final Player opponent) {
+        new HeadToHeadCall(response, player, opponent).make();
+    }
+
+
+    public static void getHeadToHead(final Response<HeadToHeadBundle> response, final Player player,
+            final Player opponent, final String regionId) {
+        new HeadToHeadCall(response, player, opponent, regionId).make();
+    }
+
+
+
+
+    private static final class HeadToHeadCall extends RegionBasedCall<HeadToHeadBundle> {
+
+
+        private static final String TAG = "HeadToHeadCall";
+
+        private final Player mOpponent;
+        private final Player mPlayer;
+
+
+        private HeadToHeadCall(final Response<HeadToHeadBundle> response, final Player player,
+                final Player opponent) throws IllegalArgumentException {
+            this(response, player, opponent, Settings.getRegion().getId());
+        }
+
+
+        private HeadToHeadCall(final Response<HeadToHeadBundle> response, final Player player,
+                final Player opponent, final String regionId) throws IllegalArgumentException {
+            super(response, regionId);
+
+            if (player == null) {
+                throw new IllegalArgumentException("player is null");
+            } else if (opponent == null) {
+                throw new IllegalArgumentException("opponent is null");
+            }
+
+            mPlayer = player;
+            mOpponent = opponent;
+        }
+
+
+        @Override
+        String getCallName() {
+            return TAG;
+        }
+
+
+        @Override
+        JsonObjectRequest getRequest() {
+            final String url = getBaseUrl() + Constants.MATCHES + '/' + mPlayer.getId() + '?' +
+                    Constants.OPPONENT + '=' + mOpponent.getId();
+            return new JsonObjectRequest(url, null, this, this);
+        }
+
+
+        @Override
+        void onJSONResponse(final JSONObject json) throws JSONException {
+            final HeadToHeadBundle headToHeadBundle = new HeadToHeadBundle(json);
+            mResponse.success(headToHeadBundle);
+        }
+
+
+    }
 
 
     private static final class MatchesCall extends RegionBasedCall<ArrayList<Match>> {
@@ -64,7 +131,7 @@ public final class Matches {
 
         @Override
         JsonObjectRequest getRequest() {
-            final String url = getBaseUrl() + '/' + Constants.MATCHES + '/' + mPlayer.getId();
+            final String url = getBaseUrl() + Constants.MATCHES + '/' + mPlayer.getId();
             return new JsonObjectRequest(url, null, this, this);
         }
 

@@ -57,10 +57,10 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
 
-    public static void start(final Activity activity, final Player opponent, final Player player) {
+    public static void start(final Activity activity, final Player player, final Player opponent) {
         final Intent intent = new Intent(activity, HeadToHeadActivity.class);
-        intent.putExtra(EXTRA_OPPONENT, opponent);
         intent.putExtra(EXTRA_PLAYER, player);
+        intent.putExtra(EXTRA_OPPONENT, opponent);
         activity.startActivity(intent);
     }
 

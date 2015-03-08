@@ -238,9 +238,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     @Override
     public void onItemClick(final View view, final int position) {
         final ListItem listItem = mListItemsShown.get(position);
-        final String opponentId = listItem.mMatch.getOpponentId();
-        final String opponentName = listItem.mMatch.getOpponentName();
-        HeadToHeadActivity.start(this, mPlayer, opponentId, opponentName);
+        final Player opponent = listItem.mMatch.getOpponent();
+        HeadToHeadActivity.start(this, mPlayer, opponent);
     }
 
 

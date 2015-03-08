@@ -144,6 +144,7 @@
     <string name="x_viewing_y">%1$s (viewing %2$s)</string>
     <string name="x_vs_y">%1$s vs %2$s</string>
     <string name="x_vs_y_on_gar_pr_z">%1$s vs %2$s on GAR PR %3$s</string>
+    <string name="w_vs_x_wins_losses">%1$s vs %2$s: wins %3$d, losses %4$d</string>
     <string name="x_y">%1$s %2$s</string>
     <string name="yes">Yes</string>
     <string name="youre_x_from_y_ready">You\'re %1$s from %2$s. Ready?</string>

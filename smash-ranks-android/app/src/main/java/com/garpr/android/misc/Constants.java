@@ -32,6 +32,8 @@ public final class Constants {
     public static final String JSON = "json";
     public static final String LAST_SYNC = "last_sync";
     public static final String LOSE = "lose";
+    public static final String LOSS = "loss";
+    public static final String LOSSES = "losses";
     public static final String MATCH = "match";
     public static final String MATCHES = "matches";
     public static final String MESSAGE = "message";
@@ -90,6 +92,7 @@ public final class Constants {
     public static final String WHICH = "which";
     public static final String WHO = "who";
     public static final String WIN = "win";
+    public static final String WINS = "wins";
     public static final String YEAR_FORMAT = "yyyy";
 
     public static final String[] RANDOM_YOUTUBE_VIDEOS = {

@@ -10,6 +10,8 @@ import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Comparator;
+
 
 public class Region implements AlphabeticallyComparable, Parcelable {
 
@@ -80,6 +82,14 @@ public class Region implements AlphabeticallyComparable, Parcelable {
     public String toString() {
         return getName();
     }
+
+
+    public static final Comparator<Region> ALPHABETICAL_ORDER = new Comparator<Region>() {
+        @Override
+        public int compare(final Region r0, final Region r1) {
+            return r0.getName().compareToIgnoreCase(r1.getName());
+        }
+    };
 
 
 

@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -167,6 +168,30 @@ public class Tournament implements AlphabeticallyComparable, Parcelable {
     public String toString() {
         return getName();
     }
+
+
+    public static final Comparator<Tournament> ALPHABETICAL_ORDER = new Comparator<Tournament>() {
+        @Override
+        public int compare(final Tournament t0, final Tournament t1) {
+            return t0.getName().compareToIgnoreCase(t1.getName());
+        }
+    };
+
+
+    public static final Comparator<Tournament> CHRONOLOGICAL_ORDER = new Comparator<Tournament>() {
+        @Override
+        public int compare(final Tournament t0, final Tournament t1) {
+            return t0.mDate.compareTo(t1.getDate());
+        }
+    };
+
+
+    public static final Comparator<Tournament> REVERSE_CHRONOLOGICAL_ORDER = new Comparator<Tournament>() {
+        @Override
+        public int compare(final Tournament t0, final Tournament t1) {
+            return CHRONOLOGICAL_ORDER.compare(t1, t0);
+        }
+    };
 
 
 

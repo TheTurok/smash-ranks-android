@@ -39,7 +39,8 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     private static final String CNAME = "com.garpr.android.activities.HeadToHeadActivity";
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
     private static final String EXTRA_OPPONENT = CNAME + ".EXTRA_OPPONENT";
-    private static final String KEY_PREVIOUSLY_SHOWING = "KEY_PREVIOUSLY_SHOWING";
+    private static final String KEY_BUNDLE = "KEY_BUNDLE";
+    private static final String KEY_SHOWING = "KEY_SHOWING";
     private static final String TAG = "HeadToHeadActivity";
 
     private ArrayList<ListItem> mListItems;
@@ -146,12 +147,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
             @Override
             public void successOnUi(final HeadToHeadBundle object) {
                 mBundle = object;
-                createListItems();
-                setAdapter(new MatchesAdapter());
-
-                if (mShowing != null) {
-                    show(mShowing);
-                }
+                prepareList();
             }
         };
 
@@ -188,14 +184,15 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         setTitle(getString(R.string.x_vs_y, mPlayer.getName(), mOpponent.getName()));
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
-            final int resultIndex = savedInstanceState.getInt(KEY_PREVIOUSLY_SHOWING, Integer.MIN_VALUE);
-
-            if (resultIndex != Integer.MIN_VALUE) {
-                mShowing = Result.values()[resultIndex];
-            }
+            mBundle = savedInstanceState.getParcelable(KEY_BUNDLE);
+            mShowing = savedInstanceState.getParcelable(KEY_SHOWING);
         }
 
-        fetchMatches();
+        if (mBundle == null) {
+            fetchMatches();
+        } else {
+            createListItems();
+        }
     }
 
 
@@ -259,11 +256,23 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         super.onSaveInstanceState(outState);
 
         if (!isMenuNull()) {
-            if (Result.LOSE.equals(mShowing)) {
-                outState.putInt(KEY_PREVIOUSLY_SHOWING, Result.LOSE.ordinal());
-            } else if (Result.WIN.equals(mShowing)) {
-                outState.putInt(KEY_PREVIOUSLY_SHOWING, Result.WIN.ordinal());
+            if (mBundle != null) {
+                outState.putParcelable(KEY_BUNDLE, mBundle);
             }
+
+            if (mShowing != null) {
+                outState.putParcelable(KEY_SHOWING, mShowing);
+            }
+        }
+    }
+
+
+    private void prepareList() {
+        createListItems();
+        setAdapter(new MatchesAdapter());
+
+        if (mShowing != null) {
+            show(mShowing);
         }
     }
 

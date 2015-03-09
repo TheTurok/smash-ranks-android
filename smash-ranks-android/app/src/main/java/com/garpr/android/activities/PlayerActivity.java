@@ -32,8 +32,6 @@ import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.FilterListener;
 import com.garpr.android.misc.RequestCodes;
-import com.garpr.android.misc.ResultCodes;
-import com.garpr.android.misc.ResultData;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
@@ -42,7 +40,6 @@ import com.garpr.android.models.Result;
 import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 public class PlayerActivity extends BaseToolbarListActivity implements
@@ -52,13 +49,15 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
     private static final String CNAME = "com.garpr.android.activities.PlayerActivity";
     private static final String EXTRA_PLAYER = CNAME + ".EXTRA_PLAYER";
-    private static final String KEY_PREVIOUSLY_SHOWING = "KEY_PREVIOUSLY_SHOWING";
+    private static final String KEY_MATCHES = "KEY_MATCHES";
+    private static final String KEY_SHOWING = "KEY_SHOWING";
     private static final String TAG = "PlayerActivity";
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
     private ArrayList<ListItem> mLoseListItems;
     private ArrayList<ListItem> mWinListItems;
+    private ArrayList<Match> mMatches;
     private boolean mInUsersRegion;
     private boolean mSetMenuItemsVisible;
     private Filter mFilter;
@@ -84,11 +83,11 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     }
 
 
-    private void createListItems(final ArrayList<Match> matches) {
+    private void createListItems() {
         mListItems = new ArrayList<>();
         Tournament lastTournament = null;
 
-        for (final Match match : matches) {
+        for (final Match match : mMatches) {
             final Tournament tournament = match.getTournament();
 
             if (!tournament.equals(lastTournament)) {
@@ -154,11 +153,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
             @Override
             public void successOnUi(final ArrayList<Match> list) {
-                setList(list);
-
-                final Intent data = new Intent();
-                data.putExtra(ResultData.PLAYER, mPlayer);
-                setResult(ResultCodes.PLAYER_UPDATED, data);
+                mMatches = list;
+                prepareList();
             }
         };
 
@@ -201,11 +197,8 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         mUserPlayer = User.getPlayer();
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
-            final int resultIndex = savedInstanceState.getInt(KEY_PREVIOUSLY_SHOWING, Integer.MIN_VALUE);
-
-            if (resultIndex != Integer.MIN_VALUE) {
-                mShowing = Result.values()[resultIndex];
-            }
+            mMatches = savedInstanceState.getParcelableArrayList(KEY_MATCHES);
+            mShowing = savedInstanceState.getParcelable(KEY_SHOWING);
         }
 
         mFilterListener = new FilterListener<ListItem>(this) {
@@ -216,7 +209,11 @@ public class PlayerActivity extends BaseToolbarListActivity implements
             }
         };
 
-        fetchMatches();
+        if (mMatches == null || mMatches.isEmpty()) {
+            fetchMatches();
+        } else {
+            prepareList();
+        }
     }
 
 
@@ -349,11 +346,23 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         super.onSaveInstanceState(outState);
 
         if (!isMenuNull()) {
-            if (Result.LOSE.equals(mShowing)) {
-                outState.putInt(KEY_PREVIOUSLY_SHOWING, Result.LOSE.ordinal());
-            } else if (Result.WIN.equals(mShowing)) {
-                outState.putInt(KEY_PREVIOUSLY_SHOWING, Result.WIN.ordinal());
+            if (mMatches != null && !mMatches.isEmpty()) {
+                outState.putParcelableArrayList(KEY_MATCHES, mMatches);
             }
+
+            if (mShowing != null) {
+                outState.putParcelable(KEY_SHOWING, mShowing);
+            }
+        }
+    }
+
+
+    private void prepareList() {
+        createListItems();
+        setAdapter(new MatchesAdapter());
+
+        if (mShowing != null) {
+            show(mShowing);
         }
     }
 
@@ -375,17 +384,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
             mSetMenuItemsVisible = true;
         } else {
             showMenuItems();
-        }
-    }
-
-
-    private void setList(final ArrayList<Match> matches) {
-        Collections.sort(matches, Match.REVERSE_CHRONOLOGICAL_ORDER);
-        createListItems(matches);
-        setAdapter(new MatchesAdapter());
-
-        if (mShowing != null) {
-            show(mShowing);
         }
     }
 

@@ -107,7 +107,8 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         };
 
         mListItems = (ArrayList<ListItem>) ListUtils.createAlphabeticalList(mListItems, creator);
-        ListItem.setItemIds(mListItems);
+        mListItems.trimToSize();
+
         mListItemsShown = mListItems;
     }
 
@@ -127,7 +128,8 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
             @Override
             public void successOnUi(final ArrayList<Player> list) {
-                setList(list);
+                mPlayers = list;
+                prepareList();
             }
         };
 
@@ -184,11 +186,11 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
-            final ArrayList<Player> list = savedInstanceState.getParcelableArrayList(KEY_PLAYERS);
+            mPlayers = savedInstanceState.getParcelableArrayList(KEY_PLAYERS);
 
-            if (list != null && !list.isEmpty()) {
+            if (mPlayers != null && !mPlayers.isEmpty()) {
                 mSelectedPlayer = savedInstanceState.getParcelable(KEY_SELECTED_PLAYER);
-                setList(list);
+                prepareList();
 
                 if (mSelectedPlayer != null) {
                     findToolbarItems();
@@ -308,6 +310,13 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     }
 
 
+    private void prepareList() {
+        Collections.sort(mPlayers, Player.ALPHABETICAL_ORDER);
+        createListItems();
+        setAdapter(new PlayersAdapter());
+    }
+
+
     @Override
     protected void prepareViews() {
         super.prepareViews();
@@ -344,18 +353,12 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     }
 
 
-    private void setList(final ArrayList<Player> list) {
-        Collections.sort(list, Player.ALPHABETICAL_ORDER);
-        mPlayers = list;
-        createListItems();
-        setAdapter(new PlayersAdapter());
-    }
-
-
 
 
     private static final class ListItem implements AlphabeticallyComparable, SpecialFilterable {
 
+
+        private static long sId;
 
         private long mId;
         private Player mPlayer;
@@ -367,6 +370,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
             final ListItem item = new ListItem();
             item.mPlayer = player;
             item.mType = Type.PLAYER;
+            item.mId = sId++;
 
             return item;
         }
@@ -376,15 +380,9 @@ public class PlayersFragment extends BaseListToolbarFragment implements
             final ListItem item = new ListItem();
             item.mTitle = title;
             item.mType = Type.TITLE;
+            item.mId = sId++;
 
             return item;
-        }
-
-
-        private static void setItemIds(final ArrayList<ListItem> listItems) {
-            for (int i = 0; i < listItems.size(); ++i) {
-                listItems.get(i).mId = (long) i;
-            }
         }
 
 

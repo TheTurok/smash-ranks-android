@@ -45,10 +45,12 @@ import java.util.Collections;
 public class RegionsFragment extends BaseListToolbarFragment {
 
 
+    private static final String KEY_REGIONS = "KEY_REGIONS";
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
     private static final String TAG = "RegionsFragment";
 
     private ArrayList<ListItem> mListItems;
+    private ArrayList<Region> mRegions;
     private FrameLayout mFrame;
     private ImageButton mSave;
     private MenuItem mNext;
@@ -115,6 +117,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
         };
 
         mListItems = (ArrayList<ListItem>) ListUtils.createAlphabeticalList(mListItems, creator);
+        mListItems.trimToSize();
     }
 
 
@@ -158,9 +161,8 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
             @Override
             public void successOnUi(final ArrayList<Region> list) {
-                Collections.sort(list, Region.ALPHABETICAL_ORDER);
-                createListItems(list);
-                setAdapter(new RegionsAdapter());
+                mRegions = list;
+                prepareList();
             }
         };
 
@@ -257,6 +259,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mRegions = savedInstanceState.getParcelableArrayList(KEY_REGIONS);
             mSelectedRegion = savedInstanceState.getParcelable(KEY_SELECTED_REGION);
         }
 
@@ -270,7 +273,11 @@ public class RegionsFragment extends BaseListToolbarFragment {
             }
         }
 
-        fetchRegions();
+        if (mRegions == null) {
+            fetchRegions();
+        } else {
+            prepareList();
+        }
     }
 
 
@@ -345,51 +352,72 @@ public class RegionsFragment extends BaseListToolbarFragment {
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        if (mRegions != null) {
+            outState.putParcelableArrayList(KEY_REGIONS, mRegions);
+        }
+
         if (mSelectedRegion != null) {
             outState.putParcelable(KEY_SELECTED_REGION, mSelectedRegion);
         }
     }
 
 
+    private void prepareEmbeddedModeViews() {
+        final Toolbar toolbar = getToolbar();
+        toolbar.setTitle(R.string.select_your_region);
+        toolbar.setVisibility(View.VISIBLE);
+    }
+
+
+    private void prepareList() {
+        Collections.sort(mRegions, Region.ALPHABETICAL_ORDER);
+        createListItems(mRegions);
+        setAdapter(new RegionsAdapter());
+    }
+
+
+    private void prepareStandaloneModeViews() {
+        final ViewTreeObserver vto = mSave.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            @SuppressWarnings("deprecation")
+            public void onGlobalLayout() {
+                final ViewTreeObserver vto = mSave.getViewTreeObserver();
+
+                if (vto.isAlive()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        vto.removeOnGlobalLayoutListener(this);
+                    } else {
+                        vto.removeGlobalOnLayoutListener(this);
+                    }
+                }
+
+                measureRecyclerViewBottomOffset();
+            }
+        });
+
+        if (mSelectedRegion != null) {
+            enableSave(false);
+        }
+
+        mSave.setVisibility(View.VISIBLE);
+        mSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                mRegionSaveListener.onRegionSaved();
+            }
+        });
+    }
+
+
     @Override
     protected void prepareViews() {
         super.prepareViews();
-        final Toolbar toolbar = getToolbar();
 
         if (isStandaloneMode()) {
-            final ViewTreeObserver vto = mSave.getViewTreeObserver();
-            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                @SuppressWarnings("deprecation")
-                public void onGlobalLayout() {
-                    final ViewTreeObserver vto = mSave.getViewTreeObserver();
-
-                    if (vto.isAlive()) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            vto.removeOnGlobalLayoutListener(this);
-                        } else {
-                            vto.removeGlobalOnLayoutListener(this);
-                        }
-                    }
-
-                    measureRecyclerViewBottomOffset();
-                }
-            });
-
-            if (mSelectedRegion != null) {
-                enableSave(false);
-            }
-
-            mSave.setVisibility(View.VISIBLE);
-            mSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    mRegionSaveListener.onRegionSaved();
-                }
-            });
+            prepareStandaloneModeViews();
         } else if (isEmbeddedMode()) {
-            toolbar.setTitle(R.string.select_your_region);
-            toolbar.setVisibility(View.VISIBLE);
+            prepareEmbeddedModeViews();
         } else {
             throw new IllegalStateException("Mode is unknown");
         }

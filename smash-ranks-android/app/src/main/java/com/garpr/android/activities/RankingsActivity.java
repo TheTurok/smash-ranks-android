@@ -47,6 +47,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         SearchView.OnQueryTextListener {
 
 
+    private static final String KEY_PLAYERS = "KEY_PLAYERS";
     private static final String TAG = "RankingsActivity";
 
     private ArrayList<ListItem> mListItems;
@@ -73,9 +74,9 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
         final Resources resources = getResources();
         final int ranksPerSection = resources.getInteger(R.integer.ranks_per_section);
-        final int mPlayersSize = mPlayers.size();
+        final int playersSize = mPlayers.size();
 
-        for (int i = 0; i < mPlayersSize; ++i) {
+        for (int i = 0; i < playersSize; ++i) {
             final Player player = mPlayers.get(i);
 
             String listItemTitle = null;
@@ -84,8 +85,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
                 final int sectionStart = player.getRank();
                 final int sectionEnd;
 
-                if (sectionStart + ranksPerSection - 1 > mPlayersSize) {
-                    sectionEnd = mPlayersSize;
+                if (sectionStart + ranksPerSection - 1 > playersSize) {
+                    sectionEnd = playersSize;
                 } else {
                     sectionEnd = sectionStart + ranksPerSection - 1;
                 }
@@ -123,9 +124,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
             @Override
             public void successOnUi(final ArrayList<Player> list) {
                 mPlayers = list;
-                Collections.sort(mPlayers, Player.RANK_ORDER);
-                createListItems();
-                setAdapter(new RankingsAdapter());
+                prepareList();
             }
         };
 
@@ -182,7 +181,15 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         mInUsersRegion = User.areWeInTheUsersRegion();
         mUserPlayer = User.getPlayer();
 
-        fetchRankings();
+        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mPlayers = savedInstanceState.getParcelableArrayList(KEY_PLAYERS);
+        }
+
+        if (mPlayers == null || mPlayers.isEmpty()) {
+            fetchRankings();
+        } else {
+            prepareList();
+        }
 
         // prepares the app's data-syncing capabilities
         Sync.setup();
@@ -265,6 +272,23 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         super.onRegionChanged(region);
         mInUsersRegion = User.areWeInTheUsersRegion();
         fetchRankings();
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (mPlayers != null && !mPlayers.isEmpty()) {
+            outState.putParcelableArrayList(KEY_PLAYERS, mPlayers);
+        }
+    }
+
+
+    private void prepareList() {
+        Collections.sort(mPlayers, Player.RANK_ORDER);
+        createListItems();
+        setAdapter(new RankingsAdapter());
     }
 
 

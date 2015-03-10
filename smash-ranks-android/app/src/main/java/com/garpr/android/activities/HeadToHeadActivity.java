@@ -191,7 +191,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         if (mBundle == null) {
             fetchMatches();
         } else {
-            createListItems();
+            prepareList();
         }
     }
 

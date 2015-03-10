@@ -273,7 +273,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
             }
         }
 
-        if (mRegions == null) {
+        if (mRegions == null || mRegions.isEmpty()) {
             fetchRegions();
         } else {
             prepareList();
@@ -352,12 +352,12 @@ public class RegionsFragment extends BaseListToolbarFragment {
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (mRegions != null) {
+        if (mRegions != null && !mRegions.isEmpty()) {
             outState.putParcelableArrayList(KEY_REGIONS, mRegions);
-        }
 
-        if (mSelectedRegion != null) {
-            outState.putParcelable(KEY_SELECTED_REGION, mSelectedRegion);
+            if (mSelectedRegion != null) {
+                outState.putParcelable(KEY_SELECTED_REGION, mSelectedRegion);
+            }
         }
     }
 

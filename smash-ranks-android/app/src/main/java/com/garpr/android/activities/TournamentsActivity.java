@@ -38,10 +38,12 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         SearchView.OnQueryTextListener {
 
 
+    private static final String KEY_TOURNAMENTS = "KEY_TOURNAMENTS";
     private static final String TAG = "TournamentsActivity";
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
+    private ArrayList<Tournament> mTournaments;
     private boolean mSetMenuItemsVisible;
     private Filter mFilter;
     private MenuItem mSearch;
@@ -56,11 +58,11 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
     }
 
 
-    private void createListItems(final ArrayList<Tournament> tournaments) {
+    private void createListItems() {
         mListItems = new ArrayList<>();
         String lastMonthAndYear = null;
 
-        for (final Tournament tournament : tournaments) {
+        for (final Tournament tournament : mTournaments) {
             final String monthAndYear = tournament.getDateWrapper().getMonthAndYear();
 
             if (!monthAndYear.equals(lastMonthAndYear)) {
@@ -93,9 +95,8 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
             @Override
             public void successOnUi(final ArrayList<Tournament> list) {
-                Collections.sort(list, Tournament.REVERSE_CHRONOLOGICAL_ORDER);
-                createListItems(list);
-                setAdapter(new TournamentsAdapter());
+                mTournaments = list;
+                prepareList();
             }
         };
 
@@ -136,7 +137,16 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fetchTournaments();
+
+        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
+            mTournaments = savedInstanceState.getParcelableArrayList(KEY_TOURNAMENTS);
+        }
+
+        if (mTournaments == null || mTournaments.isEmpty()) {
+            fetchTournaments();
+        } else {
+            prepareList();
+        }
     }
 
 
@@ -208,6 +218,23 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
     public void onRegionChanged(final Region region) {
         super.onRegionChanged(region);
         fetchTournaments();
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (mTournaments != null && !mTournaments.isEmpty()) {
+            outState.putParcelableArrayList(KEY_TOURNAMENTS, mTournaments);
+        }
+    }
+
+
+    private void prepareList() {
+        Collections.sort(mTournaments, Tournament.REVERSE_CHRONOLOGICAL_ORDER);
+        createListItems();
+        setAdapter(new TournamentsAdapter());
     }
 
 

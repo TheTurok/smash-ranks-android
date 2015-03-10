@@ -8,7 +8,7 @@ public final class Constants {
 
     public static final String ABOUT_URL = "http://www.garpr.com/#/about";
     public static final String API_URL = "http://api.garpr.com";
-    public static final String CHARLES_TWITTER_URL = "https://twitter.com/scootrnova";
+    public static final String CHARLES_TWITTER_URL = "https://twitter.com/charlesmadere";
     public static final String COMPLETED = "completed";
     public static final String CURRENT_ACTIVITY = "current_activity";
     public static final String DATE = "date";

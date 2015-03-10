@@ -159,6 +159,13 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
     @Override
+    public void onItemClick(final View view, final int position) {
+        final ListItem listItem = mListItemsShown.get(position);
+        TournamentActivity.start(this, listItem.mTournament);
+    }
+
+
+    @Override
     public boolean onMenuItemActionCollapse(final MenuItem item) {
         mListItemsShown = mListItems;
         notifyDataSetChanged();
@@ -486,6 +493,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
                 case TOURNAMENT:
                     view = inflater.inflate(R.layout.model_tournament, parent, false);
                     holder = new TournamentViewHolder(view);
+                    view.setOnClickListener(this);
                     break;
 
                 default:

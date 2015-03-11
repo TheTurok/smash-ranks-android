@@ -271,7 +271,7 @@ public class OnboardingActivity extends BaseActivity implements
 
                 default:
                     // this should never happen
-                    throw new RuntimeException();
+                    throw new RuntimeException("invalid position: " + position);
             }
 
             return fragment;

@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.garpr.android.R;
@@ -14,14 +18,17 @@ import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Tournaments;
 import com.garpr.android.fragments.TournamentMatchesFragment;
 import com.garpr.android.fragments.TournamentPlayersFragment;
+import com.garpr.android.fragments.TournamentViewPagerFragment;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 import com.garpr.android.models.Tournament;
 import com.garpr.android.models.TournamentBundle;
 
 
-public class TournamentActivity extends BaseToolbarActivity {
+public class TournamentActivity extends BaseToolbarActivity implements
+        TournamentViewPagerFragment.Listener, SwipeRefreshLayout.OnRefreshListener {
 
 
     private static final int TOURNAMENT_FRAGMENT_COUNT = 2;
@@ -32,6 +39,9 @@ public class TournamentActivity extends BaseToolbarActivity {
     private static final String KEY_BUNDLE = "KEY_BUNDLE";
     private static final String TAG = "TournamentActivity";
 
+    private boolean mIsLoading;
+    private FlexibleSwipeRefreshLayout mRefreshLayout;
+    private LinearLayout mErrorView;
     private PagerSlidingTabStrip mTabStrip;
     private Tournament mTournament;
     private TournamentBundle mBundle;
@@ -47,7 +57,15 @@ public class TournamentActivity extends BaseToolbarActivity {
     }
 
 
+    @Override
+    public void attachToRefreshLayout(final RecyclerView recyclerView) {
+        mRefreshLayout.setScrollingView(recyclerView);
+    }
+
+
     private void fetchTournament() {
+        setLoading(true);
+
         final ResponseOnUi<TournamentBundle> response = new ResponseOnUi<TournamentBundle>(TAG, this) {
             @Override
             public void errorOnUi(final Exception e) {
@@ -70,6 +88,8 @@ public class TournamentActivity extends BaseToolbarActivity {
 
 
     private void findViews() {
+        mErrorView = (LinearLayout) findViewById(R.id.activity_tournament_error);
+        mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_tournament_refresh);
         mTabStrip = (PagerSlidingTabStrip) findViewById(R.id.activity_tournament_tab_strip);
         mViewPager = (ViewPager) findViewById(R.id.activity_tournament_view_pager);
     }
@@ -107,6 +127,15 @@ public class TournamentActivity extends BaseToolbarActivity {
 
 
     @Override
+    public void onRefresh() {
+        if (!mIsLoading) {
+            mErrorView.setVisibility(View.GONE);
+            fetchTournament();
+        }
+    }
+
+
+    @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -117,8 +146,11 @@ public class TournamentActivity extends BaseToolbarActivity {
 
 
     private void prepareViewPager() {
+        mViewPager.setVisibility(View.VISIBLE);
         mViewPager.setAdapter(new TournamentFragmentAdapter());
+        mTabStrip.setShouldExpand(true);
         mTabStrip.setViewPager(mViewPager);
+        setLoading(false);
     }
 
 
@@ -128,8 +160,17 @@ public class TournamentActivity extends BaseToolbarActivity {
     }
 
 
+    private void setLoading(final boolean isLoading) {
+        mIsLoading = isLoading;
+        mRefreshLayout.setRefreshing(isLoading);
+    }
+
+
     private void showError() {
-        // TODO
+        mViewPager.setAdapter(null);
+        mViewPager.setVisibility(View.GONE);
+        mErrorView.setVisibility(View.VISIBLE);
+        setLoading(false);
     }
 
 

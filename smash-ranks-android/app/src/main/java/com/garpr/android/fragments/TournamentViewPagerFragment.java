@@ -1,7 +1,9 @@
 package com.garpr.android.fragments;
 
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -9,11 +11,13 @@ import com.garpr.android.R;
 import com.garpr.android.models.TournamentBundle;
 
 
-abstract class TournamentViewPagerFragment extends BaseFragment {
+public abstract class TournamentViewPagerFragment extends BaseFragment {
 
 
     private static final String KEY_BUNDLE = "KEY_BUNDLE";
 
+    private boolean mAttachToRefreshLayout;
+    private Listener mListener;
     private RecyclerView mRecyclerView;
     private TournamentBundle mBundle;
 
@@ -42,7 +46,7 @@ abstract class TournamentViewPagerFragment extends BaseFragment {
     }
 
 
-    protected RecyclerView getRecyclerView() {
+    public RecyclerView getRecyclerView() {
         return mRecyclerView;
     }
 
@@ -57,12 +61,58 @@ abstract class TournamentViewPagerFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         readArguments();
         findViews();
+        prepareList();
+
+        if (mAttachToRefreshLayout) {
+            mListener.attachToRefreshLayout(mRecyclerView);
+            mAttachToRefreshLayout = false;
+        }
+    }
+
+
+    @Override
+    public void onAttach(final Activity activity) {
+        super.onAttach(activity);
+        mListener = (Listener) activity;
+    }
+
+
+    protected void prepareList() {
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
 
     private void readArguments() {
         final Bundle arguments = getArguments();
         mBundle = arguments.getParcelable(KEY_BUNDLE);
+    }
+
+
+    @Override
+    public void setUserVisibleHint(final boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+            if (isAdded()) {
+                mListener.attachToRefreshLayout(mRecyclerView);
+            } else {
+                mAttachToRefreshLayout = true;
+            }
+        } else {
+            mAttachToRefreshLayout = false;
+        }
+    }
+
+
+
+
+    public interface Listener {
+
+
+        public void attachToRefreshLayout(final RecyclerView recyclerView);
+
+
     }
 
 

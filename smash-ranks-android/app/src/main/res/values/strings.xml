@@ -32,6 +32,7 @@
     <string name="error_fetching_players">Error fetching players!</string>
     <string name="error_fetching_rankings">Error fetching rankings!</string>
     <string name="error_fetching_regions">Error fetching regions!</string>
+    <string name="error_fetching_tournament">Error fetching tournament!</string>
     <string name="error_fetching_tournaments">Error fetching tournaments!</string>
     <string name="fetching_regions">Fetching regions…</string>
     <string name="gar_pr">GAR PR</string>

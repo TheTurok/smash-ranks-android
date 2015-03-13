@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ScrollView;
 
 import com.garpr.android.R;
 
@@ -82,10 +83,12 @@ public final class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
 
 
     public void setScrollingView(final View target) throws IllegalArgumentException {
-        if (target instanceof AbsListView || target instanceof RecyclerView) {
+        if (target instanceof AbsListView || target instanceof RecyclerView
+                || target instanceof ScrollView) {
             mTarget = target;
         } else {
-            throw new IllegalArgumentException("target must be either an AbsListView or a RecyclerView");
+            throw new IllegalArgumentException("target (" + target + ") must be an AbsListView,"
+                    + " RecyclerView, or ScrollView");
         }
     }
 

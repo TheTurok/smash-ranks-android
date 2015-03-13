@@ -16,10 +16,30 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             tools:ignore="UnusedAttribute" />
-        <android.support.v4.view.ViewPager
-            android:id="@+id/activity_tournament_view_pager"
+        <com.garpr.android.misc.FlexibleSwipeRefreshLayout
+            android:id="@+id/activity_tournament_refresh"
             android:layout_height="match_parent"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent">
+            <FrameLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/activity_tournament_view_pager"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:visibility="gone" />
+                <LinearLayout
+                    android:id="@+id/activity_tournament_error"
+                    tools:visibility="visible"
+                    style="@style/error_container">
+                    <TextView
+                        android:text="@string/error_fetching_tournament"
+                        style="@style/error_line1" />
+                    <TextView
+                        style="@style/error_line2" />
+                </LinearLayout>
+            </FrameLayout>
+        </com.garpr.android.misc.FlexibleSwipeRefreshLayout>
     </LinearLayout>
     <include
         layout="@layout/navigation_drawer" />

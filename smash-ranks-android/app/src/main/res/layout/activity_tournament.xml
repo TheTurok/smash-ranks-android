@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/drawer_layout">
     <LinearLayout
@@ -15,6 +16,7 @@
             android:id="@+id/activity_tournament_tab_strip"
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
+            app:pstsIndicatorColor="@color/indigo_bright"
             tools:ignore="UnusedAttribute" />
         <com.garpr.android.misc.FlexibleSwipeRefreshLayout
             android:id="@+id/activity_tournament_refresh"

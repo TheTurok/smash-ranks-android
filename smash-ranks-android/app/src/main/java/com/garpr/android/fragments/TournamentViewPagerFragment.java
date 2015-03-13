@@ -102,7 +102,7 @@ public abstract class TournamentViewPagerFragment extends BaseFragment implement
     }
 
 
-    private void readArguments() {
+    protected void readArguments() {
         final Bundle arguments = getArguments();
         mBundle = arguments.getParcelable(KEY_BUNDLE);
     }

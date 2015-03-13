@@ -8,10 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.garpr.android.R;
+import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.models.TournamentBundle;
 
 
-public abstract class TournamentViewPagerFragment extends BaseFragment {
+public abstract class TournamentViewPagerFragment extends BaseFragment implements
+        BaseListAdapter.Listener {
 
 
     private static final String KEY_BUNDLE = "KEY_BUNDLE";
@@ -32,6 +34,9 @@ public abstract class TournamentViewPagerFragment extends BaseFragment {
 
         return fragment;
     }
+
+
+    protected abstract TournamentAdapter createAdapter();
 
 
     private void findViews() {
@@ -77,9 +82,23 @@ public abstract class TournamentViewPagerFragment extends BaseFragment {
     }
 
 
-    protected void prepareList() {
+    @Override
+    public void onItemClick(final View view, final int position) {
+        // this method intentionally left blank (children can override)
+    }
+
+
+    @Override
+    public boolean onItemLongClick(final View view, final int position) {
+        // this method intentionally left blank (children can override)
+        return false;
+    }
+
+
+    private void prepareList() {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(createAdapter());
     }
 
 
@@ -105,6 +124,17 @@ public abstract class TournamentViewPagerFragment extends BaseFragment {
     }
 
 
+
+
+    protected abstract class TournamentAdapter extends BaseListAdapter {
+
+
+        protected TournamentAdapter() {
+            super(TournamentViewPagerFragment.this, mRecyclerView);
+        }
+
+
+    }
 
 
     public interface Listener {

@@ -113,6 +113,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
         readIntentData();
         setTitle(mTournament.getName());
         findViews();
+        mRefreshLayout.setOnRefreshListener(this);
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mBundle = savedInstanceState.getParcelable(KEY_BUNDLE);

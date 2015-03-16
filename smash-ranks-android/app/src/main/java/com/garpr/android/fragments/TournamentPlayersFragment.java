@@ -27,7 +27,8 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
 
     @Override
-    protected TournamentAdapter createAdapter() {
+    protected TournamentAdapter createAdapter(final TournamentBundle bundle) {
+        mPlayers = bundle.getPlayers();
         return new TournamentPlayersAdapter();
     }
 
@@ -35,14 +36,6 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
     @Override
     protected String getFragmentName() {
         return TAG;
-    }
-
-
-    @Override
-    protected void readArguments() {
-        super.readArguments();
-        final TournamentBundle bundle = getTournamentBundle();
-        mPlayers = bundle.getPlayers();
     }
 
 

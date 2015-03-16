@@ -36,7 +36,7 @@ public abstract class TournamentViewPagerFragment extends BaseFragment implement
     }
 
 
-    protected abstract TournamentAdapter createAdapter();
+    protected abstract TournamentAdapter createAdapter(final TournamentBundle bundle);
 
 
     private void findViews() {
@@ -98,7 +98,7 @@ public abstract class TournamentViewPagerFragment extends BaseFragment implement
     private void prepareList() {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(createAdapter());
+        mRecyclerView.setAdapter(createAdapter(mBundle));
     }
 
 

@@ -2,10 +2,15 @@ package com.garpr.android.fragments;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.garpr.android.R;
+import com.garpr.android.activities.PlayerActivity;
 import com.garpr.android.models.Match;
+import com.garpr.android.models.Player;
 import com.garpr.android.models.TournamentBundle;
 
 import java.util.ArrayList;
@@ -27,7 +32,8 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
 
 
     @Override
-    protected TournamentAdapter createAdapter() {
+    protected TournamentAdapter createAdapter(final TournamentBundle bundle) {
+        mMatches = bundle.getMatches();
         return new TournamentMatchesAdapter();
     }
 
@@ -38,20 +44,34 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
     }
 
 
-    @Override
-    protected void readArguments() {
-        super.readArguments();
-        final TournamentBundle bundle = getTournamentBundle();
-        mMatches = bundle.getMatches();
-    }
-
-
 
 
     private final class TournamentMatchesAdapter extends TournamentAdapter {
 
 
         private static final String TAG = "TournamentMatchesAdapter";
+
+        private final View.OnClickListener mLoserListener;
+        private final View.OnClickListener mWinnerListener;
+
+
+        private TournamentMatchesAdapter() {
+            mLoserListener = new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    final Player loser = (Player) v.getTag();
+                    PlayerActivity.startForResult(getActivity(), loser);
+                }
+            };
+
+            mWinnerListener = new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    final Player winner = (Player) v.getTag();
+                    PlayerActivity.startForResult(getActivity(), winner);
+                }
+            };
+        }
 
 
         @Override
@@ -74,15 +94,46 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-            ((TextView) holder.itemView).setText(mMatches.get(position).getWinner().getName());
+            final ViewHolder viewHolder = (ViewHolder) holder;
+            final Match match = mMatches.get(position);
+
+            final Player loser = match.getLoser();
+            viewHolder.mLoser.setTag(loser);
+            viewHolder.mLoser.setText(loser.getName());
+
+            final Player winner = match.getWinner();
+            viewHolder.mWinner.setTag(winner);
+            viewHolder.mWinner.setText(winner.getName());
         }
 
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
-            final TextView textView = new TextView(getActivity());
-            return new RecyclerView.ViewHolder(textView) {};
+            final LayoutInflater inflater = getLayoutInflater();
+            final View view = inflater.inflate(R.layout.model_match2, parent, false);
+            final ViewHolder viewHolder = new ViewHolder(view);
+            viewHolder.mLoser.setOnClickListener(mLoserListener);
+            viewHolder.mWinner.setOnClickListener(mWinnerListener);
+
+            return viewHolder;
+        }
+
+
+    }
+
+
+    private static final class ViewHolder extends RecyclerView.ViewHolder {
+
+
+        private final TextView mLoser;
+        private final TextView mWinner;
+
+
+        private ViewHolder(final View view) {
+            super(view);
+            mLoser = (TextView) view.findViewById(R.id.model_match2_loser);
+            mWinner = (TextView) view.findViewById(R.id.model_match2_winner);
         }
 
 

@@ -40,6 +40,7 @@ import com.garpr.android.models.Result;
 import com.garpr.android.models.Tournament;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class PlayerActivity extends BaseToolbarListActivity implements
@@ -360,6 +361,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
     private void prepareList() {
+        Collections.sort(mMatches, Match.REVERSE_CHRONOLOGICAL_ORDER);
         createListItems();
         setAdapter(new MatchesAdapter());
 

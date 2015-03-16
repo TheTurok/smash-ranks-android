@@ -190,8 +190,10 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         super.onCreate(savedInstanceState);
         setTitle(mPlayer.getName());
 
-        final Toolbar toolbar = getToolbar();
-        toolbar.setSubtitle(getString(R.string.rank_x, mPlayer.getRank()));
+        if (mPlayer.hasCompetitionValues()) {
+            final Toolbar toolbar = getToolbar();
+            toolbar.setSubtitle(getString(R.string.rank_x, mPlayer.getRank()));
+        }
 
         mInUsersRegion = User.areWeInTheUsersRegion();
         mUserPlayer = User.getPlayer();

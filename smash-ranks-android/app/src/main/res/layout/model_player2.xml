@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/gray"
+    android:id="@+id/model_player2_root"
+    tools:ignore="Overdraw"
+    style="@style/list_item_root.no_padding">
+    <TextView
+        android:background="?attr/selectableItemBackground"
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:id="@+id/model_player2_name"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="3"
+        android:textSize="20sp"
+        tools:ignore="UselessParent"
+        tools:text="Shroomed"
+        style="@style/list_item_root" />
+</FrameLayout>

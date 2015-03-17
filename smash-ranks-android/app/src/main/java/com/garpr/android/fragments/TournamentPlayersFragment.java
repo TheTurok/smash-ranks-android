@@ -1,6 +1,7 @@
 package com.garpr.android.fragments;
 
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.activities.PlayerActivity;
 import com.garpr.android.models.Player;
@@ -15,12 +17,15 @@ import com.garpr.android.models.TournamentBundle;
 
 import java.util.ArrayList;
 
+import static com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+
 
 public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
 
     private static final String TAG = "TournamentPlayersFragment";
 
+    private ArrayList<ListItem> mListItems;
     private ArrayList<Player> mPlayers;
 
 
@@ -51,6 +56,80 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
     }
 
 
+
+
+    private static final class ListItem implements AlphabeticallyComparable {
+
+
+        private Player mPlayer;
+        private String mTitle;
+        private Type mType;
+
+
+        private static ListItem createPlayer(final Player player) {
+            final ListItem listItem = new ListItem();
+            listItem.mPlayer = player;
+            listItem.mType = Type.PLAYER;
+
+            return listItem;
+        }
+
+
+        private static ListItem createTitle(final String title) {
+            final ListItem listItem = new ListItem();
+            listItem.mTitle = title;
+            listItem.mType = Type.TITLE;
+
+            return listItem;
+        }
+
+
+        @Override
+        public char getFirstCharOfName() {
+            return 0;
+        }
+
+
+        @Override
+        public String toString() {
+            final String string;
+
+            switch (mType) {
+                
+            }
+
+            return string;
+        }
+
+
+        private static enum Type {
+            PLAYER, TITLE;
+
+
+            @Override
+            public String toString() {
+                final int resId;
+
+                switch (this) {
+                    case PLAYER:
+                        resId = R.string.player;
+                        break;
+
+                    case TITLE:
+                        resId = R.string.title;
+                        break;
+
+                    default:
+                        throw new IllegalStateException("Type is invalid");
+                }
+
+                final Context context = App.getContext();
+                return context.getString(resId);
+            }
+        }
+
+
+    }
 
 
     private final class TournamentPlayersAdapter extends TournamentAdapter {

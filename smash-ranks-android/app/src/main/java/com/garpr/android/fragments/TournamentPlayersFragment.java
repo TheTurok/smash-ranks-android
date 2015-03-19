@@ -6,18 +6,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.activities.PlayerActivity;
+import com.garpr.android.misc.ListUtils;
+import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
+import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.TournamentBundle;
 
 import java.util.ArrayList;
-
-import static com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+import java.util.Collections;
 
 
 public class TournamentPlayersFragment extends TournamentViewPagerFragment {
@@ -37,8 +38,36 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     protected TournamentAdapter createAdapter(final TournamentBundle bundle) {
         mPlayers = bundle.getPlayers();
+        Collections.sort(mPlayers, Player.ALPHABETICAL_ORDER);
+        mListItems = new ArrayList<>(mPlayers.size());
+
+        for (final Player player : mPlayers) {
+            mListItems.add(ListItem.createPlayer(player));
+        }
+
+        final AlphabeticalSectionCreator creator = new AlphabeticalSectionCreator() {
+            @Override
+            public AlphabeticallyComparable createDigitSection() {
+                return ListItem.createTitle(getString(R.string.pound_sign));
+            }
+
+
+            @Override
+            public AlphabeticallyComparable createLetterSection(final String letter) {
+                return ListItem.createTitle(letter);
+            }
+
+
+            @Override
+            public AlphabeticallyComparable createOtherSection() {
+                return ListItem.createTitle(getString(R.string.other));
+            }
+        };
+
+        mListItems = (ArrayList<ListItem>) ListUtils.createAlphabeticalList(mListItems, creator);
         return new TournamentPlayersAdapter();
     }
 
@@ -86,7 +115,7 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
         @Override
         public char getFirstCharOfName() {
-            return 0;
+            return toString().charAt(0);
         }
 
 
@@ -95,7 +124,16 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
             final String string;
 
             switch (mType) {
-                
+                case PLAYER:
+                    string = mPlayer.getName();
+                    break;
+
+                case TITLE:
+                    string = mTitle;
+                    break;
+
+                default:
+                    throw new IllegalStateException("Type is invalid");
             }
 
             return string;
@@ -138,6 +176,16 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
         private static final String TAG = "TournamentPlayersAdapter";
 
 
+        private void bindPlayerViewHolder(final PlayerViewHolder holder, final ListItem listItem) {
+            holder.mName.setText(listItem.mPlayer.getName());
+        }
+
+
+        private void bindTItleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
+            holder.mName.setText(listItem.mTitle);
+        }
+
+
         @Override
         public String getAdapterName() {
             return TAG;
@@ -146,7 +194,7 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
         @Override
         public int getItemCount() {
-            return mPlayers.size();
+            return mListItems.size();
         }
 
 
@@ -157,20 +205,54 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
 
         @Override
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-            final ViewHolder viewHolder = (ViewHolder) holder;
-            final Player player = mPlayers.get(position);
-            viewHolder.mName.setText(player.getName());
+        public int getItemViewType(final int position) {
+            return mListItems.get(position).mType.ordinal();
         }
 
 
         @Override
-        public ViewHolder onCreateViewHolder(final ViewGroup parent,
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+            final ListItem listItem = mListItems.get(position);
+
+            switch (listItem.mType) {
+                case PLAYER:
+                    bindPlayerViewHolder((PlayerViewHolder) holder, listItem);
+                    break;
+
+                case TITLE:
+                    bindTItleViewHolder((TitleViewHolder) holder, listItem);
+                    break;
+
+                default:
+                    throw new IllegalStateException("Illegal ListItem Type: " + listItem.mType);
+            }
+        }
+
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
+            final ListItem.Type type = ListItem.Type.values()[viewType];
             final LayoutInflater inflater = getLayoutInflater();
-            final View view = inflater.inflate(R.layout.model_player2, parent, false);
-            final ViewHolder viewHolder = new ViewHolder(view);
-            viewHolder.mRoot.setOnClickListener(this);
+
+            final View view;
+            final RecyclerView.ViewHolder viewHolder;
+
+            switch (type) {
+                case PLAYER:
+                    view = inflater.inflate(R.layout.model_player2, parent, false);
+                    viewHolder = new PlayerViewHolder(view);
+                    view.setOnClickListener(this);
+                    break;
+
+                case TITLE:
+                    view = inflater.inflate(R.layout.separator_simple, parent, false);
+                    viewHolder = new TitleViewHolder(view);
+                    break;
+
+                default:
+                    throw new IllegalStateException("Illegal ListItem Type: " + type);
+            }
 
             return viewHolder;
         }
@@ -179,17 +261,30 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
     }
 
 
-    private static final class ViewHolder extends RecyclerView.ViewHolder {
+    private static final class PlayerViewHolder extends RecyclerView.ViewHolder {
 
 
-        private final FrameLayout mRoot;
         private final TextView mName;
 
 
-        private ViewHolder(final View view) {
+        private PlayerViewHolder(final View view) {
             super(view);
             mName = (TextView) view.findViewById(R.id.model_player2_name);
-            mRoot = (FrameLayout) view.findViewById(R.id.model_player2_root);
+        }
+
+
+    }
+
+
+    private static final class TitleViewHolder extends RecyclerView.ViewHolder {
+
+
+        private final TextView mName;
+
+
+        private TitleViewHolder(final View view) {
+            super(view);
+            mName = (TextView) view.findViewById(R.id.separator_simple_text);
         }
 
 

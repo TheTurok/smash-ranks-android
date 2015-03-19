@@ -168,6 +168,12 @@ public class TournamentActivity extends BaseToolbarActivity implements
     }
 
 
+    @Override
+    protected boolean showDrawerIndicator() {
+        return false;
+    }
+
+
     private void showError() {
         mViewPager.setAdapter(null);
         mViewPager.setVisibility(View.GONE);

@@ -143,7 +143,6 @@ public class TournamentActivity extends BaseToolbarActivity implements
         mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.root_padding));
         mViewPager.setVisibility(View.VISIBLE);
         mViewPager.setAdapter(new TournamentFragmentAdapter());
-        mTabStrip.setShouldExpand(true);
         mTabStrip.setViewPager(mViewPager);
         setLoading(false);
     }

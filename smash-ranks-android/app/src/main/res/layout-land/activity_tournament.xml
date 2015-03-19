@@ -6,20 +6,18 @@
     <LinearLayout
         android:orientation="vertical"
         style="@style/root.no_padding">
-        <include
-            android:elevation="0dp"
-            tools:ignore="UnusedAttribute"
-            layout="@layout/toolbar" />
-        <com.astuetz.PagerSlidingTabStrip
-            android:background="@color/gray_dark"
-            android:elevation="@dimen/elevation"
-            android:id="@+id/activity_tournament_tab_strip"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            app:pstsIndicatorColor="@color/indigo_bright"
-            app:pstsShouldExpand="true"
-            app:pstsTextAllCaps="true"
-            tools:ignore="UnusedAttribute" />
+        <android.support.v7.widget.Toolbar
+            app:theme="@style/toolbar_theme"
+            style="@style/toolbar">
+            <com.astuetz.PagerSlidingTabStrip
+                android:background="@color/gray_dark"
+                android:id="@+id/activity_tournament_tab_strip"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                app:pstsIndicatorColor="@color/indigo_bright"
+                app:pstsShouldExpand="false"
+                app:pstsTextAllCaps="true" />
+        </android.support.v7.widget.Toolbar>
         <com.garpr.android.misc.FlexibleSwipeRefreshLayout
             android:id="@+id/activity_tournament_refresh"
             android:layout_height="match_parent"

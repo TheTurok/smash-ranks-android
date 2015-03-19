@@ -93,7 +93,7 @@ public final class App extends Application {
             SQLiteDatabase.releaseMemory();
             Console.clearLogMessages();
 
-            Console.d(TAG, "onTrimMemory(" + level + ")");
+            Console.d(TAG, "onTrimMemory(" + level + ')');
         }
     }
 

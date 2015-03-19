@@ -28,7 +28,7 @@ import com.garpr.android.models.TournamentBundle;
 
 
 public class TournamentActivity extends BaseToolbarActivity implements
-        TournamentViewPagerFragment.Listener, SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, TournamentViewPagerFragment.Listener {
 
 
     private static final int TOURNAMENT_FRAGMENT_COUNT = 2;
@@ -222,7 +222,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
 
         @Override
         public CharSequence getPageTitle(final int position) {
-            final CharSequence title;
+            final String title;
 
             switch (position) {
                 case TOURNAMENT_FRAGMENT_PLAYERS:

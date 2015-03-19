@@ -3,6 +3,7 @@
 
     <dimen name="elevation">4dp</dimen>
     <dimen name="elevation_double">8dp</dimen>
+    <dimen name="elevation_quadruple">16dp</dimen>
     <dimen name="floating_action_button_disabled">-88dp</dimen>
     <dimen name="floating_action_button_enabled">16dp</dimen>
     <dimen name="floating_action_button_size">56dp</dimen>

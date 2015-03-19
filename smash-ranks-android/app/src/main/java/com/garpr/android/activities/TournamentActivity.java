@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -18,7 +17,6 @@ import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Tournaments;
 import com.garpr.android.fragments.TournamentMatchesFragment;
 import com.garpr.android.fragments.TournamentPlayersFragment;
-import com.garpr.android.fragments.TournamentViewPagerFragment;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
@@ -28,7 +26,7 @@ import com.garpr.android.models.TournamentBundle;
 
 
 public class TournamentActivity extends BaseToolbarActivity implements
-        SwipeRefreshLayout.OnRefreshListener, TournamentViewPagerFragment.Listener {
+        SwipeRefreshLayout.OnRefreshListener {
 
 
     private static final int TOURNAMENT_FRAGMENT_COUNT = 2;
@@ -54,12 +52,6 @@ public class TournamentActivity extends BaseToolbarActivity implements
         final Intent intent = new Intent(activity, TournamentActivity.class);
         intent.putExtra(EXTRA_TOURNAMENT, tournament);
         activity.startActivity(intent);
-    }
-
-
-    @Override
-    public void attachToRefreshLayout(final RecyclerView recyclerView) {
-        mRefreshLayout.setScrollingView(recyclerView);
     }
 
 
@@ -147,6 +139,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
 
 
     private void prepareViewPager() {
+        mRefreshLayout.childCanAlwaysScrollUp();
         mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.root_padding));
         mViewPager.setVisibility(View.VISIBLE);
         mViewPager.setAdapter(new TournamentFragmentAdapter());

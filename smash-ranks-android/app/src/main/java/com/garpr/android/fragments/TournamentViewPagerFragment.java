@@ -1,7 +1,6 @@
 package com.garpr.android.fragments;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +17,6 @@ public abstract class TournamentViewPagerFragment extends BaseFragment implement
 
     private static final String KEY_BUNDLE = "KEY_BUNDLE";
 
-    private boolean mAttachToRefreshLayout;
-    private Listener mListener;
     private RecyclerView mRecyclerView;
     private TournamentBundle mBundle;
 
@@ -67,18 +64,6 @@ public abstract class TournamentViewPagerFragment extends BaseFragment implement
         readArguments();
         findViews();
         prepareList();
-
-        if (mAttachToRefreshLayout) {
-            mListener.attachToRefreshLayout(mRecyclerView);
-            mAttachToRefreshLayout = false;
-        }
-    }
-
-
-    @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-        mListener = (Listener) activity;
     }
 
 
@@ -108,22 +93,6 @@ public abstract class TournamentViewPagerFragment extends BaseFragment implement
     }
 
 
-    @Override
-    public void setUserVisibleHint(final boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if (isVisibleToUser) {
-            if (isAdded()) {
-                mListener.attachToRefreshLayout(mRecyclerView);
-            } else {
-                mAttachToRefreshLayout = true;
-            }
-        } else {
-            mAttachToRefreshLayout = false;
-        }
-    }
-
-
 
 
     protected abstract class TournamentAdapter extends BaseListAdapter {
@@ -132,15 +101,6 @@ public abstract class TournamentViewPagerFragment extends BaseFragment implement
         protected TournamentAdapter() {
             super(TournamentViewPagerFragment.this, mRecyclerView);
         }
-
-
-    }
-
-
-    public interface Listener {
-
-
-        public void attachToRefreshLayout(final RecyclerView recyclerView);
 
 
     }

@@ -107,8 +107,6 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         };
 
         mListItems = (ArrayList<ListItem>) ListUtils.createAlphabeticalList(mListItems, creator);
-        mListItems.trimToSize();
-
         mListItemsShown = mListItems;
     }
 
@@ -560,7 +558,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type: " + listItem.mType);
+                    throw new IllegalStateException("Illegal ListItem Type: " + listItem.mType);
             }
         }
 

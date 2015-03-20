@@ -90,9 +90,9 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
 
             @Override
             public void success(final Rankings.Result result) {
-                if (Rankings.Result.NO_UPDATE.equals(result)) {
+                if (result.noUpdate()) {
                     sendAnalyticsEvent(lastSync, Constants.SAME_ROSTER, null);
-                } else if (Rankings.Result.UPDATE_AVAILABLE.equals(result)) {
+                } else if (result.updateAvailable()) {
                     Notifications.showRankingsUpdated();
                     sendAnalyticsEvent(lastSync, Constants.NEW_ROSTER, null);
                 } else {

@@ -175,7 +175,17 @@ public final class Rankings {
 
 
     public static enum Result {
-        NO_UPDATE, UPDATE_AVAILABLE
+        NO_UPDATE, UPDATE_AVAILABLE;
+
+
+        public boolean noUpdate() {
+            return equals(NO_UPDATE);
+        }
+
+
+        public boolean updateAvailable() {
+            return equals(UPDATE_AVAILABLE);
+        }
     }
 
 

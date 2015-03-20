@@ -228,8 +228,13 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     @Override
     public void onItemClick(final View view, final int position) {
         final ListItem listItem = mListItemsShown.get(position);
-        final Player opponent = listItem.mMatch.getOtherPlayer(mPlayer);
-        HeadToHeadActivity.start(this, mPlayer, opponent);
+
+        if (listItem.isMatch()) {
+            final Player opponent = listItem.mMatch.getOtherPlayer(mPlayer);
+            HeadToHeadActivity.start(this, mPlayer, opponent);
+        } else {
+            TournamentActivity.start(this, listItem.mTournament);
+        }
     }
 
 
@@ -679,7 +684,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
                 case MATCH:
                     view = inflater.inflate(R.layout.model_match, parent, false);
                     holder = new MatchViewHolder(view);
-                    view.setOnClickListener(this);
                     break;
 
                 case TOURNAMENT:
@@ -691,6 +695,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
                     throw new RuntimeException("Unknown ListItem Type: " + listItemType);
             }
 
+            view.setOnClickListener(this);
             return holder;
         }
 

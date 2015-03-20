@@ -597,8 +597,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         }
 
 
-        private void bindMatchViewHolder(final MatchViewHolder holder, final int position,
-                final ListItem listItem) {
+        private void bindMatchViewHolder(final MatchViewHolder holder, final ListItem listItem) {
             final Player opponent = listItem.mMatch.getOtherPlayer(mPlayer);
             holder.mOpponent.setText(opponent.getName());
 
@@ -618,7 +617,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         }
 
 
-        private void bindTournamentViewHolder(final TournamentViewHolder holder, final int position,
+        private void bindTournamentViewHolder(final TournamentViewHolder holder,
                 final ListItem listItem) {
             holder.mDate.setText(listItem.mTournament.getDateWrapper().getRawDate());
             holder.mName.setText(listItem.mTournament.getName());
@@ -655,15 +654,15 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
             switch (listItem.mType) {
                 case MATCH:
-                    bindMatchViewHolder((MatchViewHolder) holder, position, listItem);
+                    bindMatchViewHolder((MatchViewHolder) holder, listItem);
                     break;
 
                 case TOURNAMENT:
-                    bindTournamentViewHolder((TournamentViewHolder) holder, position, listItem);
+                    bindTournamentViewHolder((TournamentViewHolder) holder, listItem);
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type detected: " + listItem.mType);
+                    throw new RuntimeException("Unknown ListItem Type: " + listItem.mType);
             }
         }
 

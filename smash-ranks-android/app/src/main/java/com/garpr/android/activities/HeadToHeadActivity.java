@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -191,6 +192,13 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         } else {
             prepareList();
         }
+    }
+
+
+    @Override
+    public void onItemClick(final View view, final int position) {
+        final ListItem listItem = mListItemsShown.get(position);
+        TournamentActivity.start(this, listItem.mMatch.getTournament());
     }
 
 
@@ -556,6 +564,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
                 case TOURNAMENT:
                     view = inflater.inflate(R.layout.model_tournament, parent, false);
                     holder = new TournamentViewHolder(view);
+                    view.setOnClickListener(this);
                     break;
 
                 default:
@@ -602,6 +611,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     private static final class TournamentViewHolder extends RecyclerView.ViewHolder {
 
 
+        private final FrameLayout mRoot;
         private final TextView mDate;
         private final TextView mName;
 
@@ -610,6 +620,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
             super(view);
             mDate = (TextView) view.findViewById(R.id.model_tournament_date);
             mName = (TextView) view.findViewById(R.id.model_tournament_name);
+            mRoot = (FrameLayout) view.findViewById(R.id.model_tournament_root);
         }
 
 

@@ -69,3 +69,8 @@
 
 -keep class com.flurry.** { *; }
 -dontwarn com.flurry.**
+
+-dontwarn okio.**
+-dontwarn com.squareup.okhttp.**
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }

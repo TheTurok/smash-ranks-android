@@ -2,7 +2,6 @@ package com.garpr.android.activities;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Matches;
 import com.garpr.android.data.ResponseOnUi;
@@ -571,29 +569,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
         private static enum Type {
-            MATCH, TOURNAMENT;
-
-
-            @Override
-            public String toString() {
-                final int resId;
-
-                switch (this) {
-                    case MATCH:
-                        resId = R.string.match;
-                        break;
-
-                    case TOURNAMENT:
-                        resId = R.string.tournament;
-                        break;
-
-                    default:
-                        throw new IllegalStateException("Type is invalid");
-                }
-
-                final Context context = App.getContext();
-                return context.getString(resId);
-            }
+            MATCH, TOURNAMENT
         }
 
 

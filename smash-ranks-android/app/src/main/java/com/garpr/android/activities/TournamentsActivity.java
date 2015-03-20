@@ -2,7 +2,6 @@ package com.garpr.android.activities;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -16,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.TextView;
 
-import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Tournaments;
@@ -381,29 +379,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
         private static enum Type {
-            DATE, TOURNAMENT;
-
-
-            @Override
-            public String toString() {
-                final int resId;
-
-                switch (this) {
-                    case DATE:
-                        resId = R.string.date;
-                        break;
-
-                    case TOURNAMENT:
-                        resId = R.string.tournament;
-                        break;
-
-                    default:
-                        throw new IllegalStateException("Type is invalid");
-                }
-
-                final Context context = App.getContext();
-                return context.getString(resId);
-            }
+            DATE, TOURNAMENT
         }
 
 

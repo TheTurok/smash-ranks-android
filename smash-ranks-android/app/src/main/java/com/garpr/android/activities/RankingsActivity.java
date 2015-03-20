@@ -2,7 +2,6 @@ package com.garpr.android.activities;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Rankings;
 import com.garpr.android.data.ResponseOnUi;
@@ -434,29 +432,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
         private static enum Type {
-            PLAYER, TITLE;
-
-
-            @Override
-            public String toString() {
-                final int resId;
-
-                switch (this) {
-                    case PLAYER:
-                        resId = R.string.player;
-                        break;
-
-                    case TITLE:
-                        resId = R.string.title;
-                        break;
-
-                    default:
-                        throw new IllegalStateException("Type is invalid");
-                }
-
-                final Context context = App.getContext();
-                return context.getString(resId);
-            }
+            PLAYER, TITLE
         }
 
 

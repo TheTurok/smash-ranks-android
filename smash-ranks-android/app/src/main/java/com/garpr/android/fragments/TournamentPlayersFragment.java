@@ -27,7 +27,6 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
     private static final String TAG = "TournamentPlayersFragment";
 
     private ArrayList<ListItem> mListItems;
-    private ArrayList<Player> mPlayers;
 
 
 
@@ -40,11 +39,11 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
     @Override
     @SuppressWarnings("unchecked")
     protected TournamentAdapter createAdapter(final TournamentBundle bundle) {
-        mPlayers = bundle.getPlayers();
-        Collections.sort(mPlayers, Player.ALPHABETICAL_ORDER);
-        mListItems = new ArrayList<>(mPlayers.size());
+        final ArrayList<Player> players = bundle.getPlayers();
+        Collections.sort(players, Player.ALPHABETICAL_ORDER);
+        mListItems = new ArrayList<>(players.size());
 
-        for (final Player player : mPlayers) {
+        for (final Player player : players) {
             mListItems.add(ListItem.createPlayer(player));
         }
 

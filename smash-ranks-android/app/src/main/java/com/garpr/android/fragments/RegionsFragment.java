@@ -629,7 +629,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type: " + listItem.mType);
+                    throw new RuntimeException("Unknown ListItem Type: " + listItem.mType);
             }
         }
 
@@ -637,12 +637,12 @@ public class RegionsFragment extends BaseListToolbarFragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
             final LayoutInflater inflater = getLayoutInflater();
-            final ListItem.Type type = ListItem.Type.values()[viewType];
+            final ListItem.Type listItemType = ListItem.Type.values()[viewType];
 
             final View view;
             final RecyclerView.ViewHolder holder;
 
-            switch (type) {
+            switch (listItemType) {
                 case REGION:
                     view = inflater.inflate(R.layout.model_checkable, parent, false);
                     holder = new RegionViewHolder(view);
@@ -655,7 +655,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type: " + type);
+                    throw new RuntimeException("Unknown ListItem Type: " + listItemType);
             }
 
             return holder;

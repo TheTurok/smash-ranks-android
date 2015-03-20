@@ -446,7 +446,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type: " + listItem.mType);
+                    throw new RuntimeException("Unknown ListItem Type: " + listItem.mType);
             }
         }
 
@@ -473,7 +473,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type detected: " + viewType);
+                    throw new RuntimeException("Unknown ListItem Type: " + listItemType);
             }
 
             return holder;

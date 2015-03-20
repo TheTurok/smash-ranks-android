@@ -528,7 +528,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type: " + listItem.mType);
+                    throw new RuntimeException("Unknown ListItem Type: " + listItem.mType);
             }
         }
 
@@ -559,7 +559,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type: " + type);
+                    throw new RuntimeException("Unknown ListItem Type: " + type);
             }
 
             return holder;

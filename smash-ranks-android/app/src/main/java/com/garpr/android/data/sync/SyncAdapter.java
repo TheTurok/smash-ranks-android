@@ -96,7 +96,7 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
                     Notifications.showRankingsUpdated();
                     sendAnalyticsEvent(lastSync, Constants.NEW_ROSTER, null);
                 } else {
-                    throw new RuntimeException("Invalid Rankings.Result: " + result);
+                    throw new IllegalStateException("Illegal Rankings.Result: " + result);
                 }
             }
         };

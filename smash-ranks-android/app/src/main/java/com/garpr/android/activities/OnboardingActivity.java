@@ -91,7 +91,9 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     private void nextOnboardingStep() {
-        switch (mPager.getCurrentItem()) {
+        final int currentPagerItem = mPager.getCurrentItem();
+
+        switch (currentPagerItem) {
             case ONBOARDING_FRAGMENT_REGIONS:
                 final Region region = mRegionsFragment.getSelectedRegion();
 
@@ -106,7 +108,7 @@ public class OnboardingActivity extends BaseActivity implements
 
             default:
                 // this should never happen
-                throw new RuntimeException();
+                throw new IllegalStateException("Illegal currentPagerItem: " + currentPagerItem);
         }
     }
 
@@ -116,6 +118,8 @@ public class OnboardingActivity extends BaseActivity implements
         if (mPager == null || mPager.getCurrentItem() == 0) {
             super.onBackPressed();
         } else {
+            final int currentPagerItem = mPager.getCurrentItem();
+
             switch (mPager.getCurrentItem()) {
                 case ONBOARDING_FRAGMENT_PLAYERS:
                     if (!mPlayersFragment.onBackPressed()) {
@@ -125,7 +129,7 @@ public class OnboardingActivity extends BaseActivity implements
 
                 default:
                     // this should never happen
-                    throw new RuntimeException();
+                    throw new IllegalStateException("Illegal currentPagerItem: " + currentPagerItem);
             }
         }
     }
@@ -271,7 +275,7 @@ public class OnboardingActivity extends BaseActivity implements
 
                 default:
                     // this should never happen
-                    throw new RuntimeException("invalid position: " + position);
+                    throw new RuntimeException("Invalid position: " + position);
             }
 
             return fragment;

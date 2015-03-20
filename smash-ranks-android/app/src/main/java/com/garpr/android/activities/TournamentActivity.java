@@ -205,7 +205,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
 
                 default:
                     // this should never happen
-                    throw new RuntimeException("invalid position: " + position);
+                    throw new RuntimeException("Invalid position: " + position);
             }
 
             return fragment;
@@ -227,7 +227,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
 
                 default:
                     // this should never happen
-                    throw new RuntimeException("invalid position: " + position);
+                    throw new RuntimeException("Invalid position: " + position);
             }
 
             return title;

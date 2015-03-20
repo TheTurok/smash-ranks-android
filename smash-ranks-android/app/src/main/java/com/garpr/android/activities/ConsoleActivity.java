@@ -303,7 +303,7 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal viewType: " + viewType);
+                    throw new RuntimeException("Unknown viewType: " + viewType);
             }
         }
 
@@ -328,7 +328,7 @@ public class ConsoleActivity extends BaseToolbarListActivity implements
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal viewType detected: " + viewType);
+                    throw new RuntimeException("Unknown viewType: " + viewType);
             }
 
             return holder;

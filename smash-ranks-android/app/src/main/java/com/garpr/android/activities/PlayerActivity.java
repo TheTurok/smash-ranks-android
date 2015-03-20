@@ -690,7 +690,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
                     break;
 
                 default:
-                    throw new RuntimeException("Illegal ListItem Type detected: " + viewType);
+                    throw new RuntimeException("Unknown ListItem Type: " + listItemType);
             }
 
             return holder;

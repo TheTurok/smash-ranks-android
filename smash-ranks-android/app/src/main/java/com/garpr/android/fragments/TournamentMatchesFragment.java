@@ -5,9 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
+import com.garpr.android.activities.HeadToHeadActivity;
 import com.garpr.android.activities.PlayerActivity;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
@@ -41,6 +43,20 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
     @Override
     protected String getFragmentName() {
         return TAG;
+    }
+
+
+    @Override
+    public void onItemClick(final View view, final int position) {
+        final Match match = mMatches.get(position);
+        HeadToHeadActivity.start(getActivity(), match.getWinner(), match.getLoser());
+    }
+
+
+    @Override
+    public boolean onItemLongClick(final View view, final int position) {
+        // show dialog to view a certain player's profile
+        return true;
     }
 
 
@@ -113,8 +129,8 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
             final LayoutInflater inflater = getLayoutInflater();
             final View view = inflater.inflate(R.layout.model_match2, parent, false);
             final ViewHolder viewHolder = new ViewHolder(view);
-            viewHolder.mLoser.setOnClickListener(mLoserListener);
-            viewHolder.mWinner.setOnClickListener(mWinnerListener);
+            viewHolder.mRoot.setOnClickListener(this);
+            viewHolder.mRoot.setOnLongClickListener(this);
 
             return viewHolder;
         }
@@ -126,6 +142,7 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
     private static final class ViewHolder extends RecyclerView.ViewHolder {
 
 
+        private final FrameLayout mRoot;
         private final TextView mLoser;
         private final TextView mWinner;
 
@@ -133,6 +150,7 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
         private ViewHolder(final View view) {
             super(view);
             mLoser = (TextView) view.findViewById(R.id.model_match2_loser);
+            mRoot = (FrameLayout) view.findViewById(R.id.model_match2_root);
             mWinner = (TextView) view.findViewById(R.id.model_match2_winner);
         }
 

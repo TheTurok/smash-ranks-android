@@ -2,7 +2,7 @@
 <resources>
 
     <dimen name="list_item_height">56dp</dimen>
-    <dimen name="list_item_separator_height">36dp</dimen>
+    <dimen name="list_item_separator_height">44dp</dimen>
     <dimen name="floating_action_button_disable">-104dp</dimen>
     <dimen name="floating_action_button_enabled">24dp</dimen>
     <dimen name="navigation_drawer_banner_height">128dp</dimen>

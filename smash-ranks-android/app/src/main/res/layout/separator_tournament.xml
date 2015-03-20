@@ -1,38 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/gray"
     android:id="@+id/separator_tournament_root"
+    android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/root_padding_half"
-    style="@style/separator_item_root">
-    <TextView
-        android:id="@+id/separator_tournament_date"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center_vertical"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:textColor="@color/indigo_bright"
-        android:textSize="14sp"
-        tools:text="10/10/14"
-        style="@style/fontFamily_medium" />
-    <TextView
-        android:ellipsize="end"
-        android:gravity="center_vertical"
-        android:id="@+id/separator_tournament_name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="center_vertical"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/root_padding_half"
-        android:layout_marginRight="@dimen/root_padding_half"
-        android:layout_toLeftOf="@id/separator_tournament_date"
-        android:layout_toStartOf="@id/separator_tournament_date"
-        android:layout_width="wrap_content"
-        android:lines="1"
-        android:lineSpacingExtra="2dp"
-        android:maxLines="1"
-        android:textColor="@color/indigo_bright"
-        android:textSize="14sp"
-        tools:text="The Big House 4"
-        style="@style/fontFamily_medium" />
-</RelativeLayout>
+    android:layout_width="match_parent">
+    <LinearLayout
+        android:background="?attr/selectableItemBackground"
+        android:duplicateParentState="true"
+        android:layout_height="@dimen/list_item_separator_height"
+        android:layout_width="match_parent"
+        android:paddingBottom="@dimen/root_padding_half"
+        android:paddingLeft="@dimen/root_padding"
+        android:paddingRight="@dimen/root_padding"
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
+        <TextView
+            android:ellipsize="end"
+            android:id="@+id/separator_tournament_name"
+            android:layout_gravity="bottom"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/indigo_bright"
+            android:textSize="14sp"
+            tools:text="SF Game Night 30"
+            style="@style/fontFamily_medium" />
+        <TextView
+            android:ellipsize="end"
+            android:id="@+id/separator_tournament_date"
+            android:layout_gravity="bottom"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/indigo_bright"
+            android:textSize="14sp"
+            tools:text="01/14/15"
+            style="@style/fontFamily_medium" />
+    </LinearLayout>
+</FrameLayout>

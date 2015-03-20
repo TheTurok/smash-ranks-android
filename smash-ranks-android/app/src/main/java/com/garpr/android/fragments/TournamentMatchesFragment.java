@@ -5,9 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.garpr.android.R;
 import com.garpr.android.activities.HeadToHeadActivity;
 import com.garpr.android.activities.PlayerActivity;
@@ -46,20 +47,6 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
     }
 
 
-    @Override
-    public void onItemClick(final View view, final int position) {
-        final Match match = mMatches.get(position);
-        HeadToHeadActivity.start(getActivity(), match.getWinner(), match.getLoser());
-    }
-
-
-    @Override
-    public boolean onItemLongClick(final View view, final int position) {
-        // show dialog to view a certain player's profile
-        return true;
-    }
-
-
 
 
     private final class TournamentMatchesAdapter extends TournamentAdapter {
@@ -67,24 +54,43 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
 
         private static final String TAG = "TournamentMatchesAdapter";
 
-        private final View.OnClickListener mLoserListener;
-        private final View.OnClickListener mWinnerListener;
+        private final View.OnClickListener mClickListener;
+        private final View.OnLongClickListener mLongClickListener;
 
 
         private TournamentMatchesAdapter() {
-            mLoserListener = new View.OnClickListener() {
+            mClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    final Player loser = (Player) v.getTag();
-                    PlayerActivity.startForResult(getActivity(), loser);
+                    final Match match = (Match) v.getTag();
+                    HeadToHeadActivity.start(getActivity(), match.getWinner(), match.getLoser());
                 }
             };
 
-            mWinnerListener = new View.OnClickListener() {
+            mLongClickListener = new View.OnLongClickListener() {
                 @Override
-                public void onClick(final View v) {
-                    final Player winner = (Player) v.getTag();
-                    PlayerActivity.startForResult(getActivity(), winner);
+                public boolean onLongClick(final View v) {
+                    final Match match = (Match) v.getTag();
+                    final String[] players = { match.getWinner().getName(), match.getLoser().getName() };
+
+                    new MaterialDialog.Builder(getActivity())
+                            .items(players)
+                            .itemsCallback(new MaterialDialog.ListCallback() {
+                                @Override
+                                public void onSelection(final MaterialDialog dialog,
+                                        final View view, final int which, final CharSequence text) {
+                                    if (which == 0) {
+                                        PlayerActivity.startForResult(getActivity(), match.getWinner());
+                                    } else {
+                                        PlayerActivity.startForResult(getActivity(), match.getLoser());
+                                    }
+                                }
+                            })
+                            .negativeText(R.string.cancel)
+                            .title(R.string.select_a_player_to_view)
+                            .show();
+
+                    return true;
                 }
             };
         }
@@ -112,6 +118,7 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             final ViewHolder viewHolder = (ViewHolder) holder;
             final Match match = mMatches.get(position);
+            viewHolder.mContainer.setTag(match);
 
             final Player loser = match.getLoser();
             viewHolder.mLoser.setTag(loser);
@@ -129,8 +136,8 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
             final LayoutInflater inflater = getLayoutInflater();
             final View view = inflater.inflate(R.layout.model_match2, parent, false);
             final ViewHolder viewHolder = new ViewHolder(view);
-            viewHolder.mRoot.setOnClickListener(this);
-            viewHolder.mRoot.setOnLongClickListener(this);
+            viewHolder.mContainer.setOnClickListener(mClickListener);
+            viewHolder.mContainer.setOnLongClickListener(mLongClickListener);
 
             return viewHolder;
         }
@@ -142,15 +149,15 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
     private static final class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        private final FrameLayout mRoot;
+        private final LinearLayout mContainer;
         private final TextView mLoser;
         private final TextView mWinner;
 
 
         private ViewHolder(final View view) {
             super(view);
+            mContainer = (LinearLayout) view.findViewById(R.id.model_match2_container);
             mLoser = (TextView) view.findViewById(R.id.model_match2_loser);
-            mRoot = (FrameLayout) view.findViewById(R.id.model_match2_root);
             mWinner = (TextView) view.findViewById(R.id.model_match2_winner);
         }
 

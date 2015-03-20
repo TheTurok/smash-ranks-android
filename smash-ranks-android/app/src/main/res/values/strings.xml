@@ -92,6 +92,7 @@
     <string name="search_players">Search players…</string>
     <string name="search_tournaments">Search tournaments…</string>
     <string name="selected_tag">Selected tag</string>
+    <string name="select_a_player_to_view">Select a player</string>
     <string name="select_your_region">Select your region</string>
     <string name="select_your_tag">Select your tag</string>
     <string name="server_backend_by_ivan_van">Server backend by Ivan Van</string>

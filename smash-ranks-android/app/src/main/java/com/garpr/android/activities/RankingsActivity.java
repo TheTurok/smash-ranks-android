@@ -27,6 +27,8 @@ import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
+import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+import com.garpr.android.misc.ListUtils.SpecialFilterable;
 import com.garpr.android.misc.ResultCodes;
 import com.garpr.android.misc.ResultData;
 import com.garpr.android.misc.Utils;
@@ -35,9 +37,6 @@ import com.garpr.android.models.Region;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-import static com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
-import static com.garpr.android.misc.ListUtils.SpecialFilterable;
 
 
 public class RankingsActivity extends BaseToolbarListActivity implements

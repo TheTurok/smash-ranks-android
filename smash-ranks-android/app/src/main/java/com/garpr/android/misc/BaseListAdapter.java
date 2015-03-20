@@ -103,14 +103,14 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
 
     @Override
     public final void onClick(final View v) {
-        final int position = mRecyclerView.getChildPosition(v);
+        final int position = mRecyclerView.getChildAdapterPosition(v);
         mListener.onItemClick(v, position);
     }
 
 
     @Override
     public final boolean onLongClick(final View v) {
-        final int position = mRecyclerView.getChildPosition(v);
+        final int position = mRecyclerView.getChildAdapterPosition(v);
         return mListener.onItemLongClick(v, position);
     }
 

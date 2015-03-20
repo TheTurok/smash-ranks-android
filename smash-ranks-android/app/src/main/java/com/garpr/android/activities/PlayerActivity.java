@@ -29,7 +29,6 @@ import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.FilterListener;
-import com.garpr.android.misc.RequestCodes;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
@@ -75,10 +74,10 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
 
-    public static void startForResult(final Activity activity, final Player player) {
+    public static void start(final Activity activity, final Player player) {
         final Intent intent = new Intent(activity, PlayerActivity.class);
         intent.putExtra(EXTRA_PLAYER, player);
-        activity.startActivityForResult(intent, RequestCodes.REQUEST_DEFAULT);
+        activity.startActivity(intent);
     }
 
 

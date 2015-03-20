@@ -29,8 +29,6 @@ import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.ListUtils.SpecialFilterable;
-import com.garpr.android.misc.ResultCodes;
-import com.garpr.android.misc.ResultData;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
@@ -160,19 +158,6 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected void onActivityResult(final int requestCode, final int resultCode,
-            final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == ResultCodes.PLAYER_UPDATED && !isLoading()) {
-            final Player player = data.getParcelableExtra(ResultData.PLAYER);
-            final int indexOfPlayer = mPlayers.indexOf(player);
-            mPlayers.set(indexOfPlayer, player);
-        }
-    }
-
-
-    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mInUsersRegion = User.areWeInTheUsersRegion();
@@ -204,7 +189,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     @Override
     public void onItemClick(final View view, final int position) {
         final ListItem item = mListItemsShown.get(position);
-        PlayerActivity.startForResult(this, item.mPlayer);
+        PlayerActivity.start(this, item.mPlayer);
     }
 
 

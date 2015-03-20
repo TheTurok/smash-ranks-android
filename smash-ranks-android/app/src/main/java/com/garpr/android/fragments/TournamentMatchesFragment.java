@@ -80,9 +80,9 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
                                 public void onSelection(final MaterialDialog dialog,
                                         final View view, final int which, final CharSequence text) {
                                     if (which == 0) {
-                                        PlayerActivity.startForResult(getActivity(), match.getWinner());
+                                        PlayerActivity.start(getActivity(), match.getWinner());
                                     } else {
-                                        PlayerActivity.startForResult(getActivity(), match.getLoser());
+                                        PlayerActivity.start(getActivity(), match.getLoser());
                                     }
                                 }
                             })

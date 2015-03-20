@@ -80,7 +80,7 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
     @Override
     public void onItemClick(final View view, final int position) {
         final ListItem listItem = mListItems.get(position);
-        PlayerActivity.startForResult(getActivity(), listItem.mPlayer);
+        PlayerActivity.start(getActivity(), listItem.mPlayer);
     }
 
 

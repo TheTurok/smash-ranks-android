@@ -105,7 +105,7 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
     }
 
 
-    private Event sendAnalyticsEvent(final long lastSync, final String result, final Exception e) {
+    private void sendAnalyticsEvent(final long lastSync, final String result, final Exception e) {
         final Date lastTimeAndDate = new Date(lastSync);
         final String lastTimeAndDateString = lastTimeAndDate.toString();
 
@@ -128,8 +128,6 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
         final Editor editor = Settings.edit(CNAME);
         editor.putLong(KEY_LAST_SYNC, now);
         editor.apply();
-
-        return event;
     }
 
 

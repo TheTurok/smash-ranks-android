@@ -3,7 +3,6 @@ package com.garpr.android.fragments;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Regions;
 import com.garpr.android.data.ResponseOnUi;
@@ -245,10 +243,10 @@ public class RegionsFragment extends BaseListToolbarFragment {
         final Resources res = getResources();
         final int rootPadding = res.getDimensionPixelSize(R.dimen.root_padding);
         final int bottom = frameHeight - distanceFromTop + rootPadding;
-
         final int start = ViewCompat.getPaddingStart(recyclerView);
         final int end = ViewCompat.getPaddingEnd(recyclerView);
         final int top = recyclerView.getPaddingTop();
+
         ViewCompat.setPaddingRelative(recyclerView, start, top, end, bottom);
         recyclerView.requestLayout();
     }
@@ -535,29 +533,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
         private static enum Type {
-            REGION, TITLE;
-
-
-            @Override
-            public String toString() {
-                final int resId;
-
-                switch (this) {
-                    case REGION:
-                        resId = R.string.region;
-                        break;
-
-                    case TITLE:
-                        resId = R.string.title;
-                        break;
-
-                    default:
-                        throw new IllegalStateException("Type is invalid");
-                }
-
-                final Context context = App.getContext();
-                return context.getString(resId);
-            }
+            REGION, TITLE
         }
 
 

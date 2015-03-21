@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,8 +22,7 @@ import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
 
-abstract class BaseToolbarActivity extends BaseActivity implements
-        Toolbar.OnMenuItemClickListener {
+abstract class BaseToolbarActivity extends BaseActivity {
 
 
     private ActionBarDrawerToggle mDrawerToggle;
@@ -215,11 +215,11 @@ abstract class BaseToolbarActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        final int menuResId = getOptionsMenu();
+        final int menuRes = getOptionsMenu();
 
-        if (menuResId != 0) {
-            mToolbar.inflateMenu(menuResId);
-            mToolbar.setOnMenuItemClickListener(this);
+        if (menuRes != 0) {
+            final MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(menuRes, menu);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -233,12 +233,6 @@ abstract class BaseToolbarActivity extends BaseActivity implements
 
     protected void onDrawerOpened() {
         // this method intentionally left blank (children can override)
-    }
-
-
-    @Override
-    public final boolean onMenuItemClick(final MenuItem item) {
-        return onOptionsItemSelected(item);
     }
 
 

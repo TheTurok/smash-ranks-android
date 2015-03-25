@@ -2,12 +2,12 @@ package com.garpr.android.fragments;
 
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.garpr.android.R;
 import com.garpr.android.misc.BaseListAdapter;
+import com.garpr.android.misc.LinearLayoutManagerWrapper;
 import com.garpr.android.models.TournamentBundle;
 
 
@@ -82,7 +82,7 @@ public abstract class TournamentViewPagerFragment extends BaseFragment implement
 
     private void prepareList() {
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManagerWrapper(getActivity()));
         mRecyclerView.setAdapter(createAdapter(mBundle));
     }
 

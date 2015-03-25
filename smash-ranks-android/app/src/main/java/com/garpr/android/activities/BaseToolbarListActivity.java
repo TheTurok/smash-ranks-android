@@ -4,7 +4,6 @@ package com.garpr.android.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import com.garpr.android.R;
 import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
+import com.garpr.android.misc.LinearLayoutManagerWrapper;
 
 
 abstract class BaseToolbarListActivity extends BaseToolbarActivity implements
@@ -103,7 +103,7 @@ abstract class BaseToolbarListActivity extends BaseToolbarActivity implements
 
     protected void prepareViews() {
         mErrorLine.setText(getErrorText());
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new LinearLayoutManagerWrapper(this));
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setScrollingView(mRecyclerView);
     }

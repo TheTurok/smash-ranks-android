@@ -223,6 +223,14 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
                 show(Result.WIN);
                 break;
 
+            case R.id.activity_head_to_head_menu_view_player_one:
+                PlayerActivity.start(this, mPlayer);
+                break;
+
+            case R.id.activity_head_to_head_menu_view_player_two:
+                PlayerActivity.start(this, mOpponent);
+                break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -242,6 +250,15 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
             showMenuItems();
             mSetMenuItemsVisible = false;
         }
+
+        // the below menu items are separate from the above (there is no need to ever
+        // programmatically hide / show them and such)
+
+        final MenuItem player = menu.findItem(R.id.activity_head_to_head_menu_view_player_one);
+        player.setTitle(getString(R.string.view_x, mPlayer.getName()));
+
+        final MenuItem opponent = menu.findItem(R.id.activity_head_to_head_menu_view_player_two);
+        opponent.setTitle(getString(R.string.view_x, mOpponent.getName()));
 
         return super.onPrepareOptionsMenu(menu);
     }

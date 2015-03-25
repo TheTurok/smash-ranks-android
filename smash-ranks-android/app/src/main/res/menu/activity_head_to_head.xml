@@ -20,4 +20,12 @@
                 android:visible="false" />
         </menu>
     </item>
+    <item
+        android:id="@+id/activity_head_to_head_menu_view_player_one"
+        android:title="@string/view_first_player"
+        compat:showAsAction="never" />
+    <item
+        android:id="@+id/activity_head_to_head_menu_view_player_two"
+        android:title="@string/view_second_player"
+        compat:showAsAction="never" />
 </menu>

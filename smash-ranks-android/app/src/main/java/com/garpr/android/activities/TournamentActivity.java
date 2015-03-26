@@ -122,7 +122,6 @@ public class TournamentActivity extends BaseToolbarActivity implements
     @Override
     public void onRefresh() {
         if (!mIsLoading) {
-            mErrorView.setVisibility(View.GONE);
             fetchTournament();
         }
     }
@@ -139,6 +138,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
 
 
     private void prepareViewPager() {
+        mErrorView.setVisibility(View.GONE);
         mRefreshLayout.childCanAlwaysScrollUp();
         mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.root_padding));
         mViewPager.setVisibility(View.VISIBLE);

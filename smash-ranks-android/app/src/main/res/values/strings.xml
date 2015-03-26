@@ -122,6 +122,8 @@
     <string name="tournament">Tournament</string>
     <string name="tournaments">Tournaments</string>
     <string name="version_information">Version information</string>
+    <string name="view">View</string>
+    <string name="view_">View…</string>
     <string name="view_first_player">View first player</string>
     <string name="view_second_player">View second player</string>
     <string name="view_x">View %s</string>

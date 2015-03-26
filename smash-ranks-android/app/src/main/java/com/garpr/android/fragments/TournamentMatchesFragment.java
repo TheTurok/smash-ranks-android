@@ -87,7 +87,7 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment {
                                 }
                             })
                             .negativeText(R.string.cancel)
-                            .title(R.string.select_a_player_to_view)
+                            .title(R.string.view)
                             .show();
 
                     return true;

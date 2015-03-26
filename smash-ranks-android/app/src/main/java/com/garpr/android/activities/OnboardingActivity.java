@@ -19,6 +19,7 @@ import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Analytics.Event;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.NonSwipeableViewPager;
 import com.garpr.android.models.Player;
@@ -93,22 +94,18 @@ public class OnboardingActivity extends BaseActivity implements
     private void nextOnboardingStep() {
         final int currentPagerItem = mPager.getCurrentItem();
 
-        switch (currentPagerItem) {
-            case ONBOARDING_FRAGMENT_REGIONS:
-                final Region region = mRegionsFragment.getSelectedRegion();
+        if (currentPagerItem == ONBOARDING_FRAGMENT_REGIONS) {
+            final Region region = mRegionsFragment.getSelectedRegion();
 
-                if (!region.equals(mSelectedRegion)) {
-                    mSelectedRegion = region;
-                    User.setRegion(mSelectedRegion);
-                    mPlayersFragment.refresh();
-                }
+            if (!region.equals(mSelectedRegion)) {
+                mSelectedRegion = region;
+                User.setRegion(mSelectedRegion);
+                mPlayersFragment.refresh();
+            }
 
-                mPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
-                break;
-
-            default:
-                // this should never happen
-                throw new IllegalStateException("Illegal currentPagerItem: " + currentPagerItem);
+            mPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
+        } else {
+            Console.w(TAG, "Illegal currentPagerItem in nextOnboardingStep(): " + currentPagerItem);
         }
     }
 
@@ -120,16 +117,12 @@ public class OnboardingActivity extends BaseActivity implements
         } else {
             final int currentPagerItem = mPager.getCurrentItem();
 
-            switch (mPager.getCurrentItem()) {
-                case ONBOARDING_FRAGMENT_PLAYERS:
-                    if (!mPlayersFragment.onBackPressed()) {
-                        mPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
-                    }
-                    break;
-
-                default:
-                    // this should never happen
-                    throw new IllegalStateException("Illegal currentPagerItem: " + currentPagerItem);
+            if (currentPagerItem == ONBOARDING_FRAGMENT_PLAYERS) {
+                if (!mPlayersFragment.onBackPressed()) {
+                    mPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
+                }
+            } else {
+                Console.w(TAG, "Illegal currentPagerItem in onBackPressed(): " + currentPagerItem);
             }
         }
     }
@@ -185,7 +178,7 @@ public class OnboardingActivity extends BaseActivity implements
 
 
     @Override
-    public void onNextClick() {
+    public void onRegionNextClick() {
         nextOnboardingStep();
     }
 

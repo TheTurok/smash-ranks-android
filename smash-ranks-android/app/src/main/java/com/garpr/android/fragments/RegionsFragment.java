@@ -325,7 +325,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.fragment_regions_menu_next:
-                mToolbarNextListener.onNextClick();
+                mToolbarNextListener.onRegionNextClick();
                 break;
 
             default:
@@ -683,7 +683,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
     public interface ToolbarNextListener {
 
 
-        public void onNextClick();
+        public void onRegionNextClick();
 
 
     }

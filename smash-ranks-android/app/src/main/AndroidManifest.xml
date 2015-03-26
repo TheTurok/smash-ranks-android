@@ -117,11 +117,11 @@
             android:label="@string/tournament"
             android:launchMode="singleTop"
             android:name=".activities.TournamentActivity"
-            android:parentActivityName=".activities.RankingsActivity"
+            android:parentActivityName=".activities.TournamentsActivity"
             tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.RankingsActivity" />
+                android:value=".activities.TournamentsActivity" />
         </activity>
 
         <activity

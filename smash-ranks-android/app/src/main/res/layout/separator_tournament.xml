@@ -21,6 +21,8 @@
             android:id="@+id/separator_tournament_name"
             android:layout_gravity="bottom"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/root_padding_half"
+            android:layout_marginRight="@dimen/root_padding_half"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:lines="1"

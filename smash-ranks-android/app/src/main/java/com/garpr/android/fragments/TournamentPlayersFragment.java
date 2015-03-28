@@ -1,14 +1,12 @@
 package com.garpr.android.fragments;
 
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.activities.PlayerActivity;
 import com.garpr.android.misc.ListUtils;
@@ -140,29 +138,7 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
 
         private static enum Type {
-            PLAYER, TITLE;
-
-
-            @Override
-            public String toString() {
-                final int resId;
-
-                switch (this) {
-                    case PLAYER:
-                        resId = R.string.player;
-                        break;
-
-                    case TITLE:
-                        resId = R.string.title;
-                        break;
-
-                    default:
-                        throw new IllegalStateException("Type is invalid");
-                }
-
-                final Context context = App.getContext();
-                return context.getString(resId);
-            }
+            PLAYER, TITLE
         }
 
 
@@ -180,7 +156,7 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
         }
 
 
-        private void bindTItleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
+        private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
             holder.mName.setText(listItem.mTitle);
         }
 
@@ -219,7 +195,7 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
                     break;
 
                 case TITLE:
-                    bindTItleViewHolder((TitleViewHolder) holder, listItem);
+                    bindTitleViewHolder((TitleViewHolder) holder, listItem);
                     break;
 
                 default:

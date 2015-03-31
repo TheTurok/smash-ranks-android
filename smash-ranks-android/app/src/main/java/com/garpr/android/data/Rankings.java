@@ -3,6 +3,7 @@ package com.garpr.android.data;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 
 import org.json.JSONArray;
@@ -76,16 +77,18 @@ public final class Rankings {
 
         @Override
         void onJSONResponse(final JSONObject json) throws JSONException {
-            final String rankingsDateString = json.getString(Constants.TIME);
+            final String rankingsDateString = json.optString(Constants.TIME);
 
-            try {
-                final Date rankingsDate = RANKINGS_DATE_PARSER.parse(rankingsDateString);
-                final long rawRankingsDate = rankingsDate.getTime();
+            if (Utils.validStrings(rankingsDateString)) {
+                try {
+                    final Date rankingsDate = RANKINGS_DATE_PARSER.parse(rankingsDateString);
+                    final long rawRankingsDate = rankingsDate.getTime();
 
-                Settings.edit(CNAME).putLong(KEY_RANKINGS_DATE, rawRankingsDate).apply();
-            } catch (final ParseException e) {
-                throw new JSONException("Exception when parsing rankings date: \"" +
-                        rankingsDateString + "\". " + e.getMessage());
+                    Settings.edit(CNAME).putLong(KEY_RANKINGS_DATE, rawRankingsDate).apply();
+                } catch (final ParseException e) {
+                    throw new JSONException("Exception when parsing rankings date: \"" +
+                            rankingsDateString + "\". " + e.getMessage());
+                }
             }
         }
 

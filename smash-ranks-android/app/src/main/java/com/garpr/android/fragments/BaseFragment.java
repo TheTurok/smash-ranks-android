@@ -14,8 +14,7 @@ import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.models.Region;
 
 
-public abstract class BaseFragment extends Fragment implements
-        HeartbeatWithUi,
+public abstract class BaseFragment extends Fragment implements HeartbeatWithUi,
         Settings.OnRegionChangedListener {
 
 

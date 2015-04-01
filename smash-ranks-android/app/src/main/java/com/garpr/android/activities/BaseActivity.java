@@ -31,10 +31,8 @@ import com.garpr.android.models.Region;
  * All Activities should extend from this base class, as it greatly reduces the otherwise
  * necessary boilerplate.
  */
-abstract class BaseActivity extends ActionBarActivity implements
-        BaseFragment.Listener,
-        HeartbeatWithUi,
-        Settings.OnRegionChangedListener {
+public abstract class BaseActivity extends ActionBarActivity implements BaseFragment.Listener,
+        HeartbeatWithUi, Settings.OnRegionChangedListener {
 
 
     private boolean mIsAlive;

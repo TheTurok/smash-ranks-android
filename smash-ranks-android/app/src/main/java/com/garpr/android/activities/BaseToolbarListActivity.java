@@ -66,13 +66,6 @@ abstract class BaseToolbarListActivity extends BaseToolbarActivity implements
     }
 
 
-    protected void notifyItemChanged(final int position) {
-        if (mAdapter != null) {
-            mAdapter.itemChanged(position);
-        }
-    }
-
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

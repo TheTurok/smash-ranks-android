@@ -39,8 +39,7 @@ import java.util.Date;
  * server). Note that the user is entirely free to disable this sync or even force a sync to occur
  * by going into their device's Account & Sync settings and then going to "GAR PR".
  */
-public final class SyncAdapter extends AbstractThreadedSyncAdapter implements
-        Heartbeat {
+public final class SyncAdapter extends AbstractThreadedSyncAdapter implements Heartbeat {
 
 
     private static final String CNAME = "com.garpr.android.data.sync.SyncAdapter";

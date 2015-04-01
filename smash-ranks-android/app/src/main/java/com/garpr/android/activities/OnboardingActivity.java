@@ -26,8 +26,7 @@ import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
 
-public class OnboardingActivity extends BaseActivity implements
-        PlayersFragment.Listeners,
+public class OnboardingActivity extends BaseActivity implements PlayersFragment.Listeners,
         RegionsFragment.ToolbarNextListener {
 
 

@@ -36,8 +36,7 @@ import java.util.Collections;
 
 
 public class PlayersFragment extends BaseListToolbarFragment implements
-        MenuItemCompat.OnActionExpandListener,
-        SearchView.OnQueryTextListener {
+        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener {
 
 
     private static final String KEY_PLAYERS = "KEY_PLAYERS";

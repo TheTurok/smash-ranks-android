@@ -9,7 +9,7 @@ import android.view.View;
 import com.garpr.android.R;
 
 
-abstract class BaseListToolbarFragment extends BaseListFragment implements
+public abstract class BaseListToolbarFragment extends BaseListFragment implements
         Toolbar.OnMenuItemClickListener {
 
 

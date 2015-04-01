@@ -25,8 +25,7 @@ import com.garpr.android.misc.Utils;
 import com.garpr.android.models.LogMessage;
 
 
-public class ConsoleActivity extends BaseToolbarListActivity implements
-        Console.Listener {
+public class ConsoleActivity extends BaseToolbarListActivity implements Console.Listener {
 
 
     private static final int MINIMUM_PULLS = 3;

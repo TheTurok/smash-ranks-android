@@ -22,7 +22,7 @@ import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
 
-abstract class BaseToolbarActivity extends BaseActivity {
+public abstract class BaseToolbarActivity extends BaseActivity {
 
 
     private ActionBarDrawerToggle mDrawerToggle;

@@ -11,8 +11,6 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
 
 
     private boolean mNotifyDataSetChanged;
-    private boolean mNotifyItemChanged;
-    private int mNotifyItemChangedPosition;
     private final Listener mListener;
     private final RecyclerView mRecyclerView;
 
@@ -37,28 +35,12 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
             }
 
 
-            private void notifyItemChanged() {
-                mNotifyItemChanged = false;
-
-                try {
-                    BaseListAdapter.this.notifyItemChanged(mNotifyItemChangedPosition);
-                } catch (final IllegalStateException e) {
-                    Console.e(getAdapterName(), "Exception when using notifyItemChanged(" +
-                            mNotifyItemChangedPosition + ") in OnScrollListener", e);
-                }
-            }
-
-
             @Override
             public void onScrollStateChanged(final RecyclerView recyclerView, final int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (mNotifyDataSetChanged) {
-                        notifyDataSetChanged();
-                    } else if (mNotifyItemChanged) {
-                        notifyItemChanged();
-                    }
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mNotifyDataSetChanged) {
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -80,17 +62,6 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
 
     @Override
     public abstract long getItemId(final int position);
-
-
-    public void itemChanged(final int position) {
-        try {
-            notifyItemChanged(position);
-        } catch (final IllegalStateException e) {
-            Console.e(getAdapterName(), "Exception when using notifyItemChanged(" + position + ")", e);
-            mNotifyItemChanged = true;
-            mNotifyItemChangedPosition = position;
-        }
-    }
 
 
     @Override

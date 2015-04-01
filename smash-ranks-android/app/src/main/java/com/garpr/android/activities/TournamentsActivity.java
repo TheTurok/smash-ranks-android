@@ -32,8 +32,7 @@ import java.util.Collections;
 
 
 public class TournamentsActivity extends BaseToolbarListActivity implements
-        MenuItemCompat.OnActionExpandListener,
-        SearchView.OnQueryTextListener {
+        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener {
 
 
     private static final String KEY_TOURNAMENTS = "KEY_TOURNAMENTS";

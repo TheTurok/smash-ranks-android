@@ -15,9 +15,8 @@ import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 import com.garpr.android.misc.LinearLayoutManagerWrapper;
 
 
-abstract class BaseToolbarListActivity extends BaseToolbarActivity implements
-        BaseListAdapter.Listener,
-        SwipeRefreshLayout.OnRefreshListener {
+public abstract class BaseToolbarListActivity extends BaseToolbarActivity implements
+        BaseListAdapter.Listener, SwipeRefreshLayout.OnRefreshListener {
 
 
     private BaseListAdapter mAdapter;

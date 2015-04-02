@@ -32,7 +32,6 @@ import com.garpr.android.R;
 public final class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
 
 
-    private boolean mChildCanAlwaysScrollUp;
     private View mTarget;
 
 
@@ -52,9 +51,7 @@ public final class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
     public boolean canChildScrollUp() {
         final boolean canChildScrollUp;
 
-        if (mChildCanAlwaysScrollUp) {
-            canChildScrollUp = true;
-        } else if (mTarget == null) {
+        if (mTarget == null) {
             canChildScrollUp = super.canChildScrollUp();
         } else {
             // -1 means to check scrolling up (1 would check scrolling down)
@@ -62,11 +59,6 @@ public final class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
         }
 
         return canChildScrollUp;
-    }
-
-
-    public void childCanAlwaysScrollUp() {
-        mChildCanAlwaysScrollUp = true;
     }
 
 
@@ -91,8 +83,6 @@ public final class FlexibleSwipeRefreshLayout extends SwipeRefreshLayout {
 
 
     public void setScrollingView(final View target) throws IllegalArgumentException {
-        mChildCanAlwaysScrollUp = false;
-
         if (target instanceof AbsListView || target instanceof RecyclerView
                 || target instanceof ScrollView) {
             mTarget = target;

@@ -139,7 +139,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
 
     private void prepareViewPager() {
         mErrorView.setVisibility(View.GONE);
-        mRefreshLayout.childCanAlwaysScrollUp();
+        mRefreshLayout.setEnabled(false);
         mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.root_padding));
         mViewPager.setVisibility(View.VISIBLE);
         mViewPager.setAdapter(new TournamentFragmentAdapter());

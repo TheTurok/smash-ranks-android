@@ -395,19 +395,23 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
     private void share() {
         if (mShareIntent == null) {
-            String text = getString(R.string.x_is_ranked_y_on_gar_pr_z, mPlayer.getName(),
-                    mPlayer.getRank(), mPlayer.getProfileUrl());
+            String text = null;
 
-            if (text.length() > Constants.TWITTER_LENGTH) {
-                text = getString(R.string.x_on_gar_pr_y, mPlayer.getName(), mPlayer.getProfileUrl());
+            if (mPlayer.hasCompetitionValues()) {
+                text = getString(R.string.x_is_ranked_y_on_gar_pr_z, mPlayer.getName(),
+                        mPlayer.getRank(), mPlayer.getWebUrl());
+            }
+
+            if (text == null || text.length() > Constants.TWITTER_LENGTH) {
+                text = getString(R.string.x_on_gar_pr_y, mPlayer.getName(), mPlayer.getWebUrl());
             }
 
             if (text.length() > Constants.TWITTER_LENGTH) {
-                text = getString(R.string.gar_pr_x, mPlayer.getProfileUrl());
+                text = getString(R.string.gar_pr_x, mPlayer.getWebUrl());
             }
 
             if (text.length() > Constants.TWITTER_LENGTH) {
-                text = mPlayer.getProfileUrl();
+                text = mPlayer.getWebUrl();
             }
 
             final String title = getString(R.string.x_on_gar_pr, mPlayer.getName());

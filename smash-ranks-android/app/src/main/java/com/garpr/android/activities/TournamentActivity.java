@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -39,6 +40,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
 
     private boolean mIsLoading;
     private FlexibleSwipeRefreshLayout mRefreshLayout;
+    private Intent mShareIntent;
     private LinearLayout mErrorView;
     private PagerSlidingTabStrip mTabStrip;
     private Tournament mTournament;
@@ -100,6 +102,12 @@ public class TournamentActivity extends BaseToolbarActivity implements
 
 
     @Override
+    protected int getOptionsMenu() {
+        return R.menu.activity_tournament;
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         readIntentData();
@@ -116,6 +124,21 @@ public class TournamentActivity extends BaseToolbarActivity implements
         } else {
             prepareViewPager();
         }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.activity_tournament_menu_share:
+                share();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
     }
 
 
@@ -157,6 +180,26 @@ public class TournamentActivity extends BaseToolbarActivity implements
     private void setLoading(final boolean isLoading) {
         mIsLoading = isLoading;
         mRefreshLayout.setRefreshing(isLoading);
+    }
+
+
+    private void share() {
+        if (mShareIntent == null) {
+            String text = getString(R.string.x_on_gar_pr_y, mTournament.getName(),
+                    mTournament.getWebUrl());
+
+            if (text.length() > Constants.TWITTER_LENGTH) {
+                text = getString(R.string.gar_pr_x, mTournament.getWebUrl());
+            }
+
+            mShareIntent = new Intent(Intent.ACTION_SEND)
+                    .putExtra(Intent.EXTRA_TEXT, text)
+                    .setType(Constants.MIMETYPE_TEXT_PLAIN);
+
+            mShareIntent = Intent.createChooser(mShareIntent, getString(R.string.share_to));
+        }
+
+        startActivity(mShareIntent);
     }
 
 

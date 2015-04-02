@@ -22,7 +22,7 @@ public class Player implements AlphabeticallyComparable, Parcelable {
     private final int mRank;
     private final String mId;
     private final String mName;
-    private String mProfileUrl;
+    private String mWebUrl;
     private final String mRatingTruncated;
 
 
@@ -51,7 +51,7 @@ public class Player implements AlphabeticallyComparable, Parcelable {
         mRank = source.readInt();
         mId = source.readString();
         mName = source.readString();
-        mProfileUrl = source.readString();
+        mWebUrl = source.readString();
         mRatingTruncated = source.readString();
     }
 
@@ -89,17 +89,6 @@ public class Player implements AlphabeticallyComparable, Parcelable {
     }
 
 
-    public String getProfileUrl() {
-        if (!Utils.validStrings(mProfileUrl)) {
-            final Region region = Settings.getRegion();
-            final String regionName = region.getName().toLowerCase();
-            mProfileUrl = Constants.WEB_URL + regionName + '/' + Constants.PLAYERS + '/' + mId;
-        }
-
-        return mProfileUrl;
-    }
-
-
     public int getRank() {
         return mRank;
     }
@@ -112,6 +101,17 @@ public class Player implements AlphabeticallyComparable, Parcelable {
 
     public String getRatingTruncated() {
         return mRatingTruncated;
+    }
+
+
+    public String getWebUrl() {
+        if (!Utils.validStrings(mWebUrl)) {
+            final Region region = Settings.getRegion();
+            final String regionName = region.getName().toLowerCase();
+            mWebUrl = Constants.WEB_URL + regionName + '/' + Constants.PLAYERS + '/' + mId;
+        }
+
+        return mWebUrl;
     }
 
 
@@ -128,7 +128,8 @@ public class Player implements AlphabeticallyComparable, Parcelable {
         result = 31 * result + mRank;
         result = 31 * result + mId.hashCode();
         result = 31 * result + mName.hashCode();
-        result = 31 * result + (mRatingTruncated != null ? mRatingTruncated.hashCode() : 0);
+        result = 31 * result + (mWebUrl != null ? mWebUrl.hashCode() : 0);
+        result = 31 * result + mRatingTruncated.hashCode();
 
         return result;
     }
@@ -195,7 +196,7 @@ public class Player implements AlphabeticallyComparable, Parcelable {
         dest.writeInt(mRank);
         dest.writeString(mId);
         dest.writeString(mName);
-        dest.writeString(mProfileUrl);
+        dest.writeString(mWebUrl);
         dest.writeString(mRatingTruncated);
     }
 

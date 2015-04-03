@@ -207,7 +207,7 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
 
 
         private ConsoleAdapter() {
-            super(ConsoleActivity.this, getRecyclerView());
+            super(getRecyclerView());
 
             final Resources res = getResources();
             mDebugTextColor = res.getColor(R.color.white);

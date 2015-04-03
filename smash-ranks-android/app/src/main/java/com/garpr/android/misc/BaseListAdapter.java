@@ -7,22 +7,19 @@ import android.view.ViewGroup;
 
 
 public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
-        RecyclerView.Adapter<T> implements View.OnClickListener, View.OnLongClickListener {
+        RecyclerView.Adapter<T> {
 
 
     private boolean mNotifyDataSetChanged;
-    private final Listener mListener;
-    private final RecyclerView mRecyclerView;
 
 
 
 
-    protected BaseListAdapter(final Listener listener, final RecyclerView recyclerView) {
-        mListener = listener;
-        mRecyclerView = recyclerView;
+    protected BaseListAdapter(final RecyclerView recyclerView) {
+        recyclerView.setHasFixedSize(true);
         setHasStableIds(true);
 
-        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             private void notifyDataSetChanged() {
                 mNotifyDataSetChanged = false;
 
@@ -73,36 +70,8 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
 
 
     @Override
-    public final void onClick(final View v) {
-        final int position = mRecyclerView.getChildAdapterPosition(v);
-        mListener.onItemClick(v, position);
-    }
-
-
-    @Override
-    public final boolean onLongClick(final View v) {
-        final int position = mRecyclerView.getChildAdapterPosition(v);
-        return mListener.onItemLongClick(v, position);
-    }
-
-
-    @Override
     public String toString() {
         return getAdapterName();
-    }
-
-
-
-
-    public interface Listener {
-
-
-        public void onItemClick(final View view, final int position);
-
-
-        public boolean onItemLongClick(final View view, final int position);
-
-
     }
 
 

@@ -470,7 +470,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     }
 
 
-    private final class MatchesAdapter extends BaseListAdapter {
+    private final class MatchesAdapter extends BaseListAdapter implements View.OnClickListener {
 
 
         private static final String TAG = "MatchesAdapter";
@@ -480,7 +480,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
         private MatchesAdapter() {
-            super(HeadToHeadActivity.this, getRecyclerView());
+            super(getRecyclerView());
 
             final Resources res = getResources();
             mColorLose = res.getColor(R.color.lose_pink);
@@ -559,6 +559,12 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
         @Override
+        public void onClick(final View v) {
+
+        }
+
+
+        @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
             final LayoutInflater inflater = getLayoutInflater();
@@ -581,7 +587,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
                 case TOURNAMENT:
                     view = inflater.inflate(R.layout.model_tournament, parent, false);
                     holder = new TournamentViewHolder(view);
-                    view.setOnClickListener(this);
+
                     break;
 
                 default:

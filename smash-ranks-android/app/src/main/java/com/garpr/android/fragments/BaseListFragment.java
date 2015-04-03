@@ -14,7 +14,7 @@ import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 import com.garpr.android.misc.LinearLayoutManagerWrapper;
 
 
-public abstract class BaseListFragment extends BaseFragment implements BaseListAdapter.Listener,
+public abstract class BaseListFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener {
 
 

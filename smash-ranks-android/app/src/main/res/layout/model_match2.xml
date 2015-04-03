@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.garpr.android.views.MatchItemView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
-    android:id="@+id/model_match2_root"
     android:layout_marginTop="@dimen/root_padding_half"
     style="@style/list_item_root.no_padding">
     <LinearLayout
@@ -44,4 +43,4 @@
             android:textSize="20sp"
             tools:text="Mew2King" />
     </LinearLayout>
-</FrameLayout>
+</com.garpr.android.views.MatchItemView>

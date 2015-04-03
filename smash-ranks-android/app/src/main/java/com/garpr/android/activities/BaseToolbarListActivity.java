@@ -16,7 +16,7 @@ import com.garpr.android.misc.LinearLayoutManagerWrapper;
 
 
 public abstract class BaseToolbarListActivity extends BaseToolbarActivity implements
-        BaseListAdapter.Listener, SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener {
 
 
     private BaseListAdapter mAdapter;
@@ -71,19 +71,6 @@ public abstract class BaseToolbarListActivity extends BaseToolbarActivity implem
         readIntentData(getIntent());
         findViews();
         prepareViews();
-    }
-
-
-    @Override
-    public void onItemClick(final View view, final int position) {
-        // this method intentionally left blank (children can override)
-    }
-
-
-    @Override
-    public boolean onItemLongClick(final View view, final int position) {
-        // this method intentionally left blank (children can override)
-        return false;
     }
 
 

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.garpr.android.R;
 import com.garpr.android.activities.PlayerActivity;
@@ -14,12 +13,15 @@ import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.TournamentBundle;
+import com.garpr.android.views.PlayerItemView;
+import com.garpr.android.views.SimpleSeparatorView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class TournamentPlayersFragment extends TournamentViewPagerFragment {
+public class TournamentPlayersFragment extends TournamentViewPagerFragment implements
+        PlayerItemView.OnClickListener {
 
 
     private static final String TAG = "TournamentPlayersFragment";
@@ -76,9 +78,8 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
 
     @Override
-    public void onItemClick(final View view, final int position) {
-        final ListItem listItem = mListItems.get(position);
-        PlayerActivity.start(getActivity(), listItem.mPlayer);
+    public void onClick(final PlayerItemView v) {
+        PlayerActivity.start(getActivity(), v.getPlayer());
     }
 
 
@@ -137,7 +138,7 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
         }
 
 
-        private static enum Type {
+        private enum Type {
             PLAYER, TITLE
         }
 
@@ -149,16 +150,6 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
 
         private static final String TAG = "TournamentPlayersAdapter";
-
-
-        private void bindPlayerViewHolder(final PlayerViewHolder holder, final ListItem listItem) {
-            holder.mName.setText(listItem.mPlayer.getName());
-        }
-
-
-        private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
-            holder.mName.setText(listItem.mTitle);
-        }
 
 
         @Override
@@ -191,11 +182,11 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
             switch (listItem.mType) {
                 case PLAYER:
-                    bindPlayerViewHolder((PlayerViewHolder) holder, listItem);
+                    ((PlayerItemView.ViewHolder) holder).getView().setPlayer(listItem.mPlayer);
                     break;
 
                 case TITLE:
-                    bindTitleViewHolder((TitleViewHolder) holder, listItem);
+                    ((SimpleSeparatorView.ViewHolder) holder).getView().setText(listItem.mTitle);
                     break;
 
                 default:
@@ -215,14 +206,14 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
 
             switch (type) {
                 case PLAYER:
-                    view = inflater.inflate(R.layout.model_player2, parent, false);
-                    viewHolder = new PlayerViewHolder(view);
-                    view.setOnClickListener(this);
+                    view = inflater.inflate(R.layout.view_player_item, parent, false);
+                    viewHolder = ((PlayerItemView) view).getViewHolder();
+                    ((PlayerItemView) view).setOnClickListener(TournamentPlayersFragment.this);
                     break;
 
                 case TITLE:
-                    view = inflater.inflate(R.layout.separator_simple, parent, false);
-                    viewHolder = new TitleViewHolder(view);
+                    view = inflater.inflate(R.layout.view_simple_separator_item, parent, false);
+                    viewHolder = ((SimpleSeparatorView) view).getViewHolder();
                     break;
 
                 default:
@@ -230,36 +221,6 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment {
             }
 
             return viewHolder;
-        }
-
-
-    }
-
-
-    private static final class PlayerViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mName;
-
-
-        private PlayerViewHolder(final View view) {
-            super(view);
-            mName = (TextView) view.findViewById(R.id.model_player2_name);
-        }
-
-
-    }
-
-
-    private static final class TitleViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mName;
-
-
-        private TitleViewHolder(final View view) {
-            super(view);
-            mName = (TextView) view.findViewById(R.id.separator_simple_text);
         }
 
 

@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.garpr.android.views.SimpleMatchItemView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.garpr.android.views.SimpleItemView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
-    android:id="@+id/model_match_root"
     tools:ignore="Overdraw"
     style="@style/list_item_root.no_padding">
     <TextView
         android:background="?attr/selectableItemBackground"
         android:duplicateParentState="true"
         android:ellipsize="end"
-        android:id="@+id/model_match_opponent"
         android:gravity="center_vertical"
+        android:id="@+id/view_simple_item_text"
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -21,5 +20,5 @@
         android:paddingTop="@dimen/root_padding_fourth"
         android:maxLines="3"
         android:textSize="20sp"
-        tools:text="Shroomed" />
-</com.garpr.android.views.SimpleMatchItemView>
+        tools:text="Hello, World!" />
+</com.garpr.android.views.SimpleItemView>

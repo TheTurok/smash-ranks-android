@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -13,9 +14,10 @@ import com.garpr.android.R;
 import com.garpr.android.models.Player;
 
 
-public class PlayerItemView extends FrameLayout {
+public class PlayerItemView extends FrameLayout implements View.OnClickListener {
 
 
+    private OnClickListener mClickListener;
     private Player mPlayer;
     private TextView mName;
     private ViewHolder mViewHolder;
@@ -66,9 +68,23 @@ public class PlayerItemView extends FrameLayout {
 
 
     @Override
+    public void onClick(final View v) {
+        if (mClickListener != null) {
+            mClickListener.onClick(this);
+        }
+    }
+
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mName = (TextView) findViewById(R.id.model_player2_name);
+        mName = (TextView) findViewById(R.id.view_player_item_name);
+        setOnClickListener(this);
+    }
+
+
+    public void setOnClickListener(final OnClickListener l) {
+        mClickListener = l;
     }
 
 
@@ -91,6 +107,15 @@ public class PlayerItemView extends FrameLayout {
         public PlayerItemView getView() {
             return PlayerItemView.this;
         }
+
+
+    }
+
+
+    public interface OnClickListener {
+
+
+        void onClick(final PlayerItemView v);
 
 
     }

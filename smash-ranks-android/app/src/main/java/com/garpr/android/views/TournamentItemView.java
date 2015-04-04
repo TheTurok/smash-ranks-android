@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -17,6 +18,7 @@ import com.garpr.android.models.Tournament;
 public class TournamentItemView extends FrameLayout {
 
 
+    private LinearLayout mContainer;
     private TextView mDate;
     private TextView mName;
     private Tournament mTournament;
@@ -48,6 +50,11 @@ public class TournamentItemView extends FrameLayout {
     }
 
 
+    public LinearLayout getContainerView() {
+        return mContainer;
+    }
+
+
     public TextView getDateView() {
         return mDate;
     }
@@ -75,8 +82,9 @@ public class TournamentItemView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mDate = (TextView) findViewById(R.id.model_tournament_date);
-        mName = (TextView) findViewById(R.id.model_tournament_name);
+        mContainer = (LinearLayout) findViewById(R.id.view_tournament_item_container);
+        mDate = (TextView) findViewById(R.id.view_tournament_item_date);
+        mName = (TextView) findViewById(R.id.view_tournament_item_name);
     }
 
 

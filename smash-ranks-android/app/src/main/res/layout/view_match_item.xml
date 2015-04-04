@@ -5,15 +5,13 @@
     android:layout_marginTop="@dimen/root_padding_half"
     style="@style/list_item_root.no_padding">
     <LinearLayout
-        android:background="?attr/selectableItemBackground"
-        android:id="@+id/model_match2_container"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/view_match_item_container"
+        android:orientation="vertical"
+        style="@style/list_item_root.no_padding">
         <TextView
             android:ellipsize="end"
-            android:id="@+id/model_match2_winner"
             android:gravity="center_vertical"
+            android:id="@+id/view_match_item_winner"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -28,8 +26,8 @@
             tools:text="Shroomed" />
         <TextView
             android:ellipsize="end"
-            android:id="@+id/model_match2_loser"
             android:gravity="center_vertical"
+            android:id="@+id/view_match_item_loser"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"

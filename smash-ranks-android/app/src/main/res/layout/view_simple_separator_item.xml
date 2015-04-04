@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.garpr.android.views.SimpleSeparatorView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
-    android:id="@+id/separator_simple_root"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/root_padding_half"
     android:layout_width="match_parent">
     <FrameLayout
         android:background="?attr/selectableItemBackground"
         android:duplicateParentState="true"
+        android:id="@+id/view_simple_separator_item_container"
         android:layout_height="@dimen/list_item_separator_height"
         android:layout_width="match_parent"
         android:paddingBottom="@dimen/root_padding_half"
@@ -17,7 +17,7 @@
         tools:ignore="UselessParent">
         <TextView
             android:ellipsize="end"
-            android:id="@+id/separator_simple_text"
+            android:id="@+id/view_simple_separator_item_text"
             android:layout_gravity="bottom"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -29,4 +29,4 @@
             tools:text="January 2015"
             style="@style/fontFamily_medium" />
     </FrameLayout>
-</FrameLayout>
+</com.garpr.android.views.SimpleSeparatorView>

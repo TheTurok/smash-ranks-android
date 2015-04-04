@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.garpr.android.views.TournamentItemView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
-    android:id="@+id/model_tournament_root"
     tools:ignore="Overdraw"
     style="@style/list_item_root.no_padding">
     <LinearLayout
-        android:background="?attr/selectableItemBackground"
         android:duplicateParentState="true"
+        android:id="@+id/view_tournament_item_container"
         android:orientation="horizontal"
         tools:ignore="UselessParent"
         style="@style/list_item_root">
         <TextView
             android:gravity="center_vertical"
-            android:id="@+id/model_tournament_date"
+            android:id="@+id/view_tournament_item_date"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -23,7 +22,7 @@
         <TextView
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:id="@+id/model_tournament_name"
+            android:id="@+id/view_tournament_item_name"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/root_padding_half"
@@ -34,4 +33,4 @@
             android:textSize="18sp"
             tools:text="The Big House 4" />
     </LinearLayout>
-</FrameLayout>
+</com.garpr.android.views.TournamentItemView>

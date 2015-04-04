@@ -11,8 +11,7 @@ import com.garpr.android.misc.LinearLayoutManagerWrapper;
 import com.garpr.android.models.TournamentBundle;
 
 
-public abstract class TournamentViewPagerFragment extends BaseFragment implements
-        BaseListAdapter.Listener {
+public abstract class TournamentViewPagerFragment extends BaseFragment {
 
 
     private static final String KEY_BUNDLE = "KEY_BUNDLE";
@@ -67,19 +66,6 @@ public abstract class TournamentViewPagerFragment extends BaseFragment implement
     }
 
 
-    @Override
-    public void onItemClick(final View view, final int position) {
-        // this method intentionally left blank (children can override)
-    }
-
-
-    @Override
-    public boolean onItemLongClick(final View view, final int position) {
-        // this method intentionally left blank (children can override)
-        return false;
-    }
-
-
     private void prepareList() {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManagerWrapper(getActivity()));
@@ -95,11 +81,12 @@ public abstract class TournamentViewPagerFragment extends BaseFragment implement
 
 
 
-    protected abstract class TournamentAdapter extends BaseListAdapter {
+    protected abstract class TournamentAdapter<T extends RecyclerView.ViewHolder> extends
+            BaseListAdapter<T> {
 
 
         protected TournamentAdapter() {
-            super(TournamentViewPagerFragment.this, mRecyclerView);
+            super(mRecyclerView);
         }
 
 

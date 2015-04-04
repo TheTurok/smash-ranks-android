@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.garpr.android.views.PlayerItemView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
-    android:id="@+id/model_player2_root"
     tools:ignore="Overdraw"
     style="@style/list_item_root.no_padding">
     <TextView
@@ -10,13 +9,16 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:gravity="center_vertical"
-        android:id="@+id/model_player2_name"
+        android:id="@+id/view_player_item_name"
+        android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:lineSpacingExtra="2dp"
+        android:minHeight="@dimen/list_item_height"
+        android:paddingBottom="@dimen/root_padding_fourth"
+        android:paddingLeft="@dimen/root_padding"
+        android:paddingRight="@dimen/root_padding"
+        android:paddingTop="@dimen/root_padding_fourth"
         android:maxLines="3"
         android:textSize="20sp"
-        tools:ignore="UselessParent"
-        tools:text="Shroomed"
-        style="@style/list_item_root" />
-</FrameLayout>
+        tools:text="Shroomed" />
+</com.garpr.android.views.PlayerItemView>

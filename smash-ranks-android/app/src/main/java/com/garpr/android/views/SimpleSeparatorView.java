@@ -15,6 +15,7 @@ import com.garpr.android.R;
 public class SimpleSeparatorView extends FrameLayout {
 
 
+    private FrameLayout mContainer;
     private TextView mText;
     private ViewHolder mViewHolder;
 
@@ -44,6 +45,11 @@ public class SimpleSeparatorView extends FrameLayout {
     }
 
 
+    public FrameLayout getContainerView() {
+        return mContainer;
+    }
+
+
     public TextView getTextView() {
         return mText;
     }
@@ -61,7 +67,13 @@ public class SimpleSeparatorView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mText = (TextView) findViewById(R.id.separator_simple_text);
+        mContainer = (FrameLayout) findViewById(R.id.view_simple_separator_item_container);
+        mText = (TextView) findViewById(R.id.view_simple_separator_item_text);
+    }
+
+
+    public void setText(final CharSequence text) {
+        mText.setText(text);
     }
 
 

@@ -2,23 +2,23 @@
 <com.garpr.android.views.TournamentSeparatorView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
-    android:id="@+id/separator_tournament_root"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/root_padding_half"
     android:layout_width="match_parent">
     <LinearLayout
         android:background="?attr/selectableItemBackground"
         android:duplicateParentState="true"
+        android:id="@+id/view_tournament_separator_item_container"
         android:layout_height="@dimen/list_item_separator_height"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:paddingBottom="@dimen/root_padding_half"
         android:paddingLeft="@dimen/root_padding"
         android:paddingRight="@dimen/root_padding"
-        android:orientation="horizontal"
         tools:ignore="UselessParent">
         <TextView
             android:ellipsize="end"
-            android:id="@+id/separator_tournament_name"
+            android:id="@+id/view_tournament_separator_item_name"
             android:layout_gravity="bottom"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/root_padding_half"
@@ -34,7 +34,7 @@
             style="@style/fontFamily_medium" />
         <TextView
             android:ellipsize="end"
-            android:id="@+id/separator_tournament_date"
+            android:id="@+id/view_tournament_separator_item_date"
             android:layout_gravity="bottom"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"

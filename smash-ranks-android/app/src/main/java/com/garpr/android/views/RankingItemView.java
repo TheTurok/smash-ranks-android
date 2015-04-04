@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -16,6 +17,7 @@ import com.garpr.android.models.Player;
 public class RankingItemView extends FrameLayout {
 
 
+    private LinearLayout mContainer;
     private Player mPlayer;
     private TextView mName;
     private TextView mRank;
@@ -45,6 +47,11 @@ public class RankingItemView extends FrameLayout {
     public RankingItemView(final Context context, final AttributeSet attrs,
             final int defStyleAttr, final int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+
+    public LinearLayout getContainerView() {
+        return mContainer;
     }
 
 
@@ -80,9 +87,10 @@ public class RankingItemView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mName = (TextView) findViewById(R.id.model_player_name);
-        mRank = (TextView) findViewById(R.id.model_player_rank);
-        mRating = (TextView) findViewById(R.id.model_player_rating);
+        mContainer = (LinearLayout) findViewById(R.id.view_ranking_item_container);
+        mName = (TextView) findViewById(R.id.view_ranking_item_name);
+        mRank = (TextView) findViewById(R.id.view_ranking_item_rank);
+        mRating = (TextView) findViewById(R.id.view_ranking_item_rating);
     }
 
 

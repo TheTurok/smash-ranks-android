@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.garpr.android.views.PlayerItemView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
-    android:id="@+id/model_player_root"
     tools:ignore="Overdraw"
     style="@style/list_item_root.no_padding">
     <LinearLayout
-        android:background="?attr/selectableItemBackground"
         android:duplicateParentState="true"
         android:gravity="center_vertical"
+        android:id="@+id/view_ranking_item_container"
         android:orientation="horizontal"
         tools:ignore="UselessParent"
         style="@style/list_item_root">
         <TextView
-            android:id="@+id/model_player_rank"
+            android:id="@+id/view_ranking_item_rank"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/indigo_bright"
@@ -23,7 +22,7 @@
         <TextView
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:id="@+id/model_player_name"
+            android:id="@+id/view_ranking_item_name"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/root_padding_half"
             android:layout_marginRight="@dimen/root_padding_half"
@@ -34,7 +33,7 @@
             android:textSize="20sp"
             tools:text="Shroomed" />
         <TextView
-            android:id="@+id/model_player_rating"
+            android:id="@+id/view_ranking_item_rating"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/indigo_bright"
@@ -42,4 +41,4 @@
             tools:text="30.102"
             style="@style/gravity_end" />
     </LinearLayout>
-</FrameLayout>
+</com.garpr.android.views.PlayerItemView>

@@ -7,12 +7,13 @@
     <LinearLayout
         android:duplicateParentState="true"
         android:gravity="center_vertical"
+        android:id="@+id/view_checkable_item_container"
         android:orientation="horizontal"
         tools:ignore="UselessParent"
         style="@style/list_item_root">
         <TextView
             android:gravity="center_vertical"
-            android:id="@+id/model_checkable_text"
+            android:id="@+id/view_checkable_item_text"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -20,9 +21,9 @@
             tools:text="Hungrybox" />
         <CheckBox
             android:checkMark="@drawable/checkbox"
-            android:id="@+id/model_checkable_check"
+            android:gravity="center_vertical"
+            android:id="@+id/view_checkable_item_check"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:gravity="center_vertical" />
+            android:layout_width="wrap_content" />
     </LinearLayout>
 </com.garpr.android.views.CheckableItemView>

@@ -6,53 +6,49 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
+import com.garpr.android.models.Tournament;
 
 
-public class CheckableItemView extends FrameLayout {
+public class TournamentSeparatorView extends FrameLayout {
 
 
-    private CheckBox mCheck;
-    private TextView mText;
+    private TextView mDate;
+    private TextView mName;
+    private Tournament mTournament;
     private ViewHolder mViewHolder;
 
 
 
 
-    public CheckableItemView(final Context context) {
+    public TournamentSeparatorView(final Context context) {
         super(context);
     }
 
 
-    public CheckableItemView(final Context context, final AttributeSet attrs) {
+    public TournamentSeparatorView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
 
-    public CheckableItemView(final Context context, final AttributeSet attrs,
+    public TournamentSeparatorView(final Context context, final AttributeSet attrs,
             final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CheckableItemView(final Context context, final AttributeSet attrs,
+    public TournamentSeparatorView(final Context context, final AttributeSet attrs,
             final int defStyleAttr, final int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
 
-    public CheckBox getCheckView() {
-        return mCheck;
-    }
-
-
-    public TextView getTextView() {
-        return mText;
+    public Tournament getTournament() {
+        return mTournament;
     }
 
 
@@ -65,26 +61,18 @@ public class CheckableItemView extends FrameLayout {
     }
 
 
-    public boolean isChecked() {
-        return mCheck.isChecked();
-    }
-
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mCheck = (CheckBox) findViewById(R.id.model_checkable_check);
-        mText = (TextView) findViewById(R.id.model_checkable_text);
+        mDate = (TextView) findViewById(R.id.separator_tournament_date);
+        mName = (TextView) findViewById(R.id.separator_tournament_name);
     }
 
 
-    public void setChecked(final boolean checked) {
-        mCheck.setChecked(checked);
-    }
-
-
-    public void setText(final CharSequence text) {
-        mText.setText(text);
+    public void setTournament(final Tournament tournament) {
+        mTournament = tournament;
+        mDate.setText(mTournament.getDateWrapper().getDay());
+        mName.setText(mTournament.getName());
     }
 
 
@@ -94,12 +82,12 @@ public class CheckableItemView extends FrameLayout {
 
 
         private ViewHolder() {
-            super(CheckableItemView.this);
+            super(TournamentSeparatorView.this);
         }
 
 
-        public CheckableItemView getView() {
-            return CheckableItemView.this;
+        public TournamentSeparatorView getView() {
+            return TournamentSeparatorView.this;
         }
 
 

@@ -5,16 +5,15 @@
     android:id="@+id/model_player_root"
     tools:ignore="Overdraw"
     style="@style/list_item_root.no_padding">
-    <RelativeLayout
+    <LinearLayout
         android:background="?attr/selectableItemBackground"
         android:duplicateParentState="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         tools:ignore="UselessParent"
         style="@style/list_item_root">
         <TextView
             android:id="@+id/model_player_rank"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/indigo_bright"
@@ -22,32 +21,25 @@
             tools:ignore="RelativeOverlap"
             tools:text="1" />
         <TextView
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:id="@+id/model_player_name"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/root_padding_half"
+            android:layout_marginRight="@dimen/root_padding_half"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="3"
+            android:textSize="20sp"
+            tools:text="Shroomed" />
+        <TextView
             android:id="@+id/model_player_rating"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/indigo_bright"
             android:textSize="14sp"
             tools:text="30.102"
             style="@style/gravity_end" />
-        <TextView
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:id="@+id/model_player_name"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/root_padding_half"
-            android:layout_marginRight="@dimen/root_padding_half"
-            android:layout_toEndOf="@id/model_player_rank"
-            android:layout_toLeftOf="@id/model_player_rating"
-            android:layout_toRightOf="@id/model_player_rank"
-            android:layout_toStartOf="@id/model_player_rating"
-            android:layout_width="0dp"
-            android:lineSpacingExtra="2dp"
-            android:maxLines="3"
-            android:textSize="20sp"
-            tools:text="Shroomed" />
-    </RelativeLayout>
+    </LinearLayout>
 </FrameLayout>

@@ -13,34 +13,36 @@ import com.garpr.android.R;
 import com.garpr.android.models.Player;
 
 
-public class PlayerItemView extends FrameLayout {
+public class RankingItemView extends FrameLayout {
 
 
     private Player mPlayer;
     private TextView mName;
+    private TextView mRank;
+    private TextView mRating;
     private ViewHolder mViewHolder;
 
 
 
 
-    public PlayerItemView(final Context context) {
+    public RankingItemView(final Context context) {
         super(context);
     }
 
 
-    public PlayerItemView(final Context context, final AttributeSet attrs) {
+    public RankingItemView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
 
-    public PlayerItemView(final Context context, final AttributeSet attrs,
+    public RankingItemView(final Context context, final AttributeSet attrs,
             final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public PlayerItemView(final Context context, final AttributeSet attrs,
+    public RankingItemView(final Context context, final AttributeSet attrs,
             final int defStyleAttr, final int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
@@ -56,6 +58,16 @@ public class PlayerItemView extends FrameLayout {
     }
 
 
+    public TextView getRankView() {
+        return mRank;
+    }
+
+
+    public TextView getRatingView() {
+        return mRating;
+    }
+
+
     public ViewHolder getViewHolder() {
         if (mViewHolder == null) {
             mViewHolder = new ViewHolder();
@@ -68,13 +80,17 @@ public class PlayerItemView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mName = (TextView) findViewById(R.id.model_player2_name);
+        mName = (TextView) findViewById(R.id.model_player_name);
+        mRank = (TextView) findViewById(R.id.model_player_rank);
+        mRating = (TextView) findViewById(R.id.model_player_rating);
     }
 
 
     public void setPlayer(final Player player) {
         mPlayer = player;
         mName.setText(mPlayer.getName());
+        mRank.setText(String.valueOf(mPlayer.getRank()));
+        mRating.setText(mPlayer.getRatingTruncated());
     }
 
 
@@ -83,13 +99,13 @@ public class PlayerItemView extends FrameLayout {
     public final class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        public ViewHolder() {
-            super(PlayerItemView.this);
+        private ViewHolder() {
+            super(RankingItemView.this);
         }
 
 
-        public PlayerItemView getView() {
-            return PlayerItemView.this;
+        public RankingItemView getView() {
+            return RankingItemView.this;
         }
 
 

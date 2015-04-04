@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 
@@ -63,6 +62,11 @@ public class CheckableItemView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mText = (CheckedTextView) findViewById(R.id.model_checkable_text);
+    }
+
+
+    public void setText(final CharSequence text) {
+        mText.setText(text);
     }
 
 

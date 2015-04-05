@@ -2,8 +2,6 @@ package com.garpr.android.fragments;
 
 
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.garpr.android.R;
@@ -165,12 +163,6 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
 
 
         @Override
-        public long getItemId(final int position) {
-            return position;
-        }
-
-
-        @Override
         public int getItemViewType(final int position) {
             return mListItems.get(position).mType.ordinal();
         }
@@ -199,22 +191,20 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
             final ListItem.Type type = ListItem.Type.values()[viewType];
-            final LayoutInflater inflater = getLayoutInflater();
-
-            final View view;
             final RecyclerView.ViewHolder viewHolder;
 
             switch (type) {
-                case PLAYER:
-                    view = inflater.inflate(R.layout.view_player_item, parent, false);
-                    viewHolder = ((PlayerItemView) view).getViewHolder();
-                    ((PlayerItemView) view).setOnClickListener(TournamentPlayersFragment.this);
+                case PLAYER: {
+                    final PlayerItemView piv = PlayerItemView.inflate(getActivity(), parent);
+                    piv.setOnClickListener(TournamentPlayersFragment.this);
+                    viewHolder = piv.getViewHolder();
                     break;
+                }
 
-                case TITLE:
-                    view = inflater.inflate(R.layout.view_simple_separator_item, parent, false);
-                    viewHolder = ((SimpleSeparatorView) view).getViewHolder();
+                case TITLE: {
+                    viewHolder = SimpleSeparatorView.inflate(getActivity(), parent).getViewHolder();
                     break;
+                }
 
                 default:
                     throw new IllegalStateException("Illegal ListItem Type: " + type);

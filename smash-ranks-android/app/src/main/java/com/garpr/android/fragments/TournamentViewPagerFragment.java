@@ -6,8 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.garpr.android.R;
-import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.LinearLayoutManagerWrapper;
+import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.models.TournamentBundle;
 
 
@@ -82,7 +82,7 @@ public abstract class TournamentViewPagerFragment extends BaseFragment {
 
 
     protected abstract class TournamentAdapter<T extends RecyclerView.ViewHolder> extends
-            BaseListAdapter<T> {
+            RecyclerAdapter<T> {
 
 
         protected TournamentAdapter() {

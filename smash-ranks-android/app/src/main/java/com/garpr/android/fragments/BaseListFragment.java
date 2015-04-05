@@ -9,19 +9,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
-import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 import com.garpr.android.misc.LinearLayoutManagerWrapper;
+import com.garpr.android.misc.RecyclerAdapter;
 
 
 public abstract class BaseListFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener {
 
 
-    private BaseListAdapter mAdapter;
     private boolean mIsLoading;
     private FlexibleSwipeRefreshLayout mRefreshLayout;
     private LinearLayout mErrorView;
+    private RecyclerAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private TextView mErrorLine;
 
@@ -75,19 +75,6 @@ public abstract class BaseListFragment extends BaseFragment implements
 
 
     @Override
-    public void onItemClick(final View view, final int position) {
-        // this method intentionally left blank (children can override)
-    }
-
-
-    @Override
-    public boolean onItemLongClick(final View view, final int position) {
-        // this method intentionally left blank (children can override)
-        return false;
-    }
-
-
-    @Override
     public void onRefresh() {
         mErrorView.setVisibility(View.GONE);
     }
@@ -106,7 +93,7 @@ public abstract class BaseListFragment extends BaseFragment implements
     }
 
 
-    protected void setAdapter(final BaseListAdapter adapter) {
+    protected void setAdapter(final RecyclerAdapter adapter) {
         mErrorView.setVisibility(View.GONE);
         mAdapter = adapter;
         mRecyclerView.setHasFixedSize(true);

@@ -6,7 +6,9 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +28,13 @@ public class TournamentSeparatorView extends FrameLayout implements View.OnClick
     private ViewHolder mViewHolder;
 
 
+
+
+    public static TournamentSeparatorView inflate(final Context context, final ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
+        return (TournamentSeparatorView) inflater.inflate(R.layout.view_tournament_separator_item,
+                parent, false);
+    }
 
 
     public TournamentSeparatorView(final Context context) {

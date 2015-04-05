@@ -8,35 +8,34 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckedTextView;
 import android.widget.Filter;
-import android.widget.TextView;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.ListUtils.SpecialFilterable;
+import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.models.Player;
+import com.garpr.android.views.CheckableItemView;
+import com.garpr.android.views.SimpleSeparatorView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 
 public class PlayersFragment extends BaseListToolbarFragment implements
-        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener {
+        CheckableItemView.OnClickListener, MenuItemCompat.OnActionExpandListener,
+        SearchView.OnQueryTextListener {
 
 
     private static final String KEY_PLAYERS = "KEY_PLAYERS";
@@ -213,8 +212,8 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     @Override
-    public void onItemClick(final View view, final int position) {
-        mSelectedPlayer = mListItemsShown.get(position).mPlayer;
+    public void onClick(final CheckableItemView v) {
+        mSelectedPlayer = (Player) v.getTag();
         notifyDataSetChanged();
 
         findToolbarItems();
@@ -325,7 +324,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     @Override
-    protected void setAdapter(final BaseListAdapter adapter) {
+    protected void setAdapter(final RecyclerAdapter adapter) {
         super.setAdapter(adapter);
 
         final ListUtils.FilterListener<ListItem> listener = new ListUtils.FilterListener<ListItem>(this) {
@@ -487,30 +486,14 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     }
 
 
-    private final class PlayersAdapter extends BaseListAdapter {
+    private final class PlayersAdapter extends RecyclerAdapter {
 
 
         private static final String TAG = "PlayersAdapter";
 
 
         private PlayersAdapter() {
-            super(PlayersFragment.this, getRecyclerView());
-        }
-
-
-        private void bindPlayerViewHolder(final PlayerViewHolder holder, final ListItem listItem) {
-            holder.mName.setText(listItem.mPlayer.getName());
-
-            if (listItem.mPlayer.equals(mSelectedPlayer)) {
-                holder.mName.setChecked(true);
-            } else {
-                holder.mName.setChecked(false);
-            }
-        }
-
-
-        private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
-            holder.mTitle.setText(listItem.mTitle);
+            super(getRecyclerView());
         }
 
 
@@ -543,13 +526,18 @@ public class PlayersFragment extends BaseListToolbarFragment implements
             final ListItem listItem = mListItemsShown.get(position);
 
             switch (listItem.mType) {
-                case PLAYER:
-                    bindPlayerViewHolder((PlayerViewHolder) holder, listItem);
+                case PLAYER: {
+                    final CheckableItemView civ = ((CheckableItemView.ViewHolder) holder).getView();
+                    civ.setText(listItem.mPlayer.getName());
+                    civ.setChecked(listItem.mPlayer.equals(mSelectedPlayer));
+                    civ.setTag(listItem.mPlayer);
                     break;
+                }
 
-                case TITLE:
-                    bindTitleViewHolder((TitleViewHolder) holder, listItem);
+                case TITLE: {
+                    ((SimpleSeparatorView.ViewHolder) holder).getView().setText(listItem.mTitle);
                     break;
+                }
 
                 default:
                     throw new IllegalStateException("Unknown ListItem Type: " + listItem.mType);
@@ -560,23 +548,21 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
-            final LayoutInflater inflater = getLayoutInflater();
             final ListItem.Type listItemType = ListItem.Type.values()[viewType];
-
-            final View view;
             final RecyclerView.ViewHolder holder;
 
             switch (listItemType) {
-                case PLAYER:
-                    view = inflater.inflate(R.layout.model_checkable, parent, false);
-                    holder = new PlayerViewHolder(view);
-                    view.setOnClickListener(this);
+                case PLAYER: {
+                    final CheckableItemView civ = CheckableItemView.inflate(getActivity(), parent);
+                    civ.setOnClickListener(PlayersFragment.this);
+                    holder = civ.getViewHolder();
                     break;
+                }
 
-                case TITLE:
-                    view = inflater.inflate(R.layout.separator_simple, parent, false);
-                    holder = new TitleViewHolder(view);
+                case TITLE: {
+                    holder = SimpleSeparatorView.inflate(getActivity(), parent).getViewHolder();
                     break;
+                }
 
                 default:
                     throw new RuntimeException("Unknown ListItem Type: " + listItemType);
@@ -589,43 +575,13 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     }
 
 
-    private static final class PlayerViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final CheckedTextView mName;
-
-
-        private PlayerViewHolder(final View view) {
-            super(view);
-            mName = (CheckedTextView) view.findViewById(R.id.model_checkable_text);
-        }
-
-
-    }
-
-
-    private static final class TitleViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mTitle;
-
-
-        private TitleViewHolder(final View view) {
-            super(view);
-            mTitle = (TextView) view.findViewById(R.id.separator_simple_text);
-        }
-
-
-    }
-
-
     public interface Listeners {
 
 
-        public void onGoClick();
+        void onGoClick();
 
 
-        public void onSkipClick();
+        void onSkipClick();
 
 
     }

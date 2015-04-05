@@ -1,7 +1,6 @@
 package com.garpr.android.fragments;
 
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -97,12 +96,6 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
 
 
         @Override
-        public long getItemId(final int position) {
-            return position;
-        }
-
-
-        @Override
         public void onBindViewHolder(final MatchItemView.ViewHolder holder, final int position) {
             final MatchItemView miv = holder.getView();
             miv.setMatch(mMatches.get(position));
@@ -112,9 +105,7 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
         @Override
         public MatchItemView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
-            final LayoutInflater inflater = getLayoutInflater();
-            final MatchItemView miv = (MatchItemView) inflater.inflate(R.layout.view_match_item,
-                    parent, false);
+            final MatchItemView miv = MatchItemView.inflate(getActivity(), parent);
             miv.setOnClickListener(TournamentMatchesFragment.this);
             miv.setOnLongClickListener(TournamentMatchesFragment.this);
 

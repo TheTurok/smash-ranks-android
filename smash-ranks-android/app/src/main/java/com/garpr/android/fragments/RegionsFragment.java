@@ -10,7 +10,6 @@ import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,29 +17,30 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Regions;
 import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.models.Region;
+import com.garpr.android.views.CheckableItemView;
+import com.garpr.android.views.SimpleSeparatorView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class RegionsFragment extends BaseListToolbarFragment {
+public class RegionsFragment extends BaseListToolbarFragment implements
+        CheckableItemView.OnClickListener {
 
 
     private static final String KEY_REGIONS = "KEY_REGIONS";
@@ -300,8 +300,8 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     @Override
-    public void onItemClick(final View view, final int position) {
-        mSelectedRegion = mListItems.get(position).mRegion;
+    public void onClick(final CheckableItemView v) {
+        mSelectedRegion = (Region) v.getTag();
         notifyDataSetChanged();
 
         if (isStandaloneMode()) {
@@ -423,7 +423,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
     @Override
-    protected void setAdapter(final BaseListAdapter adapter) {
+    protected void setAdapter(final RecyclerAdapter adapter) {
         super.setAdapter(adapter);
 
         if (mSelectedRegion != null && isEmbeddedMode()) {
@@ -532,7 +532,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
         }
 
 
-        private static enum Type {
+        private enum Type {
             REGION, TITLE
         }
 
@@ -540,30 +540,14 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
-    private final class RegionsAdapter extends BaseListAdapter {
+    private final class RegionsAdapter extends RecyclerAdapter {
 
 
         private static final String TAG = "RegionsAdapter";
 
 
         private RegionsAdapter() {
-            super(RegionsFragment.this, getRecyclerView());
-        }
-
-
-        private void bindRegionViewHolder(final RegionViewHolder holder, final ListItem listItem) {
-            holder.mName.setText(listItem.mRegion.getName());
-
-            if (listItem.mRegion.equals(mSelectedRegion)) {
-                holder.mName.setChecked(true);
-            } else {
-                holder.mName.setChecked(false);
-            }
-        }
-
-
-        private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
-            holder.mTitle.setText(listItem.mTitle);
+            super(getRecyclerView());
         }
 
 
@@ -580,12 +564,6 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
 
         @Override
-        public long getItemId(final int position) {
-            return (long) position;
-        }
-
-
-        @Override
         public int getItemViewType(final int position) {
             return mListItems.get(position).mType.ordinal();
         }
@@ -596,13 +574,20 @@ public class RegionsFragment extends BaseListToolbarFragment {
             final ListItem listItem = mListItems.get(position);
 
             switch (listItem.mType) {
-                case REGION:
-                    bindRegionViewHolder((RegionViewHolder) holder, listItem);
+                case REGION: {
+                    final CheckableItemView.ViewHolder vh = (CheckableItemView.ViewHolder) holder;
+                    final CheckableItemView civ = vh.getView();
+                    civ.setText(listItem.mRegion.getName());
+                    civ.setChecked(listItem.mRegion.equals(mSelectedRegion));
+                    civ.setTag(listItem.mRegion);
                     break;
+                }
 
-                case TITLE:
-                    bindTitleViewHolder((TitleViewHolder) holder, listItem);
+                case TITLE: {
+                    final SimpleSeparatorView.ViewHolder vh = (SimpleSeparatorView.ViewHolder) holder;
+                    vh.getView().setText(listItem.mTitle);
                     break;
+                }
 
                 default:
                     throw new RuntimeException("Unknown ListItem Type: " + listItem.mType);
@@ -612,23 +597,21 @@ public class RegionsFragment extends BaseListToolbarFragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-            final LayoutInflater inflater = getLayoutInflater();
             final ListItem.Type listItemType = ListItem.Type.values()[viewType];
-
-            final View view;
             final RecyclerView.ViewHolder holder;
 
             switch (listItemType) {
-                case REGION:
-                    view = inflater.inflate(R.layout.model_checkable, parent, false);
-                    holder = new RegionViewHolder(view);
-                    view.setOnClickListener(this);
+                case REGION: {
+                    final CheckableItemView civ = CheckableItemView.inflate(getActivity(), parent);
+                    civ.setOnClickListener(RegionsFragment.this);
+                    holder = civ.getViewHolder();
                     break;
+                }
 
-                case TITLE:
-                    view = inflater.inflate(R.layout.separator_simple, parent, false);
-                    holder = new TitleViewHolder(view);
+                case TITLE: {
+                    holder = SimpleSeparatorView.inflate(getActivity(), parent).getViewHolder();
                     break;
+                }
 
                 default:
                     throw new RuntimeException("Unknown ListItem Type: " + listItemType);
@@ -641,40 +624,10 @@ public class RegionsFragment extends BaseListToolbarFragment {
     }
 
 
-    private static final class RegionViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final CheckedTextView mName;
-
-
-        private RegionViewHolder(final View view) {
-            super(view);
-            mName = (CheckedTextView) view.findViewById(R.id.model_checkable_text);
-        }
-
-
-    }
-
-
-    private static final class TitleViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mTitle;
-
-
-        private TitleViewHolder(final View view) {
-            super(view);
-            mTitle = (TextView) view.findViewById(R.id.separator_simple_text);
-        }
-
-
-    }
-
-
     public interface RegionSaveListener {
 
 
-        public void onRegionSaved();
+        void onRegionSaved();
 
 
     }
@@ -683,7 +636,7 @@ public class RegionsFragment extends BaseListToolbarFragment {
     public interface ToolbarNextListener {
 
 
-        public void onRegionNextClick();
+        void onRegionNextClick();
 
 
     }

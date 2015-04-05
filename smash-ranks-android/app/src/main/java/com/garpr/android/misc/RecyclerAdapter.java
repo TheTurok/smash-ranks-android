@@ -2,11 +2,10 @@ package com.garpr.android.misc;
 
 
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.ViewGroup;
 
 
-public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
+public abstract class RecyclerAdapter<T extends RecyclerView.ViewHolder> extends
         RecyclerView.Adapter<T> {
 
 
@@ -15,20 +14,14 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
 
 
 
-    protected BaseListAdapter(final RecyclerView recyclerView) {
+    protected RecyclerAdapter(final RecyclerView recyclerView) {
         recyclerView.setHasFixedSize(true);
         setHasStableIds(true);
 
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             private void notifyDataSetChanged() {
                 mNotifyDataSetChanged = false;
-
-                try {
-                    BaseListAdapter.this.notifyDataSetChanged();
-                } catch (final IllegalStateException e) {
-                    Console.e(getAdapterName(), "Exception when using notifyDataSetChanged()"
-                            + " in OnScrollListener", e);
-                }
+                RecyclerAdapter.this.notifyDataSetChanged();
             }
 
 
@@ -58,7 +51,9 @@ public abstract class BaseListAdapter<T extends RecyclerView.ViewHolder> extends
 
 
     @Override
-    public abstract long getItemId(final int position);
+    public long getItemId(final int position) {
+        return (long) position;
+    }
 
 
     @Override

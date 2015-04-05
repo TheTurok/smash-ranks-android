@@ -15,10 +15,11 @@ import com.garpr.android.R;
 import com.garpr.android.models.Tournament;
 
 
-public class TournamentItemView extends FrameLayout {
+public class TournamentItemView extends FrameLayout implements View.OnClickListener {
 
 
     private LinearLayout mContainer;
+    private OnClickListener mClickListener;
     private TextView mDate;
     private TextView mName;
     private Tournament mTournament;
@@ -80,11 +81,26 @@ public class TournamentItemView extends FrameLayout {
 
 
     @Override
+    public void onClick(final View v) {
+        if (mClickListener != null) {
+            mClickListener.onClick(this);
+        }
+    }
+
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mContainer = (LinearLayout) findViewById(R.id.view_tournament_item_container);
         mDate = (TextView) findViewById(R.id.view_tournament_item_date);
         mName = (TextView) findViewById(R.id.view_tournament_item_name);
+
+        mContainer.setOnClickListener(this);
+    }
+
+
+    public void setOnClickListener(final OnClickListener l) {
+        mClickListener = l;
     }
 
 
@@ -108,6 +124,15 @@ public class TournamentItemView extends FrameLayout {
         public TournamentItemView getView() {
             return TournamentItemView.this;
         }
+
+
+    }
+
+
+    public interface OnClickListener {
+
+
+        void onClick(final TournamentItemView v);
 
 
     }

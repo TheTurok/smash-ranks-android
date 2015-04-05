@@ -6,16 +6,18 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
 
 
-public class SimpleSeparatorView extends FrameLayout {
+public class SimpleSeparatorView extends FrameLayout implements View.OnClickListener {
 
 
     private FrameLayout mContainer;
+    private OnClickListener mClickListener;
     private TextView mText;
     private ViewHolder mViewHolder;
 
@@ -65,10 +67,25 @@ public class SimpleSeparatorView extends FrameLayout {
 
 
     @Override
+    public void onClick(final View v) {
+        if (mClickListener != null) {
+            mClickListener.onClick(this);
+        }
+    }
+
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mContainer = (FrameLayout) findViewById(R.id.view_simple_separator_item_container);
         mText = (TextView) findViewById(R.id.view_simple_separator_item_text);
+
+        mContainer.setOnClickListener(this);
+    }
+
+
+    public void setOnClickListener(final OnClickListener l) {
+        mClickListener = l;
     }
 
 
@@ -90,6 +107,15 @@ public class SimpleSeparatorView extends FrameLayout {
         public SimpleSeparatorView getView() {
             return SimpleSeparatorView.this;
         }
+
+
+    }
+
+
+    public interface OnClickListener {
+
+
+        void onClick(final SimpleSeparatorView v);
 
 
     }

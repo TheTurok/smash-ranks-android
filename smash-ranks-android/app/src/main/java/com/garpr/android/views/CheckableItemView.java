@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -14,11 +15,12 @@ import android.widget.TextView;
 import com.garpr.android.R;
 
 
-public class CheckableItemView extends FrameLayout {
+public class CheckableItemView extends FrameLayout implements View.OnClickListener {
 
 
     private CheckBox mCheck;
     private LinearLayout mContainer;
+    private OnClickListener mClickListener;
     private TextView mText;
     private ViewHolder mViewHolder;
 
@@ -78,16 +80,31 @@ public class CheckableItemView extends FrameLayout {
 
 
     @Override
+    public void onClick(final View v) {
+        if (mClickListener != null) {
+            mClickListener.onClick(this);
+        }
+    }
+
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mCheck = (CheckBox) findViewById(R.id.view_checkable_item_check);
         mContainer = (LinearLayout) findViewById(R.id.view_checkable_item_container);
         mText = (TextView) findViewById(R.id.view_checkable_item_text);
+
+        mContainer.setOnClickListener(this);
     }
 
 
     public void setChecked(final boolean checked) {
         mCheck.setChecked(checked);
+    }
+
+
+    public void setOnClickListener(final OnClickListener l) {
+        mClickListener = l;
     }
 
 
@@ -109,6 +126,15 @@ public class CheckableItemView extends FrameLayout {
         public CheckableItemView getView() {
             return CheckableItemView.this;
         }
+
+
+    }
+
+
+    public interface OnClickListener {
+
+
+        void onClick(final CheckableItemView v);
 
 
     }

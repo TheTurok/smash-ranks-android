@@ -6,15 +6,17 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
 
 
-public class SimpleItemView extends FrameLayout {
+public class SimpleItemView extends FrameLayout implements View.OnClickListener {
 
 
+    private OnClickListener mClickListener;
     private TextView mText;
     private ViewHolder mViewHolder;
 
@@ -59,9 +61,24 @@ public class SimpleItemView extends FrameLayout {
 
 
     @Override
+    public void onClick(final View v) {
+        if (mClickListener != null) {
+            mClickListener.onClick(this);
+        }
+    }
+
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mText = (TextView) findViewById(R.id.view_simple_item_text);
+
+        setOnClickListener(this);
+    }
+
+
+    public void setOnClickListener(final OnClickListener l) {
+        mClickListener = l;
     }
 
 
@@ -83,6 +100,15 @@ public class SimpleItemView extends FrameLayout {
         public SimpleItemView getView() {
             return SimpleItemView.this;
         }
+
+
+    }
+
+
+    public interface OnClickListener {
+
+
+        void onClick(final SimpleItemView v);
 
 
     }

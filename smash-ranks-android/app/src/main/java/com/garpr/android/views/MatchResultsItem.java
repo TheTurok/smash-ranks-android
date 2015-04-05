@@ -15,6 +15,8 @@ import com.garpr.android.R;
 public class MatchResultsItem extends TextView {
 
 
+    private int mLoses;
+    private int mWins;
     private ViewHolder mViewHolder;
 
 
@@ -43,12 +45,29 @@ public class MatchResultsItem extends TextView {
     }
 
 
+    public int getLoses() {
+        return mLoses;
+    }
+
+
+    public int getWins() {
+        return mWins;
+    }
+
+
     public ViewHolder getViewHolder() {
         if (mViewHolder == null) {
             mViewHolder = new ViewHolder();
         }
 
         return mViewHolder;
+    }
+
+
+    public void setResults(final int wins, final int loses) {
+        mWins = wins;
+        mLoses = loses;
+        setText(getResources().getString(R.string.x_em_dash_y, mWins, mLoses));
     }
 
 

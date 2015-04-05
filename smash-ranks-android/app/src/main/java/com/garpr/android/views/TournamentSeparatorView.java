@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,10 +15,11 @@ import com.garpr.android.R;
 import com.garpr.android.models.Tournament;
 
 
-public class TournamentSeparatorView extends FrameLayout {
+public class TournamentSeparatorView extends FrameLayout implements View.OnClickListener {
 
 
     private LinearLayout mContainer;
+    private OnClickListener mClickListener;
     private TextView mDate;
     private TextView mName;
     private Tournament mTournament;
@@ -79,11 +81,26 @@ public class TournamentSeparatorView extends FrameLayout {
 
 
     @Override
+    public void onClick(final View v) {
+        if (mClickListener != null) {
+            mClickListener.onClick(this);
+        }
+    }
+
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mContainer = (LinearLayout) findViewById(R.id.view_tournament_separator_item_container);
         mDate = (TextView) findViewById(R.id.view_tournament_separator_item_date);
         mName = (TextView) findViewById(R.id.view_tournament_separator_item_name);
+
+        mContainer.setOnClickListener(this);
+    }
+
+
+    public void setOnClickListener(final OnClickListener l) {
+        mClickListener = l;
     }
 
 
@@ -107,6 +124,15 @@ public class TournamentSeparatorView extends FrameLayout {
         public TournamentSeparatorView getView() {
             return TournamentSeparatorView.this;
         }
+
+
+    }
+
+
+    public interface OnClickListener {
+
+
+        void onClick(final TournamentSeparatorView v);
 
 
     }

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -20,6 +22,12 @@ public class MatchResultsItem extends TextView {
     private ViewHolder mViewHolder;
 
 
+
+
+    public static MatchResultsItem inflate(final Context context, final ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
+        return (MatchResultsItem) inflater.inflate(R.layout.view_match_results_item, parent, false);
+    }
 
 
     public MatchResultsItem(final Context context) {

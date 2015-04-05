@@ -10,19 +10,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
-import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 import com.garpr.android.misc.LinearLayoutManagerWrapper;
+import com.garpr.android.misc.RecyclerAdapter;
 
 
 public abstract class BaseToolbarListActivity extends BaseToolbarActivity implements
         SwipeRefreshLayout.OnRefreshListener {
 
 
-    private BaseListAdapter mAdapter;
     private boolean mIsLoading;
     private FlexibleSwipeRefreshLayout mRefreshLayout;
     private LinearLayout mErrorView;
+    private RecyclerAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private TextView mErrorLine;
 
@@ -93,7 +93,7 @@ public abstract class BaseToolbarListActivity extends BaseToolbarActivity implem
     }
 
 
-    protected void setAdapter(final BaseListAdapter adapter) {
+    protected void setAdapter(final RecyclerAdapter adapter) {
         mErrorView.setVisibility(View.GONE);
         mAdapter = adapter;
         mRecyclerView.setHasFixedSize(true);

@@ -8,13 +8,11 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -23,22 +21,25 @@ import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.User;
 import com.garpr.android.data.sync.Sync;
 import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.ListUtils.SpecialFilterable;
+import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
+import com.garpr.android.views.RankingItemView;
+import com.garpr.android.views.SimpleSeparatorView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 
 public class RankingsActivity extends BaseToolbarListActivity implements
-        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener {
+        MenuItemCompat.OnActionExpandListener, RankingItemView.OnClickListener,
+        SearchView.OnQueryTextListener {
 
 
     private static final String KEY_PLAYERS = "KEY_PLAYERS";
@@ -153,6 +154,12 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
     private boolean isMenuNull() {
         return Utils.areAnyObjectsNull(mSearch);
+    }
+
+
+    @Override
+    public void onClick(final RankingItemView v) {
+
     }
 
 
@@ -274,7 +281,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected void setAdapter(final BaseListAdapter adapter) {
+    protected void setAdapter(final RecyclerAdapter adapter) {
         super.setAdapter(adapter);
 
         final ListUtils.FilterListener<ListItem> listener = new ListUtils.FilterListener<ListItem>(this) {
@@ -414,7 +421,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         }
 
 
-        private static enum Type {
+        private enum Type {
             PLAYER, TITLE
         }
 
@@ -422,7 +429,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     }
 
 
-    private final class RankingsAdapter extends BaseListAdapter<RecyclerView.ViewHolder> {
+    private final class RankingsAdapter extends RecyclerAdapter {
 
 
         private static final String TAG = "RankingsAdapter";
@@ -432,7 +439,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
         private RankingsAdapter() {
-            super(RankingsActivity.this, getRecyclerView());
+            super(getRecyclerView());
+
             final Resources resources = getResources();
             mBgGray = resources.getColor(R.color.gray);
             mBgHighlight = resources.getColor(R.color.overlay_bright);
@@ -451,11 +459,6 @@ public class RankingsActivity extends BaseToolbarListActivity implements
                     holder.mRoot.setBackgroundColor(mBgGray);
                 }
             }
-        }
-
-
-        private void bindTitleViewHolder(final TitleViewHolder holder, final ListItem listItem) {
-            holder.mTitle.setText(listItem.mTitle);
         }
 
 
@@ -493,7 +496,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
                     break;
 
                 case TITLE:
-                    bindTitleViewHolder((TitleViewHolder) holder, listItem);
+                    ((SimpleSeparatorView.ViewHolder) holder).getView().setText(listItem.mTitle);
                     break;
 
                 default:
@@ -505,65 +508,28 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
-            final LayoutInflater inflater = getLayoutInflater();
             final ListItem.Type listItemType = ListItem.Type.values()[viewType];
-
-            final View view;
             final RecyclerView.ViewHolder holder;
 
             switch (listItemType) {
-                case PLAYER:
-                    view = inflater.inflate(R.layout.model_player, parent, false);
-                    holder = new PlayerViewHolder(view);
-                    view.setOnClickListener(this);
+                case PLAYER: {
+                    final RankingItemView riv = RankingItemView.inflate(RankingsActivity.this,
+                            parent);
+                    riv.setOnClickListener(RankingsActivity.this);
+                    holder = riv.getViewHolder();
                     break;
+                }
 
-                case TITLE:
-                    view = inflater.inflate(R.layout.separator_simple, parent, false);
-                    holder = new TitleViewHolder(view);
+                case TITLE: {
+                    holder = SimpleSeparatorView.inflate(RankingsActivity.this, parent).getViewHolder();
                     break;
+                }
 
                 default:
                     throw new RuntimeException("Unknown ListItem Type: " + listItemType);
             }
 
             return holder;
-        }
-
-
-    }
-
-
-    private static final class PlayerViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final FrameLayout mRoot;
-        private final TextView mName;
-        private final TextView mRank;
-        private final TextView mRating;
-
-
-        private PlayerViewHolder(final View view) {
-            super(view);
-            mRoot = (FrameLayout) view.findViewById(R.id.model_player_root);
-            mRank = (TextView) view.findViewById(R.id.model_player_rank);
-            mName = (TextView) view.findViewById(R.id.model_player_name);
-            mRating = (TextView) view.findViewById(R.id.model_player_rating);
-        }
-
-
-    }
-
-
-    private static final class TitleViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mTitle;
-
-
-        private TitleViewHolder(final View view) {
-            super(view);
-            mTitle = (TextView) view.findViewById(R.id.separator_simple_text);
         }
 
 

@@ -2,37 +2,40 @@ package com.garpr.android.activities;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
+import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Matches;
 import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.HeadToHeadBundle;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Result;
 import com.garpr.android.models.Tournament;
+import com.garpr.android.views.MatchResultsItem;
+import com.garpr.android.views.SimpleSeparatorView;
+import com.garpr.android.views.TournamentItemView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 
-public class HeadToHeadActivity extends BaseToolbarListActivity {
+public class HeadToHeadActivity extends BaseToolbarListActivity implements
+        TournamentItemView.OnClickListener {
 
 
     private static final String CNAME = "com.garpr.android.activities.HeadToHeadActivity";
@@ -86,8 +89,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
             mListItems.add(ListItem.createTournament(match));
         }
 
-        final String header = getString(R.string.x_em_dash_y, mBundle.getWins(), mBundle.getLosses());
-        mListItems.add(0, ListItem.createHeader(header));
+        mListItems.add(0, ListItem.createResults(mBundle.getWins(), mBundle.getLosses()));
         mListItems.trimToSize();
         mListItemsShown = mListItems;
 
@@ -102,7 +104,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         for (int i = 0; i < mListItems.size(); ++i) {
             final ListItem listItem = mListItems.get(i);
 
-            if (listItem.isHeader()) {
+            if (listItem.isResults()) {
                 listItems.add(listItem);
             } else if (listItem.isTournament() && ((listItem.mMatch.isLoser(mPlayer) &&
                     result.isLose()) || (listItem.mMatch.isWinner(mPlayer) && result.isWin()))) {
@@ -178,6 +180,13 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
     @Override
+    public void onClick(final TournamentItemView v) {
+        final Tournament tournament = v.getTournament();
+        TournamentActivity.start(this, tournament);
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.x_vs_y, mPlayer.getName(), mOpponent.getName()));
@@ -192,13 +201,6 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         } else {
             prepareList();
         }
-    }
-
-
-    @Override
-    public void onItemClick(final View view, final int position) {
-        final ListItem listItem = mListItemsShown.get(position);
-        TournamentActivity.start(this, listItem.mMatch.getTournament());
     }
 
 
@@ -308,7 +310,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
     @Override
-    protected void setAdapter(final BaseListAdapter adapter) {
+    protected void setAdapter(final RecyclerAdapter adapter) {
         super.setAdapter(adapter);
 
         // it's possible for us to have gotten here before onPrepareOptionsMenu() has run
@@ -363,9 +365,9 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
     private static final class ListItem {
 
 
+        private int[] mResults;
         private Match mMatch;
         private String mDate;
-        private String mHeader;
         private Type mType;
 
 
@@ -378,10 +380,10 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         }
 
 
-        private static ListItem createHeader(final String header) {
+        private static ListItem createResults(final int wins, final int loses) {
             final ListItem listItem = new ListItem();
-            listItem.mHeader = header;
-            listItem.mType = Type.HEADER;
+            listItem.mResults = new int[] { wins, loses };
+            listItem.mType = Type.RESULTS;
 
             return listItem;
         }
@@ -407,8 +409,8 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
                 if (isDate() && li.isDate()) {
                     isEqual = mDate.equals(li.mDate);
-                } else if (isHeader() && li.isHeader()) {
-                    isEqual = mHeader.equals(li.mHeader);
+                } else if (isResults() && li.isResults()) {
+                    isEqual = Arrays.equals(mResults, li.mResults);
                 } else if (isTournament() && li.isTournament()) {
                     isEqual = mMatch.equals(li.mMatch);
                 } else {
@@ -427,8 +429,8 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         }
 
 
-        private boolean isHeader() {
-            return mType.equals(Type.HEADER);
+        private boolean isResults() {
+            return mType.equals(Type.RESULTS);
         }
 
 
@@ -446,8 +448,9 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
                     title = mDate;
                     break;
 
-                case HEADER:
-                    title = mHeader;
+                case RESULTS:
+                    final Context context = App.getContext();
+                    title = context.getString(R.string.x_em_dash_y, mResults[0], mResults[1]);
                     break;
 
                 case TOURNAMENT:
@@ -462,15 +465,15 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         }
 
 
-        private static enum Type {
-            DATE, HEADER, TOURNAMENT
+        private enum Type {
+            DATE, RESULTS, TOURNAMENT
         }
 
 
     }
 
 
-    private final class MatchesAdapter extends BaseListAdapter implements View.OnClickListener {
+    private final class MatchesAdapter extends RecyclerAdapter {
 
 
         private static final String TAG = "MatchesAdapter";
@@ -488,29 +491,6 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         }
 
 
-        private void bindDateViewHolder(final DateViewHolder holder, final ListItem listItem) {
-            holder.mDate.setText(listItem.mDate);
-        }
-
-
-        private void bindHeaderViewHolder(final HeaderViewHolder holder, final ListItem listItem) {
-            holder.mHeader.setText(listItem.mHeader);
-        }
-
-
-        private void bindTournamentViewHolder(final TournamentViewHolder holder, final ListItem listItem) {
-            final Tournament tournament = listItem.mMatch.getTournament();
-            holder.mDate.setText(tournament.getDateWrapper().getDay());
-            holder.mName.setText(tournament.getName());
-
-            if (listItem.mMatch.isWinner(mPlayer)) {
-                holder.mName.setTextColor(mColorWin);
-            } else {
-                holder.mName.setTextColor(mColorLose);
-            }
-        }
-
-
         @Override
         public String getAdapterName() {
             return TAG;
@@ -520,12 +500,6 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
         @Override
         public int getItemCount() {
             return mListItemsShown.size();
-        }
-
-
-        @Override
-        public long getItemId(final int position) {
-            return (long) position;
         }
 
 
@@ -541,15 +515,22 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
             switch (listItem.mType) {
                 case DATE:
-                    bindDateViewHolder((DateViewHolder) holder, listItem);
+                    ((SimpleSeparatorView.ViewHolder) holder).getView().setText(listItem.mDate);
                     break;
 
-                case HEADER:
-                    bindHeaderViewHolder((HeaderViewHolder) holder, listItem);
+                case RESULTS:
+                    ((MatchResultsItem.ViewHolder) holder).getView().setResults(listItem.mResults);
                     break;
 
                 case TOURNAMENT:
-                    bindTournamentViewHolder((TournamentViewHolder) holder, listItem);
+                    final TournamentItemView tiv = ((TournamentItemView.ViewHolder) holder).getView();
+                    tiv.setTournament(listItem.mMatch.getTournament());
+
+                    if (listItem.mMatch.isWinner(mPlayer)) {
+                        tiv.getNameView().setText(mColorWin);
+                    } else {
+                        tiv.getNameView().setText(mColorLose);
+                    }
                     break;
 
                 default:
@@ -559,35 +540,27 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
 
 
         @Override
-        public void onClick(final View v) {
-
-        }
-
-
-        @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
-            final LayoutInflater inflater = getLayoutInflater();
             final ListItem.Type type = ListItem.Type.values()[viewType];
-
-            final View view;
             final RecyclerView.ViewHolder holder;
 
             switch (type) {
                 case DATE:
-                    view = inflater.inflate(R.layout.separator_simple, parent, false);
-                    holder = new DateViewHolder(view);
+                    holder = SimpleSeparatorView.inflate(HeadToHeadActivity.this, parent)
+                            .getViewHolder();
                     break;
 
-                case HEADER:
-                    view = inflater.inflate(R.layout.head_to_head_header, parent, false);
-                    holder = new HeaderViewHolder(view);
+                case RESULTS:
+                    holder = MatchResultsItem.inflate(HeadToHeadActivity.this, parent)
+                            .getViewHolder();
                     break;
 
                 case TOURNAMENT:
-                    view = inflater.inflate(R.layout.model_tournament, parent, false);
-                    holder = new TournamentViewHolder(view);
-
+                    final TournamentItemView tiv = TournamentItemView
+                            .inflate(HeadToHeadActivity.this, parent);
+                    tiv.setOnClickListener(HeadToHeadActivity.this);
+                    holder = tiv.getViewHolder();
                     break;
 
                 default:
@@ -595,55 +568,6 @@ public class HeadToHeadActivity extends BaseToolbarListActivity {
             }
 
             return holder;
-        }
-
-
-    }
-
-
-    private static final class DateViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mDate;
-
-
-        private DateViewHolder(final View view) {
-            super(view);
-            mDate = (TextView) view.findViewById(R.id.separator_simple_text);
-        }
-
-
-    }
-
-
-    private static final class HeaderViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mHeader;
-
-
-        private HeaderViewHolder(final View view) {
-            super(view);
-            mHeader = (TextView) view.findViewById(R.id.head_to_head_header_text);
-        }
-
-
-    }
-
-
-    private static final class TournamentViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final FrameLayout mRoot;
-        private final TextView mDate;
-        private final TextView mName;
-
-
-        private TournamentViewHolder(final View view) {
-            super(view);
-            mDate = (TextView) view.findViewById(R.id.model_tournament_date);
-            mName = (TextView) view.findViewById(R.id.model_tournament_name);
-            mRoot = (FrameLayout) view.findViewById(R.id.model_tournament_root);
         }
 
 

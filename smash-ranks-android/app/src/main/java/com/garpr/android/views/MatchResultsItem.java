@@ -72,6 +72,11 @@ public class MatchResultsItem extends TextView {
     }
 
 
+    public void setResults(final int[] results) {
+        setResults(results[0], results[1]);
+    }
+
+
     public void setResults(final int wins, final int loses) {
         mWins = wins;
         mLoses = loses;

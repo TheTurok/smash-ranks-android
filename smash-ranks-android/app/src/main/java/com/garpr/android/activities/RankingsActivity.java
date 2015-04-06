@@ -159,7 +159,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
     @Override
     public void onClick(final RankingItemView v) {
-
+        final Player player = v.getPlayer();
+        PlayerActivity.start(this, player);
     }
 
 
@@ -189,13 +190,6 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         if (!isMenuNull() && MenuItemCompat.isActionViewExpanded(mSearch)) {
             MenuItemCompat.collapseActionView(mSearch);
         }
-    }
-
-
-    @Override
-    public void onItemClick(final View view, final int position) {
-        final ListItem item = mListItemsShown.get(position);
-        PlayerActivity.start(this, item.mPlayer);
     }
 
 
@@ -447,21 +441,6 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         }
 
 
-        private void bindPlayerViewHolder(final PlayerViewHolder holder, final ListItem listItem) {
-            holder.mName.setText(listItem.mPlayer.getName());
-            holder.mRank.setText(String.valueOf(listItem.mPlayer.getRank()));
-            holder.mRating.setText(listItem.mPlayer.getRatingTruncated());
-
-            if (mInUsersRegion && mUserPlayer != null) {
-                if (listItem.mPlayer.equals(mUserPlayer)) {
-                    holder.mRoot.setBackgroundColor(mBgHighlight);
-                } else {
-                    holder.mRoot.setBackgroundColor(mBgGray);
-                }
-            }
-        }
-
-
         @Override
         public String getAdapterName() {
             return TAG;
@@ -492,12 +471,22 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
             switch (listItem.mType) {
                 case PLAYER:
-                    bindPlayerViewHolder((PlayerViewHolder) holder, listItem);
+                    final RankingItemView riv = ((RankingItemView.ViewHolder) holder).getView();
+                    riv.setPlayer(listItem.mPlayer);
+
+                    if (mInUsersRegion && mUserPlayer != null) {
+                        if (listItem.mPlayer.equals(mUserPlayer)) {
+                            riv.setBackgroundColor(mBgHighlight);
+                        } else {
+                            riv.setBackgroundColor(mBgGray);
+                        }
+                    }
                     break;
 
-                case TITLE:
+                case TITLE: {
                     ((SimpleSeparatorView.ViewHolder) holder).getView().setText(listItem.mTitle);
                     break;
+                }
 
                 default:
                     throw new RuntimeException("Unknown ListItem Type: " + listItem.mType);

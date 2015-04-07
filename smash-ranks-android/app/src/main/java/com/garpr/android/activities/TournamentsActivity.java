@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,20 +18,23 @@ import com.garpr.android.R;
 import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Tournaments;
 import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
+import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 import com.garpr.android.models.Tournament;
+import com.garpr.android.views.SimpleSeparatorView;
+import com.garpr.android.views.TournamentItemView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 
 public class TournamentsActivity extends BaseToolbarListActivity implements
-        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener {
+        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener,
+        TournamentItemView.OnClickListener {
 
 
     private static final String KEY_TOURNAMENTS = "KEY_TOURNAMENTS";
@@ -132,6 +134,13 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
     @Override
+    public void onClick(final TournamentItemView v) {
+        final Tournament tournament = v.getTournament();
+        TournamentActivity.start(this, tournament);
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -152,13 +161,6 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         if (!isMenuNull() && MenuItemCompat.isActionViewExpanded(mSearch)) {
             MenuItemCompat.collapseActionView(mSearch);
         }
-    }
-
-
-    @Override
-    public void onItemClick(final View view, final int position) {
-        final ListItem listItem = mListItemsShown.get(position);
-        TournamentActivity.start(this, listItem.mTournament);
     }
 
 
@@ -243,7 +245,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected void setAdapter(final BaseListAdapter adapter) {
+    protected void setAdapter(final RecyclerAdapter adapter) {
         super.setAdapter(adapter);
 
         final ListUtils.FilterListener<ListItem> listener = new ListUtils.FilterListener<ListItem>(this) {
@@ -377,7 +379,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         }
 
 
-        private static enum Type {
+        private enum Type {
             DATE, TOURNAMENT
         }
 
@@ -385,25 +387,14 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
     }
 
 
-    private final class TournamentsAdapter extends BaseListAdapter {
+    private final class TournamentsAdapter extends RecyclerAdapter {
 
 
         private static final String TAG = "TournamentsAdapter";
 
 
         private TournamentsAdapter() {
-            super(TournamentsActivity.this, getRecyclerView());
-        }
-
-
-        private void bindDateViewHolder(final DateViewHolder holder, final ListItem listItem) {
-            holder.mDate.setText(listItem.mDate);
-        }
-
-
-        private void bindTournamentViewHolder(final TournamentViewHolder holder, final ListItem listItem) {
-            holder.mDate.setText(listItem.mTournament.getDateWrapper().getDay());
-            holder.mName.setText(listItem.mTournament.getName());
+            super(getRecyclerView());
         }
 
 
@@ -437,11 +428,12 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
             switch (listItem.mType) {
                 case DATE:
-                    bindDateViewHolder((DateViewHolder) holder, listItem);
+                    ((SimpleSeparatorView.ViewHolder) holder).getView().setText(listItem.mDate);
                     break;
 
                 case TOURNAMENT:
-                    bindTournamentViewHolder((TournamentViewHolder) holder, listItem);
+                    final TournamentItemView tiv = ((TournamentItemView.ViewHolder) holder).getView();
+                    tiv.setTournament(listItem.mTournament);
                     break;
 
                 default:
@@ -453,22 +445,20 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
-            final LayoutInflater inflater = getLayoutInflater();
             final ListItem.Type listItemType = ListItem.Type.values()[viewType];
-
-            final View view;
             final RecyclerView.ViewHolder holder;
 
             switch (listItemType) {
                 case DATE:
-                    view = inflater.inflate(R.layout.separator_simple, parent, false);
-                    holder = new DateViewHolder(view);
+                    holder = SimpleSeparatorView.inflate(TournamentsActivity.this, parent)
+                            .getViewHolder();
                     break;
 
                 case TOURNAMENT:
-                    view = inflater.inflate(R.layout.model_tournament, parent, false);
-                    holder = new TournamentViewHolder(view);
-                    view.setOnClickListener(this);
+                    final TournamentItemView tiv = TournamentItemView.inflate(TournamentsActivity.this,
+                            parent);
+                    tiv.setOnClickListener(TournamentsActivity.this);
+                    holder = tiv.getViewHolder();
                     break;
 
                 default:
@@ -476,38 +466,6 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
             }
 
             return holder;
-        }
-
-
-    }
-
-
-    private static final class DateViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mDate;
-
-
-        private DateViewHolder(final View view) {
-            super(view);
-            mDate = (TextView) view.findViewById(R.id.separator_simple_text);
-        }
-
-
-    }
-
-
-    private static final class TournamentViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mName;
-        private final TextView mDate;
-
-
-        private TournamentViewHolder(final View view) {
-            super(view);
-            mDate = (TextView) view.findViewById(R.id.model_tournament_date);
-            mName = (TextView) view.findViewById(R.id.model_tournament_name);
         }
 
 

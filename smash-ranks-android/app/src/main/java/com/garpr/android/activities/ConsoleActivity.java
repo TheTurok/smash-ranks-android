@@ -19,8 +19,8 @@ import android.widget.TextView;
 
 import com.garpr.android.BuildConfig;
 import com.garpr.android.R;
-import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
+import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.LogMessage;
 
@@ -198,7 +198,7 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
 
 
 
-    private abstract class ConsoleAdapter extends BaseListAdapter {
+    private abstract class ConsoleAdapter extends RecyclerAdapter {
 
 
         private final int mDebugTextColor;

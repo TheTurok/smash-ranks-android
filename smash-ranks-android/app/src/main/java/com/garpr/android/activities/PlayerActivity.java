@@ -9,14 +9,10 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Matches;
@@ -24,24 +20,27 @@ import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
 import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.BaseListAdapter;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.FilterListener;
+import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 import com.garpr.android.models.Result;
 import com.garpr.android.models.Tournament;
+import com.garpr.android.views.PlayerItemView;
+import com.garpr.android.views.TournamentSeparatorView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 
 public class PlayerActivity extends BaseToolbarListActivity implements
-        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener {
+        MenuItemCompat.OnActionExpandListener, PlayerItemView.OnClickListener,
+        SearchView.OnQueryTextListener, TournamentSeparatorView.OnClickListener {
 
 
     private static final String CNAME = "com.garpr.android.activities.PlayerActivity";
@@ -183,6 +182,20 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
     @Override
+    public void onClick(final PlayerItemView v) {
+        final Player player = v.getPlayer();
+        PlayerActivity.start(this, player);
+    }
+
+
+    @Override
+    public void onClick(final TournamentSeparatorView v) {
+        final Tournament tournament = v.getTournament();
+        TournamentActivity.start(this, tournament);
+    }
+
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(mPlayer.getName());
@@ -220,19 +233,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     protected void onDrawerOpened() {
         if (!isMenuNull() && MenuItemCompat.isActionViewExpanded(mSearch)) {
             MenuItemCompat.collapseActionView(mSearch);
-        }
-    }
-
-
-    @Override
-    public void onItemClick(final View view, final int position) {
-        final ListItem listItem = mListItemsShown.get(position);
-
-        if (listItem.isMatch()) {
-            final Player opponent = listItem.mMatch.getOtherPlayer(mPlayer);
-            HeadToHeadActivity.start(this, mPlayer, opponent);
-        } else {
-            TournamentActivity.start(this, listItem.mTournament);
         }
     }
 
@@ -379,7 +379,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected void setAdapter(final BaseListAdapter adapter) {
+    protected void setAdapter(final RecyclerAdapter adapter) {
         super.setAdapter(adapter);
         mFilter = ListUtils.createSpecialFilter(mListItems, mFilterListener);
 
@@ -575,7 +575,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         }
 
 
-        private static enum Type {
+        private enum Type {
             MATCH, TOURNAMENT
         }
 
@@ -583,7 +583,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     }
 
 
-    private final class MatchesAdapter extends BaseListAdapter {
+    private final class MatchesAdapter extends RecyclerAdapter {
 
 
         private static final String TAG = "MatchesAdapter";
@@ -595,39 +595,13 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
         private MatchesAdapter() {
-            super(PlayerActivity.this, getRecyclerView());
+            super(getRecyclerView());
+
             final Resources resources = getResources();
             mBgGray = resources.getColor(R.color.gray);
             mBgHighlight = resources.getColor(R.color.overlay_bright);
             mColorLose = resources.getColor(R.color.lose_pink);
             mColorWin = resources.getColor(R.color.win_green);
-        }
-
-
-        private void bindMatchViewHolder(final MatchViewHolder holder, final ListItem listItem) {
-            final Player opponent = listItem.mMatch.getOtherPlayer(mPlayer);
-            holder.mOpponent.setText(opponent.getName());
-
-            if (listItem.mMatch.isWinner(mPlayer)) {
-                holder.mOpponent.setTextColor(mColorWin);
-            } else {
-                holder.mOpponent.setTextColor(mColorLose);
-            }
-
-            if (mInUsersRegion && mUserPlayer != null) {
-                if (opponent.getId().equals(mUserPlayer.getId())) {
-                    holder.mRoot.setBackgroundColor(mBgHighlight);
-                } else {
-                    holder.mRoot.setBackgroundColor(mBgGray);
-                }
-            }
-        }
-
-
-        private void bindTournamentViewHolder(final TournamentViewHolder holder,
-                final ListItem listItem) {
-            holder.mDate.setText(listItem.mTournament.getDateWrapper().getRawDate());
-            holder.mName.setText(listItem.mTournament.getName());
         }
 
 
@@ -661,11 +635,27 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
             switch (listItem.mType) {
                 case MATCH:
-                    bindMatchViewHolder((MatchViewHolder) holder, listItem);
+                    final PlayerItemView piv = ((PlayerItemView.ViewHolder) holder).getView();
+                    piv.setPlayer(listItem.mOpponent);
+
+                    if (listItem.mMatch.isWinner(mPlayer)) {
+                        piv.getNameView().setTextColor(mColorWin);
+                    } else {
+                        piv.getNameView().setTextColor(mColorLose);
+                    }
+
+                    if (mInUsersRegion && mUserPlayer != null) {
+                        if (listItem.mOpponent.getId().equals(mUserPlayer.getId())) {
+                            piv.setBackgroundColor(mBgHighlight);
+                        } else {
+                            piv.setBackgroundColor(mBgGray);
+                        }
+                    }
                     break;
 
                 case TOURNAMENT:
-                    bindTournamentViewHolder((TournamentViewHolder) holder, listItem);
+                    ((TournamentSeparatorView.ViewHolder) holder).getView().setTournament(
+                            listItem.mTournament);
                     break;
 
                 default:
@@ -677,63 +667,28 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
-            final LayoutInflater inflater = getLayoutInflater();
             final ListItem.Type listItemType = ListItem.Type.values()[viewType];
-
-            final View view;
             final RecyclerView.ViewHolder holder;
 
             switch (listItemType) {
                 case MATCH:
-                    view = inflater.inflate(R.layout.model_match, parent, false);
-                    holder = new MatchViewHolder(view);
+                    final PlayerItemView piv = PlayerItemView.inflate(PlayerActivity.this, parent);
+                    piv.setOnClickListener(PlayerActivity.this);
+                    holder = piv.getViewHolder();
                     break;
 
                 case TOURNAMENT:
-                    view = inflater.inflate(R.layout.separator_tournament, parent, false);
-                    holder = new TournamentViewHolder(view);
+                    final TournamentSeparatorView tsv = TournamentSeparatorView.inflate(
+                            PlayerActivity.this, parent);
+                    tsv.setOnClickListener(PlayerActivity.this);
+                    holder = tsv.getViewHolder();
                     break;
 
                 default:
                     throw new RuntimeException("Unknown ListItem Type: " + listItemType);
             }
 
-            view.setOnClickListener(this);
             return holder;
-        }
-
-
-    }
-
-
-    private static final class MatchViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final FrameLayout mRoot;
-        private final TextView mOpponent;
-
-
-        private MatchViewHolder(final View view) {
-            super(view);
-            mRoot = (FrameLayout) view.findViewById(R.id.model_match_root);
-            mOpponent = (TextView) view.findViewById(R.id.model_match_opponent);
-        }
-
-
-    }
-
-
-    private static final class TournamentViewHolder extends RecyclerView.ViewHolder {
-
-
-        private final TextView mDate;
-        private final TextView mName;
-
-
-        private TournamentViewHolder(final View view) {
-            super(view);
-            mDate = (TextView) view.findViewById(R.id.separator_tournament_date);
-            mName = (TextView) view.findViewById(R.id.separator_tournament_name);
         }
 
 

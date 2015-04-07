@@ -5,7 +5,6 @@
     tools:ignore="Overdraw"
     style="@style/list_item_root.no_padding">
     <LinearLayout
-        android:duplicateParentState="true"
         android:id="@+id/view_tournament_item_container"
         android:orientation="horizontal"
         tools:ignore="UselessParent"

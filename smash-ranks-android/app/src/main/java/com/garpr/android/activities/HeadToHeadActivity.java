@@ -527,9 +527,9 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
                     tiv.setTournament(listItem.mMatch.getTournament());
 
                     if (listItem.mMatch.isWinner(mPlayer)) {
-                        tiv.getNameView().setText(mColorWin);
+                        tiv.getNameView().setTextColor(mColorWin);
                     } else {
-                        tiv.getNameView().setText(mColorLose);
+                        tiv.getNameView().setTextColor(mColorLose);
                     }
                     break;
 

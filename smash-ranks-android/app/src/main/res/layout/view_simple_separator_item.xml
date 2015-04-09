@@ -1,32 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.garpr.android.views.SimpleSeparatorView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/gray"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/root_padding_half"
-    android:layout_width="match_parent">
+    style="@style/separator_root">
     <FrameLayout
-        android:background="?attr/selectableItemBackground"
-        android:duplicateParentState="true"
         android:id="@+id/view_simple_separator_item_container"
-        android:layout_height="@dimen/list_item_separator_height"
-        android:layout_width="match_parent"
-        android:paddingBottom="@dimen/root_padding_half"
-        android:paddingLeft="@dimen/root_padding"
-        android:paddingRight="@dimen/root_padding"
-        tools:ignore="UselessParent">
+        tools:ignore="UselessParent"
+        style="@style/separator_container">
         <TextView
-            android:ellipsize="end"
             android:id="@+id/view_simple_separator_item_text"
-            android:layout_gravity="bottom"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/indigo_bright"
-            android:textSize="14sp"
             tools:text="January 2015"
-            style="@style/fontFamily_medium" />
+            style="@style/separator_text" />
     </FrameLayout>
 </com.garpr.android.views.SimpleSeparatorView>

@@ -67,7 +67,6 @@
 
     <style name="list_item_root">
         <item name="android:background">?attr/selectableItemBackground</item>
-        <item name="android:duplicateParentState">true</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:minHeight">@dimen/list_item_height</item>
@@ -136,14 +135,32 @@
         <item name="android:padding">0dp</item>
     </style>
 
-    <style name="separator_item_root">
-        <item name="android:background">@color/gray</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="separator_container">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:layout_height">@dimen/list_item_separator_height</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:paddingBottom">@dimen/root_padding_half</item>
         <item name="android:paddingLeft">@dimen/root_padding</item>
         <item name="android:paddingRight">@dimen/root_padding</item>
-        <item name="android:paddingTop">@dimen/root_padding</item>
+    </style>
+
+    <style name="separator_root">
+        <item name="android:background">@color/gray</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/root_padding_half</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="separator_text_base" parent="singleline">
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/indigo_bright</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="separator_text" parent="separator_text_base">
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="settings_container">

@@ -15,6 +15,10 @@
         <item name="android:layout_gravity">start</item>
     </style>
 
+    <style name="separator_text" parent="separator_text_base">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
     <style name="settings_separator" parent="settings_separator_base">
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>

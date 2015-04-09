@@ -240,7 +240,7 @@ public final class ListUtils {
     public interface AlphabeticallyComparable {
 
 
-        public char getFirstCharOfName();
+        char getFirstCharOfName();
 
 
     }
@@ -249,13 +249,13 @@ public final class ListUtils {
     public interface AlphabeticalSectionCreator {
 
 
-        public AlphabeticallyComparable createDigitSection();
+        AlphabeticallyComparable createDigitSection();
 
 
-        public AlphabeticallyComparable createLetterSection(final String letter);
+        AlphabeticallyComparable createLetterSection(final String letter);
 
 
-        public AlphabeticallyComparable createOtherSection();
+        AlphabeticallyComparable createOtherSection();
 
 
     }
@@ -264,7 +264,7 @@ public final class ListUtils {
     public interface BasicFilterable {
 
 
-        public String getName();
+        String getName();
 
 
     }
@@ -273,10 +273,10 @@ public final class ListUtils {
     public interface SpecialFilterable extends BasicFilterable {
 
 
-        public boolean isBasicItem();
+        boolean isBasicItem();
 
 
-        public boolean isSpecialItem();
+        boolean isSpecialItem();
 
 
     }

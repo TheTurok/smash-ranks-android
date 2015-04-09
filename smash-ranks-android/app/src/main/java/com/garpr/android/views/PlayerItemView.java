@@ -77,9 +77,7 @@ public class PlayerItemView extends FrameLayout implements View.OnClickListener 
 
     @Override
     public void onClick(final View v) {
-        if (mClickListener != null) {
-            mClickListener.onClick(this);
-        }
+        mClickListener.onClick(this);
     }
 
 
@@ -87,12 +85,12 @@ public class PlayerItemView extends FrameLayout implements View.OnClickListener 
     protected void onFinishInflate() {
         super.onFinishInflate();
         mName = (TextView) findViewById(R.id.view_player_item_name);
-        setOnClickListener(this);
     }
 
 
     public void setOnClickListener(final OnClickListener l) {
         mClickListener = l;
+        setOnClickListener(this);
     }
 
 

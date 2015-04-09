@@ -91,9 +91,7 @@ public class TournamentSeparatorView extends FrameLayout implements View.OnClick
 
     @Override
     public void onClick(final View v) {
-        if (mClickListener != null) {
-            mClickListener.onClick(this);
-        }
+        mClickListener.onClick(this);
     }
 
 
@@ -103,19 +101,18 @@ public class TournamentSeparatorView extends FrameLayout implements View.OnClick
         mContainer = (LinearLayout) findViewById(R.id.view_tournament_separator_item_container);
         mDate = (TextView) findViewById(R.id.view_tournament_separator_item_date);
         mName = (TextView) findViewById(R.id.view_tournament_separator_item_name);
-
-        mContainer.setOnClickListener(this);
     }
 
 
     public void setOnClickListener(final OnClickListener l) {
         mClickListener = l;
+        mContainer.setOnClickListener(this);
     }
 
 
     public void setTournament(final Tournament tournament) {
         mTournament = tournament;
-        mDate.setText(mTournament.getDateWrapper().getDay());
+        mDate.setText(mTournament.getDateWrapper().getRawDate());
         mName.setText(mTournament.getName());
     }
 

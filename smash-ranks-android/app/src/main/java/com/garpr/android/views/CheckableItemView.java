@@ -89,9 +89,7 @@ public class CheckableItemView extends FrameLayout implements View.OnClickListen
 
     @Override
     public void onClick(final View v) {
-        if (mClickListener != null) {
-            mClickListener.onClick(this);
-        }
+        mClickListener.onClick(this);
     }
 
 
@@ -101,8 +99,6 @@ public class CheckableItemView extends FrameLayout implements View.OnClickListen
         mCheck = (CheckBox) findViewById(R.id.view_checkable_item_check);
         mContainer = (LinearLayout) findViewById(R.id.view_checkable_item_container);
         mText = (TextView) findViewById(R.id.view_checkable_item_text);
-
-        mContainer.setOnClickListener(this);
     }
 
 
@@ -113,6 +109,7 @@ public class CheckableItemView extends FrameLayout implements View.OnClickListen
 
     public void setOnClickListener(final OnClickListener l) {
         mClickListener = l;
+        mContainer.setOnClickListener(this);
     }
 
 

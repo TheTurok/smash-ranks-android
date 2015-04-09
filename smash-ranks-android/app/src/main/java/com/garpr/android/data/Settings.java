@@ -219,7 +219,7 @@ public final class Settings {
     public interface OnRegionChangedListener {
 
 
-        public void onRegionChanged(final Region region);
+        void onRegionChanged(final Region region);
 
 
     }

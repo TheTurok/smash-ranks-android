@@ -70,9 +70,7 @@ public class SimpleItemView extends FrameLayout implements View.OnClickListener 
 
     @Override
     public void onClick(final View v) {
-        if (mClickListener != null) {
-            mClickListener.onClick(this);
-        }
+        mClickListener.onClick(this);
     }
 
 
@@ -80,13 +78,12 @@ public class SimpleItemView extends FrameLayout implements View.OnClickListener 
     protected void onFinishInflate() {
         super.onFinishInflate();
         mText = (TextView) findViewById(R.id.view_simple_item_text);
-
-        setOnClickListener(this);
     }
 
 
     public void setOnClickListener(final OnClickListener l) {
         mClickListener = l;
+        setOnClickListener(this);
     }
 
 

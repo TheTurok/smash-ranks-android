@@ -90,9 +90,7 @@ public class TournamentItemView extends FrameLayout implements View.OnClickListe
 
     @Override
     public void onClick(final View v) {
-        if (mClickListener != null) {
-            mClickListener.onClick(this);
-        }
+        mClickListener.onClick(this);
     }
 
 
@@ -102,13 +100,12 @@ public class TournamentItemView extends FrameLayout implements View.OnClickListe
         mContainer = (LinearLayout) findViewById(R.id.view_tournament_item_container);
         mDate = (TextView) findViewById(R.id.view_tournament_item_date);
         mName = (TextView) findViewById(R.id.view_tournament_item_name);
-
-        mContainer.setOnClickListener(this);
     }
 
 
     public void setOnClickListener(final OnClickListener l) {
         mClickListener = l;
+        mContainer.setOnClickListener(this);
     }
 
 

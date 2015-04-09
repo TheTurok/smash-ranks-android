@@ -261,7 +261,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
 
             switch (position) {
                 case TOURNAMENT_FRAGMENT_PLAYERS:
-                    title = getString(R.string.players);
+                    title = getString(R.string.entrants);
                     break;
 
                 case TOURNAMENT_FRAGMENT_MATCHES:

@@ -111,7 +111,7 @@ public abstract class BaseFragment extends Fragment implements HeartbeatWithUi,
     public interface Listener {
 
 
-        public void runOnUi(final Runnable action);
+        void runOnUi(final Runnable action);
 
 
     }

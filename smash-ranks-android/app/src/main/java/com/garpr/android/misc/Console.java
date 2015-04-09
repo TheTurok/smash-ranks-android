@@ -239,10 +239,10 @@ public final class Console {
 
 
 
-    public static interface Listener {
+    public interface Listener {
 
 
-        public void onLogMessagesChanged();
+        void onLogMessagesChanged();
 
 
     }

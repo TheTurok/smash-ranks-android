@@ -96,9 +96,7 @@ public class RankingItemView extends FrameLayout implements View.OnClickListener
 
     @Override
     public void onClick(final View v) {
-        if (mClickListener != null) {
-            mClickListener.onClick(this);
-        }
+        mClickListener.onClick(this);
     }
 
 
@@ -109,13 +107,12 @@ public class RankingItemView extends FrameLayout implements View.OnClickListener
         mName = (TextView) findViewById(R.id.view_ranking_item_name);
         mRank = (TextView) findViewById(R.id.view_ranking_item_rank);
         mRating = (TextView) findViewById(R.id.view_ranking_item_rating);
-
-        mContainer.setOnClickListener(this);
     }
 
 
     public void setOnClickListener(final OnClickListener l) {
         mClickListener = l;
+        mContainer.setOnClickListener(this);
     }
 
 

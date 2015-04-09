@@ -70,7 +70,6 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
                     }
                 })
                 .negativeText(R.string.cancel)
-                .title(R.string.view)
                 .show();
     }
 

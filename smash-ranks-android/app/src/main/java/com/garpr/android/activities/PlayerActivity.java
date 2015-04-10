@@ -645,7 +645,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
                     }
 
                     if (mInUsersRegion && mUserPlayer != null) {
-                        if (listItem.mOpponent.getId().equals(mUserPlayer.getId())) {
+                        if (listItem.mOpponent.equals(mUserPlayer)) {
                             piv.setBackgroundColor(mBgHighlight);
                         } else {
                             piv.setBackgroundColor(mBgGray);

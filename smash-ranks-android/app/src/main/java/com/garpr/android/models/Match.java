@@ -57,6 +57,11 @@ public class Match implements Parcelable {
     }
 
 
+    public boolean containsPlayer(final Player player) {
+        return mLoser.equals(player) || mWinner.equals(player);
+    }
+
+
     @Override
     public boolean equals(final Object o) {
         final boolean isEqual;

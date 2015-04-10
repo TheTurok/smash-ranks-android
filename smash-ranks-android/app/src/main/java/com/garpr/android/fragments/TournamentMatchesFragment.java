@@ -1,6 +1,8 @@
 package com.garpr.android.fragments;
 
 
+import android.content.res.Resources;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -8,7 +10,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.garpr.android.R;
 import com.garpr.android.activities.HeadToHeadActivity;
 import com.garpr.android.activities.PlayerActivity;
+import com.garpr.android.data.User;
 import com.garpr.android.models.Match;
+import com.garpr.android.models.Player;
 import com.garpr.android.models.TournamentBundle;
 import com.garpr.android.views.MatchItemView;
 
@@ -22,6 +26,8 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
     private static final String TAG = "TournamentMatchesFragment";
 
     private ArrayList<Match> mMatches;
+    private boolean mInUsersRegion;
+    private Player mUserPlayer;
 
 
 
@@ -48,6 +54,14 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
     public void onClick(final MatchItemView v) {
         final Match match = v.getMatch();
         HeadToHeadActivity.start(getActivity(), match.getWinner(), match.getLoser());
+    }
+
+
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mInUsersRegion = User.areWeInTheUsersRegion();
+        mUserPlayer = User.getPlayer();
     }
 
 
@@ -81,6 +95,16 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
 
         private static final String TAG = "TournamentMatchesAdapter";
 
+        private final int mBgGray;
+        private final int mBgHighlight;
+
+
+        private TournamentMatchesAdapter() {
+            final Resources resources = getResources();
+            mBgGray = resources.getColor(R.color.gray);
+            mBgHighlight = resources.getColor(R.color.overlay_bright);
+        }
+
 
         @Override
         public String getAdapterName() {
@@ -97,7 +121,17 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
         @Override
         public void onBindViewHolder(final MatchItemView.ViewHolder holder, final int position) {
             final MatchItemView miv = holder.getView();
-            miv.setMatch(mMatches.get(position));
+            final Match match = mMatches.get(position);
+
+            if (mInUsersRegion && mUserPlayer != null) {
+                if (match.containsPlayer(mUserPlayer)) {
+                    miv.setBackgroundColor(mBgHighlight);
+                } else {
+                    miv.setBackgroundColor(mBgGray);
+                }
+            }
+
+            miv.setMatch(match);
         }
 
 

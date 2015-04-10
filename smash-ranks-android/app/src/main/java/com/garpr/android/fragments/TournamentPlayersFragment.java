@@ -1,11 +1,14 @@
 package com.garpr.android.fragments;
 
 
+import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.garpr.android.R;
 import com.garpr.android.activities.PlayerActivity;
+import com.garpr.android.data.User;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
@@ -25,6 +28,8 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
     private static final String TAG = "TournamentPlayersFragment";
 
     private ArrayList<ListItem> mListItems;
+    private boolean mInUsersRegion;
+    private Player mUserPlayer;
 
 
 
@@ -78,6 +83,14 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
     @Override
     public void onClick(final PlayerItemView v) {
         PlayerActivity.start(getActivity(), v.getPlayer());
+    }
+
+
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mInUsersRegion = User.areWeInTheUsersRegion();
+        mUserPlayer = User.getPlayer();
     }
 
 
@@ -149,6 +162,16 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
 
         private static final String TAG = "TournamentPlayersAdapter";
 
+        private final int mBgGray;
+        private final int mBgHighlight;
+
+
+        private TournamentPlayersAdapter() {
+            final Resources resources = getResources();
+            mBgGray = resources.getColor(R.color.gray);
+            mBgHighlight = resources.getColor(R.color.overlay_bright);
+        }
+
 
         @Override
         public String getAdapterName() {
@@ -174,7 +197,16 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
 
             switch (listItem.mType) {
                 case PLAYER:
-                    ((PlayerItemView.ViewHolder) holder).getView().setPlayer(listItem.mPlayer);
+                    final PlayerItemView piv = ((PlayerItemView.ViewHolder) holder).getView();
+                    piv.setPlayer(listItem.mPlayer);
+
+                    if (mInUsersRegion && mUserPlayer != null) {
+                        if (listItem.mPlayer.equals(mUserPlayer)) {
+                            piv.setBackgroundColor(mBgHighlight);
+                        } else {
+                            piv.setBackgroundColor(mBgGray);
+                        }
+                    }
                     break;
 
                 case TITLE:

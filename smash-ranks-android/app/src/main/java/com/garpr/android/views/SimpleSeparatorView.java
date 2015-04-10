@@ -66,12 +66,19 @@ public class SimpleSeparatorView extends FrameLayout implements View.OnClickList
         super.onFinishInflate();
         mContainer = (FrameLayout) findViewById(R.id.view_simple_separator_item_container);
         mText = (TextView) findViewById(R.id.view_simple_separator_item_text);
+
+        if (mClickListener != null) {
+            mContainer.setOnClickListener(this);
+        }
     }
 
 
     public void setOnClickListener(final OnClickListener l) {
         mClickListener = l;
-        mContainer.setOnClickListener(this);
+
+        if (mContainer != null) {
+            mContainer.setOnClickListener(this);
+        }
     }
 
 

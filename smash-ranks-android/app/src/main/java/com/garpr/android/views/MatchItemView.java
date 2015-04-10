@@ -77,6 +77,14 @@ public class MatchItemView extends FrameLayout implements View.OnClickListener,
         mContainer = (LinearLayout) findViewById(R.id.view_match_item_container);
         mLoser = (TextView) findViewById(R.id.view_match_item_loser);
         mWinner = (TextView) findViewById(R.id.view_match_item_winner);
+
+        if (mClickListener != null) {
+            mContainer.setOnClickListener(this);
+        }
+
+        if (mLongClickListener != null) {
+            mContainer.setOnLongClickListener(this);
+        }
     }
 
 
@@ -106,13 +114,19 @@ public class MatchItemView extends FrameLayout implements View.OnClickListener,
 
     public void setOnClickListener(final OnClickListener l) {
         mClickListener = l;
-        mContainer.setOnClickListener(this);
+
+        if (mContainer != null) {
+            mContainer.setOnClickListener(this);
+        }
     }
 
 
     public void setOnLongClickListener(final OnLongClickListener l) {
         mLongClickListener = l;
-        mContainer.setOnLongClickListener(this);
+
+        if (mContainer != null) {
+            mContainer.setOnLongClickListener(this);
+        }
     }
 
 

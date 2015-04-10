@@ -87,12 +87,19 @@ public class RankingItemView extends FrameLayout implements View.OnClickListener
         mName = (TextView) findViewById(R.id.view_ranking_item_name);
         mRank = (TextView) findViewById(R.id.view_ranking_item_rank);
         mRating = (TextView) findViewById(R.id.view_ranking_item_rating);
+
+        if (mClickListener != null) {
+            mContainer.setOnClickListener(this);
+        }
     }
 
 
     public void setOnClickListener(final OnClickListener l) {
         mClickListener = l;
-        mContainer.setOnClickListener(this);
+
+        if (mContainer != null) {
+            mContainer.setOnClickListener(this);
+        }
     }
 
 

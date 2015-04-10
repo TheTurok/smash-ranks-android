@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/root_padding"
     android:paddingRight="@dimen/root_padding"
     android:paddingTop="@dimen/root_padding_half"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="Overdraw">
     <TextView
         android:id="@+id/model_log_message_with_stack_trace_tag_and_message"
         android:layout_height="wrap_content"

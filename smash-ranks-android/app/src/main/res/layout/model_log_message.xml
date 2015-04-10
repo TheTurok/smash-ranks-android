@@ -10,4 +10,5 @@
     android:paddingRight="@dimen/root_padding"
     android:paddingTop="@dimen/root_padding_half"
     android:textSize="14sp"
+    tools:ignore="Overdraw"
     tools:text="Region listener added at index 4" />

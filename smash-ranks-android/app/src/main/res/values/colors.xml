@@ -18,6 +18,8 @@
     <color name="overlay_bright">#33FFFFFF</color>
     <color name="overlay_dark">#88000000</color>
     <color name="transparent">#00000000</color>
+    <color name="transparent_lose_pink">#33EC407A</color>
+    <color name="transparent_win_green">#3366BB6A</color>
     <color name="white">#FFFFFF</color>
     <color name="win_green">#66BB6A</color>
 

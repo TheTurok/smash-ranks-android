@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.garpr.android.views.MatchResultsItem xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:gravity="center"
-    android:id="@+id/head_to_head_header_text"
     android:layout_height="80dp"
-    android:layout_width="match_parent"
-    tools:text="1 &#8212; 3"
-    style="@style/header_text" />
+    android:layout_width="match_parent">
+    <View
+        android:id="@+id/view_match_results_item_wins_bar"
+        style="@style/results_bar_wins" />
+    <View
+        android:id="@+id/view_match_results_item_loses_bar"
+        style="@style/results_bar_loses" />
+    <TextView
+        android:gravity="center"
+        android:id="@+id/view_match_results_item_results"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        tools:text="1 &#8212; 3"
+        style="@style/header_text" />
+</com.garpr.android.views.MatchResultsItem>

@@ -39,4 +39,14 @@
         <item name="android:drawableStart">@drawable/ic_star</item>
     </style>
 
+    <style name="results_bar_loses" parent="results_bar_base">
+        <item name="android:background">@color/transparent_lose_pink</item>
+        <item name="android:layout_gravity">center_vertical|end</item>
+    </style>
+
+    <style name="results_bar_wins" parent="results_bar_base">
+        <item name="android:background">@color/transparent_win_green</item>
+        <item name="android:layout_gravity">center_vertical|start</item>
+    </style>
+
 </resources>

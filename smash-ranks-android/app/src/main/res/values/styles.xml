@@ -65,6 +65,10 @@
         <item name="android:scrollbars">vertical</item>
     </style>
 
+    <style name="list.no_padding">
+        <item name="android:paddingBottom">0dp</item>
+    </style>
+
     <style name="list_item_root">
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:layout_height">wrap_content</item>

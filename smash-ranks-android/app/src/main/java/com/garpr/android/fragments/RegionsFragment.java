@@ -1,12 +1,10 @@
 package com.garpr.android.fragments;
 
 
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,11 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Regions;
@@ -34,6 +29,7 @@ import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.models.Region;
 import com.garpr.android.views.CheckableItemView;
 import com.garpr.android.views.SimpleSeparatorView;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,8 +45,8 @@ public class RegionsFragment extends BaseListToolbarFragment implements
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<Region> mRegions;
+    private FloatingActionButton mSave;
     private FrameLayout mFrame;
-    private ImageButton mSave;
     private MenuItem mNext;
     private Region mSelectedRegion;
     private RegionSaveListener mRegionSaveListener;
@@ -61,29 +57,6 @@ public class RegionsFragment extends BaseListToolbarFragment implements
 
     public static RegionsFragment create() {
         return new RegionsFragment();
-    }
-
-
-    private void animateSave(final int newMargin) {
-        final MarginLayoutParams params = (MarginLayoutParams) mSave.getLayoutParams();
-        final int currentMargin = MarginLayoutParamsCompat.getMarginEnd(params);
-
-        final Resources res = getResources();
-        final int duration = res.getInteger(android.R.integer.config_mediumAnimTime);
-
-        final ValueAnimator animator = ValueAnimator.ofInt(currentMargin, newMargin);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(final ValueAnimator animation) {
-                final int margin = (Integer) animation.getAnimatedValue();
-                MarginLayoutParamsCompat.setMarginEnd(params, margin);
-                mSave.setLayoutParams(params);
-            }
-        });
-
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(duration);
-        animator.start();
     }
 
 
@@ -116,31 +89,6 @@ public class RegionsFragment extends BaseListToolbarFragment implements
 
         mListItems = (ArrayList<ListItem>) ListUtils.createAlphabeticalList(mListItems, creator);
         mListItems.trimToSize();
-    }
-
-
-    private void disableSave() {
-        mSave.setEnabled(false);
-
-        final Resources res = getResources();
-        final int newMargin = res.getDimensionPixelSize(R.dimen.floating_action_button_disabled);
-        animateSave(newMargin);
-    }
-
-
-    private void enableSave(final boolean animate) {
-        mSave.setEnabled(true);
-
-        final Resources res = getResources();
-        final int newMargin = res.getDimensionPixelSize(R.dimen.floating_action_button_enabled);
-
-        if (animate) {
-            animateSave(newMargin);
-        } else {
-            final MarginLayoutParams params = (MarginLayoutParams) mSave.getLayoutParams();
-            MarginLayoutParamsCompat.setMarginEnd(params, newMargin);
-            mSave.setLayoutParams(params);
-        }
     }
 
 
@@ -182,7 +130,7 @@ public class RegionsFragment extends BaseListToolbarFragment implements
         super.findViews();
         final View view = getView();
         mFrame = (FrameLayout) view.findViewById(R.id.fragment_regions_list_frame);
-        mSave = (ImageButton) view.findViewById(R.id.fragment_regions_save);
+        mSave = (FloatingActionButton) view.findViewById(R.id.fragment_regions_save);
     }
 
 
@@ -266,8 +214,9 @@ public class RegionsFragment extends BaseListToolbarFragment implements
 
             if (mSelectedRegion == null) {
                 mSelectedRegion = region;
+                mSave.hide(false);
             } else if (!region.equals(mSelectedRegion)) {
-                enableSave(false);
+                mSave.show(false);
             }
         }
 
@@ -308,9 +257,9 @@ public class RegionsFragment extends BaseListToolbarFragment implements
             final Region region = Settings.getRegion();
 
             if (region.equals(mSelectedRegion)) {
-                disableSave();
+                mSave.hide();
             } else {
-                enableSave(true);
+                mSave.show();
             }
         } else if (isEmbeddedMode()) {
             findToolbarItems();
@@ -395,7 +344,7 @@ public class RegionsFragment extends BaseListToolbarFragment implements
         });
 
         if (mSelectedRegion != null) {
-            enableSave(false);
+            mSave.show(false);
         }
 
         mSave.setVisibility(View.VISIBLE);

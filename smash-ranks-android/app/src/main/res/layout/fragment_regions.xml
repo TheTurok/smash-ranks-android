@@ -15,7 +15,7 @@
             android:layout_width="match_parent">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_base_list_list"
-                style="@style/list" />
+                style="@style/list.no_padding" />
             <LinearLayout
                 android:id="@+id/fragment_base_list_error"
                 tools:visibility="visible"
@@ -26,21 +26,17 @@
                 <TextView
                     style="@style/error_line2" />
             </LinearLayout>
-            <ImageButton
-                android:background="@drawable/floating_action_button"
-                android:contentDescription="@string/save"
+            <com.melnykov.fab.FloatingActionButton
                 android:id="@+id/fragment_regions_save"
-                android:layout_height="@dimen/floating_action_button_size"
-                android:layout_marginBottom="@dimen/root_padding_double"
-                android:layout_marginEnd="@dimen/floating_action_button_disabled"
-                android:layout_marginRight="@dimen/floating_action_button_disabled"
-                android:layout_width="@dimen/floating_action_button_size"
-                android:src="@drawable/ic_save"
-                android:visibility="gone"
-                tools:ignore="UnusedAttribute"
-                tools:layout_marginEnd="@dimen/floating_action_button_enabled"
-                tools:layout_marginRight="@dimen/floating_action_button_enabled"
-                tools:visibility="visible"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/root_padding"
+                android:layout_marginLeft="@dimen/root_padding"
+                android:layout_marginRight="@dimen/root_padding"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_save_normal"
+                app:fab_colorNormal="@color/indigo_bright"
+                app:fab_colorPressed="@color/indigo"
+                app:fab_colorRipple="@color/indigo_dark"
                 style="@style/layout_gravity_bottom_end" />
         </FrameLayout>
     </com.garpr.android.views.FlexibleSwipeRefreshLayout>

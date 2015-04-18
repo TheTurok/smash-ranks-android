@@ -195,7 +195,7 @@ public final class ListUtils {
     }
 
 
-    public abstract static class FilterListener<T extends BasicFilterable> {
+    public static abstract class FilterListener<T extends BasicFilterable> {
 
 
         private final WeakReference<Heartbeat> mHeartbeat;

@@ -24,6 +24,7 @@ import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.FilterListener;
+import com.garpr.android.misc.ListUtils.SpecialFilterable;
 import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Match;
@@ -469,7 +470,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
 
-    private static final class ListItem implements ListUtils.SpecialFilterable {
+    private static final class ListItem implements SpecialFilterable {
 
 
         private static long sId;

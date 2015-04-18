@@ -9,9 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
-import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 import com.garpr.android.misc.LinearLayoutManagerWrapper;
 import com.garpr.android.misc.RecyclerAdapter;
+import com.garpr.android.views.FlexibleSwipeRefreshLayout;
 
 
 public abstract class BaseListFragment extends BaseFragment implements

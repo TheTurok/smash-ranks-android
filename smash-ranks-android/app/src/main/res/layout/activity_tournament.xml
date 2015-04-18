@@ -20,7 +20,7 @@
             app:pstsShouldExpand="true"
             app:pstsTextAllCaps="true"
             tools:ignore="UnusedAttribute" />
-        <com.garpr.android.misc.FlexibleSwipeRefreshLayout
+        <com.garpr.android.views.FlexibleSwipeRefreshLayout
             android:id="@+id/activity_tournament_refresh"
             android:layout_height="match_parent"
             android:layout_width="match_parent">
@@ -43,7 +43,7 @@
                         style="@style/error_line2" />
                 </LinearLayout>
             </FrameLayout>
-        </com.garpr.android.misc.FlexibleSwipeRefreshLayout>
+        </com.garpr.android.views.FlexibleSwipeRefreshLayout>
     </LinearLayout>
     <include
         layout="@layout/navigation_drawer" />

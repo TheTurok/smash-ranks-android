@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     style="@style/root.no_padding">
-    <com.garpr.android.misc.FlexibleSwipeRefreshLayout
+    <com.garpr.android.views.FlexibleSwipeRefreshLayout
         android:id="@+id/fragment_base_list_refresh"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -43,7 +43,7 @@
                 tools:visibility="visible"
                 style="@style/layout_gravity_bottom_end" />
         </FrameLayout>
-    </com.garpr.android.misc.FlexibleSwipeRefreshLayout>
+    </com.garpr.android.views.FlexibleSwipeRefreshLayout>
     <android.support.v7.widget.Toolbar
         android:visibility="gone"
         app:theme="@style/toolbar_theme"

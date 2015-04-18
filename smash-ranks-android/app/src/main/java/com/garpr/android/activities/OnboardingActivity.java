@@ -21,9 +21,9 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Analytics.Event;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.NonSwipeableViewPager;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
+import com.garpr.android.views.NonSwipeableViewPager;
 
 
 public class OnboardingActivity extends BaseActivity implements PlayersFragment.Listeners,

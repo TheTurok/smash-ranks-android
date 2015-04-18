@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.garpr.android.misc.FlexibleSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.garpr.android.views.FlexibleSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_base_list_refresh"
     style="@style/root.no_padding">
@@ -20,4 +20,4 @@
                 style="@style/error_line2" />
         </LinearLayout>
     </FrameLayout>
-</com.garpr.android.misc.FlexibleSwipeRefreshLayout>
+</com.garpr.android.views.FlexibleSwipeRefreshLayout>

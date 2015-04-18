@@ -1,4 +1,4 @@
-package com.garpr.android.misc;
+package com.garpr.android.views;
 
 
 import android.content.Context;

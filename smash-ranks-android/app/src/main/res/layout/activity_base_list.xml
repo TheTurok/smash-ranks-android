@@ -7,7 +7,7 @@
         style="@style/root.no_padding">
         <include
             layout="@layout/toolbar" />
-        <com.garpr.android.misc.FlexibleSwipeRefreshLayout
+        <com.garpr.android.views.FlexibleSwipeRefreshLayout
             android:id="@+id/activity_base_list_refresh"
             android:layout_height="match_parent"
             android:layout_width="match_parent">
@@ -30,7 +30,7 @@
                         style="@style/error_line2" />
                 </LinearLayout>
             </FrameLayout>
-        </com.garpr.android.misc.FlexibleSwipeRefreshLayout>
+        </com.garpr.android.views.FlexibleSwipeRefreshLayout>
     </LinearLayout>
     <include
         layout="@layout/navigation_drawer" />

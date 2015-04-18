@@ -21,9 +21,9 @@ import com.garpr.android.fragments.TournamentPlayersFragment;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.FlexibleSwipeRefreshLayout;
 import com.garpr.android.models.Tournament;
 import com.garpr.android.models.TournamentBundle;
+import com.garpr.android.views.FlexibleSwipeRefreshLayout;
 
 
 public class TournamentActivity extends BaseToolbarActivity implements

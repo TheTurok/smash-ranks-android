@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.ListUtils.MonthlyComparable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class DateWrapper implements Parcelable {
+public class DateWrapper implements MonthlyComparable, Parcelable {
 
 
     private static final SimpleDateFormat DATE_PARSER;
@@ -92,6 +93,7 @@ public class DateWrapper implements Parcelable {
     }
 
 
+    @Override
     public String getMonth() {
         return mMonth;
     }
@@ -107,6 +109,7 @@ public class DateWrapper implements Parcelable {
     }
 
 
+    @Override
     public String getYear() {
         return mYear;
     }

@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
+import com.garpr.android.misc.ListUtils.MonthlyComparable;
 import com.garpr.android.misc.Utils;
 
 import org.json.JSONException;
@@ -16,7 +17,7 @@ import java.text.ParseException;
 import java.util.Comparator;
 
 
-public class Tournament implements AlphabeticallyComparable, Parcelable {
+public class Tournament implements AlphabeticallyComparable, MonthlyComparable, Parcelable {
 
 
     private final DateWrapper mDateWrapper;
@@ -83,6 +84,12 @@ public class Tournament implements AlphabeticallyComparable, Parcelable {
     }
 
 
+    @Override
+    public String getMonth() {
+        return mDateWrapper.getMonth();
+    }
+
+
     public String getName() {
         return mName;
     }
@@ -96,6 +103,12 @@ public class Tournament implements AlphabeticallyComparable, Parcelable {
         }
 
         return mWebUrl;
+    }
+
+
+    @Override
+    public String getYear() {
+        return mDateWrapper.getYear();
     }
 
 

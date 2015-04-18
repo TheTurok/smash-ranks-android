@@ -29,6 +29,31 @@ public final class ListUtils {
     }
 
 
+    public static ArrayList<? extends MonthlyComparable> createMonthlyList(
+            final ArrayList<? extends MonthlyComparable> list,
+            final MonthlySectionCreator creator) {
+        final ArrayList<MonthlyComparable> newList = new ArrayList<>(list.size());
+        String lastMonth = null, lastYear = null;
+
+        for (final MonthlyComparable mc : list) {
+            final String month = mc.getMonth();
+            final String year = mc.getYear();
+
+            if (!month.equalsIgnoreCase(lastMonth) && !year.equalsIgnoreCase(lastYear)) {
+                lastMonth = month;
+                lastYear = year;
+
+                newList.add(creator.createMonthlySection(month, year));
+            }
+
+            newList.add(mc);
+        }
+
+        newList.trimToSize();
+        return newList;
+    }
+
+
     public static Filter createSpecialFilter(final ArrayList<? extends SpecialFilterable> list,
             final FilterListener listener) {
         return new SpecialFilter(list, listener);
@@ -265,6 +290,27 @@ public final class ListUtils {
 
 
         String getName();
+
+
+    }
+
+
+    public interface MonthlyComparable {
+
+
+        String getMonth();
+
+
+        String getYear();
+
+
+    }
+
+
+    public interface MonthlySectionCreator {
+
+
+        MonthlyComparable createMonthlySection(final String month, final String year);
 
 
     }

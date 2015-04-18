@@ -18,6 +18,7 @@ import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.HeadToHeadBundle;
@@ -77,6 +78,8 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
         final ArrayList<Match> matches = mBundle.getMatches();
         Collections.sort(matches, Match.REVERSE_CHRONOLOGICAL_ORDER);
 
+        // TODO
+        ListUtils.createMonthlyList();
         for (final Match match : matches) {
             final Tournament tournament = match.getTournament();
 

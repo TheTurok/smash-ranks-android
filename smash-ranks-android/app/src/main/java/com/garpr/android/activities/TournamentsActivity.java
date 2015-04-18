@@ -61,6 +61,8 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         mListItems = new ArrayList<>();
         String lastMonthAndYear = null;
 
+        // TODO
+        ListUtils.createMonthlyList();
         for (final Tournament tournament : mTournaments) {
             final String monthAndYear = tournament.getDateWrapper().getMonthAndYear();
 

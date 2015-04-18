@@ -2,6 +2,7 @@
 <resources>
 
     <style name="app_theme" parent="base_theme">
+        <item name="android:colorEdgeEffect">@color/indigo</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>

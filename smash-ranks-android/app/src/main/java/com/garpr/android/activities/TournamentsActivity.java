@@ -21,8 +21,12 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
+import com.garpr.android.misc.ListUtils.MonthlyComparable;
+import com.garpr.android.misc.ListUtils.MonthlySectionCreator;
+import com.garpr.android.misc.ListUtils.SpecialFilterable;
 import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
+import com.garpr.android.models.DateWrapper;
 import com.garpr.android.models.Region;
 import com.garpr.android.models.Tournament;
 import com.garpr.android.views.SimpleSeparatorView;
@@ -57,25 +61,22 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
     }
 
 
+    @SuppressWarnings("unchecked")
     private void createListItems() {
         mListItems = new ArrayList<>();
-        String lastMonthAndYear = null;
 
-        // TODO
-        ListUtils.createMonthlyList();
         for (final Tournament tournament : mTournaments) {
-            final String monthAndYear = tournament.getDateWrapper().getMonthAndYear();
-
-            if (!monthAndYear.equals(lastMonthAndYear)) {
-                lastMonthAndYear = monthAndYear;
-                final ListItem listItem = ListItem.createDate(monthAndYear);
-                mListItems.add(listItem);
-            }
-
-            final ListItem listItem = ListItem.createTournament(tournament);
-            mListItems.add(listItem);
+            mListItems.add(ListItem.createTournament(tournament));
         }
 
+        final MonthlySectionCreator creator = new MonthlySectionCreator() {
+            @Override
+            public MonthlyComparable createMonthlySection(final DateWrapper dateWrapper) {
+                return ListItem.createDate(dateWrapper);
+            }
+        };
+
+        mListItems = (ArrayList<ListItem>) ListUtils.createMonthlyList(mListItems, creator);
         mListItems.trimToSize();
         mListItemsShown = mListItems;
     }
@@ -277,20 +278,20 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
 
-    private final static class ListItem implements ListUtils.SpecialFilterable {
+    private final static class ListItem implements MonthlyComparable, SpecialFilterable {
 
 
         private static long sId;
 
+        private DateWrapper mDateWrapper;
         private long mId;
-        private String mDate;
         private Tournament mTournament;
         private Type mType;
 
 
-        private static ListItem createDate(final String monthAndYear) {
+        private static ListItem createDate(final DateWrapper dateWrapper) {
             final ListItem item = new ListItem();
-            item.mDate = monthAndYear;
+            item.mDateWrapper = dateWrapper;
             item.mId = sId++;
             item.mType = Type.DATE;
 
@@ -300,6 +301,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
         private static ListItem createTournament(final Tournament tournament) {
             final ListItem item = new ListItem();
+            item.mDateWrapper = tournament.getDateWrapper();
             item.mId = sId++;
             item.mTournament = tournament;
             item.mType = Type.TOURNAMENT;
@@ -318,7 +320,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
                 final ListItem li = (ListItem) o;
 
                 if (isDate() && li.isDate()) {
-                    isEqual = mDate.equals(li.mDate);
+                    isEqual = mDateWrapper.equals(li.mDateWrapper);
                 } else if (isTournament() && li.isTournament()) {
                     isEqual = mTournament.equals(li.mTournament);
                 } else {
@@ -333,12 +335,18 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
         @Override
+        public DateWrapper getDateWrapper() {
+            return mDateWrapper;
+        }
+
+
+        @Override
         public String getName() {
             final String name;
 
             switch (mType) {
                 case DATE:
-                    name = mDate;
+                    name = mDateWrapper.getRawDate();
                     break;
 
                 case TOURNAMENT:
@@ -430,7 +438,8 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
             switch (listItem.mType) {
                 case DATE:
-                    ((SimpleSeparatorView.ViewHolder) holder).getView().setText(listItem.mDate);
+                    ((SimpleSeparatorView.ViewHolder) holder).getView().setText(
+                            listItem.mDateWrapper.getMonthAndYear());
                     break;
 
                 case TOURNAMENT:

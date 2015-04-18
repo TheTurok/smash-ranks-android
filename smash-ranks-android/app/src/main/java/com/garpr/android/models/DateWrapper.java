@@ -88,12 +88,17 @@ public class DateWrapper implements MonthlyComparable, Parcelable {
     }
 
 
+    @Override
+    public DateWrapper getDateWrapper() {
+        return this;
+    }
+
+
     public String getDay() {
         return mDay;
     }
 
 
-    @Override
     public String getMonth() {
         return mMonth;
     }
@@ -109,7 +114,6 @@ public class DateWrapper implements MonthlyComparable, Parcelable {
     }
 
 
-    @Override
     public String getYear() {
         return mYear;
     }

@@ -19,8 +19,11 @@ import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
+import com.garpr.android.misc.ListUtils.MonthlyComparable;
+import com.garpr.android.misc.ListUtils.MonthlySectionCreator;
 import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
+import com.garpr.android.models.DateWrapper;
 import com.garpr.android.models.HeadToHeadBundle;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
@@ -71,27 +74,24 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
     }
 
 
+    @SuppressWarnings("unchecked")
     private void createListItems() {
-        mListItems = new ArrayList<>();
-        Tournament lastTournament = null;
-
         final ArrayList<Match> matches = mBundle.getMatches();
         Collections.sort(matches, Match.REVERSE_CHRONOLOGICAL_ORDER);
+        mListItems = new ArrayList<>();
 
-        // TODO
-        ListUtils.createMonthlyList();
         for (final Match match : matches) {
-            final Tournament tournament = match.getTournament();
-
-            if (!tournament.equals(lastTournament)) {
-                lastTournament = tournament;
-                final String monthAndYear = tournament.getDateWrapper().getMonthAndYear();
-                mListItems.add(ListItem.createDate(monthAndYear));
-            }
-
             mListItems.add(ListItem.createTournament(match));
         }
 
+        final MonthlySectionCreator creator = new MonthlySectionCreator() {
+            @Override
+            public MonthlyComparable createMonthlySection(final DateWrapper dateWrapper) {
+                return ListItem.createDate(dateWrapper);
+            }
+        };
+
+        mListItems = (ArrayList<ListItem>) ListUtils.createMonthlyList(mListItems, creator);
         mListItems.add(0, ListItem.createResults(mBundle.getWins(), mBundle.getLosses()));
         mListItems.trimToSize();
         mListItemsShown = mListItems;
@@ -365,18 +365,18 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
 
 
-    private static final class ListItem {
+    private static final class ListItem implements MonthlyComparable {
 
 
+        private DateWrapper mDateWrapper;
         private int[] mResults;
         private Match mMatch;
-        private String mDate;
         private Type mType;
 
 
-        private static ListItem createDate(final String date) {
+        private static ListItem createDate(final DateWrapper dateWrapper) {
             final ListItem listItem = new ListItem();
-            listItem.mDate = date;
+            listItem.mDateWrapper = dateWrapper;
             listItem.mType = Type.DATE;
 
             return listItem;
@@ -394,6 +394,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
         private static ListItem createTournament(final Match match) {
             final ListItem listItem = new ListItem();
+            listItem.mDateWrapper = match.getDateWrapper();
             listItem.mMatch = match;
             listItem.mType = Type.TOURNAMENT;
 
@@ -411,7 +412,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
                 final ListItem li = (ListItem) o;
 
                 if (isDate() && li.isDate()) {
-                    isEqual = mDate.equals(li.mDate);
+                    isEqual = mDateWrapper.equals(li.mDateWrapper);
                 } else if (isResults() && li.isResults()) {
                     isEqual = Arrays.equals(mResults, li.mResults);
                 } else if (isTournament() && li.isTournament()) {
@@ -424,6 +425,12 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
             }
 
             return isEqual;
+        }
+
+
+        @Override
+        public DateWrapper getDateWrapper() {
+            return mDateWrapper;
         }
 
 
@@ -448,7 +455,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
             switch (mType) {
                 case DATE:
-                    title = mDate;
+                    title = mDateWrapper.getRawDate();
                     break;
 
                 case RESULTS:
@@ -518,7 +525,8 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
             switch (listItem.mType) {
                 case DATE:
-                    ((SimpleSeparatorView.ViewHolder) holder).getView().setText(listItem.mDate);
+                    ((SimpleSeparatorView.ViewHolder) holder).getView().setText(
+                            listItem.mDateWrapper.getMonthAndYear());
                     break;
 
                 case RESULTS:

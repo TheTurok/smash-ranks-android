@@ -74,6 +74,7 @@ public class Tournament implements AlphabeticallyComparable, MonthlyComparable, 
     }
 
 
+    @Override
     public DateWrapper getDateWrapper() {
         return mDateWrapper;
     }
@@ -81,12 +82,6 @@ public class Tournament implements AlphabeticallyComparable, MonthlyComparable, 
 
     public String getId() {
         return mId;
-    }
-
-
-    @Override
-    public String getMonth() {
-        return mDateWrapper.getMonth();
     }
 
 
@@ -103,12 +98,6 @@ public class Tournament implements AlphabeticallyComparable, MonthlyComparable, 
         }
 
         return mWebUrl;
-    }
-
-
-    @Override
-    public String getYear() {
-        return mDateWrapper.getYear();
     }
 
 

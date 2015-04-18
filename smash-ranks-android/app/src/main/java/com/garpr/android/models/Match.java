@@ -7,6 +7,7 @@ import android.os.Parcelable;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
+import com.garpr.android.misc.ListUtils.MonthlyComparable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +15,7 @@ import org.json.JSONObject;
 import java.util.Comparator;
 
 
-public class Match implements Parcelable {
+public class Match implements MonthlyComparable, Parcelable {
 
 
     private final Player mLoser;
@@ -77,6 +78,12 @@ public class Match implements Parcelable {
         }
 
         return isEqual;
+    }
+
+
+    @Override
+    public DateWrapper getDateWrapper() {
+        return mTournament.getDateWrapper();
     }
 
 

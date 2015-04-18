@@ -3,6 +3,8 @@ package com.garpr.android.misc;
 
 import android.widget.Filter;
 
+import com.garpr.android.models.DateWrapper;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -36,14 +38,15 @@ public final class ListUtils {
         String lastMonth = null, lastYear = null;
 
         for (final MonthlyComparable mc : list) {
-            final String month = mc.getMonth();
-            final String year = mc.getYear();
+            final DateWrapper dw = mc.getDateWrapper();
+            final String month = dw.getMonth();
+            final String year = dw.getYear();
 
             if (!month.equalsIgnoreCase(lastMonth) && !year.equalsIgnoreCase(lastYear)) {
                 lastMonth = month;
                 lastYear = year;
 
-                newList.add(creator.createMonthlySection(month, year));
+                newList.add(creator.createMonthlySection(dw));
             }
 
             newList.add(mc);
@@ -298,10 +301,7 @@ public final class ListUtils {
     public interface MonthlyComparable {
 
 
-        String getMonth();
-
-
-        String getYear();
+        DateWrapper getDateWrapper();
 
 
     }
@@ -310,7 +310,7 @@ public final class ListUtils {
     public interface MonthlySectionCreator {
 
 
-        MonthlyComparable createMonthlySection(final String month, final String year);
+        MonthlyComparable createMonthlySection(final DateWrapper dateWrapper);
 
 
     }

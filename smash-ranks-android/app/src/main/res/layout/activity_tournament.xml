@@ -14,7 +14,7 @@
             android:background="@color/gray_dark"
             android:elevation="@dimen/elevation"
             android:id="@+id/activity_tournament_tab_strip"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="48dp"
             android:layout_width="match_parent"
             app:pstsIndicatorColor="@color/indigo_bright"
             app:pstsShouldExpand="true"

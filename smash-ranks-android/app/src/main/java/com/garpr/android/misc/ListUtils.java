@@ -42,7 +42,7 @@ public final class ListUtils {
             final String month = dw.getMonth();
             final String year = dw.getYear();
 
-            if (!month.equalsIgnoreCase(lastMonth) && !year.equalsIgnoreCase(lastYear)) {
+            if (!month.equalsIgnoreCase(lastMonth) || !year.equalsIgnoreCase(lastYear)) {
                 lastMonth = month;
                 lastYear = year;
 

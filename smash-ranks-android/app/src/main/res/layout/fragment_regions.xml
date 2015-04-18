@@ -15,7 +15,7 @@
             android:layout_width="match_parent">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_base_list_list"
-                style="@style/list.no_padding" />
+                style="@style/list" />
             <LinearLayout
                 android:id="@+id/fragment_base_list_error"
                 tools:visibility="visible"

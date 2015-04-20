@@ -3,7 +3,7 @@
     xmlns:compat="http://schemas.android.com/apk/res-auto">
     <item
         android:enabled="false"
-        android:id="@+id/fragment_regions_menu_next"
+        android:id="@+id/fragment_toolbar_regions_menu_next"
         android:title="@string/next"
         compat:showAsAction="ifRoom|withText" />
 </menu>

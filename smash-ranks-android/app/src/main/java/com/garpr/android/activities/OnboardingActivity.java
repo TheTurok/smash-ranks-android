@@ -17,6 +17,7 @@ import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
+import com.garpr.android.fragments.ToolbarRegionsFragment;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Analytics.Event;
 import com.garpr.android.misc.Console;
@@ -27,7 +28,7 @@ import com.garpr.android.views.NonSwipeableViewPager;
 
 
 public class OnboardingActivity extends BaseActivity implements PlayersFragment.Listeners,
-        RegionsFragment.ToolbarNextListener {
+        ToolbarRegionsFragment.NextListener {
 
 
     private static final int ONBOARDING_FRAGMENT_COUNT = 2;
@@ -258,7 +259,7 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
 
             switch (position) {
                 case ONBOARDING_FRAGMENT_REGIONS:
-                    fragment = RegionsFragment.create();
+                    fragment = ToolbarRegionsFragment.create();
                     break;
 
                 case ONBOARDING_FRAGMENT_PLAYERS:

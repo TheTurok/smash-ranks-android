@@ -1,24 +1,15 @@
 package com.garpr.android.fragments;
 
 
-import android.app.Activity;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Regions;
 import com.garpr.android.data.ResponseOnUi;
-import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
@@ -29,13 +20,12 @@ import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.models.Region;
 import com.garpr.android.views.CheckableItemView;
 import com.garpr.android.views.SimpleSeparatorView;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class RegionsFragment extends BaseListToolbarFragment implements
+public abstract class RegionsFragment extends BaseListFragment implements
         CheckableItemView.OnClickListener {
 
 
@@ -45,19 +35,10 @@ public class RegionsFragment extends BaseListToolbarFragment implements
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<Region> mRegions;
-    private FloatingActionButton mSave;
-    private FrameLayout mFrame;
-    private MenuItem mNext;
-    private Region mSelectedRegion;
-    private RegionSaveListener mRegionSaveListener;
-    private ToolbarNextListener mToolbarNextListener;
+    protected FrameLayout mFrame;
+    protected Region mSelectedRegion;
 
 
-
-
-    public static RegionsFragment create() {
-        return new RegionsFragment();
-    }
 
 
     @SuppressWarnings("unchecked")
@@ -116,27 +97,11 @@ public class RegionsFragment extends BaseListToolbarFragment implements
     }
 
 
-    private void findToolbarItems() {
-        if (mNext == null) {
-            final Toolbar toolbar = getToolbar();
-            final Menu menu = toolbar.getMenu();
-            mNext = menu.findItem(R.id.fragment_regions_menu_next);
-        }
-    }
-
-
     @Override
     protected void findViews() {
         super.findViews();
         final View view = getView();
         mFrame = (FrameLayout) view.findViewById(R.id.fragment_regions_list_frame);
-        mSave = (FloatingActionButton) view.findViewById(R.id.fragment_regions_save);
-    }
-
-
-    @Override
-    protected int getContentView() {
-        return R.layout.fragment_regions;
     }
 
 
@@ -152,51 +117,8 @@ public class RegionsFragment extends BaseListToolbarFragment implements
     }
 
 
-    @Override
-    protected int getOptionsMenu() {
-        final int optionsMenu;
-
-        if (isEmbeddedMode()) {
-            optionsMenu = R.menu.fragment_regions;
-        } else {
-            optionsMenu = 0;
-        }
-
-        return optionsMenu;
-    }
-
-
     public Region getSelectedRegion() {
         return mSelectedRegion;
-    }
-
-
-    private boolean isEmbeddedMode() {
-        return mToolbarNextListener != null;
-    }
-
-
-    private boolean isStandaloneMode() {
-        return mRegionSaveListener != null;
-    }
-
-
-    private void measureRecyclerViewBottomOffset() {
-        final RecyclerView recyclerView = getRecyclerView();
-        recyclerView.setClipToPadding(false);
-
-        final int frameHeight = mFrame.getHeight();
-        final int distanceFromTop = mSave.getTop();
-
-        final Resources res = getResources();
-        final int rootPadding = res.getDimensionPixelSize(R.dimen.root_padding);
-        final int bottom = frameHeight - distanceFromTop + rootPadding;
-        final int start = ViewCompat.getPaddingStart(recyclerView);
-        final int end = ViewCompat.getPaddingEnd(recyclerView);
-        final int top = recyclerView.getPaddingTop();
-
-        ViewCompat.setPaddingRelative(recyclerView, start, top, end, bottom);
-        recyclerView.requestLayout();
     }
 
 
@@ -209,17 +131,6 @@ public class RegionsFragment extends BaseListToolbarFragment implements
             mSelectedRegion = savedInstanceState.getParcelable(KEY_SELECTED_REGION);
         }
 
-        if (isStandaloneMode()) {
-            final Region region = Settings.getRegion();
-
-            if (mSelectedRegion == null) {
-                mSelectedRegion = region;
-                mSave.hide(false);
-            } else if (!region.equals(mSelectedRegion)) {
-                mSave.show(false);
-            }
-        }
-
         if (mRegions == null || mRegions.isEmpty()) {
             fetchRegions();
         } else {
@@ -229,59 +140,9 @@ public class RegionsFragment extends BaseListToolbarFragment implements
 
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-
-        if (activity instanceof RegionSaveListener) {
-            mRegionSaveListener = (RegionSaveListener) activity;
-        }
-
-        if (activity instanceof ToolbarNextListener) {
-            mToolbarNextListener = (ToolbarNextListener) activity;
-        }
-
-        if (mRegionSaveListener == null && mToolbarNextListener == null) {
-            throw new IllegalStateException("Attached Activity must implement a listener");
-        } else if (mRegionSaveListener != null && mToolbarNextListener != null) {
-            throw new IllegalStateException("Attached Activity can only implement one listener");
-        }
-    }
-
-
-    @Override
     public void onClick(final CheckableItemView v) {
         mSelectedRegion = (Region) v.getTag();
         notifyDataSetChanged();
-
-        if (isStandaloneMode()) {
-            final Region region = Settings.getRegion();
-
-            if (region.equals(mSelectedRegion)) {
-                mSave.hide();
-            } else {
-                mSave.show();
-            }
-        } else if (isEmbeddedMode()) {
-            findToolbarItems();
-            mNext.setEnabled(true);
-        } else {
-            throw new IllegalStateException("Mode is unknown");
-        }
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.fragment_regions_menu_next:
-                mToolbarNextListener.onRegionNextClick();
-                break;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-        return true;
     }
 
 
@@ -309,86 +170,10 @@ public class RegionsFragment extends BaseListToolbarFragment implements
     }
 
 
-    private void prepareEmbeddedModeViews() {
-        final Toolbar toolbar = getToolbar();
-        toolbar.setTitle(R.string.select_your_region);
-        toolbar.setVisibility(View.VISIBLE);
-    }
-
-
     private void prepareList() {
         Collections.sort(mRegions, Region.ALPHABETICAL_ORDER);
         createListItems(mRegions);
         setAdapter(new RegionsAdapter());
-    }
-
-
-    private void prepareStandaloneModeViews() {
-        final ViewTreeObserver vto = mSave.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            @SuppressWarnings("deprecation")
-            public void onGlobalLayout() {
-                final ViewTreeObserver vto = mSave.getViewTreeObserver();
-
-                if (vto.isAlive()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        vto.removeOnGlobalLayoutListener(this);
-                    } else {
-                        vto.removeGlobalOnLayoutListener(this);
-                    }
-                }
-
-                measureRecyclerViewBottomOffset();
-            }
-        });
-
-        if (mSelectedRegion != null) {
-            mSave.show(false);
-        }
-
-        mSave.setVisibility(View.VISIBLE);
-        mSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                mRegionSaveListener.onRegionSaved();
-            }
-        });
-    }
-
-
-    @Override
-    protected void prepareViews() {
-        super.prepareViews();
-
-        if (isStandaloneMode()) {
-            prepareStandaloneModeViews();
-        } else if (isEmbeddedMode()) {
-            prepareEmbeddedModeViews();
-        } else {
-            throw new IllegalStateException("Mode is unknown");
-        }
-    }
-
-
-    @Override
-    protected void setAdapter(final RecyclerAdapter adapter) {
-        super.setAdapter(adapter);
-
-        if (mSelectedRegion != null && isEmbeddedMode()) {
-            findToolbarItems();
-            mNext.setEnabled(true);
-        }
-    }
-
-
-    @Override
-    protected void showError() {
-        super.showError();
-
-        if (isStandaloneMode()) {
-            mSave.setVisibility(View.GONE);
-        }
     }
 
 
@@ -568,24 +353,6 @@ public class RegionsFragment extends BaseListToolbarFragment implements
 
             return holder;
         }
-
-
-    }
-
-
-    public interface RegionSaveListener {
-
-
-        void onRegionSaved();
-
-
-    }
-
-
-    public interface ToolbarNextListener {
-
-
-        void onRegionNextClick();
 
 
     }

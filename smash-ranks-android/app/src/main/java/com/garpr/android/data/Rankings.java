@@ -177,7 +177,7 @@ public final class Rankings {
     }
 
 
-    public static enum Result {
+    public enum Result {
         NO_UPDATE, UPDATE_AVAILABLE;
 
 

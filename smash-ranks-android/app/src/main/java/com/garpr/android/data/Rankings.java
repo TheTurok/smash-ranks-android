@@ -21,7 +21,7 @@ public final class Rankings {
 
 
     private static final SimpleDateFormat RANKINGS_DATE_PARSER;
-    private static final String CNAME = "com.garpr.android.data2.Rankings";
+    private static final String CNAME = "com.garpr.android.data.Rankings";
     private static final String KEY_RANKINGS_DATE = "KEY_RANKINGS_DATE";
 
 
@@ -29,6 +29,11 @@ public final class Rankings {
 
     static {
         RANKINGS_DATE_PARSER = new SimpleDateFormat(Constants.RANKINGS_DATE_FORMAT, Locale.getDefault());
+    }
+
+
+    public static void checkForUpdates(final Response<Result> response) {
+        new CheckForRankingsUpdatesCall(response).make();
     }
 
 
@@ -44,11 +49,6 @@ public final class Rankings {
 
     public static long getDate() {
         return Settings.get(CNAME).getLong(KEY_RANKINGS_DATE, 0L);
-    }
-
-
-    public static void checkForUpdates(final Response<Result> response) {
-        new CheckForRankingsUpdatesCall(response).make();
     }
 
 

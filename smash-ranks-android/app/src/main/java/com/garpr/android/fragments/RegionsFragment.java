@@ -318,8 +318,7 @@ public abstract class RegionsFragment extends BaseListFragment implements
                 }
 
                 case TITLE: {
-                    final SimpleSeparatorView.ViewHolder vh = (SimpleSeparatorView.ViewHolder) holder;
-                    vh.getView().setText(listItem.mTitle);
+                    ((SimpleSeparatorView.ViewHolder) holder).getView().setText(listItem.mTitle);
                     break;
                 }
 

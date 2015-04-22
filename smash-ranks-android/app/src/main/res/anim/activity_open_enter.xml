@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    When opening a new activity, this is the animation that is run on the next activity (which
+    is entering the screen).
+-->
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <alpha
+        android:duration="@android:integer/config_longAnimTime"
+        android:fromAlpha="0.75"
+        android:toAlpha="1.00" />
+    <translate
+        android:duration="@android:integer/config_longAnimTime"
+        android:fromXDelta="100%"
+        android:toXDelta="0%" />
+</set>

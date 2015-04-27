@@ -1,12 +1,12 @@
 package com.garpr.android.fragments;
 
 
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AlertDialog;
 import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.garpr.android.R;
 import com.garpr.android.activities.HeadToHeadActivity;
 import com.garpr.android.activities.PlayerActivity;
@@ -70,12 +70,10 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
         final Match match = v.getMatch();
         final String[] players = { match.getWinner().getName(), match.getLoser().getName() };
 
-        new MaterialDialog.Builder(getActivity())
-                .items(players)
-                .itemsCallback(new MaterialDialog.ListCallback() {
+        new AlertDialog.Builder(getActivity())
+                .setItems(players, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSelection(final MaterialDialog dialog,
-                            final View view, final int which, final CharSequence text) {
+                    public void onClick(final DialogInterface dialog, final int which) {
                         if (which == 0) {
                             PlayerActivity.start(getActivity(), match.getWinner());
                         } else {
@@ -83,7 +81,12 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
                         }
                     }
                 })
-                .negativeText(R.string.cancel)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dialog.dismiss();
+                    }
+                })
                 .show();
     }
 

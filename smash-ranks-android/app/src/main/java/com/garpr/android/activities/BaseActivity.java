@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -31,7 +31,7 @@ import com.garpr.android.models.Region;
  * All Activities should extend from this base class, as it greatly reduces the otherwise
  * necessary boilerplate.
  */
-public abstract class BaseActivity extends ActionBarActivity implements BaseFragment.Listener,
+public abstract class BaseActivity extends AppCompatActivity implements BaseFragment.Listener,
         HeartbeatWithUi, Settings.OnRegionChangedListener {
 
 

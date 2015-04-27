@@ -1,16 +1,17 @@
 package com.garpr.android.activities;
 
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
@@ -162,17 +163,22 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
     public void onGoClick() {
         final Player player = mPlayersFragment.getSelectedPlayer();
 
-        new MaterialDialog.Builder(this)
-                .callback(new MaterialDialog.ButtonCallback() {
+        new AlertDialog.Builder(this)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onPositive(final MaterialDialog dialog) {
-                        super.onPositive(dialog);
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setMessage(getString(R.string.youre_x_from_y_ready, player.getName(),
+                        mSelectedRegion.getName()))
+                .setPositiveButton(R.string.lets_go, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dialog.dismiss();
                         finishOnboarding(true);
                     }
                 })
-                .content(R.string.youre_x_from_y_ready, player.getName(), mSelectedRegion.getName())
-                .negativeText(R.string.cancel)
-                .positiveText(R.string.lets_go)
                 .show();
     }
 
@@ -206,17 +212,21 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
 
     @Override
     public void onSkipClick() {
-        new MaterialDialog.Builder(this)
-                .callback(new MaterialDialog.ButtonCallback() {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.are_you_sure_you_dont_want_to_select_your_tag)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onPositive(final MaterialDialog dialog) {
-                        super.onPositive(dialog);
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dialog.dismiss();
                         finishOnboarding(false);
                     }
                 })
-                .content(R.string.are_you_sure_you_dont_want_to_select_your_tag)
-                .negativeText(R.string.cancel)
-                .positiveText(R.string.yes)
                 .show();
     }
 

@@ -19,8 +19,10 @@
             android:textSize="20sp"
             tools:text="Hungrybox" />
         <CheckBox
+            android:background="@null"
             android:checkMark="@drawable/checkbox"
             android:clickable="false"
+            android:duplicateParentState="false"
             android:gravity="center_vertical"
             android:id="@+id/view_checkable_item_check"
             android:layout_height="wrap_content"

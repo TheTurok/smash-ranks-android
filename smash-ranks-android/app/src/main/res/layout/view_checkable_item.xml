@@ -20,7 +20,6 @@
             tools:text="Hungrybox" />
         <CheckBox
             android:background="@null"
-            android:checkMark="@drawable/checkbox"
             android:clickable="false"
             android:duplicateParentState="false"
             android:gravity="center_vertical"

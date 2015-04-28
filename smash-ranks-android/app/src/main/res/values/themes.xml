@@ -17,6 +17,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="dialog_theme" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/indigo_bright</item>
+    </style>
+
     <style name="gorgonite_theme" parent="app_theme">
 
     </style>

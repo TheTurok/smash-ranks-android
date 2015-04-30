@@ -74,6 +74,12 @@ public final class NetworkCache {
     }
 
 
+    public synchronized static void clear() {
+        getTimestampsCache().edit().clear().apply();
+        getJsonCache().edit().clear().apply();
+    }
+
+
     public synchronized static JSONObject get(final String url) {
         clean();
 

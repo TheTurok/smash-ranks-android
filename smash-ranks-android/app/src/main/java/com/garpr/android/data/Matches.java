@@ -1,7 +1,6 @@
 package com.garpr.android.data;
 
 
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.HeadToHeadBundle;
 import com.garpr.android.models.Match;
@@ -79,10 +78,9 @@ public final class Matches {
 
 
         @Override
-        JsonObjectRequest getRequest() {
-            final String url = getBaseUrl() + Constants.MATCHES + '/' + mPlayer.getId() + '?' +
+        String getUrl() {
+            return super.getUrl() + Constants.MATCHES + '/' + mPlayer.getId() + '?' +
                     Constants.OPPONENT + '=' + mOpponent.getId();
-            return new JsonObjectRequest(url, null, this, this);
         }
 
 
@@ -129,9 +127,8 @@ public final class Matches {
 
 
         @Override
-        JsonObjectRequest getRequest() {
-            final String url = getBaseUrl() + Constants.MATCHES + '/' + mPlayer.getId();
-            return new JsonObjectRequest(url, null, this, this);
+        String getUrl() {
+            return super.getUrl() + Constants.MATCHES + '/' + mPlayer.getId();
         }
 
 

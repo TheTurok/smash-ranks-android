@@ -1,7 +1,6 @@
 package com.garpr.android.data;
 
 
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Tournament;
@@ -75,9 +74,8 @@ public final class Tournaments {
 
 
         @Override
-        JsonObjectRequest getRequest() {
-            final String url = getBaseUrl() + Constants.TOURNAMENTS + '/' + mTournamentId;
-            return new JsonObjectRequest(url, null, this, this);
+        String getUrl() {
+            return super.getUrl() + Constants.TOURNAMENTS + '/' + mTournamentId;
         }
 
 
@@ -115,9 +113,8 @@ public final class Tournaments {
 
 
         @Override
-        JsonObjectRequest getRequest() {
-            final String url = getBaseUrl() + Constants.TOURNAMENTS;
-            return new JsonObjectRequest(url, null, this, this);
+        String getUrl() {
+            return super.getUrl() + Constants.TOURNAMENTS;
         }
 
 

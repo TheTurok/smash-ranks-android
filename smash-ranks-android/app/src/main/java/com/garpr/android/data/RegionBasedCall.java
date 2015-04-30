@@ -29,8 +29,8 @@ abstract class RegionBasedCall<T> extends Call<T> {
 
 
     @Override
-    String getBaseUrl() {
-        return super.getBaseUrl() + mRegionId + '/';
+    String getUrl() {
+        return super.getUrl() + mRegionId + '/';
     }
 
 

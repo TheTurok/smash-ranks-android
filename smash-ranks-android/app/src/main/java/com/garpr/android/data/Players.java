@@ -1,7 +1,6 @@
 package com.garpr.android.data;
 
 
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Player;
 
@@ -51,9 +50,8 @@ public final class Players {
 
 
         @Override
-        JsonObjectRequest getRequest() {
-            final String url = getBaseUrl() + Constants.PLAYERS;
-            return new JsonObjectRequest(url, null, this, this);
+        String getUrl() {
+            return super.getUrl() + Constants.PLAYERS;
         }
 
 

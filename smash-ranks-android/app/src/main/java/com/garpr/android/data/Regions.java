@@ -1,7 +1,6 @@
 package com.garpr.android.data;
 
 
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Region;
 
@@ -40,9 +39,8 @@ public final class Regions {
 
 
         @Override
-        JsonObjectRequest getRequest() {
-            final String url = getBaseUrl() + Constants.REGIONS;
-            return new JsonObjectRequest(url, null, this, this);
+        String getUrl() {
+            return super.getUrl() + Constants.REGIONS;
         }
 
 

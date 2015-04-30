@@ -32,15 +32,12 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
     }
 
 
-    String getBaseUrl() {
-        return Constants.API_URL + '/';
-    }
-
-
     abstract String getCallName();
 
 
-    abstract JsonObjectRequest getRequest();
+    String getUrl() {
+        return Constants.API_URL + '/';
+    }
 
 
     void make() {
@@ -50,7 +47,7 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
             return;
         }
 
-        final JsonObjectRequest request = getRequest();
+        final JsonObjectRequest request = new JsonObjectRequest(getUrl(), this, this);
         request.setTag(heartbeat);
 
         Console.d(getCallName(), "Making call to " + request.getUrl());

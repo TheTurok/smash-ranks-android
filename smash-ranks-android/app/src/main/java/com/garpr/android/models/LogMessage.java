@@ -27,7 +27,7 @@ public class LogMessage implements Parcelable {
     private void throwIfPriorityIsInvalid() {
         if (priority != Log.DEBUG && priority != Log.WARN && priority != Log.ERROR) {
             throw new IllegalArgumentException("priority must be either Log.DEBUG (" + Log.DEBUG
-                    + "), Log.WARN (" + Log.WARN + "), or Log.ERROR (" + Log.ERROR + ")");
+                    + "), Log.WARN (" + Log.WARN + "), or Log.ERROR (" + Log.ERROR + ')');
         }
     }
 

@@ -26,7 +26,7 @@ public enum Result implements Parcelable {
         } else if (Constants.WIN.equalsIgnoreCase(resultString)) {
             result = WIN;
         } else {
-            throw new JSONException("Result JSON is invalid: \"" + resultString + "\"");
+            throw new JSONException("Result JSON is invalid: \"" + resultString + '"');
         }
 
         return result;

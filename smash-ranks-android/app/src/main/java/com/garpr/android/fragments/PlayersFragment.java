@@ -456,7 +456,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         }
 
 
-        private static enum Type {
+        private enum Type {
             PLAYER, TITLE;
 
 

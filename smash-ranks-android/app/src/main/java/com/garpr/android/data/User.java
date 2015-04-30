@@ -97,7 +97,7 @@ public final class User {
             if (sUser.mRank == Integer.MIN_VALUE) {
                 Console.d(TAG, "User has no rank saved in SharedPreferences");
             } else {
-                Console.d(TAG, "Read in User's rank from SharedPreferences (" + sUser.mRank + ")");
+                Console.d(TAG, "Read in User's rank from SharedPreferences (" + sUser.mRank + ')');
             }
 
             final String regionString = sPreferences.getString(KEY_REGION, null);

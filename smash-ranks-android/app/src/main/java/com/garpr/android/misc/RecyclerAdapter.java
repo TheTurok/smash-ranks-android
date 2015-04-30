@@ -18,7 +18,7 @@ public abstract class RecyclerAdapter<T extends RecyclerView.ViewHolder> extends
         recyclerView.setHasFixedSize(true);
         setHasStableIds(true);
 
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private void notifyDataSetChanged() {
                 mNotifyDataSetChanged = false;
                 RecyclerAdapter.this.notifyDataSetChanged();

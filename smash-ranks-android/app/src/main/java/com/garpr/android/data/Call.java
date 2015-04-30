@@ -18,6 +18,8 @@ import org.json.JSONObject;
 abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
 
 
+    private boolean mPulledFromNetworkCache;
+    private String mUrl;
     protected final Response<T> mResponse;
 
 
@@ -41,19 +43,39 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
 
 
     void make() {
-        final Heartbeat heartbeat = mResponse.getHeartbeat();
-
-        if (heartbeat == null || !heartbeat.isAlive()) {
+        if (!mResponse.isAlive()) {
             return;
         }
 
-        final JsonObjectRequest request = new JsonObjectRequest(getUrl(), this, this);
-        request.setTag(heartbeat);
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final Heartbeat heartbeat = mResponse.getHeartbeat();
 
-        Console.d(getCallName(), "Making call to " + request.getUrl());
+                if (heartbeat == null || !heartbeat.isAlive()) {
+                    return;
+                }
 
-        final RequestQueue requestQueue = App.getRequestQueue();
-        requestQueue.add(request);
+                mUrl = getUrl();
+                final JSONObject response = NetworkCache.get(mUrl);
+                mPulledFromNetworkCache = response != null;
+
+                if (mPulledFromNetworkCache) {
+                    Console.d(getCallName(), "Pulled call response from cache to " + mUrl);
+                    onResponse(response);
+                } else {
+                    final JsonObjectRequest request = new JsonObjectRequest(mUrl, Call.this, Call.this);
+                    request.setTag(heartbeat);
+
+                    Console.d(getCallName(), "Making call to " + mUrl);
+
+                    final RequestQueue requestQueue = App.getRequestQueue();
+                    requestQueue.add(request);
+                }
+            }
+        };
+
+        new Thread(runnable).start();
     }
 
 
@@ -83,13 +105,13 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
 
     @Override
     public final void onResponse(final JSONObject response) {
-        if (!mResponse.isAlive()) {
-            return;
-        }
-
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                if (!mPulledFromNetworkCache) {
+                    NetworkCache.set(mUrl, response);
+                }
+
                 if (mResponse.isAlive()) {
                     try {
                         onJSONResponse(response);

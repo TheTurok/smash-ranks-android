@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 
 
 public final class NetworkCache {
@@ -38,7 +39,7 @@ public final class NetworkCache {
 
     @SuppressWarnings("unchecked")
     private synchronized static void clean() {
-        final SharedPreferences timestampsCache = Settings.get(TIMESTAMPS);
+        final SharedPreferences timestampsCache = getTimestampsCache();
         final Map<String, String> timestamps = (Map<String, String>) timestampsCache.getAll();
 
         if (timestamps == null || timestamps.isEmpty()) {
@@ -51,19 +52,18 @@ public final class NetworkCache {
         Editor timestampsCacheEditor = null;
         Editor jsonCacheEditor = null;
 
-        for (final String timestamp : timestamps.keySet()) {
-            final long then = Long.parseLong(timestamp);
+        for (final Entry<String, String> timestampEntry : timestamps.entrySet()) {
+            final long then = Long.parseLong(timestampEntry.getKey());
 
             if (now - then >= TIMESTAMP_CUTOFF) {
                 if (!editing) {
                     editing = true;
                     timestampsCacheEditor = timestampsCache.edit();
-                    jsonCacheEditor = Settings.get(JSON).edit();
+                    jsonCacheEditor = getJsonCache().edit();
                 }
 
-                timestampsCacheEditor.remove(timestamp);
-                final String url = timestamps.get(timestamp);
-                jsonCacheEditor.remove(url);
+                timestampsCacheEditor.remove(timestampEntry.getKey());
+                jsonCacheEditor.remove(timestampEntry.getValue());
             }
         }
 
@@ -109,32 +109,34 @@ public final class NetworkCache {
     public synchronized static void set(final String url, final JSONObject json) {
         final SharedPreferences timestampsCache = getTimestampsCache();
         final Map<String, String> timestamps = (Map<String, String>) timestampsCache.getAll();
-        Editor timestampsCacheEditor = null;
+        final Editor timestampsCacheEditor = timestampsCache.edit();
+        final Editor jsonCacheEditor = getJsonCache().edit();
 
         if (timestamps != null && timestamps.size() >= MAX_SIZE) {
-            timestampsCacheEditor = Settings.edit(TIMESTAMPS);
             final LinkedList<String> timestampsList = new LinkedList<>(timestamps.keySet());
             Collections.sort(timestampsList, TIMESTAMP_COMPARATOR);
 
             do {
-                final String timestamp = timestampsList.removeLast();
-                final String oldUrl = timestamps.get(timestamp);
-                timestampsCacheEditor.remove(timestamp);
-                
+                final String timestampToRemove = timestampsList.removeLast();
+                final String urlToRemove = timestamps.get(timestampToRemove);
+                timestampsCacheEditor.remove(timestampToRemove);
+                jsonCacheEditor.remove(urlToRemove);
             } while (timestampsList.size() >= MAX_SIZE);
+
+            for (final String timestamp : timestampsList) {
+                final String timestampUrl = timestampsCache.getString(timestamp, null);
+
+                if (url.equalsIgnoreCase(timestampUrl)) {
+                    timestampsCacheEditor.remove(timestamp);
+                    break;
+                }
+            }
         }
-
-        // TODO
-        // trim to max size - 1
-
-        // TODO
-        // search for a key with the value of url in timestamps (it needs to be removed if it exists)
 
         final String timestamp = String.valueOf(System.currentTimeMillis());
         timestampsCacheEditor.putString(timestamp, url);
         timestampsCacheEditor.apply();
 
-        final Editor jsonCacheEditor = Settings.edit(JSON);
         jsonCacheEditor.putString(url, json.toString());
         jsonCacheEditor.apply();
     }

@@ -148,4 +148,12 @@ public final class NetworkCache {
     }
 
 
+    @SuppressWarnings("unchecked")
+    public synchronized static int size() {
+        final SharedPreferences timestampsCache = getTimestampsCache();
+        final Map<String, String> timestamps = (Map<String, String>) timestampsCache.getAll();
+        return timestamps == null ? 0 : timestamps.size();
+    }
+
+
 }

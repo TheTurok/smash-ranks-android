@@ -4,6 +4,8 @@ package com.garpr.android.data;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.garpr.android.BuildConfig;
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Utils;
 
 import org.json.JSONException;
@@ -19,10 +21,11 @@ import java.util.Map.Entry;
 public final class NetworkCache {
 
 
-    private static final int MAX_SIZE = 32;
+    private static final int MAX_SIZE;
     private static final long TIMESTAMP_CUTOFF = 60L * 60L * 24L * 5L; // 5 days
     private static final String CNAME = "com.garpr.android.data.NetworkCache";
     private static final String JSON = CNAME + ".JSON";
+    private static final String TAG = "NetworkCache";
     private static final String TIMESTAMPS = CNAME + ".TIMESTAMPS";
 
     private static final Comparator<String> TIMESTAMP_COMPARATOR = new Comparator<String>() {
@@ -35,6 +38,15 @@ public final class NetworkCache {
     };
 
 
+
+
+    static {
+        if (BuildConfig.DEBUG) {
+            MAX_SIZE = 8;
+        } else {
+            MAX_SIZE = 32;
+        }
+    }
 
 
     @SuppressWarnings("unchecked")
@@ -75,7 +87,9 @@ public final class NetworkCache {
 
 
     public synchronized static void clear() {
-        getTimestampsCache().edit().clear().apply();
+        final SharedPreferences timestampsCache = getTimestampsCache();
+        Console.d(TAG, "Clearing network cache, it had " + timestampsCache.getAll().size() + " entries");
+        timestampsCache.edit().clear().apply();
         getJsonCache().edit().clear().apply();
     }
 

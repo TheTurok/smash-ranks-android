@@ -132,7 +132,33 @@ public class SettingsActivity extends BaseToolbarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        pollNetworkCache();
         pollSyncStatus();
+    }
+
+
+    private void pollNetworkCache() {
+        final int networkCacheSize = NetworkCache.size();
+
+        if (networkCacheSize >= 1) {
+            mNetworkCache.setEnabled(true);
+            mNetworkCache.setAlpha(1f);
+        } else {
+            mNetworkCache.setEnabled(false);
+            mNetworkCache.setAlpha(0.6f);
+        }
+
+        final Resources res = getResources();
+        mNetworkCacheSize.setText(res.getQuantityString(R.plurals.currently_contains_x_entries,
+                networkCacheSize, networkCacheSize));
+
+        mNetworkCache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                NetworkCache.clear();
+                pollNetworkCache();
+            }
+        });
     }
 
 
@@ -169,19 +195,7 @@ public class SettingsActivity extends BaseToolbarActivity {
         final Region region = Settings.getRegion();
         mRegionName.setText(region.getName());
 
-        final int networkCacheSize = NetworkCache.size();
-        mNetworkCache.setEnabled(networkCacheSize >= 1);
-
-        final Resources res = getResources();
-        mNetworkCacheSize.setText(res.getQuantityString(R.plurals.currently_contains_x_entries,
-                networkCacheSize, networkCacheSize));
-
-        mNetworkCache.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                // TODO
-            }
-        });
+        pollNetworkCache();
 
         mSync.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,6 +213,7 @@ public class SettingsActivity extends BaseToolbarActivity {
         final String syncChargingKey = getString(R.string.preferences_sync_charging);
         final String syncWifiKey = getString(R.string.preferences_sync_wifi);
 
+        final Resources res = getResources();
         final boolean syncChargingDefault = res.getBoolean(R.bool.preferences_sync_charging_default);
         final boolean syncWifiDefault = res.getBoolean(R.bool.preferences_sync_wifi_default);
 

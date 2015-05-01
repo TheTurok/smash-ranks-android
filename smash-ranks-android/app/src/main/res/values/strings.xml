@@ -18,6 +18,7 @@
     <string name="close">Close</string>
     <string name="close_drawer">Close drawer</string>
     <string name="clear_log">Clear log</string>
+    <string name="clear_network_cache">Clear network cache</string>
     <string name="console">Console</string>
     <string name="date">Date</string>
     <string name="debug">Debug</string>

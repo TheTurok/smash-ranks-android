@@ -42,12 +42,14 @@ public class SettingsActivity extends BaseToolbarActivity {
     private LinearLayout mAuthor;
     private LinearLayout mConsole;
     private LinearLayout mGitHub;
+    private LinearLayout mNetworkCache;
     private LinearLayout mRegion;
     private LinearLayout mServer;
     private LinearLayout mSync;
     private LinearLayout mSyncCharging;
     private LinearLayout mSyncWifi;
     private TextView mRegionName;
+    private TextView mNetworkCacheSize;
     private TextView mSyncChargingDesc;
     private TextView mSyncStatus;
     private TextView mSyncWifiDesc;
@@ -67,6 +69,8 @@ public class SettingsActivity extends BaseToolbarActivity {
         mAuthor = (LinearLayout) findViewById(R.id.activity_settings_author);
         mConsole = (LinearLayout) findViewById(R.id.activity_settings_console);
         mGitHub = (LinearLayout) findViewById(R.id.activity_settings_github);
+        mNetworkCache = (LinearLayout) findViewById(R.id.activity_settings_network_cache);
+        mNetworkCacheSize = (TextView) findViewById(R.id.activity_settings_network_cache_size);
         mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
         mOrb = (ImageButton) findViewById(R.id.activity_settings_orb);

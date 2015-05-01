@@ -33,6 +33,17 @@
                             tools:text="@string/norcal"
                             style="@style/settings_subtitle" />
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/activity_settings_network_cache"
+                        style="@style/settings_container">
+                        <TextView
+                            android:text="@string/clear_network_cache"
+                            style="@style/settings_title" />
+                        <TextView
+                            android:id="@+id/activity_settings_network_cache_size"
+                            tools:text="Currently contains 47 entries"
+                            style="@style/settings_subtitle" />
+                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
                     style="@style/settings_section">

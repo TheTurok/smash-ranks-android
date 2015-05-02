@@ -166,7 +166,18 @@ public final class NetworkCache {
     public synchronized static int size() {
         final SharedPreferences timestampsCache = getTimestampsCache();
         final Map<String, String> timestamps = (Map<String, String>) timestampsCache.getAll();
-        return timestamps == null ? 0 : timestamps.size();
+        final int timestampsSize = timestamps == null ? 0 : timestamps.size();
+
+        final SharedPreferences jsonCache = getJsonCache();
+        final Map<String, String> jsons = (Map<String, String>) jsonCache.getAll();
+        final int jsonSize = jsons == null ? 0 : jsons.size();
+
+        if (timestampsSize == jsonSize) {
+            return timestampsSize;
+        } else {
+            throw new IllegalStateException("timestampsCache (" + timestampsSize + ") and "
+                    + " jsonCache (" + jsonSize + ") have out-of-sync sizes!");
+        }
     }
 
 

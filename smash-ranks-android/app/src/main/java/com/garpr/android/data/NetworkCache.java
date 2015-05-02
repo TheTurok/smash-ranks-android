@@ -50,7 +50,7 @@ public final class NetworkCache {
 
 
     @SuppressWarnings("unchecked")
-    private synchronized static void clean() {
+    private static synchronized void clean() {
         final SharedPreferences timestampsCache = getTimestampsCache();
         final Map<String, String> timestamps = (Map<String, String>) timestampsCache.getAll();
 
@@ -86,7 +86,7 @@ public final class NetworkCache {
     }
 
 
-    public synchronized static void clear() {
+    public static synchronized void clear() {
         final SharedPreferences timestampsCache = getTimestampsCache();
         Console.d(TAG, "Clearing network cache, it had " + timestampsCache.getAll().size() + " entries");
         timestampsCache.edit().clear().apply();
@@ -94,10 +94,10 @@ public final class NetworkCache {
     }
 
 
-    public synchronized static JSONObject get(final String url) {
+    public static synchronized JSONObject get(final String url) {
         clean();
 
-        final SharedPreferences jsonCache = Settings.get(JSON);
+        final SharedPreferences jsonCache = getJsonCache();
         final String jsonString = jsonCache.getString(url, null);
         final JSONObject json;
 

@@ -9,7 +9,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.App;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.Heartbeat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,18 +18,20 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
 
 
     private boolean mPulledFromNetworkCache;
+    private final boolean mIgnoreCache;
     private String mUrl;
     protected final Response<T> mResponse;
 
 
 
 
-    Call(final Response<T> response) throws IllegalArgumentException {
+    Call(final Response<T> response, final boolean ignoreCache) throws IllegalArgumentException {
         if (response == null) {
             throw new IllegalArgumentException("Response can't be null");
         }
 
         mResponse = response;
+        mIgnoreCache = ignoreCache;
     }
 
 
@@ -50,32 +51,39 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                final Heartbeat heartbeat = mResponse.getHeartbeat();
-
-                if (heartbeat == null || !heartbeat.isAlive()) {
+                if (!mResponse.isAlive()) {
                     return;
                 }
 
-                mUrl = getUrl();
-                final JSONObject response = NetworkCache.get(mUrl);
-                mPulledFromNetworkCache = response != null;
-
-                if (mPulledFromNetworkCache) {
-                    Console.d(getCallName(), "Pulled call response from cache to " + mUrl);
-                    onResponse(response);
+                if (mIgnoreCache) {
+                    makeNetworkRequest();
                 } else {
-                    final JsonObjectRequest request = new JsonObjectRequest(mUrl, Call.this, Call.this);
-                    request.setTag(heartbeat);
+                    mUrl = getUrl();
+                    final JSONObject response = NetworkCache.get(mUrl);
+                    mPulledFromNetworkCache = response != null;
 
-                    Console.d(getCallName(), "Making call to " + mUrl);
-
-                    final RequestQueue requestQueue = App.getRequestQueue();
-                    requestQueue.add(request);
+                    if (mPulledFromNetworkCache) {
+                        Console.d(getCallName(), "Pulled call response from cache to " + mUrl);
+                        onResponse(response);
+                    } else {
+                        makeNetworkRequest();
+                    }
                 }
             }
         };
 
         new Thread(runnable).start();
+    }
+
+
+    private void makeNetworkRequest() {
+        final JsonObjectRequest request = new JsonObjectRequest(mUrl, Call.this, Call.this);
+        request.setTag(mResponse.getHeartbeat());
+
+        Console.d(getCallName(), "Making call to " + mUrl);
+
+        final RequestQueue requestQueue = App.getRequestQueue();
+        requestQueue.add(request);
     }
 
 

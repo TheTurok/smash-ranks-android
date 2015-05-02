@@ -16,26 +16,27 @@ import java.util.ArrayList;
 public final class Matches {
 
 
-    public static void get(final Response<ArrayList<Match>> response, final Player player) {
-        new MatchesCall(response, player).make();
+    public static void get(final Response<ArrayList<Match>> response, final Player player,
+            final boolean ignoreCache) {
+        new MatchesCall(response, player, ignoreCache).make();
     }
 
 
     public static void get(final Response<ArrayList<Match>> response, final String regionId,
-            final Player player) {
-        new MatchesCall(response, regionId, player).make();
+            final Player player, final boolean ignoreCache) {
+        new MatchesCall(response, regionId, player, ignoreCache).make();
     }
 
 
     public static void getHeadToHead(final Response<HeadToHeadBundle> response, final Player player,
-            final Player opponent) {
-        new HeadToHeadCall(response, player, opponent).make();
+            final Player opponent, final boolean ignoreCache) {
+        new HeadToHeadCall(response, player, opponent, ignoreCache).make();
     }
 
 
     public static void getHeadToHead(final Response<HeadToHeadBundle> response, final Player player,
-            final Player opponent, final String regionId) {
-        new HeadToHeadCall(response, player, opponent, regionId).make();
+            final Player opponent, final String regionId, final boolean ignoreCache) {
+        new HeadToHeadCall(response, player, opponent, regionId, ignoreCache).make();
     }
 
 
@@ -51,13 +52,14 @@ public final class Matches {
 
 
         private HeadToHeadCall(final Response<HeadToHeadBundle> response, final Player player,
-                final Player opponent) throws IllegalArgumentException {
-            this(response, player, opponent, Settings.getRegion().getId());
+                final Player opponent, final boolean ignoreCache) throws IllegalArgumentException {
+            this(response, player, opponent, Settings.getRegion().getId(), ignoreCache);
         }
 
 
         private HeadToHeadCall(final Response<HeadToHeadBundle> response, final Player player,
-                final Player opponent, final String regionId) throws IllegalArgumentException {
+                final Player opponent, final String regionId, final boolean ignoreCache)
+                throws IllegalArgumentException {
             super(response, regionId);
 
             if (player == null) {
@@ -102,14 +104,14 @@ public final class Matches {
         private final Player mPlayer;
 
 
-        private MatchesCall(final Response<ArrayList<Match>> response, final Player player)
-                throws IllegalArgumentException {
-            this(response, Settings.getRegion().getId(), player);
+        private MatchesCall(final Response<ArrayList<Match>> response, final Player player,
+                final boolean ignoreCache) throws IllegalArgumentException {
+            this(response, Settings.getRegion().getId(), player, ignoreCache);
         }
 
 
         private MatchesCall(final Response<ArrayList<Match>> response, final String regionId,
-                final Player player) {
+                final Player player, final boolean ignoreCache) throws IllegalArgumentException {
             super(response, regionId);
 
             if (player == null) {

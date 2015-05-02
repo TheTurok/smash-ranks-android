@@ -12,12 +12,14 @@ abstract class RegionBasedCall<T> extends Call<T> {
 
 
 
-    RegionBasedCall(final Response<T> response) throws IllegalArgumentException {
-        this(response, Settings.getRegion().getId());
+    RegionBasedCall(final Response<T> response, final boolean ignoreCache)
+            throws IllegalArgumentException {
+        this(response, Settings.getRegion().getId(), ignoreCache);
     }
 
 
-    RegionBasedCall(final Response<T> response, final String regionId) throws IllegalArgumentException {
+    RegionBasedCall(final Response<T> response, final String regionId, final boolean ignoreCache)
+            throws IllegalArgumentException {
         super(response);
 
         if (!Utils.validStrings(regionId)) {

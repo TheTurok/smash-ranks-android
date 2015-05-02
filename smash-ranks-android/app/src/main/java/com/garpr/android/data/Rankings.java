@@ -36,13 +36,14 @@ public final class Rankings {
     }
 
 
-    public static void get(final Response<ArrayList<Player>> response) {
-        new RankingsCall(response).make();
+    public static void get(final Response<ArrayList<Player>> response, final boolean ignoreCache) {
+        new RankingsCall(response, ignoreCache).make();
     }
 
 
-    public static void get(final Response<ArrayList<Player>> response, final String regionId) {
-        new RankingsCall(response, regionId).make();
+    public static void get(final Response<ArrayList<Player>> response, final String regionId,
+            final boolean ignoreCache) {
+        new RankingsCall(response, regionId, ignoreCache).make();
     }
 
 
@@ -56,14 +57,15 @@ public final class Rankings {
     private static abstract class BaseRankingsCall<T> extends RegionBasedCall<T> {
 
 
-        BaseRankingsCall(final Response<T> response) throws IllegalArgumentException {
-            super(response);
+        BaseRankingsCall(final Response<T> response, final boolean ignoreCache)
+                throws IllegalArgumentException {
+            super(response, ignoreCache);
         }
 
 
-        BaseRankingsCall(final Response<T> response, final String regionId) throws
-                IllegalArgumentException {
-            super(response, regionId);
+        BaseRankingsCall(final Response<T> response, final String regionId, final boolean ignoreCache)
+                throws IllegalArgumentException {
+            super(response, regionId, ignoreCache);
         }
 
 
@@ -102,9 +104,9 @@ public final class Rankings {
         private final long mCurrentRankingsDate;
 
 
-        private CheckForRankingsUpdatesCall(final Response<Result> response) throws
-                IllegalArgumentException {
-            super(response);
+        private CheckForRankingsUpdatesCall(final Response<Result> response)
+                throws IllegalArgumentException {
+            super(response, true);
             mCurrentRankingsDate = getDate();
         }
 
@@ -137,14 +139,15 @@ public final class Rankings {
         private static final String TAG = "RankingsCall";
 
 
-        private RankingsCall(final Response<ArrayList<Player>> response) throws IllegalArgumentException {
-            super(response);
+        private RankingsCall(final Response<ArrayList<Player>> response, final boolean ignoreCache)
+                throws IllegalArgumentException {
+            this(response, Settings.getRegion().getId(), ignoreCache);
         }
 
 
-        private RankingsCall(final Response<ArrayList<Player>> response, final String regionId)
-                throws IllegalArgumentException {
-            super(response, regionId);
+        private RankingsCall(final Response<ArrayList<Player>> response, final String regionId,
+                final boolean ignoreCache) throws IllegalArgumentException {
+            super(response, regionId, ignoreCache);
         }
 
 

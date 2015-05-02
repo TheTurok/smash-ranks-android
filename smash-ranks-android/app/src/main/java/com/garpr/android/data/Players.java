@@ -14,13 +14,14 @@ import java.util.ArrayList;
 public final class Players {
 
 
-    public static void get(final Response<ArrayList<Player>> response) {
-        new PlayersCall(response).make();
+    public static void get(final Response<ArrayList<Player>> response, final boolean ignoreCache) {
+        new PlayersCall(response, ignoreCache).make();
     }
 
 
-    public static void get(final Response<ArrayList<Player>> response, final String regionId) {
-        new PlayersCall(response, regionId).make();
+    public static void get(final Response<ArrayList<Player>> response, final String regionId,
+            final boolean ignoreCache) {
+        new PlayersCall(response, regionId, ignoreCache).make();
     }
 
 
@@ -32,13 +33,14 @@ public final class Players {
         private static final String TAG = "PlayersCall";
 
 
-        private PlayersCall(final Response<ArrayList<Player>> response) throws IllegalArgumentException {
+        private PlayersCall(final Response<ArrayList<Player>> response, final boolean ignoreCache)
+                throws IllegalArgumentException {
             super(response);
         }
 
 
-        private PlayersCall(final Response<ArrayList<Player>> response, final String regionId)
-                throws IllegalArgumentException {
+        private PlayersCall(final Response<ArrayList<Player>> response, final String regionId,
+                final boolean ignoreCache) throws IllegalArgumentException {
             super(response, regionId);
         }
 

@@ -133,6 +133,8 @@ public final class NetworkCache {
         final Editor jsonCacheEditor = getJsonCache().edit();
 
         if (timestamps != null && timestamps.size() >= MAX_SIZE) {
+            Console.d(TAG, "cache contains " + timestamps.size() + ", cleaning...");
+
             final LinkedList<String> timestampsList = new LinkedList<>(timestamps.keySet());
             Collections.sort(timestampsList, TIMESTAMP_COMPARATOR);
 

@@ -54,7 +54,7 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
             public void run() {
                 final Heartbeat heartbeat = mResponse.getHeartbeat();
 
-                if (heartbeat != null && heartbeat.isAlive()) {
+                if (heartbeat != null && !heartbeat.isAlive()) {
                     return;
                 }
 

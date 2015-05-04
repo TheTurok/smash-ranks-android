@@ -53,6 +53,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
     private ArrayList<ListItem> mListItemsShown;
     private ArrayList<ListItem> mLoseListItems;
     private ArrayList<ListItem> mWinListItems;
+    private boolean mPulled;
     private boolean mSetMenuItemsVisible;
     private HeadToHeadBundle mBundle;
     private MenuItem mShow;
@@ -141,6 +142,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
         final ResponseOnUi<HeadToHeadBundle> response = new ResponseOnUi<HeadToHeadBundle>(TAG, this) {
             @Override
             public void errorOnUi(final Exception e) {
+                mPulled = false;
                 Console.e(TAG, "Exception when fetching head to head matches", e);
                 showError();
 
@@ -150,12 +152,13 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
             @Override
             public void successOnUi(final HeadToHeadBundle object) {
+                mPulled = false;
                 mBundle = object;
                 prepareList();
             }
         };
 
-        Matches.getHeadToHead(response, mPlayer, mOpponent);
+        Matches.getHeadToHead(response, mPlayer, mOpponent, mPulled);
     }
 
 
@@ -274,6 +277,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
         super.onRefresh();
 
         if (!isLoading()) {
+            mPulled = true;
             fetchMatches();
         }
     }

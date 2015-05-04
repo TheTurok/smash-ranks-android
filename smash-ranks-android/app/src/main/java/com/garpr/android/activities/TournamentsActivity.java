@@ -47,6 +47,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
     private ArrayList<Tournament> mTournaments;
+    private boolean mPulled;
     private boolean mSetMenuItemsVisible;
     private Filter mFilter;
     private MenuItem mSearch;
@@ -88,6 +89,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         final ResponseOnUi<ArrayList<Tournament>> response = new ResponseOnUi<ArrayList<Tournament>>(TAG, this) {
             @Override
             public void errorOnUi(final Exception e) {
+                mPulled = false;
                 Console.e(TAG, "Exception when retrieving tournaments", e);
                 showError();
 
@@ -97,12 +99,13 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
             @Override
             public void successOnUi(final ArrayList<Tournament> list) {
+                mPulled = false;
                 mTournaments = list;
                 prepareList();
             }
         };
 
-        Tournaments.getAll(response);
+        Tournaments.getAll(response, mPulled);
     }
 
 
@@ -217,6 +220,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
         super.onRefresh();
 
         if (!isLoading()) {
+            mPulled = true;
             MenuItemCompat.collapseActionView(mSearch);
             fetchTournaments();
         }

@@ -35,6 +35,7 @@ public abstract class RegionsFragment extends BaseListFragment implements
 
     private ArrayList<ListItem> mListItems;
     private ArrayList<Region> mRegions;
+    private boolean mPulled;
     protected FrameLayout mFrame;
     protected Region mSelectedRegion;
 
@@ -79,6 +80,7 @@ public abstract class RegionsFragment extends BaseListFragment implements
         final ResponseOnUi<ArrayList<Region>> response = new ResponseOnUi<ArrayList<Region>>(TAG, this) {
             @Override
             public void errorOnUi(final Exception e) {
+                mPulled = false;
                 Console.e(TAG, "Exception when retrieving regions!", e);
                 showError();
 
@@ -88,12 +90,13 @@ public abstract class RegionsFragment extends BaseListFragment implements
 
             @Override
             public void successOnUi(final ArrayList<Region> list) {
+                mPulled = false;
                 mRegions = list;
                 prepareList();
             }
         };
 
-        Regions.get(response);
+        Regions.get(response, mPulled);
     }
 
 
@@ -151,6 +154,7 @@ public abstract class RegionsFragment extends BaseListFragment implements
         super.onRefresh();
 
         if (!isLoading()) {
+            mPulled = true;
             fetchRegions();
         }
     }

@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public final class Regions {
 
 
-    public static void get(final Response<ArrayList<Region>> response) {
-        new RegionsCall(response).make();
+    public static void get(final Response<ArrayList<Region>> response, final boolean ignoreCache) {
+        new RegionsCall(response, ignoreCache).make();
     }
 
 
@@ -27,8 +27,9 @@ public final class Regions {
         private static final String TAG = "RegionsCall";
 
 
-        private RegionsCall(final Response<ArrayList<Region>> response) throws IllegalArgumentException {
-            super(response);
+        private RegionsCall(final Response<ArrayList<Region>> response, final boolean ignoreCache)
+                throws IllegalArgumentException {
+            super(response, ignoreCache);
         }
 
 

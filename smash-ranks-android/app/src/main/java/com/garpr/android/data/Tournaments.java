@@ -16,26 +16,15 @@ import java.util.ArrayList;
 public final class Tournaments {
 
 
-    public static void getAll(final Response<ArrayList<Tournament>> response) {
-        new TournamentsCall(response).make();
-    }
-
-
     public static void getAll(final Response<ArrayList<Tournament>> response,
-            final String regionId) {
-        new TournamentsCall(response, regionId).make();
+            final boolean ignoreCache) {
+        new TournamentsCall(response, ignoreCache).make();
     }
 
 
     public static void getTournament(final Response<TournamentBundle> response,
             final String tournamentId) {
         new TournamentCall(response, tournamentId).make();
-    }
-
-
-    public static void getTournament(final Response<TournamentBundle> response,
-            final String tournamentId, final String regionId) {
-        new TournamentCall(response, tournamentId, regionId).make();
     }
 
 
@@ -51,13 +40,7 @@ public final class Tournaments {
 
         private TournamentCall(final Response<TournamentBundle> response, final String tournamentId)
                 throws IllegalArgumentException {
-            this(response, tournamentId, Settings.getRegion().getId());
-        }
-
-
-        private TournamentCall(final Response<TournamentBundle> response, final String tournamentId,
-                final String regionId) throws IllegalArgumentException {
-            super(response, regionId);
+            super(response, false);
 
             if (!Utils.validStrings(tournamentId)) {
                 throw new IllegalArgumentException("tournamentId is invalid");
@@ -95,14 +78,9 @@ public final class Tournaments {
         private static final String TAG = "TournamentsCall";
 
 
-        private TournamentsCall(final Response<ArrayList<Tournament>> response) throws IllegalArgumentException {
-            this(response, Settings.getRegion().getId());
-        }
-
-
-        private TournamentsCall(final Response<ArrayList<Tournament>> response, final String regionId)
-                throws IllegalArgumentException {
-            super(response, regionId);
+        private TournamentsCall(final Response<ArrayList<Tournament>> response,
+                final boolean ignoreCache) throws IllegalArgumentException {
+            super(response, ignoreCache);
         }
 
 

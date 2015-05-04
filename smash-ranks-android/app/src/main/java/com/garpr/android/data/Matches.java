@@ -22,21 +22,9 @@ public final class Matches {
     }
 
 
-    public static void get(final Response<ArrayList<Match>> response, final String regionId,
-            final Player player, final boolean ignoreCache) {
-        new MatchesCall(response, regionId, player, ignoreCache).make();
-    }
-
-
-    public static void getHeadToHead(final Response<HeadToHeadBundle> response, final Player player,
-            final Player opponent, final boolean ignoreCache) {
+    public static void getHeadToHead(final Response<HeadToHeadBundle> response,
+            final Player player, final Player opponent, final boolean ignoreCache) {
         new HeadToHeadCall(response, player, opponent, ignoreCache).make();
-    }
-
-
-    public static void getHeadToHead(final Response<HeadToHeadBundle> response, final Player player,
-            final Player opponent, final String regionId, final boolean ignoreCache) {
-        new HeadToHeadCall(response, player, opponent, regionId, ignoreCache).make();
     }
 
 
@@ -53,14 +41,7 @@ public final class Matches {
 
         private HeadToHeadCall(final Response<HeadToHeadBundle> response, final Player player,
                 final Player opponent, final boolean ignoreCache) throws IllegalArgumentException {
-            this(response, player, opponent, Settings.getRegion().getId(), ignoreCache);
-        }
-
-
-        private HeadToHeadCall(final Response<HeadToHeadBundle> response, final Player player,
-                final Player opponent, final String regionId, final boolean ignoreCache)
-                throws IllegalArgumentException {
-            super(response, regionId);
+            super(response, ignoreCache);
 
             if (player == null) {
                 throw new IllegalArgumentException("player is null");
@@ -106,13 +87,7 @@ public final class Matches {
 
         private MatchesCall(final Response<ArrayList<Match>> response, final Player player,
                 final boolean ignoreCache) throws IllegalArgumentException {
-            this(response, Settings.getRegion().getId(), player, ignoreCache);
-        }
-
-
-        private MatchesCall(final Response<ArrayList<Match>> response, final String regionId,
-                final Player player, final boolean ignoreCache) throws IllegalArgumentException {
-            super(response, regionId);
+            super(response, ignoreCache);
 
             if (player == null) {
                 throw new IllegalArgumentException("player is null");

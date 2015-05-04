@@ -49,6 +49,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     private ArrayList<ListItem> mListItemsShown;
     private ArrayList<Player> mPlayers;
     private boolean mInUsersRegion;
+    private boolean mPulled;
     private boolean mSetMenuItemsVisible;
     private Filter mFilter;
     private MenuItem mSearch;
@@ -109,6 +110,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         final ResponseOnUi<ArrayList<Player>> response = new ResponseOnUi<ArrayList<Player>>(TAG, this) {
             @Override
             public void errorOnUi(final Exception e) {
+                mPulled = false;
                 Console.e(TAG, "Exception when retrieving rankings", e);
                 showError();
 
@@ -118,12 +120,13 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
             @Override
             public void successOnUi(final ArrayList<Player> list) {
+                mPulled = false;
                 mPlayers = list;
                 prepareList();
             }
         };
 
-        Rankings.get(response);
+        Rankings.get(response, mPulled);
     }
 
 
@@ -243,6 +246,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         super.onRefresh();
 
         if (!isLoading()) {
+            mPulled = true;
             MenuItemCompat.collapseActionView(mSearch);
             fetchRankings();
         }

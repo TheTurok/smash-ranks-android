@@ -41,13 +41,7 @@ public final class Rankings {
     }
 
 
-    public static void get(final Response<ArrayList<Player>> response, final String regionId,
-            final boolean ignoreCache) {
-        new RankingsCall(response, regionId, ignoreCache).make();
-    }
-
-
-    public static long getDate() {
+    private static long getDate() {
         return Settings.get(CNAME).getLong(KEY_RANKINGS_DATE, 0L);
     }
 
@@ -60,12 +54,6 @@ public final class Rankings {
         BaseRankingsCall(final Response<T> response, final boolean ignoreCache)
                 throws IllegalArgumentException {
             super(response, ignoreCache);
-        }
-
-
-        BaseRankingsCall(final Response<T> response, final String regionId, final boolean ignoreCache)
-                throws IllegalArgumentException {
-            super(response, regionId, ignoreCache);
         }
 
 
@@ -141,13 +129,7 @@ public final class Rankings {
 
         private RankingsCall(final Response<ArrayList<Player>> response, final boolean ignoreCache)
                 throws IllegalArgumentException {
-            this(response, Settings.getRegion().getId(), ignoreCache);
-        }
-
-
-        private RankingsCall(final Response<ArrayList<Player>> response, final String regionId,
-                final boolean ignoreCache) throws IllegalArgumentException {
-            super(response, regionId, ignoreCache);
+            super(response, ignoreCache);
         }
 
 

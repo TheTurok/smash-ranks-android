@@ -9,6 +9,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.garpr.android.App;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.Heartbeat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,12 +52,14 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (!mResponse.isAlive()) {
+                final Heartbeat heartbeat = mResponse.getHeartbeat();
+
+                if (heartbeat != null && heartbeat.isAlive()) {
                     return;
                 }
 
                 if (mIgnoreCache) {
-                    makeNetworkRequest();
+                    makeNetworkRequest(heartbeat);
                 } else {
                     mUrl = getUrl();
                     final JSONObject response = NetworkCache.get(mUrl);
@@ -66,7 +69,7 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
                         Console.d(getCallName(), "Pulled call response from cache to " + mUrl);
                         onResponse(response);
                     } else {
-                        makeNetworkRequest();
+                        makeNetworkRequest(heartbeat);
                     }
                 }
             }
@@ -76,9 +79,9 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
     }
 
 
-    private void makeNetworkRequest() {
+    private void makeNetworkRequest(final Heartbeat heartbeat) {
         final JsonObjectRequest request = new JsonObjectRequest(mUrl, Call.this, Call.this);
-        request.setTag(mResponse.getHeartbeat());
+        request.setTag(heartbeat);
 
         Console.d(getCallName(), "Making call to " + mUrl);
 

@@ -56,6 +56,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
     private ArrayList<ListItem> mWinListItems;
     private ArrayList<Match> mMatches;
     private boolean mInUsersRegion;
+    private boolean mPulled;
     private boolean mSetMenuItemsVisible;
     private Filter mFilter;
     private FilterListener<ListItem> mFilterListener;
@@ -141,6 +142,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         final ResponseOnUi<ArrayList<Match>> response = new ResponseOnUi<ArrayList<Match>>(TAG, this) {
             @Override
             public void errorOnUi(final Exception e) {
+                mPulled = false;
                 Console.e(TAG, "Exception when fetching matches", e);
                 showError();
 
@@ -150,12 +152,13 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
             @Override
             public void successOnUi(final ArrayList<Match> list) {
+                mPulled = false;
                 mMatches = list;
                 prepareList();
             }
         };
 
-        Matches.get(response, mPlayer);
+        Matches.get(response, mPlayer, mPulled);
     }
 
 
@@ -333,6 +336,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         super.onRefresh();
 
         if (!isLoading()) {
+            mPulled = false;
             MenuItemCompat.collapseActionView(mSearch);
             fetchMatches();
         }

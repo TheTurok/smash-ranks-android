@@ -45,6 +45,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     private ArrayList<ListItem> mListItems;
     private ArrayList<ListItem> mListItemsShown;
     private ArrayList<Player> mPlayers;
+    private boolean mPulled;
     private Filter mFilter;
     private Listeners mListeners;
     private MenuItem mGo;
@@ -110,6 +111,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
         final ResponseOnUi<ArrayList<Player>> response = new ResponseOnUi<ArrayList<Player>>(TAG, this) {
             @Override
             public void errorOnUi(final Exception e) {
+                mPulled = false;
                 Console.e(TAG, "Exception when retrieving players!", e);
                 showError();
 
@@ -119,12 +121,13 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
             @Override
             public void successOnUi(final ArrayList<Player> list) {
+                mPulled = false;
                 mPlayers = list;
                 prepareList();
             }
         };
 
-        Players.get(response);
+        Players.get(response, mPulled);
     }
 
 
@@ -282,6 +285,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
                 MenuItemCompat.collapseActionView(mSearch);
             }
 
+            mPulled = true;
             refresh();
         }
     }

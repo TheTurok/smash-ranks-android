@@ -19,12 +19,6 @@ public final class Players {
     }
 
 
-    public static void get(final Response<ArrayList<Player>> response, final String regionId,
-            final boolean ignoreCache) {
-        new PlayersCall(response, regionId, ignoreCache).make();
-    }
-
-
 
 
     private static final class PlayersCall extends RegionBasedCall<ArrayList<Player>> {
@@ -35,13 +29,7 @@ public final class Players {
 
         private PlayersCall(final Response<ArrayList<Player>> response, final boolean ignoreCache)
                 throws IllegalArgumentException {
-            super(response);
-        }
-
-
-        private PlayersCall(final Response<ArrayList<Player>> response, final String regionId,
-                final boolean ignoreCache) throws IllegalArgumentException {
-            super(response, regionId);
+            super(response, ignoreCache);
         }
 
 

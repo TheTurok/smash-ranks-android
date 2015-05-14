@@ -58,10 +58,11 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
                     return;
                 }
 
+                mUrl = getUrl();
+
                 if (mIgnoreCache) {
                     makeNetworkRequest(heartbeat);
                 } else {
-                    mUrl = getUrl();
                     final JSONObject response = NetworkCache.get(mUrl);
                     mPulledFromNetworkCache = response != null;
 

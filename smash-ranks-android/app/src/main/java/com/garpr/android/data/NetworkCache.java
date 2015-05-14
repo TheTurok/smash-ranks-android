@@ -147,10 +147,10 @@ public final class NetworkCache {
 
             for (final String timestamp : timestampsList) {
                 final String timestampUrl = timestampsCache.getString(timestamp, null);
+                Console.d(TAG, "url: " + url + " t: " + timestamp + " url: " + timestampUrl);
 
                 if (url.equalsIgnoreCase(timestampUrl)) {
                     timestampsCacheEditor.remove(timestamp);
-                    break;
                 }
             }
         }

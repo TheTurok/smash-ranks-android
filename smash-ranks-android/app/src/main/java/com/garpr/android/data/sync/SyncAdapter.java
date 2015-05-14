@@ -18,6 +18,7 @@ import android.support.v4.net.ConnectivityManagerCompat;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
+import com.garpr.android.data.NetworkCache;
 import com.garpr.android.data.Rankings;
 import com.garpr.android.data.Response;
 import com.garpr.android.data.Settings;
@@ -25,8 +26,6 @@ import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.Notifications;
-
-import java.util.Date;
 
 
 /**
@@ -90,6 +89,7 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements He
                 if (result.noUpdate()) {
                     sendAnalyticsEvent(lastSync, Constants.SAME_ROSTER, null);
                 } else if (result.updateAvailable()) {
+                    NetworkCache.clear();
                     Notifications.showRankingsUpdated();
                     sendAnalyticsEvent(lastSync, Constants.NEW_ROSTER, null);
                 } else {
@@ -103,15 +103,8 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements He
 
 
     private void sendAnalyticsEvent(final long lastSync, final String result, final Exception e) {
-        final Date lastTimeAndDate = new Date(lastSync);
-        final String lastTimeAndDateString = lastTimeAndDate.toString();
-
-        final long now = System.currentTimeMillis();
-        final Date timeAndDate = new Date(now);
-        final String timeAndDateString = timeAndDate.toString();
-
         final Editor editor = Settings.edit(CNAME);
-        editor.putLong(KEY_LAST_SYNC, now);
+        editor.putLong(KEY_LAST_SYNC, System.currentTimeMillis());
         editor.apply();
     }
 

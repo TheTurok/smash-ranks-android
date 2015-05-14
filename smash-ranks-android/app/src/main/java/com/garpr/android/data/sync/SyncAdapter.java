@@ -21,8 +21,6 @@ import com.garpr.android.R;
 import com.garpr.android.data.Rankings;
 import com.garpr.android.data.Response;
 import com.garpr.android.data.Settings;
-import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.Analytics.Event;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
@@ -111,18 +109,6 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements He
         final long now = System.currentTimeMillis();
         final Date timeAndDate = new Date(now);
         final String timeAndDateString = timeAndDate.toString();
-
-        final Event event;
-
-        if (e == null) {
-            event = Analytics.report(Constants.PERIODIC_SYNC);
-        } else {
-            event = Analytics.report(e, Constants.PERIODIC_SYNC);
-        }
-
-        event.putExtra(Constants.LAST_SYNC, lastTimeAndDateString)
-                .putExtra(Constants.SYNC_RESULT, result)
-                .putExtra(Constants.TIME, timeAndDateString);
 
         final Editor editor = Settings.edit(CNAME);
         editor.putLong(KEY_LAST_SYNC, now);

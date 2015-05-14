@@ -17,9 +17,7 @@ import android.widget.TextView;
 import com.garpr.android.R;
 import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Tournaments;
-import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
-import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.MonthlyComparable;
 import com.garpr.android.misc.ListUtils.MonthlySectionCreator;
@@ -92,8 +90,6 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
                 mPulled = false;
                 Console.e(TAG, "Exception when retrieving tournaments", e);
                 showError();
-
-                Analytics.report(e, Constants.TOURNAMENTS).send();
             }
 
 

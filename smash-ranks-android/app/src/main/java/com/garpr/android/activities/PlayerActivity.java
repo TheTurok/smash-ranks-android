@@ -17,9 +17,7 @@ import android.widget.Filter;
 import com.garpr.android.R;
 import com.garpr.android.data.Matches;
 import com.garpr.android.data.ResponseOnUi;
-import com.garpr.android.data.Settings;
 import com.garpr.android.data.User;
-import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
@@ -145,8 +143,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
                 mPulled = false;
                 Console.e(TAG, "Exception when fetching matches", e);
                 showError();
-
-                Analytics.report(e, Constants.MATCHES).send();
             }
 
 
@@ -429,8 +425,6 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         }
 
         startActivity(mShareIntent);
-        Analytics.report(Constants.SHARE).putExtra(Constants.REGION, Settings.getRegion().getName())
-                .putExtra(Constants.WHAT, Constants.PLAYER_MATCHES).send();
     }
 
 

@@ -18,7 +18,6 @@ import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Tournaments;
 import com.garpr.android.fragments.TournamentMatchesFragment;
 import com.garpr.android.fragments.TournamentPlayersFragment;
-import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Tournament;
@@ -65,8 +64,6 @@ public class TournamentActivity extends BaseToolbarActivity implements
             public void errorOnUi(final Exception e) {
                 Console.e(TAG, "Exception when fetching tournament", e);
                 showError();
-
-                Analytics.report(e, Constants.TOURNAMENT).send();
             }
 
 

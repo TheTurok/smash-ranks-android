@@ -19,8 +19,6 @@ import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.fragments.ToolbarRegionsFragment;
-import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.Analytics.Event;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Player;
@@ -40,7 +38,6 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
     private static final String TAG = "OnboardingActivity";
 
-    private boolean mReportToAnalytics;
     private NonSwipeableViewPager mPager;
     private PlayersFragment mPlayersFragment;
     private Region mSelectedRegion;
@@ -57,20 +54,6 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
 
 
     private void finishOnboarding(final boolean savePlayer) {
-        final Event event = Analytics.report(Constants.ONBOARDING)
-                .putExtra(Constants.REGION, mSelectedRegion.getName());
-
-        if (savePlayer) {
-            final Player player = mPlayersFragment.getSelectedPlayer();
-            User.setPlayer(player);
-
-            event.putExtra(Constants.ONBOARDING_STATUS, Constants.COMPLETED);
-        } else {
-            event.putExtra(Constants.ONBOARDING_STATUS, Constants.SKIPPED);
-        }
-
-        event.send();
-
         final Editor editor = Settings.edit(CNAME);
         editor.putBoolean(KEY_ONBOARDING_COMPLETE, true);
         editor.apply();
@@ -138,12 +121,9 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mReportToAnalytics = true;
 
         if (onboardingCompleted()) {
             Crashlytics.setBool(Constants.SKIPPED_ONBOARDING, true);
-
-            mReportToAnalytics = false;
             RankingsActivity.start(this);
             finish();
         } else {
@@ -238,12 +218,6 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
         } else {
             applyStatusBarHeightAsTopPadding(mTop);
         }
-    }
-
-
-    @Override
-    protected boolean reportToAnalytics() {
-        return mReportToAnalytics;
     }
 
 

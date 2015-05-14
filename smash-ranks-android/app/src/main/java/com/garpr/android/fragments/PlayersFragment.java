@@ -17,9 +17,7 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Players;
 import com.garpr.android.data.ResponseOnUi;
-import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
-import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
@@ -114,8 +112,6 @@ public class PlayersFragment extends BaseListToolbarFragment implements
                 mPulled = false;
                 Console.e(TAG, "Exception when retrieving players!", e);
                 showError();
-
-                Analytics.report(e, Constants.PLAYERS).send();
             }
 
 

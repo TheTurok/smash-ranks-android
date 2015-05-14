@@ -15,9 +15,7 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Matches;
 import com.garpr.android.data.ResponseOnUi;
-import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
-import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.MonthlyComparable;
 import com.garpr.android.misc.ListUtils.MonthlySectionCreator;
@@ -145,8 +143,6 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
                 mPulled = false;
                 Console.e(TAG, "Exception when fetching head to head matches", e);
                 showError();
-
-                Analytics.report(e, Constants.HEAD_TO_HEAD).send();
             }
 
 

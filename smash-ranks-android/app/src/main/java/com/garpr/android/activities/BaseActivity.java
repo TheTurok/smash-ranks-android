@@ -20,7 +20,6 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.fragments.BaseFragment;
-import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.misc.Notifications;
@@ -193,16 +192,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
 
 
     @Override
-    protected void onPostCreate(final Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        if (reportToAnalytics()) {
-            Analytics.report(getActivityName()).send();
-        }
-    }
-
-
-    @Override
     protected void onPostResume() {
         super.onPostResume();
         Crashlytics.setString(Constants.CURRENT_ACTIVITY, getActivityName());
@@ -219,11 +208,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
     protected void onResume() {
         super.onResume();
         Notifications.clear();
-    }
-
-
-    protected boolean reportToAnalytics() {
-        return true;
     }
 
 

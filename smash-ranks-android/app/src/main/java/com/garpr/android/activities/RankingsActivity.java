@@ -20,9 +20,7 @@ import com.garpr.android.data.Rankings;
 import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.User;
 import com.garpr.android.data.sync.Sync;
-import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Console;
-import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.ListUtils.SpecialFilterable;
@@ -113,8 +111,6 @@ public class RankingsActivity extends BaseToolbarListActivity implements
                 mPulled = false;
                 Console.e(TAG, "Exception when retrieving rankings", e);
                 showError();
-
-                Analytics.report(e, Constants.RANKINGS).send();
             }
 
 

@@ -22,7 +22,6 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.data.NetworkCache;
 import com.garpr.android.data.Settings;
-import com.garpr.android.misc.Analytics;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
@@ -304,8 +303,6 @@ public class SettingsActivity extends BaseToolbarActivity {
 
         final String videoUrl = Constants.RANDOM_YOUTUBE_VIDEOS[videoIndex];
         openLink(videoUrl);
-
-        Analytics.report(Constants.EASTER_EGG).putExtra(Constants.WHICH, Constants.ORB).send();
     }
 
 

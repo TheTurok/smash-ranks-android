@@ -8,8 +8,6 @@ import android.support.v4.app.Fragment;
 import com.garpr.android.data.Settings;
 import com.garpr.android.fragments.FloatingActionButtonRegionsFragment;
 import com.garpr.android.fragments.RegionsFragment;
-import com.garpr.android.misc.Analytics;
-import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Region;
 
 
@@ -46,8 +44,6 @@ public class RegionsActivity extends BaseFragmentActivity implements
         final Region region = fragment.getSelectedRegion();
         Settings.setRegion(region);
         finish();
-
-        Analytics.report(Constants.REGION_CHANGE).send();
     }
 
 

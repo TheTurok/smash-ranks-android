@@ -52,37 +52,37 @@ public final class NetworkCache {
     @SuppressWarnings("unchecked")
     private static synchronized void clean() {
         final SharedPreferences timestampsCache = getTimestampsCache();
-        final Map<String, String> timestamps = (Map<String, String>) timestampsCache.getAll();
+        final Map<String, String> timestampsMap = (Map<String, String>) timestampsCache.getAll();
 
-        if (timestamps == null || timestamps.isEmpty()) {
+        if (timestampsMap == null || timestampsMap.isEmpty()) {
             return;
         }
 
         final long now = System.currentTimeMillis() / 1000L;
+        final Editor timestampsCacheEditor = timestampsCache.edit();
+        final Editor jsonCacheEditor = getJsonCache().edit();
 
-        boolean editing = false;
-        Editor timestampsCacheEditor = null;
-        Editor jsonCacheEditor = null;
+        final LinkedList<String> timestampsList = new LinkedList<>(timestampsMap.keySet());
+        Collections.sort(timestampsList, TIMESTAMP_COMPARATOR);
 
-        for (final Entry<String, String> timestampEntry : timestamps.entrySet()) {
-            final long then = Long.parseLong(timestampEntry.getKey());
+        while (timestampsList.size() >= MAX_SIZE) {
+            final String timestampToRemove = timestampsList.removeLast();
+            final String urlToRemove = timestampsMap.get(timestampToRemove);
+            timestampsCacheEditor.remove(timestampToRemove);
+            jsonCacheEditor.remove(urlToRemove);
+        }
+
+        for (final String timestamp : timestampsList) {
+            final long then = Long.parseLong(timestamp);
 
             if (now - then >= TIMESTAMP_CUTOFF) {
-                if (!editing) {
-                    editing = true;
-                    timestampsCacheEditor = timestampsCache.edit();
-                    jsonCacheEditor = getJsonCache().edit();
-                }
-
-                timestampsCacheEditor.remove(timestampEntry.getKey());
-                jsonCacheEditor.remove(timestampEntry.getValue());
+                jsonCacheEditor.remove(timestampsMap.get(timestamp));
+                timestampsCacheEditor.remove(timestamp);
             }
         }
 
-        if (editing) {
-            timestampsCacheEditor.apply();
-            jsonCacheEditor.apply();
-        }
+        timestampsCacheEditor.apply();
+        jsonCacheEditor.apply();
     }
 
 
@@ -127,30 +127,19 @@ public final class NetworkCache {
 
     @SuppressWarnings("unchecked")
     public synchronized static void set(final String url, final JSONObject json) {
+        clean();
+
         final SharedPreferences timestampsCache = getTimestampsCache();
         final Map<String, String> timestamps = (Map<String, String>) timestampsCache.getAll();
         final Editor timestampsCacheEditor = timestampsCache.edit();
         final Editor jsonCacheEditor = getJsonCache().edit();
 
-        if (timestamps != null && timestamps.size() >= MAX_SIZE) {
-            Console.d(TAG, "cache contains " + timestamps.size() + ", cleaning...");
-
-            final LinkedList<String> timestampsList = new LinkedList<>(timestamps.keySet());
-            Collections.sort(timestampsList, TIMESTAMP_COMPARATOR);
-
-            do {
-                final String timestampToRemove = timestampsList.removeLast();
-                final String urlToRemove = timestamps.get(timestampToRemove);
-                timestampsCacheEditor.remove(timestampToRemove);
-                jsonCacheEditor.remove(urlToRemove);
-            } while (timestampsList.size() >= MAX_SIZE);
-
-            for (final String timestamp : timestampsList) {
-                final String timestampUrl = timestampsCache.getString(timestamp, null);
-                Console.d(TAG, "url: " + url + " t: " + timestamp + " url: " + timestampUrl);
+        if (timestamps != null && !timestamps.isEmpty()) {
+            for (final Entry<String, String> timestamp : timestamps.entrySet()) {
+                final String timestampUrl = timestamp.getValue();
 
                 if (url.equalsIgnoreCase(timestampUrl)) {
-                    timestampsCacheEditor.remove(timestamp);
+                    timestampsCacheEditor.remove(timestampUrl);
                 }
             }
         }

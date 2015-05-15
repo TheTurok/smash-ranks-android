@@ -4,7 +4,6 @@ package com.garpr.android.misc;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.garpr.android.BuildConfig;
 import com.garpr.android.models.LogMessage;
 
 import java.lang.ref.WeakReference;
@@ -98,20 +97,12 @@ public final class Console {
 
 
     public static void d(final String tag, final String msg) {
-        if (BuildConfig.DEBUG) {
-            Log.d(tag, msg);
-        }
-
         Crashlytics.log(Log.DEBUG, tag, msg);
         add(Log.DEBUG, tag, msg, null);
     }
 
 
     public static void d(final String tag, final String msg, final Throwable tr) {
-        if (BuildConfig.DEBUG) {
-            Log.d(tag, msg, tr);
-        }
-
         Crashlytics.logException(tr);
         Crashlytics.log(Log.DEBUG, tag, msg);
         add(Log.DEBUG, tag, msg, tr);
@@ -149,20 +140,12 @@ public final class Console {
 
 
     public static void e(final String tag, final String msg) {
-        if (BuildConfig.DEBUG) {
-            Log.e(tag, msg);
-        }
-
         Crashlytics.log(Log.ERROR, tag, msg);
         add(Log.ERROR, tag, msg, null);
     }
 
 
     public static void e(final String tag, final String msg, final Throwable tr) {
-        if (BuildConfig.DEBUG) {
-            Log.e(tag, msg, tr);
-        }
-
         Crashlytics.logException(tr);
         Crashlytics.log(Log.ERROR, tag, msg);
         add(Log.ERROR, tag, msg, tr);
@@ -217,20 +200,12 @@ public final class Console {
 
 
     public static void w(final String tag, final String msg) {
-        if (BuildConfig.DEBUG) {
-            Log.w(tag, msg);
-        }
-
         Crashlytics.log(Log.WARN, tag, msg);
         add(Log.WARN, tag, msg, null);
     }
 
 
     public static void w(final String tag, final String msg, final Throwable tr) {
-        if (BuildConfig.DEBUG) {
-            Log.w(tag, msg, tr);
-        }
-
         Crashlytics.logException(tr);
         Crashlytics.log(Log.WARN, tag, msg);
         add(Log.WARN, tag, msg, tr);

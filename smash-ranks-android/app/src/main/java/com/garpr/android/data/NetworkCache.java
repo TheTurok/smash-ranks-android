@@ -137,7 +137,9 @@ public final class NetworkCache {
                 final String timestampUrl = timestamp.getValue();
 
                 if (url.equalsIgnoreCase(timestampUrl)) {
-                    timestampsCacheEditor.remove(timestampUrl);
+                    timestampsCacheEditor.remove(timestamp.getKey());
+                    jsonCacheEditor.remove(timestampUrl);
+                    break;
                 }
             }
         }

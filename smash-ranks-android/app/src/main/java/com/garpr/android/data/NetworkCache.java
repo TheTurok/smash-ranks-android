@@ -95,8 +95,6 @@ public final class NetworkCache {
 
 
     public static synchronized JSONObject get(final String url) {
-        clean();
-
         final SharedPreferences jsonCache = getJsonCache();
         final String jsonString = jsonCache.getString(url, null);
         final JSONObject json;

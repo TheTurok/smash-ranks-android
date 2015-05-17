@@ -88,7 +88,7 @@ public final class App extends Application {
 
         if (currentVersion > lastVersion) {
             onUpgrade(lastVersion, currentVersion);
-            Settings.setLastVersion(lastVersion);
+            Settings.setLastVersion(currentVersion);
         }
     }
 

@@ -42,9 +42,9 @@ public final class NetworkCache {
 
     static {
         if (BuildConfig.DEBUG) {
-            MAX_SIZE = 8;
+            MAX_SIZE = 6;
         } else {
-            MAX_SIZE = 32;
+            MAX_SIZE = 24;
         }
     }
 

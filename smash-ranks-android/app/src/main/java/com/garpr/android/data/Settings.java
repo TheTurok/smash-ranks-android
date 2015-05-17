@@ -24,6 +24,7 @@ public final class Settings {
 
 
     private static final String KEY_REGION = "KEY_REGION";
+    private static final String KEY_LAST_VERSION = "KEY_LAST_VERSION";
     private static final String TAG = "Settings";
 
     private static final LinkedList<WeakReference<OnRegionChangedListener>> REGION_LISTENERS;
@@ -147,6 +148,11 @@ public final class Settings {
     }
 
 
+    public static int getLastVersion() {
+        return get().getInt(KEY_LAST_VERSION, 0);
+    }
+
+
     private static void notifyRegionListeners() {
         synchronized (REGION_LISTENERS) {
             if (REGION_LISTENERS.isEmpty()) {
@@ -191,6 +197,11 @@ public final class Settings {
         final Editor editor = edit();
         editor.putString(KEY_REGION, regionString);
         editor.apply();
+    }
+
+
+    public static void setLastVersion(final int lastVersion) {
+        edit().putInt(KEY_LAST_VERSION, lastVersion);
     }
 
 

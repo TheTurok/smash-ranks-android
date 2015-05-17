@@ -11,6 +11,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.garpr.android.data.Database;
+import com.garpr.android.data.NetworkCache;
+import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
@@ -80,6 +82,24 @@ public final class App extends Application {
 
         sRequestQueue = Volley.newRequestQueue(sContext, new OkHttpStack());
         Database.initialize();
+
+        final int currentVersion = getVersionCode();
+        final int lastVersion = Settings.getLastVersion();
+
+        if (currentVersion > lastVersion) {
+            onUpgrade(lastVersion, currentVersion);
+            Settings.setLastVersion(lastVersion);
+        }
+    }
+
+
+    private void onUpgrade(final int lastVersion, final int currentVersion) {
+        Console.d(TAG, "Upgrading from " + lastVersion + " to " + currentVersion);
+
+        if (lastVersion < 34) {
+            // network cache is potentially corrupted and should be cleared
+            NetworkCache.clear();
+        }
     }
 
 

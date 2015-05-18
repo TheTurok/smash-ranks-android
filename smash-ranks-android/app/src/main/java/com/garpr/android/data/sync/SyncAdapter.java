@@ -23,7 +23,6 @@ import com.garpr.android.data.Rankings;
 import com.garpr.android.data.Response;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Console;
-import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.Notifications;
 
@@ -75,37 +74,24 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements He
     }
 
 
-    private void checkForRosterUpdate(final long lastSync) {
+    private void checkForRosterUpdate() {
         final Response<Rankings.Result> response = new Response<Rankings.Result>(TAG, this) {
             @Override
             public void error(final Exception e) {
                 Console.e(TAG, "Exception when retrieving roster while syncing!", e);
-                sendAnalyticsEvent(lastSync, Constants.EXCEPTION, e);
             }
 
 
             @Override
             public void success(final Rankings.Result result) {
-                if (result.noUpdate()) {
-                    sendAnalyticsEvent(lastSync, Constants.SAME_ROSTER, null);
-                } else if (result.updateAvailable()) {
+                if (result.updateAvailable()) {
                     NetworkCache.clear();
                     Notifications.showRankingsUpdated();
-                    sendAnalyticsEvent(lastSync, Constants.NEW_ROSTER, null);
-                } else {
-                    throw new IllegalStateException("Illegal Rankings.Result: " + result);
                 }
             }
         };
 
         Rankings.checkForUpdates(response);
-    }
-
-
-    private void sendAnalyticsEvent(final long lastSync, final String result, final Exception e) {
-        final Editor editor = Settings.edit(CNAME);
-        editor.putLong(KEY_LAST_SYNC, System.currentTimeMillis());
-        editor.apply();
     }
 
 
@@ -143,22 +129,18 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter implements He
                 "\", \"" + provider + "\", \"" + syncResult + "\")");
 
         final SharedPreferences sPreferences = Settings.get(CNAME);
-        long lastSync = sPreferences.getLong(KEY_LAST_SYNC, 0L);
+        final long lastSync = sPreferences.getLong(KEY_LAST_SYNC, 0L);
+        final Editor editor = sPreferences.edit();
+        editor.putLong(KEY_LAST_SYNC, System.currentTimeMillis());
+        editor.apply();
 
-        if (lastSync == 0L) {
-            // So when the app's syncing functionality is first initialized, a sync is forcibly
-            // started. This is bad because that is handled in RankingActivity's onCreate(), which
-            // means we'll already be grabbing players and rankings and stuff when this sync
-            // begins. So in order to prevent these things from happening simultaneously, we just
-            // don't sync at all.
-            // May have to look into setting a flag in the Players class that will tell the sync
-            // to back off if a refresh is currently in progress.
-            lastSync = System.currentTimeMillis();
-            final Editor editor = sPreferences.edit();
-            editor.putLong(KEY_LAST_SYNC, lastSync);
-            editor.apply();
-        } else if (canSync()) {
-            checkForRosterUpdate(lastSync);
+        // So when the app's syncing functionality is first initialized, a sync is forcibly started.
+        // This is bad because that is handled in RankingActivity's onCreate(), which means we'll
+        // we'll already be grabbing players and rankings and stuff when this sync begins. So in
+        // order to prevent these things from happening simultaneously, we just don't sync at all.
+
+        if (lastSync != 0L && canSync()) {
+            checkForRosterUpdate();
         }
     }
 

@@ -60,7 +60,7 @@ public abstract class Response<T> implements Heartbeat {
      */
     @Override
     public final boolean isAlive() {
-        final Heartbeat heartbeat = mHeartbeat.get();
+        final Heartbeat heartbeat = getHeartbeat();
         return heartbeat != null && heartbeat.isAlive();
     }
 

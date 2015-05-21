@@ -104,8 +104,11 @@
                         android:id="@+id/activity_settings_author"
                         style="@style/settings_container">
                         <TextView
-                            android:text="@string/app_by_charles_madere"
+                            android:text="@string/app_written_by"
                             style="@style/settings_title" />
+                        <TextView
+                            android:text="@string/app_authors"
+                            style="@style/settings_subtitle" />
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/activity_settings_github"

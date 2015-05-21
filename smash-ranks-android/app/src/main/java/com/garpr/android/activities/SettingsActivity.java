@@ -6,12 +6,14 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
@@ -256,7 +258,7 @@ public class SettingsActivity extends BaseToolbarActivity {
         mAuthor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                openLink(Constants.CHARLES_TWITTER_URL);
+                showAuthorsDialog();
             }
         });
 
@@ -301,8 +303,31 @@ public class SettingsActivity extends BaseToolbarActivity {
             videoIndex = Utils.RANDOM.nextInt(Constants.RANDOM_YOUTUBE_VIDEOS.length);
         } while (videoIndex < 0 || videoIndex >= Constants.RANDOM_YOUTUBE_VIDEOS.length);
 
-        final String videoUrl = Constants.RANDOM_YOUTUBE_VIDEOS[videoIndex];
-        openLink(videoUrl);
+        openLink(Constants.RANDOM_YOUTUBE_VIDEOS[videoIndex]);
+    }
+
+
+    private void showAuthorsDialog() {
+        final String[] items = getResources().getStringArray(R.array.app_authors);
+
+        new AlertDialog.Builder(SettingsActivity.this)
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dialog.dismiss();
+                        final String author = items[which];
+
+                        if (author.equalsIgnoreCase(getString(R.string.charles_madere))) {
+                            openLink(Constants.CHARLES_TWITTER_URL);
+                        } else if (author.equalsIgnoreCase(getString(R.string.timothy_choi))) {
+                            // TODO
+                            // find out what he wants here...
+                        } else {
+                            throw new RuntimeException("unknown author: " + author);
+                        }
+                    }
+                })
+                .show();
     }
 
 

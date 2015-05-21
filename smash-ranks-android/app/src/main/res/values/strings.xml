@@ -5,12 +5,14 @@
     <string name="advanced">Advanced</string>
     <string name="x_against_y">%1$s against %2$s</string>
     <string name="alphabetical_order">Alphabetical Order</string>
-    <string name="app_by_charles_madere">App by Charles Madere</string>
+    <string name="app_authors">Charles Madere and Timothy Choi</string>
+    <string name="app_written_by">App written by</string>
     <string name="are_you_sure_you_dont_want_to_select_your_tag">Are you sure that you don\'t want to select your tag?</string>
     <string name="back">Back</string>
     <string name="cancel">Cancel</string>
     <string name="change_region">Change region</string>
     <string name="change_sync_settings">Change sync settings</string>
+    <string name="charles_madere">Charles Madere</string>
     <string name="chronologically">Chronologically</string>
     <string name="clear">Clear</string>
     <string name="clear_cache">Clear cache</string>
@@ -120,6 +122,7 @@
         version of your current region\'s roster. If a new roster is found, it\'ll be automatically
         downloaded, and a notification will appear in your device\'s notification center.</string>
     <string name="tag_and_message"><b>%1$s</b> %2$s</string>
+    <string name="timothy_choi">Timothy Choi</string>
     <string name="title">Title</string>
     <string name="tournament">Tournament</string>
     <string name="tournaments">Tournaments</string>

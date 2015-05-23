@@ -24,7 +24,7 @@ import com.garpr.android.misc.ListUtils.MonthlySectionCreator;
 import com.garpr.android.misc.ListUtils.SpecialFilterable;
 import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
-import com.garpr.android.models.DateWrapper;
+import com.garpr.android.models.BaseDateWrapper;
 import com.garpr.android.models.Region;
 import com.garpr.android.models.Tournament;
 import com.garpr.android.views.SimpleSeparatorView;
@@ -70,7 +70,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
         final MonthlySectionCreator creator = new MonthlySectionCreator() {
             @Override
-            public MonthlyComparable createMonthlySection(final DateWrapper dateWrapper) {
+            public MonthlyComparable createMonthlySection(final BaseDateWrapper dateWrapper) {
                 return ListItem.createDate(dateWrapper);
             }
         };
@@ -283,13 +283,13 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
         private static long sId;
 
-        private DateWrapper mDateWrapper;
+        private BaseDateWrapper mDateWrapper;
         private long mId;
         private Tournament mTournament;
         private Type mType;
 
 
-        private static ListItem createDate(final DateWrapper dateWrapper) {
+        private static ListItem createDate(final BaseDateWrapper dateWrapper) {
             final ListItem item = new ListItem();
             item.mDateWrapper = dateWrapper;
             item.mId = sId++;
@@ -335,7 +335,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
         @Override
-        public DateWrapper getDateWrapper() {
+        public BaseDateWrapper getDateWrapper() {
             return mDateWrapper;
         }
 

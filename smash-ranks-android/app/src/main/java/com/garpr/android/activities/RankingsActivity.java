@@ -27,6 +27,7 @@ import com.garpr.android.misc.ListUtils.SpecialFilterable;
 import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
+import com.garpr.android.models.RankingsBundle;
 import com.garpr.android.models.Region;
 import com.garpr.android.views.RankingItemView;
 import com.garpr.android.views.SimpleSeparatorView;
@@ -105,7 +106,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     private void fetchRankings() {
         setLoading(true);
 
-        final ResponseOnUi<ArrayList<Player>> response = new ResponseOnUi<ArrayList<Player>>(TAG, this) {
+        final ResponseOnUi<RankingsBundle> response = new ResponseOnUi<RankingsBundle>(TAG, this) {
             @Override
             public void errorOnUi(final Exception e) {
                 mPulled = false;
@@ -115,9 +116,9 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
             @Override
-            public void successOnUi(final ArrayList<Player> list) {
+            public void successOnUi(final RankingsBundle rankingsBundle) {
                 mPulled = false;
-                mPlayers = list;
+                mPlayers = rankingsBundle.getRankings();
                 prepareList();
             }
         };

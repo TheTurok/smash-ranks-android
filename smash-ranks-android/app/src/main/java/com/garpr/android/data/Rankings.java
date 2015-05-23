@@ -1,15 +1,13 @@
 package com.garpr.android.data;
 
 
+import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
-import com.garpr.android.misc.Utils;
 import com.garpr.android.models.RankingsBundle;
+import com.garpr.android.models.RankingsBundle.DateWrapper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.ParseException;
-import java.util.Date;
 
 
 public final class Rankings {
@@ -36,6 +34,11 @@ public final class Rankings {
     }
 
 
+    private static void setDate(final long date) {
+        Settings.edit(CNAME).putLong(KEY_RANKINGS_DATE, date).apply();
+    }
+
+
 
 
     private static abstract class BaseRankingsCall<T> extends RegionBasedCall<T> {
@@ -48,31 +51,29 @@ public final class Rankings {
 
 
         @Override
-        String getUrl() {
+        final String getUrl() {
             return super.getUrl() + Constants.RANKINGS;
         }
 
 
         @Override
-        void onJSONResponse(final JSONObject json) throws JSONException {
+        final void onJSONResponse(final JSONObject json) throws JSONException {
+            final RankingsBundle rankingsBundle = new RankingsBundle(json);
 
-            // TODO
-            // this should use the new RankingsBundle object to grab the time
-
-            final String rankingsDateString = json.optString(Constants.TIME);
-
-            if (Utils.validStrings(rankingsDateString)) {
-                try {
-                    final Date rankingsDate = RANKINGS_DATE_PARSER.parse(rankingsDateString);
-                    final long rawRankingsDate = rankingsDate.getTime();
-
-                    Settings.edit(CNAME).putLong(KEY_RANKINGS_DATE, rawRankingsDate).apply();
-                } catch (final ParseException e) {
-                    throw new JSONException("Exception when parsing rankings date: \"" +
-                            rankingsDateString + "\". " + e.getMessage());
-                }
+            if (rankingsBundle.hasDateWrapper()) {
+                final DateWrapper dateWrapper = rankingsBundle.getDateWrapper();
+                final long newRankingsDate = dateWrapper.getDate().getTime();
+                setDate(newRankingsDate);
+            } else {
+                Console.w(getCallName(), "RankingsBundle has no DateWrapper? Region is "
+                        + Settings.getRegion().getName());
             }
+
+            onRankingsBundleResponse(rankingsBundle);
         }
+
+
+        abstract void onRankingsBundleResponse(final RankingsBundle rankingsBundle);
 
 
     }
@@ -100,11 +101,10 @@ public final class Rankings {
 
 
         @Override
-        void onJSONResponse(final JSONObject json) throws JSONException {
-            super.onJSONResponse(json);
+        void onRankingsBundleResponse(final RankingsBundle rankingsBundle) {
             final long newRankingsDate = getDate();
 
-            if (mCurrentRankingsDate < newRankingsDate) {
+            if (mCurrentRankingsDate != 0L && mCurrentRankingsDate < newRankingsDate) {
                 mResponse.success(Result.UPDATE_AVAILABLE);
             } else {
                 mResponse.success(Result.NO_UPDATE);
@@ -134,9 +134,8 @@ public final class Rankings {
 
 
         @Override
-        void onJSONResponse(final JSONObject json) throws JSONException {
-            super.onJSONResponse(json);
-            mResponse.success(new RankingsBundle(json));
+        void onRankingsBundleResponse(final RankingsBundle rankingsBundle) {
+            mResponse.success(rankingsBundle);
         }
 
 

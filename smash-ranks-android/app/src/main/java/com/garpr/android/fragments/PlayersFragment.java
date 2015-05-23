@@ -421,7 +421,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
                     break;
 
                 default:
-                    throw new IllegalStateException("ListItem Type is invalid");
+                    throw new IllegalStateException("invalid ListItem Type: " + mType);
             }
 
             return name;

@@ -123,7 +123,7 @@ public class TournamentBundle implements Parcelable {
     public String toString() {
         final Context context = App.getContext();
         return context.getString(R.string.w_on_x_has_y_players_and_z_matches, mTournament.getName(),
-                mTournament.getDateWrapper().getRawDate(), mPlayers.size(), mMatches.size());
+                mTournament.getDateWrapper().getMmDdYy(), mPlayers.size(), mMatches.size());
     }
 
 

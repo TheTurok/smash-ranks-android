@@ -40,7 +40,10 @@ public final class Constants {
     public static final String MATCHES = "matches";
     public static final String MESSAGE = "message";
     public static final String MIMETYPE_TEXT_PLAIN = "text/plain";
+    public static final String MM_DD_YY_FORMAT = "MM/d/yy";
     public static final String MONTH_FORMAT = "LLLL";
+    public static final String MONTH_AND_DAY_FORMAT = "MMM d";
+    public static final String MONTH_AND_DAY_AND_YEAR_FORMAT = "MMM d, yyyy";
     public static final String NAME = "name";
     public static final String NEW_REGION = "new_region";
     public static final String NEW_ROSTER = "new_roster";
@@ -122,6 +125,7 @@ public final class Constants {
             "https://www.youtube.com/watch?v=QKfGNdSxy5E", // lord vs s2j falcon round robin
             "https://www.youtube.com/watch?v=U3mtUCizvf8", // ahmad vs gar money match
             "https://www.youtube.com/watch?v=lSxYS99TwaU", // fly vs silentwolf KoC 3
+            "https://www.youtube.com/watch?v=7i0PUCX7VEw", // leffen vs chillin salty suite
             "https://www.youtube.com/watch?v=MlGM0BFv3JU" // westballz sacred combo
     };
 

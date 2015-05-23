@@ -346,7 +346,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
             switch (mType) {
                 case DATE:
-                    name = mDateWrapper.getRawDate();
+                    name = mDateWrapper.getMonthAndYear();
                     break;
 
                 case TOURNAMENT:

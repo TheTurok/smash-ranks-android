@@ -52,6 +52,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     private boolean mPulled;
     private boolean mSetMenuItemsVisible;
     private Filter mFilter;
+    private MenuItem mDate;
     private MenuItem mSearch;
     private Player mUserPlayer;
     private String mRankingsDate;
@@ -123,7 +124,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
                 mPlayers = rankingsBundle.getRankings();
 
                 if (rankingsBundle.hasDateWrapper()) {
-                    mRankingsDate = rankingsBundle.getDateWrapper().get();
+                    mRankingsDate = rankingsBundle.getDateWrapper()
+                            .getMonthAndDayOrMonthAndDayAndYear();
                 }
 
                 prepareList();
@@ -160,7 +162,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     private boolean isMenuNull() {
-        return Utils.areAnyObjectsNull(mSearch);
+        return Utils.areAnyObjectsNull(mDate, mSearch);
     }
 
 
@@ -217,6 +219,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
+        mDate = menu.findItem(R.id.activity_rankings_menu_date);
         mSearch = menu.findItem(R.id.activity_rankings_menu_search);
 
         MenuItemCompat.setOnActionExpandListener(mSearch, this);
@@ -309,7 +312,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     private void showMenuItems() {
-        Utils.showMenuItems(mSearch);
+        mDate.setTitle(getString(R.string.updated_x, mRankingsDate));
+        Utils.showMenuItems(mDate, mSearch);
     }
 
 
@@ -390,7 +394,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
                     break;
 
                 default:
-                    throw new IllegalStateException("ListItem Type is invalid");
+                    throw new IllegalStateException("invalid ListItem Type: " + mType);
             }
 
             return name;

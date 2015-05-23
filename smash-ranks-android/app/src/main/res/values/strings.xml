@@ -126,6 +126,7 @@
     <string name="title">Title</string>
     <string name="tournament">Tournament</string>
     <string name="tournaments">Tournaments</string>
+    <string name="updated_x">Updated %s</string>
     <string name="version_information">Version information</string>
     <string name="view">View</string>
     <string name="view_">View…</string>

@@ -99,7 +99,7 @@ public class TournamentSeparatorView extends FrameLayout implements View.OnClick
 
     public void setTournament(final Tournament tournament) {
         mTournament = tournament;
-        mDate.setText(mTournament.getDateWrapper().getRawDate());
+        mDate.setText(mTournament.getDateWrapper().getMmDdYy());
         mName.setText(mTournament.getName());
     }
 

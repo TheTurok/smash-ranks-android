@@ -26,7 +26,7 @@ public class LogMessage implements Parcelable {
 
     private void throwIfPriorityIsInvalid() {
         if (mPriority != Log.DEBUG && mPriority != Log.WARN && mPriority != Log.ERROR) {
-            throw new IllegalArgumentException("priority must be either Log.DEBUG (" + Log.DEBUG
+            throw new IllegalArgumentException("mPriority must be either Log.DEBUG (" + Log.DEBUG
                     + "), Log.WARN (" + Log.WARN + "), or Log.ERROR (" + Log.ERROR + ')');
         }
     }
@@ -155,7 +155,7 @@ public class LogMessage implements Parcelable {
     @Override
     public String toString() {
         final Context context = App.getContext();
-        return context.getString(R.string.x_colon_y, tag, message);
+        return context.getString(R.string.x_colon_y, mTag, mMessage);
     }
 
 

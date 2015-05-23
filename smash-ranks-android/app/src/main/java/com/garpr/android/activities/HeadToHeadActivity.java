@@ -455,7 +455,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
             switch (mType) {
                 case DATE:
-                    title = mDateWrapper.getRawDate();
+                    title = mDateWrapper.getMonthAndYear();
                     break;
 
                 case RESULTS:
@@ -468,7 +468,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
                     break;
 
                 default:
-                    throw new IllegalStateException("ListItem Type is invalid");
+                    throw new IllegalStateException("invalid ListItem Type: " + mType);
             }
 
             return title;

@@ -161,15 +161,28 @@ public class Tournament implements AlphabeticallyComparable, MonthlyComparable, 
         }
 
 
-        DateWrapper(final String date) throws ParseException {
+        private DateWrapper(final String date) throws ParseException {
             super(DATE_PARSER, date);
         }
 
 
-        DateWrapper(final Parcel source) {
+        private DateWrapper(final Parcel source) {
             super(source);
         }
 
+
+        public static final Creator<DateWrapper> CREATOR = new Creator<DateWrapper>() {
+            @Override
+            public DateWrapper createFromParcel(final Parcel source) {
+                return new DateWrapper(source);
+            }
+
+
+            @Override
+            public DateWrapper[] newArray(final int size) {
+                return new DateWrapper[size];
+            }
+        };
 
 
     }

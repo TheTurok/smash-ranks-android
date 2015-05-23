@@ -150,7 +150,7 @@ public class Tournament implements AlphabeticallyComparable, MonthlyComparable, 
 
 
 
-    public static class DateWrapper extends BaseDateWrapper implements Parcelable {
+    public static final class DateWrapper extends BaseDateWrapper implements Parcelable {
 
 
         private static final SimpleDateFormat DATE_PARSER;

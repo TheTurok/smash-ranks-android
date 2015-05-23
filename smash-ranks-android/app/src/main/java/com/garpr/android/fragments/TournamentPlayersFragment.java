@@ -142,7 +142,7 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
                     break;
 
                 default:
-                    throw new IllegalStateException("Type is invalid");
+                    throw new IllegalStateException("invalid Type: " + mType);
             }
 
             return string;

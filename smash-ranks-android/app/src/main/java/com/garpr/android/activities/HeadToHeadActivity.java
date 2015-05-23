@@ -147,9 +147,9 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
 
             @Override
-            public void successOnUi(final HeadToHeadBundle object) {
+            public void successOnUi(final HeadToHeadBundle headToHeadBundle) {
                 mPulled = false;
-                mBundle = object;
+                mBundle = headToHeadBundle;
                 prepareList();
             }
         };

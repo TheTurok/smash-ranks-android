@@ -42,6 +42,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     private static final String KEY_PLAYERS = "KEY_PLAYERS";
+    private static final String KEY_RANKINGS_DATE = "KEY_RANKINGS_DATE";
     private static final String TAG = "RankingsActivity";
 
     private ArrayList<ListItem> mListItems;
@@ -53,6 +54,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     private Filter mFilter;
     private MenuItem mSearch;
     private Player mUserPlayer;
+    private String mRankingsDate;
 
 
 
@@ -119,6 +121,11 @@ public class RankingsActivity extends BaseToolbarListActivity implements
             public void successOnUi(final RankingsBundle rankingsBundle) {
                 mPulled = false;
                 mPlayers = rankingsBundle.getRankings();
+
+                if (rankingsBundle.hasDateWrapper()) {
+                    mRankingsDate = rankingsBundle.getDateWrapper().get();
+                }
+
                 prepareList();
             }
         };
@@ -172,6 +179,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mPlayers = savedInstanceState.getParcelableArrayList(KEY_PLAYERS);
+            mRankingsDate = savedInstanceState.getString(KEY_RANKINGS_DATE);
         }
 
         if (mPlayers == null || mPlayers.isEmpty()) {
@@ -264,6 +272,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
         if (mPlayers != null && !mPlayers.isEmpty()) {
             outState.putParcelableArrayList(KEY_PLAYERS, mPlayers);
+            outState.putString(KEY_RANKINGS_DATE, mRankingsDate);
         }
     }
 

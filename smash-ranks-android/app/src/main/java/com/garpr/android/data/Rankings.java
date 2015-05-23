@@ -3,32 +3,22 @@ package com.garpr.android.data;
 
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Utils;
-import com.garpr.android.models.Player;
+import com.garpr.android.models.RankingsBundle;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 
 public final class Rankings {
 
 
-    private static final SimpleDateFormat RANKINGS_DATE_PARSER;
     private static final String CNAME = "com.garpr.android.data.Rankings";
     private static final String KEY_RANKINGS_DATE = "KEY_RANKINGS_DATE";
 
 
-
-
-    static {
-        RANKINGS_DATE_PARSER = new SimpleDateFormat(Constants.RANKINGS_DATE_FORMAT, Locale.getDefault());
-    }
 
 
     public static void checkForUpdates(final Response<Result> response) {
@@ -36,7 +26,7 @@ public final class Rankings {
     }
 
 
-    public static void get(final Response<ArrayList<Player>> response, final boolean ignoreCache) {
+    public static void get(final Response<RankingsBundle> response, final boolean ignoreCache) {
         new RankingsCall(response, ignoreCache).make();
     }
 
@@ -65,6 +55,10 @@ public final class Rankings {
 
         @Override
         void onJSONResponse(final JSONObject json) throws JSONException {
+
+            // TODO
+            // this should use the new RankingsBundle object to grab the time
+
             final String rankingsDateString = json.optString(Constants.TIME);
 
             if (Utils.validStrings(rankingsDateString)) {
@@ -121,13 +115,13 @@ public final class Rankings {
     }
 
 
-    private static final class RankingsCall extends BaseRankingsCall<ArrayList<Player>> {
+    private static final class RankingsCall extends BaseRankingsCall<RankingsBundle> {
 
 
         private static final String TAG = "RankingsCall";
 
 
-        private RankingsCall(final Response<ArrayList<Player>> response, final boolean ignoreCache)
+        private RankingsCall(final Response<RankingsBundle> response, final boolean ignoreCache)
                 throws IllegalArgumentException {
             super(response, ignoreCache);
         }
@@ -142,18 +136,7 @@ public final class Rankings {
         @Override
         void onJSONResponse(final JSONObject json) throws JSONException {
             super.onJSONResponse(json);
-
-            final JSONArray rankingsJSON = json.getJSONArray(Constants.RANKING);
-            final int rankingsLength = rankingsJSON.length();
-            final ArrayList<Player> players = new ArrayList<>(rankingsLength);
-
-            for (int i = 0; i < rankingsLength; ++i) {
-                final JSONObject playerJSON = rankingsJSON.getJSONObject(i);
-                final Player player = new Player(playerJSON);
-                players.add(player);
-            }
-
-            mResponse.success(players);
+            mResponse.success(new RankingsBundle(json));
         }
 
 

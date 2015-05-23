@@ -14,7 +14,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Locale;
 
 
 public class Tournament implements AlphabeticallyComparable, MonthlyComparable, Parcelable {
@@ -43,7 +45,7 @@ public class Tournament implements AlphabeticallyComparable, MonthlyComparable, 
 
 
     private Tournament(final Parcel source) {
-        mDateWrapper = source.readParcelable(DateWrapper.class.getClassLoader());
+        mDateWrapper = source.readParcelable(BaseDateWrapper.class.getClassLoader());
         mId = source.readString();
         mName = source.readString();
         mWebUrl = source.readString();
@@ -131,8 +133,8 @@ public class Tournament implements AlphabeticallyComparable, MonthlyComparable, 
     public static final Comparator<Tournament> CHRONOLOGICAL_ORDER = new Comparator<Tournament>() {
         @Override
         public int compare(final Tournament t0, final Tournament t1) {
-            final DateWrapper t0dw = t0.getDateWrapper();
-            final DateWrapper t1dw = t1.getDateWrapper();
+            final BaseDateWrapper t0dw = t0.getDateWrapper();
+            final BaseDateWrapper t1dw = t1.getDateWrapper();
             return t0dw.getDate().compareTo(t1dw.getDate());
         }
     };
@@ -144,6 +146,33 @@ public class Tournament implements AlphabeticallyComparable, MonthlyComparable, 
             return CHRONOLOGICAL_ORDER.compare(t1, t0);
         }
     };
+
+
+
+
+    public static class DateWrapper extends BaseDateWrapper implements Parcelable {
+
+
+        private static final SimpleDateFormat DATE_PARSER;
+
+
+        static {
+            DATE_PARSER = new SimpleDateFormat(Constants.TOURNAMENT_DATE_FORMAT, Locale.getDefault());
+        }
+
+
+        DateWrapper(final String date) throws ParseException {
+            super(DATE_PARSER, date);
+        }
+
+
+        DateWrapper(final Parcel source) {
+            super(source);
+        }
+
+
+
+    }
 
 
 
@@ -181,6 +210,11 @@ public class Tournament implements AlphabeticallyComparable, MonthlyComparable, 
             return new Tournament[size];
         }
     };
+
+
+
+
+
 
 
 }

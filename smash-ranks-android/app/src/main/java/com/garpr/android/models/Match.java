@@ -82,7 +82,7 @@ public class Match implements MonthlyComparable, Parcelable {
 
 
     @Override
-    public DateWrapper getDateWrapper() {
+    public BaseDateWrapper getDateWrapper() {
         return mTournament.getDateWrapper();
     }
 

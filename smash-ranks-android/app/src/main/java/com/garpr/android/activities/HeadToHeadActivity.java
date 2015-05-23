@@ -21,7 +21,7 @@ import com.garpr.android.misc.ListUtils.MonthlyComparable;
 import com.garpr.android.misc.ListUtils.MonthlySectionCreator;
 import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.Utils;
-import com.garpr.android.models.DateWrapper;
+import com.garpr.android.models.BaseDateWrapper;
 import com.garpr.android.models.HeadToHeadBundle;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
@@ -85,7 +85,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
         final MonthlySectionCreator creator = new MonthlySectionCreator() {
             @Override
-            public MonthlyComparable createMonthlySection(final DateWrapper dateWrapper) {
+            public MonthlyComparable createMonthlySection(final BaseDateWrapper dateWrapper) {
                 return ListItem.createDate(dateWrapper);
             }
         };
@@ -368,13 +368,13 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
     private static final class ListItem implements MonthlyComparable {
 
 
-        private DateWrapper mDateWrapper;
+        private BaseDateWrapper mDateWrapper;
         private int[] mResults;
         private Match mMatch;
         private Type mType;
 
 
-        private static ListItem createDate(final DateWrapper dateWrapper) {
+        private static ListItem createDate(final BaseDateWrapper dateWrapper) {
             final ListItem listItem = new ListItem();
             listItem.mDateWrapper = dateWrapper;
             listItem.mType = Type.DATE;
@@ -429,7 +429,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
 
         @Override
-        public DateWrapper getDateWrapper() {
+        public BaseDateWrapper getDateWrapper() {
             return mDateWrapper;
         }
 

@@ -16,10 +16,9 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class DateWrapper implements MonthlyComparable, Parcelable {
+public abstract class BaseDateWrapper implements MonthlyComparable, Parcelable {
 
 
-    private static final SimpleDateFormat DATE_PARSER;
     private static final SimpleDateFormat DAY_OF_MONTH_FORMATTER;
     private static final SimpleDateFormat MONTH_FORMATTER;
     private static final SimpleDateFormat YEAR_FORMATTER;
@@ -36,17 +35,16 @@ public class DateWrapper implements MonthlyComparable, Parcelable {
 
     static {
         final Locale locale = Locale.getDefault();
-        DATE_PARSER = new SimpleDateFormat(Constants.TOURNAMENT_DATE_FORMAT, locale);
         DAY_OF_MONTH_FORMATTER = new SimpleDateFormat(Constants.DAY_OF_MONTH_FORMAT, locale);
         MONTH_FORMATTER = new SimpleDateFormat(Constants.MONTH_FORMAT, locale);
         YEAR_FORMATTER = new SimpleDateFormat(Constants.YEAR_FORMAT, locale);
     }
 
 
-    public DateWrapper(final String date) throws ParseException {
+    BaseDateWrapper(final SimpleDateFormat parser, final String date) throws ParseException {
         mRawDate = date;
 
-        mDate = DATE_PARSER.parse(date);
+        mDate = parser.parse(date);
         mDay = DAY_OF_MONTH_FORMATTER.format(mDate);
         mMonth = MONTH_FORMATTER.format(mDate);
         mYear = YEAR_FORMATTER.format(mDate);
@@ -56,7 +54,7 @@ public class DateWrapper implements MonthlyComparable, Parcelable {
     }
 
 
-    private DateWrapper(final Parcel source) {
+    BaseDateWrapper(final Parcel source) {
         mDate = new Date(source.readLong());
         mDay = source.readString();
         mMonth = source.readString();
@@ -72,8 +70,8 @@ public class DateWrapper implements MonthlyComparable, Parcelable {
 
         if (this == o) {
             isEqual = true;
-        } else if (o instanceof DateWrapper) {
-            final DateWrapper dw = (DateWrapper) o;
+        } else if (o instanceof BaseDateWrapper) {
+            final BaseDateWrapper dw = (BaseDateWrapper) o;
             isEqual = mDate.equals(dw.getDate());
         } else {
             isEqual = false;
@@ -89,7 +87,7 @@ public class DateWrapper implements MonthlyComparable, Parcelable {
 
 
     @Override
-    public DateWrapper getDateWrapper() {
+    public BaseDateWrapper getDateWrapper() {
         return this;
     }
 
@@ -163,20 +161,6 @@ public class DateWrapper implements MonthlyComparable, Parcelable {
         dest.writeString(mRawDate);
         dest.writeString(mYear);
     }
-
-
-    public static final Creator<DateWrapper> CREATOR = new Creator<DateWrapper>() {
-        @Override
-        public DateWrapper createFromParcel(final Parcel source) {
-            return new DateWrapper(source);
-        }
-
-
-        @Override
-        public DateWrapper[] newArray(final int size) {
-            return new DateWrapper[size];
-        }
-    };
 
 
 }

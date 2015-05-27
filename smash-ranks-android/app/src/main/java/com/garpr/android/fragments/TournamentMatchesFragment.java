@@ -66,7 +66,7 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
 
 
     @Override
-    public void onLongClick(final MatchItemView v) {
+    public boolean onLongClick(final MatchItemView v) {
         final Match match = v.getMatch();
         final String[] players = { match.getWinner().getName(), match.getLoser().getName() };
 
@@ -88,6 +88,8 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
                     }
                 })
                 .show();
+
+        return true;
     }
 
 

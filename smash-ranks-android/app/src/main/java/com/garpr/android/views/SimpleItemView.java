@@ -13,10 +13,9 @@ import android.widget.TextView;
 import com.garpr.android.R;
 
 
-public class SimpleItemView extends FrameLayout implements View.OnClickListener {
+public class SimpleItemView extends FrameLayout {
 
 
-    private OnClickListener mClickListener;
     private TextView mText;
     private ViewHolder mViewHolder;
 
@@ -49,12 +48,6 @@ public class SimpleItemView extends FrameLayout implements View.OnClickListener 
 
 
     @Override
-    public void onClick(final View v) {
-        mClickListener.onClick(this);
-    }
-
-
-    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mText = (TextView) findViewById(R.id.view_simple_item_text);
@@ -62,8 +55,16 @@ public class SimpleItemView extends FrameLayout implements View.OnClickListener 
 
 
     public void setOnClickListener(final OnClickListener l) {
-        mClickListener = l;
-        setOnClickListener(this);
+        if (l == null) {
+            setClickable(false);
+        } else {
+            setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    l.onClick(SimpleItemView.this);
+                }
+            });
+        }
     }
 
 

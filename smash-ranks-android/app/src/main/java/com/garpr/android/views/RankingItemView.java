@@ -15,11 +15,10 @@ import com.garpr.android.R;
 import com.garpr.android.models.Player;
 
 
-public class RankingItemView extends FrameLayout implements View.OnClickListener {
+public class RankingItemView extends FrameLayout {
 
 
     private LinearLayout mContainer;
-    private OnClickListener mClickListener;
     private Player mPlayer;
     private TextView mName;
     private TextView mRank;
@@ -75,30 +74,25 @@ public class RankingItemView extends FrameLayout implements View.OnClickListener
 
 
     @Override
-    public void onClick(final View v) {
-        mClickListener.onClick(this);
-    }
-
-
-    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mContainer = (LinearLayout) findViewById(R.id.view_ranking_item_container);
         mName = (TextView) findViewById(R.id.view_ranking_item_name);
         mRank = (TextView) findViewById(R.id.view_ranking_item_rank);
         mRating = (TextView) findViewById(R.id.view_ranking_item_rating);
-
-        if (mClickListener != null) {
-            mContainer.setOnClickListener(this);
-        }
     }
 
 
     public void setOnClickListener(final OnClickListener l) {
-        mClickListener = l;
-
-        if (mContainer != null) {
-            mContainer.setOnClickListener(this);
+        if (l == null) {
+            mContainer.setClickable(false);
+        } else {
+            mContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    l.onClick(RankingItemView.this);
+                }
+            });
         }
     }
 

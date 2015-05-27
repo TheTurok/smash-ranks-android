@@ -13,11 +13,10 @@ import android.widget.TextView;
 import com.garpr.android.R;
 
 
-public class SimpleSeparatorView extends FrameLayout implements View.OnClickListener {
+public class SimpleSeparatorView extends FrameLayout {
 
 
     private FrameLayout mContainer;
-    private OnClickListener mClickListener;
     private TextView mText;
     private ViewHolder mViewHolder;
 
@@ -56,28 +55,23 @@ public class SimpleSeparatorView extends FrameLayout implements View.OnClickList
 
 
     @Override
-    public void onClick(final View v) {
-        mClickListener.onClick(this);
-    }
-
-
-    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mContainer = (FrameLayout) findViewById(R.id.view_simple_separator_item_container);
         mText = (TextView) findViewById(R.id.view_simple_separator_item_text);
-
-        if (mClickListener != null) {
-            mContainer.setOnClickListener(this);
-        }
     }
 
 
     public void setOnClickListener(final OnClickListener l) {
-        mClickListener = l;
-
-        if (mContainer != null) {
-            mContainer.setOnClickListener(this);
+        if (l == null) {
+            mContainer.setClickable(false);
+        } else {
+            mContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    l.onClick(SimpleSeparatorView.this);
+                }
+            });
         }
     }
 

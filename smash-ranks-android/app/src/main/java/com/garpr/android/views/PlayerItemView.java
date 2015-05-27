@@ -14,10 +14,9 @@ import com.garpr.android.R;
 import com.garpr.android.models.Player;
 
 
-public class PlayerItemView extends FrameLayout implements View.OnClickListener {
+public class PlayerItemView extends FrameLayout {
 
 
-    private OnClickListener mClickListener;
     private Player mPlayer;
     private TextView mName;
     private ViewHolder mViewHolder;
@@ -56,12 +55,6 @@ public class PlayerItemView extends FrameLayout implements View.OnClickListener 
 
 
     @Override
-    public void onClick(final View v) {
-        mClickListener.onClick(this);
-    }
-
-
-    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mName = (TextView) findViewById(R.id.view_player_item_name);
@@ -69,8 +62,16 @@ public class PlayerItemView extends FrameLayout implements View.OnClickListener 
 
 
     public void setOnClickListener(final OnClickListener l) {
-        mClickListener = l;
-        setOnClickListener(this);
+        if (l == null) {
+            setClickable(false);
+        } else {
+            setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    l.onClick(PlayerItemView.this);
+                }
+            });
+        }
     }
 
 

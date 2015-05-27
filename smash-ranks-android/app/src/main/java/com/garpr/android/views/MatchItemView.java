@@ -16,14 +16,11 @@ import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 
 
-public class MatchItemView extends FrameLayout implements View.OnClickListener,
-        View.OnLongClickListener {
+public class MatchItemView extends FrameLayout {
 
 
     private LinearLayout mContainer;
     private Match mMatch;
-    private OnClickListener mClickListener;
-    private OnLongClickListener mLongClickListener;
     private TextView mLoser;
     private TextView mWinner;
     private ViewHolder mViewHolder;
@@ -77,27 +74,6 @@ public class MatchItemView extends FrameLayout implements View.OnClickListener,
         mContainer = (LinearLayout) findViewById(R.id.view_match_item_container);
         mLoser = (TextView) findViewById(R.id.view_match_item_loser);
         mWinner = (TextView) findViewById(R.id.view_match_item_winner);
-
-        if (mClickListener != null) {
-            mContainer.setOnClickListener(this);
-        }
-
-        if (mLongClickListener != null) {
-            mContainer.setOnLongClickListener(this);
-        }
-    }
-
-
-    @Override
-    public void onClick(final View v) {
-        mClickListener.onClick(this);
-    }
-
-
-    @Override
-    public boolean onLongClick(final View v) {
-        mLongClickListener.onLongClick(this);
-        return true;
     }
 
 
@@ -113,19 +89,29 @@ public class MatchItemView extends FrameLayout implements View.OnClickListener,
 
 
     public void setOnClickListener(final OnClickListener l) {
-        mClickListener = l;
-
-        if (mContainer != null) {
-            mContainer.setOnClickListener(this);
+        if (l == null) {
+            mContainer.setClickable(false);
+        } else {
+            mContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    l.onClick(MatchItemView.this);
+                }
+            });
         }
     }
 
 
     public void setOnLongClickListener(final OnLongClickListener l) {
-        mLongClickListener = l;
-
-        if (mContainer != null) {
-            mContainer.setOnLongClickListener(this);
+        if (l == null) {
+            mContainer.setLongClickable(false);
+        } else {
+            mContainer.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(final View v) {
+                    return l.onLongClick(MatchItemView.this);
+                }
+            });
         }
     }
 
@@ -160,7 +146,7 @@ public class MatchItemView extends FrameLayout implements View.OnClickListener,
     public interface OnLongClickListener {
 
 
-        void onLongClick(final MatchItemView v);
+        boolean onLongClick(final MatchItemView v);
 
 
     }

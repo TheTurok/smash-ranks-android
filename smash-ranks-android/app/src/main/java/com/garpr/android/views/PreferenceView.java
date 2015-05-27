@@ -33,7 +33,7 @@ public class PreferenceView extends LinearLayout {
 
 
     private void parseAttributes(final AttributeSet attrs) {
-
+        // TODO
     }
 
 

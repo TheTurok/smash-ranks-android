@@ -15,12 +15,11 @@ import android.widget.TextView;
 import com.garpr.android.R;
 
 
-public class CheckableItemView extends FrameLayout implements View.OnClickListener {
+public class CheckableItemView extends FrameLayout {
 
 
     private CheckBox mCheck;
     private LinearLayout mContainer;
-    private OnClickListener mClickListener;
     private TextView mText;
     private ViewHolder mViewHolder;
 
@@ -68,21 +67,11 @@ public class CheckableItemView extends FrameLayout implements View.OnClickListen
 
 
     @Override
-    public void onClick(final View v) {
-        mClickListener.onClick(this);
-    }
-
-
-    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mCheck = (CheckBox) findViewById(R.id.view_checkable_item_check);
         mContainer = (LinearLayout) findViewById(R.id.view_checkable_item_container);
         mText = (TextView) findViewById(R.id.view_checkable_item_text);
-
-        if (mClickListener != null) {
-            mContainer.setOnClickListener(this);
-        }
     }
 
 
@@ -92,10 +81,15 @@ public class CheckableItemView extends FrameLayout implements View.OnClickListen
 
 
     public void setOnClickListener(final OnClickListener l) {
-        mClickListener = l;
-
-        if (mContainer != null) {
-            mContainer.setOnClickListener(this);
+        if (l == null) {
+            mContainer.setClickable(false);
+        } else {
+            mContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    l.onClick(CheckableItemView.this);
+                }
+            });
         }
     }
 

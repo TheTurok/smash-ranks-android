@@ -31,7 +31,7 @@
                         <TextView
                             android:id="@+id/activity_settings_region_name"
                             tools:text="@string/norcal"
-                            style="@style/settings_subtitle" />
+                            style="@style/settings_sub_title" />
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/activity_settings_network_cache"
@@ -42,7 +42,7 @@
                         <TextView
                             android:id="@+id/activity_settings_network_cache_size"
                             tools:text="Currently contains 47 entries"
-                            style="@style/settings_subtitle" />
+                            style="@style/settings_sub_title" />
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -56,7 +56,7 @@
                         android:paddingLeft="@dimen/root_padding"
                         android:paddingRight="@dimen/root_padding"
                         android:text="@string/sync_description"
-                        style="@style/settings_subtitle" />
+                        style="@style/settings_sub_title" />
                     <LinearLayout
                         android:id="@+id/activity_settings_sync"
                         style="@style/settings_container">
@@ -66,33 +66,31 @@
                         <TextView
                             android:id="@+id/activity_settings_sync_status"
                             tools:text="@string/periodic_sync_is_enabled"
-                            style="@style/settings_subtitle" />
+                            style="@style/settings_sub_title" />
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/activity_settings_sync_charging"
                         style="@style/settings_container">
                         <CheckedTextView
-                            android:checkMark="@drawable/checkbox"
                             android:id="@+id/activity_settings_sync_charging_label"
                             android:text="@string/only_sync_when_charging"
-                            style="@style/settings_title" />
+                            style="@style/settings_checked_title" />
                         <TextView
                             android:id="@+id/activity_settings_sync_charging_desc"
                             tools:text="@string/will_only_sync_if_plugged_in"
-                            style="@style/settings_subtitle" />
+                            style="@style/settings_sub_title" />
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/activity_settings_sync_wifi"
                         style="@style/settings_container">
                         <CheckedTextView
-                            android:checkMark="@drawable/checkbox"
                             android:id="@+id/activity_settings_sync_wifi_label"
                             android:text="@string/only_sync_on_wifi"
-                            style="@style/settings_title" />
+                            style="@style/settings_checked_title" />
                         <TextView
                             android:id="@+id/activity_settings_sync_wifi_desc"
                             tools:text="@string/will_only_sync_if_connected_to_wifi"
-                            style="@style/settings_subtitle" />
+                            style="@style/settings_sub_title" />
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -108,7 +106,7 @@
                             style="@style/settings_title" />
                         <TextView
                             android:text="@string/app_authors"
-                            style="@style/settings_subtitle" />
+                            style="@style/settings_sub_title" />
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/activity_settings_github"
@@ -132,7 +130,7 @@
                             style="@style/settings_title" />
                         <TextView
                             android:text="@string/log_console_description"
-                            style="@style/settings_subtitle" />
+                            style="@style/settings_sub_title" />
                     </LinearLayout>
                     <LinearLayout
                         style="@style/settings_container.disabled">
@@ -143,7 +141,7 @@
                         <TextView
                             android:id="@+id/activity_settings_version"
                             tools:text="1.0 (build 1)"
-                            style="@style/settings_subtitle" />
+                            style="@style/settings_sub_title" />
                     </LinearLayout>
                 </LinearLayout>
                 <ImageButton

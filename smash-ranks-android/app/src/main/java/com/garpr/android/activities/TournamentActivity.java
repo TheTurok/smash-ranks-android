@@ -4,6 +4,7 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -12,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.garpr.android.R;
 import com.garpr.android.data.ResponseOnUi;
 import com.garpr.android.data.Tournaments;
@@ -41,7 +41,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
     private FlexibleSwipeRefreshLayout mRefreshLayout;
     private Intent mShareIntent;
     private LinearLayout mErrorView;
-    private PagerSlidingTabStrip mTabStrip;
+    private TabLayout mTabLayout;
     private Tournament mTournament;
     private TournamentBundle mBundle;
     private ViewPager mViewPager;
@@ -81,7 +81,7 @@ public class TournamentActivity extends BaseToolbarActivity implements
     private void findViews() {
         mErrorView = (LinearLayout) findViewById(R.id.activity_tournament_error);
         mRefreshLayout = (FlexibleSwipeRefreshLayout) findViewById(R.id.activity_tournament_refresh);
-        mTabStrip = (PagerSlidingTabStrip) findViewById(R.id.activity_tournament_tab_strip);
+        mTabLayout = (TabLayout) findViewById(R.id.activity_tournament_tab_layout);
         mViewPager = (ViewPager) findViewById(R.id.activity_tournament_view_pager);
     }
 
@@ -162,8 +162,11 @@ public class TournamentActivity extends BaseToolbarActivity implements
         mRefreshLayout.setEnabled(false);
         mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.root_padding));
         mViewPager.setVisibility(View.VISIBLE);
+
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mTabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         mViewPager.setAdapter(new TournamentFragmentAdapter());
-        mTabStrip.setViewPager(mViewPager);
+        mTabLayout.setTabsFromPagerAdapter(mViewPager.getAdapter());
         setLoading(false);
     }
 

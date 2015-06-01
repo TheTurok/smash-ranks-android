@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,7 +15,6 @@ import com.garpr.android.R;
 import com.garpr.android.data.Settings;
 import com.garpr.android.models.Region;
 import com.garpr.android.views.CheckableItemView;
-import com.melnykov.fab.FloatingActionButton;
 
 
 public class FloatingActionButtonRegionsFragment extends RegionsFragment {
@@ -80,9 +80,9 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
 
         if (mSelectedRegion == null || region.equals(mSelectedRegion)) {
             mSelectedRegion = region;
-            mSave.hide(false);
+//            mSave.hide(false);
         } else {
-            mSave.show(false);
+//            mSave.show(false);
         }
     }
 
@@ -100,9 +100,9 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
         final Region region = Settings.getRegion();
 
         if (region.equals(mSelectedRegion)) {
-            mSave.hide();
+//            mSave.hide();
         } else {
-            mSave.show();
+//            mSave.show();
         }
     }
 
@@ -131,7 +131,7 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
         });
 
         if (mSelectedRegion != null) {
-            mSave.show(false);
+//            mSave.show(false);
         }
 
         mSave.setVisibility(View.VISIBLE);

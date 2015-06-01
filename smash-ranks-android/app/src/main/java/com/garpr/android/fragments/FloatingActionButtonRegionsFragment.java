@@ -22,6 +22,7 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
 
     private static final String TAG = "FloatingActionButtonRegionsFragment";
 
+    // TODO add animation to show / hide the FAB
     private FloatingActionButton mSave;
     private SaveListener mListener;
 

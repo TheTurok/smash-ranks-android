@@ -54,6 +54,10 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
 
 
     private void finishOnboarding(final boolean savePlayer) {
+        if (savePlayer) {
+            User.setPlayer(mPlayersFragment.getSelectedPlayer());
+        }
+
         final Editor editor = Settings.edit(CNAME);
         editor.putBoolean(KEY_ONBOARDING_COMPLETE, true);
         editor.apply();

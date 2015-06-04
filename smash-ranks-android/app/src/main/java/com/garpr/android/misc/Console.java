@@ -4,7 +4,6 @@ package com.garpr.android.misc;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
 import com.garpr.android.models.LogMessage;
 
 import java.lang.ref.WeakReference;

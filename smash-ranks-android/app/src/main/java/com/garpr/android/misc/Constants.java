@@ -40,7 +40,7 @@ public final class Constants {
     public static final String MATCHES = "matches";
     public static final String MESSAGE = "message";
     public static final String MIMETYPE_TEXT_PLAIN = "text/plain";
-    public static final String MM_DD_YY_FORMAT = "MM/d/yy";
+    public static final String MM_DD_YY_FORMAT = "M/d/yy";
     public static final String MONTH_FORMAT = "LLLL";
     public static final String MONTH_AND_DAY_FORMAT = "MMM d";
     public static final String MONTH_AND_DAY_AND_YEAR_FORMAT = "MMM d, yyyy";

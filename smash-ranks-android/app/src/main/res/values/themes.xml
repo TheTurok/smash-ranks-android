@@ -6,6 +6,7 @@
     </style>
 
     <style name="base_theme" parent="Theme.AppCompat">
+        <item name="alertDialogTheme">@style/dialog_theme</item>
         <item name="colorAccent">@color/indigo_bright</item>
         <item name="colorPrimary">@color/indigo</item>
         <item name="colorPrimaryDark">@color/indigo_dark</item>

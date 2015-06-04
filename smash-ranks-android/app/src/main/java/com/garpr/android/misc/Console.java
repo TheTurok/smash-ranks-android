@@ -4,6 +4,7 @@ package com.garpr.android.misc;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.garpr.android.models.LogMessage;
 
 import java.lang.ref.WeakReference;
@@ -32,10 +33,13 @@ public final class Console {
         final String stackTrace;
         final String throwableMessage;
 
+        Crashlytics.getInstance().core.log(priority, tag, msg);
+
         if (tr == null) {
             stackTrace = null;
             throwableMessage = null;
         } else {
+            Crashlytics.getInstance().core.logException(tr);
             stackTrace = Log.getStackTraceString(tr);
             throwableMessage = tr.getMessage();
         }
@@ -97,14 +101,11 @@ public final class Console {
 
 
     public static void d(final String tag, final String msg) {
-        Crashlytics.log(Log.DEBUG, tag, msg);
-        add(Log.DEBUG, tag, msg, null);
+        d(tag, msg, null);
     }
 
 
     public static void d(final String tag, final String msg, final Throwable tr) {
-        Crashlytics.logException(tr);
-        Crashlytics.log(Log.DEBUG, tag, msg);
         add(Log.DEBUG, tag, msg, tr);
     }
 
@@ -140,14 +141,11 @@ public final class Console {
 
 
     public static void e(final String tag, final String msg) {
-        Crashlytics.log(Log.ERROR, tag, msg);
-        add(Log.ERROR, tag, msg, null);
+        e(tag, msg, null);
     }
 
 
     public static void e(final String tag, final String msg, final Throwable tr) {
-        Crashlytics.logException(tr);
-        Crashlytics.log(Log.ERROR, tag, msg);
         add(Log.ERROR, tag, msg, tr);
     }
 
@@ -200,14 +198,11 @@ public final class Console {
 
 
     public static void w(final String tag, final String msg) {
-        Crashlytics.log(Log.WARN, tag, msg);
-        add(Log.WARN, tag, msg, null);
+        w(tag, msg, null);
     }
 
 
     public static void w(final String tag, final String msg, final Throwable tr) {
-        Crashlytics.logException(tr);
-        Crashlytics.log(Log.WARN, tag, msg);
         add(Log.WARN, tag, msg, tr);
     }
 

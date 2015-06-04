@@ -74,11 +74,7 @@ public final class App extends Application {
         sContext = getApplicationContext();
         Fabric.with(sContext, new Crashlytics());
 
-        if (BuildConfig.DEBUG) {
-            Crashlytics.setBool(Constants.DEBUG, true);
-        } else {
-            Crashlytics.setBool(Constants.DEBUG, false);
-        }
+        Crashlytics.getInstance().core.setBool(Constants.DEBUG, BuildConfig.DEBUG);
 
         sRequestQueue = Volley.newRequestQueue(sContext, new OkHttpStack());
         Database.initialize();

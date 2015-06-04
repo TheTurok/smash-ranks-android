@@ -194,7 +194,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        Crashlytics.setString(Constants.CURRENT_ACTIVITY, getActivityName());
+        Crashlytics.getInstance().core.setString(Constants.CURRENT_ACTIVITY, getActivityName());
     }
 
 

@@ -182,14 +182,14 @@ public final class Settings {
         final JSONObject regionJSON = region.toJSON();
         final String regionString = regionJSON.toString();
 
-        Crashlytics.setString(Constants.NEW_REGION, regionString);
+        Crashlytics.getInstance().core.setString(Constants.NEW_REGION, regionString);
 
         if (sRegion == null) {
-            Crashlytics.setString(Constants.OLD_REGION, Constants.NULL);
+            Crashlytics.getInstance().core.setString(Constants.OLD_REGION, Constants.NULL);
         } else {
             final JSONObject sRegionJSON = sRegion.toJSON();
             final String sRegionString = sRegionJSON.toString();
-            Crashlytics.setString(Constants.OLD_REGION, sRegionString);
+            Crashlytics.getInstance().core.setString(Constants.OLD_REGION, sRegionString);
         }
 
         sRegion = region;

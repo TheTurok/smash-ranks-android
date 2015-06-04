@@ -51,6 +51,7 @@ public final class Constants {
     public static final String NULL = "null";
     public static final String OLD_REGION = "old_region";
     public static final String ONBOARDING = "onboarding";
+    public static final String ONBOARDING_ALREADY_COMPLETED = "onboarding_already_completed";
     public static final String ONBOARDING_STATUS = "onboarding_status";
     public static final String OPPONENT = "opponent";
     public static final String OPPONENT_ID = "opponent_id";

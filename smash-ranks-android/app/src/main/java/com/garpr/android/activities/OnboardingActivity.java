@@ -126,12 +126,13 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (onboardingCompleted()) {
-            Crashlytics.setBool(Constants.SKIPPED_ONBOARDING, true);
+        final boolean onboardingCompleted = onboardingCompleted();
+        Crashlytics.getInstance().core.setBool(Constants.ONBOARDING_ALREADY_COMPLETED, onboardingCompleted);
+
+        if (onboardingCompleted) {
             RankingsActivity.start(this);
             finish();
         } else {
-            Crashlytics.setBool(Constants.SKIPPED_ONBOARDING, false);
             findViews();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

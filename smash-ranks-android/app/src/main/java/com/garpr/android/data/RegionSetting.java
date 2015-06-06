@@ -117,6 +117,26 @@ public class RegionSetting extends Setting<Region> {
     }
 
 
+    public void set(final Region newValue, final boolean notifyListeners) {
+        set(newValue);
+
+        if (notifyListeners) {
+            synchronized (mListeners) {
+                for (int i = 0; i < mListeners.size(); ) {
+                    final Attachment attachment = mListeners.get(i);
+
+                    if (attachment.isAlive()) {
+                        attachment.onRegionChanged(newValue);
+                        ++i;
+                    } else {
+                        mListeners.remove(i);
+                    }
+                }
+            }
+        }
+    }
+
+
 
 
     private final static class Attachment implements Heartbeat, RegionListener {

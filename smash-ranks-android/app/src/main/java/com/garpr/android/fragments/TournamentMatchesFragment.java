@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.garpr.android.R;
 import com.garpr.android.activities.HeadToHeadActivity;
 import com.garpr.android.activities.PlayerActivity;
-import com.garpr.android.data.User;
+import com.garpr.android.User;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.TournamentBundle;

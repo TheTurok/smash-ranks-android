@@ -12,15 +12,19 @@ import com.garpr.android.App;
 public final class Settings {
 
 
+    private static final String CNAME = "com.garpr.android.data";
+
     public static final IntegerSetting LastVersion;
     public static final RegionSetting Region;
+    public static final com.garpr.android.data.User User;
 
 
 
 
     static {
-        LastVersion = new IntegerSetting("KEY_LAST_VERSION", 0);
-        Region = new RegionSetting("KEY_REGION_SETTING");
+        LastVersion = new IntegerSetting(CNAME + ".LAST_VERSION", 0);
+        Region = new RegionSetting(CNAME + ".REGION_SETTING");
+        User = new User(CNAME + ".USER");
     }
 
 

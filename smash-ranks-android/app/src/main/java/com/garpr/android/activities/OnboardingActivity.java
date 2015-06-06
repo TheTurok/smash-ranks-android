@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.crashlytics.android.Crashlytics;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
-import com.garpr.android.data.User;
+import com.garpr.android.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.fragments.ToolbarRegionsFragment;

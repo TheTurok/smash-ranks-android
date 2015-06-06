@@ -17,6 +17,7 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.calls.Players;
 import com.garpr.android.calls.ResponseOnUi;
+import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;

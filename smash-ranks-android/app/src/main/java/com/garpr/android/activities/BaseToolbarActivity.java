@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
-import com.garpr.android.data.User;
+import com.garpr.android.User;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 

@@ -12,7 +12,7 @@ import com.garpr.android.App;
 public final class Settings {
 
 
-    private static final String CNAME = "com.garpr.android.data.Settings";
+    private static final String CNAME = "com.garpr.android.settings.Settings";
 
     public static final BooleanSetting OnboardingComplete;
     public static final IntegerSetting LastVersion;

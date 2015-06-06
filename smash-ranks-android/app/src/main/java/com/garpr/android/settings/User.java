@@ -4,7 +4,7 @@ package com.garpr.android.settings;
 public final class User {
 
 
-    private static final String CNAME = "com.garpr.android.data.User";
+    private static final String CNAME = "com.garpr.android.settings.User";
 
     public static final IntegerSetting Rank;
     public static final PlayerSetting Player;

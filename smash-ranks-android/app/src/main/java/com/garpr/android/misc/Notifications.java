@@ -41,7 +41,7 @@ public final class Notifications {
                 .setSmallIcon(R.drawable.notification)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
-        final Region region = Settings.getRegion();
+        final Region region = Settings.Region.get();
         final String contentText = context.getString(R.string.x_rankings_have_been_updated,
                 region.getName());
         builder.setContentText(contentText);

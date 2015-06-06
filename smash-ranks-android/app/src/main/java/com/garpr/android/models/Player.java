@@ -106,7 +106,7 @@ public class Player implements AlphabeticallyComparable, Parcelable {
 
     public String getWebUrl() {
         if (!Utils.validStrings(mWebUrl)) {
-            final Region region = Settings.getRegion();
+            final Region region = Settings.Region.get();
             final String regionName = region.getName().toLowerCase();
             mWebUrl = Constants.WEB_URL + regionName + '/' + Constants.PLAYERS + '/' + mId;
         }

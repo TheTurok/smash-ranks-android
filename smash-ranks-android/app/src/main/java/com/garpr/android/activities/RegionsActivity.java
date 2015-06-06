@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import com.garpr.android.data.Settings;
 import com.garpr.android.fragments.FloatingActionButtonRegionsFragment;
 import com.garpr.android.fragments.RegionsFragment;
-import com.garpr.android.models.Region;
 
 
 public class RegionsActivity extends BaseFragmentActivity implements
@@ -41,8 +40,7 @@ public class RegionsActivity extends BaseFragmentActivity implements
     @Override
     public void onRegionSaved() {
         final RegionsFragment fragment = (RegionsFragment) getFragment();
-        final Region region = fragment.getSelectedRegion();
-        Settings.setRegion(region);
+        Settings.Region.set(fragment.getSelectedRegion());
         finish();
     }
 

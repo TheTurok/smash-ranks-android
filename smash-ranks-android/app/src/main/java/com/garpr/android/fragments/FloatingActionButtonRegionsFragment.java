@@ -76,7 +76,7 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final Region region = Settings.getRegion();
+        final Region region = Settings.Region.get();
 
         if (mSelectedRegion == null || region.equals(mSelectedRegion)) {
             mSelectedRegion = region;
@@ -97,7 +97,7 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
     @Override
     public void onClick(final CheckableItemView v) {
         super.onClick(v);
-        final Region region = Settings.getRegion();
+        final Region region = Settings.Region.get();
 
         if (region.equals(mSelectedRegion)) {
             mSave.hide();

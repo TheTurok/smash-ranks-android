@@ -36,7 +36,7 @@ public final class User {
 
     public static boolean areWeInTheUsersRegion() {
         final Region usersRegion = getRegion();
-        final Region settingsRegion = Settings.getRegion();
+        final Region settingsRegion = Settings.Region.get();
         return usersRegion.equals(settingsRegion);
     }
 
@@ -150,7 +150,7 @@ public final class User {
         sUser.mRegion = region;
         saveUser();
 
-        Settings.setRegion(region, false);
+        Settings.Region.set(region, false);
     }
 
 

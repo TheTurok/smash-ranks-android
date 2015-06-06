@@ -278,7 +278,7 @@ public abstract class BaseToolbarActivity extends BaseActivity {
 
     private void updateDrawerRegion() {
         final Region userRegion = User.getRegion();
-        final Region settingsRegion = Settings.getRegion();
+        final Region settingsRegion = Settings.Region.get();
         final String regionText;
 
         if (userRegion.equals(settingsRegion)) {

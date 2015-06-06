@@ -67,7 +67,7 @@ public final class Rankings {
                 setDate(newRankingsDate);
             } else {
                 Console.w(getCallName(), "RankingsBundle has no DateWrapper? Region is "
-                        + Settings.getRegion().getName());
+                        + Settings.Region.get().getName());
             }
 
             onRankingsBundleResponse(rankingsBundle);

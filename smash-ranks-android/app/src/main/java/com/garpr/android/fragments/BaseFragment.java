@@ -9,13 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.garpr.android.App;
+import com.garpr.android.data.RegionSetting;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.models.Region;
 
 
 public abstract class BaseFragment extends Fragment implements HeartbeatWithUi,
-        Settings.OnRegionChangedListener {
+        RegionSetting.RegionListener {
 
 
     private boolean mIsAlive;
@@ -51,7 +52,7 @@ public abstract class BaseFragment extends Fragment implements HeartbeatWithUi,
         super.onActivityCreated(savedInstanceState);
 
         if (listenForRegionChanges()) {
-            Settings.attachRegionListener(this);
+            Settings.Region.attachListener(this, this);
         }
     }
 
@@ -79,7 +80,7 @@ public abstract class BaseFragment extends Fragment implements HeartbeatWithUi,
         App.cancelNetworkRequests(this);
 
         if (listenForRegionChanges()) {
-            Settings.detachRegionListener(this);
+            Settings.Region.detachListener(this);
         }
 
         super.onDestroyView();

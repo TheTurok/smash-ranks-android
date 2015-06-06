@@ -18,6 +18,7 @@ import android.view.ViewGroup.MarginLayoutParams;
 import com.crashlytics.android.Crashlytics;
 import com.garpr.android.App;
 import com.garpr.android.R;
+import com.garpr.android.data.RegionSetting;
 import com.garpr.android.data.Settings;
 import com.garpr.android.fragments.BaseFragment;
 import com.garpr.android.misc.Constants;
@@ -31,7 +32,7 @@ import com.garpr.android.models.Region;
  * necessary boilerplate.
  */
 public abstract class BaseActivity extends AppCompatActivity implements BaseFragment.Listener,
-        HeartbeatWithUi, Settings.OnRegionChangedListener {
+        HeartbeatWithUi, RegionSetting.RegionListener {
 
 
     private boolean mIsAlive;
@@ -156,7 +157,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
         setContentView(getContentView());
         mIsAlive = true;
         mIsFirstResume = true;
-        Settings.attachRegionListener(this);
+        Settings.Region.attachListener(this, this);
     }
 
 
@@ -164,7 +165,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
     protected void onDestroy() {
         mIsAlive = false;
         App.cancelNetworkRequests(this);
-        Settings.detachRegionListener(this);
+        Settings.Region.detachListener(this);
         super.onDestroy();
     }
 

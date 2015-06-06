@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -78,11 +77,11 @@ public final class App extends Application {
         sRequestQueue = Volley.newRequestQueue(sContext, new OkHttpStack());
 
         final int currentVersion = getVersionCode();
-        final int lastVersion = Settings.getLastVersion();
+        final int lastVersion = Settings.LastVersion.get();
 
         if (currentVersion > lastVersion) {
             onUpgrade(lastVersion, currentVersion);
-            Settings.setLastVersion(currentVersion);
+            Settings.LastVersion.set(currentVersion);
         }
     }
 

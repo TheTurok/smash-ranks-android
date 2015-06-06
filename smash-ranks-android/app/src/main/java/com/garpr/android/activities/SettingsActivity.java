@@ -185,7 +185,7 @@ public class SettingsActivity extends BaseToolbarActivity {
             }
         });
 
-        final Region region = Settings.getRegion();
+        final Region region = Settings.Region.get();
         mRegionName.setText(region.getName());
 
         pollNetworkCache();

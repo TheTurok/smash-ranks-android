@@ -2,10 +2,22 @@
 <com.garpr.android.views.CheckPreferenceView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/settings_container">
-    <CheckedTextView
-        android:id="@+id/view_check_preference_title"
-        tools:text="@string/enable_or_disable_sync"
-        style="@style/settings_checked_title" />
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/view_check_preference_title"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            tools:text="@string/enable_or_disable_sync"
+            style="@style/settings_title" />
+        <CheckBox
+            android:id="@+id/view_check_preference_check_box"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/root_padding"
+            android:layout_width="wrap_content" />
+    </LinearLayout>
     <TextView
         android:id="@+id/view_check_preference_sub_title"
         tools:text="@string/periodic_sync_is_enabled"

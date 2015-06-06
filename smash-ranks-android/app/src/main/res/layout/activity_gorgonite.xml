@@ -7,7 +7,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/archer" />
     <ImageButton
-        android:background="@drawable/bg_press"
+        android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/close"
         android:id="@+id/activity_gorgonite_close"
         android:layout_height="?attr/actionBarSize"

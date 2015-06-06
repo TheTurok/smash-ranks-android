@@ -182,10 +182,6 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="settings_checked_title" parent="settings_title">
-        <item name="android:checkMark">@drawable/checkbox</item>
-    </style>
-
     <style name="settings_container">
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:layout_height">wrap_content</item>

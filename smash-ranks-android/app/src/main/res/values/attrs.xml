@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CheckPreferenceView">
+        <attr format="string" name="check_preference_view_title" />
+        <attr format="string" name="check_preference_view_sub_title_disabled" />
+        <attr format="string" name="check_preference_view_sub_title_enabled" />
+    </declare-styleable>
+
+</resources>

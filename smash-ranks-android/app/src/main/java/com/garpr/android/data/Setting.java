@@ -30,6 +30,11 @@ public abstract class Setting<T> {
     }
 
 
+    public final void delete() {
+        writeSharedPreferences().remove(mKey).apply();
+    }
+
+
     public abstract T get();
 
 

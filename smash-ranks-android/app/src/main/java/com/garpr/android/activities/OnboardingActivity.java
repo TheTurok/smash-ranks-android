@@ -2,8 +2,6 @@ package com.garpr.android.activities;
 
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,8 +31,6 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
     private static final int ONBOARDING_FRAGMENT_COUNT = 2;
     private static final int ONBOARDING_FRAGMENT_PLAYERS = 1;
     private static final int ONBOARDING_FRAGMENT_REGIONS = 0;
-    private static final String CNAME = "com.garpr.android.activities.OnboardingActivity";
-    private static final String KEY_ONBOARDING_COMPLETE = "KEY_ONBOARDING_COMPLETE";
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
     private static final String TAG = "OnboardingActivity";
 
@@ -59,10 +55,7 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
             User.Player.set(player);
         }
 
-        final Editor editor = Settings.edit(CNAME);
-        editor.putBoolean(KEY_ONBOARDING_COMPLETE, true);
-        editor.apply();
-
+        Settings.OnboardingComplete.set(true);
         RankingsActivity.start(this);
         finish();
     }
@@ -117,17 +110,11 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
     }
 
 
-    private boolean onboardingCompleted() {
-        final SharedPreferences sPreferences = Settings.get(CNAME);
-        return sPreferences.getBoolean(KEY_ONBOARDING_COMPLETE, false);
-    }
-
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final boolean onboardingCompleted = onboardingCompleted();
+        final boolean onboardingCompleted = Settings.OnboardingComplete.get();
         Crashlytics.getInstance().core.setBool(Constants.ONBOARDING_ALREADY_COMPLETED, onboardingCompleted);
 
         if (onboardingCompleted) {

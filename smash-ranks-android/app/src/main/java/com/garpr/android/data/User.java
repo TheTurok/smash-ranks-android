@@ -14,9 +14,9 @@ public final class User {
 
 
     static {
-        Rank = new IntegerSetting(CNAME + ".Rank", 0);
-        Player = new PlayerSetting(CNAME + ".Player");
-        Region = new RegionSetting(CNAME + ".Region");
+        Rank = new IntegerSetting(CNAME + ".RANK", 0);
+        Player = new PlayerSetting(CNAME + ".PLAYER");
+        Region = new RegionSetting(CNAME + ".REGION");
     }
 
 

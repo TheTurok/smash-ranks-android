@@ -14,12 +14,6 @@ import org.json.JSONObject;
 public final class Rankings {
 
 
-    private static final String CNAME = "com.garpr.android.data.Rankings";
-    private static final String KEY_RANKINGS_DATE = "KEY_RANKINGS_DATE";
-
-
-
-
     public static void checkForUpdates(final Response<Result> response) {
         new CheckForRankingsUpdatesCall(response).make();
     }
@@ -27,16 +21,6 @@ public final class Rankings {
 
     public static void get(final Response<RankingsBundle> response, final boolean ignoreCache) {
         new RankingsCall(response, ignoreCache).make();
-    }
-
-
-    private static long getDate() {
-        return Settings.get(CNAME).getLong(KEY_RANKINGS_DATE, 0L);
-    }
-
-
-    private static void setDate(final long date) {
-        Settings.edit(CNAME).putLong(KEY_RANKINGS_DATE, date).apply();
     }
 
 
@@ -64,7 +48,7 @@ public final class Rankings {
             if (rankingsBundle.hasDateWrapper()) {
                 final DateWrapper dateWrapper = rankingsBundle.getDateWrapper();
                 final long newRankingsDate = dateWrapper.getDate().getTime();
-                setDate(newRankingsDate);
+                Settings.RankingsDate.set(newRankingsDate);
             } else {
                 Console.w(getCallName(), "RankingsBundle has no DateWrapper? Region is "
                         + Settings.Region.get().getName());
@@ -91,7 +75,7 @@ public final class Rankings {
         private CheckForRankingsUpdatesCall(final Response<Result> response)
                 throws IllegalArgumentException {
             super(response, true);
-            mCurrentRankingsDate = getDate();
+            mCurrentRankingsDate = Settings.RankingsDate.get();
         }
 
 
@@ -103,7 +87,7 @@ public final class Rankings {
 
         @Override
         void onRankingsBundleResponse(final RankingsBundle rankingsBundle) {
-            final long newRankingsDate = getDate();
+            final long newRankingsDate = Settings.RankingsDate.get();
 
             if (mCurrentRankingsDate != 0L && mCurrentRankingsDate < newRankingsDate) {
                 mResponse.success(Result.UPDATE_AVAILABLE);

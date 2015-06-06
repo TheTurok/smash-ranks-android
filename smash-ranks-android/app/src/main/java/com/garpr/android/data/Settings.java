@@ -14,14 +14,18 @@ public final class Settings {
 
     private static final String CNAME = "com.garpr.android.data.Settings";
 
+    public static final BooleanSetting OnboardingComplete;
     public static final IntegerSetting LastVersion;
+    public static final LongSetting RankingsDate;
     public static final RegionSetting Region;
 
 
 
 
     static {
+        OnboardingComplete = new BooleanSetting(CNAME + ".ONBOARDING_COMPLETE", false);
         LastVersion = new IntegerSetting(CNAME + ".LAST_VERSION", 0);
+        RankingsDate = new LongSetting(CNAME + ".RANKINGS_DATE", 0L);
         Region = new RegionSetting(CNAME + ".REGION_SETTING");
     }
 

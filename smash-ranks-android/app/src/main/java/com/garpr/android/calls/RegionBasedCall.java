@@ -1,4 +1,7 @@
-package com.garpr.android.data;
+package com.garpr.android.calls;
+
+
+import com.garpr.android.data.Settings;
 
 
 abstract class RegionBasedCall<T> extends Call<T> {

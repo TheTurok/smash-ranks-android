@@ -10,8 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
-import com.garpr.android.data.Database;
-import com.garpr.android.data.NetworkCache;
+import com.garpr.android.calls.NetworkCache;
 import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
@@ -77,7 +76,6 @@ public final class App extends Application {
         Crashlytics.getInstance().core.setBool(Constants.DEBUG, BuildConfig.DEBUG);
 
         sRequestQueue = Volley.newRequestQueue(sContext, new OkHttpStack());
-        Database.initialize();
 
         final int currentVersion = getVersionCode();
         final int lastVersion = Settings.getLastVersion();
@@ -104,7 +102,6 @@ public final class App extends Application {
         super.onTrimMemory(level);
 
         if (level >= TRIM_MEMORY_BACKGROUND) {
-            SQLiteDatabase.releaseMemory();
             Console.clearLogMessages();
 
             Console.d(TAG, "onTrimMemory(" + level + ')');

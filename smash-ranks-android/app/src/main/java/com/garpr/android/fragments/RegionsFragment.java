@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.garpr.android.R;
-import com.garpr.android.data.Regions;
-import com.garpr.android.data.ResponseOnUi;
+import com.garpr.android.calls.Regions;
+import com.garpr.android.calls.ResponseOnUi;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;

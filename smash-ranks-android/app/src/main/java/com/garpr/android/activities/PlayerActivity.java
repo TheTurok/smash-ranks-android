@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 
 import com.garpr.android.R;
-import com.garpr.android.data.Matches;
-import com.garpr.android.data.ResponseOnUi;
+import com.garpr.android.calls.Matches;
+import com.garpr.android.calls.ResponseOnUi;
 import com.garpr.android.data.User;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;

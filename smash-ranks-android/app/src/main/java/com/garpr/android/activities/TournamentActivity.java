@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.garpr.android.R;
-import com.garpr.android.data.ResponseOnUi;
-import com.garpr.android.data.Tournaments;
+import com.garpr.android.calls.ResponseOnUi;
+import com.garpr.android.calls.Tournaments;
 import com.garpr.android.fragments.TournamentMatchesFragment;
 import com.garpr.android.fragments.TournamentPlayersFragment;
 import com.garpr.android.misc.Console;

@@ -1,10 +1,11 @@
-package com.garpr.android.data;
+package com.garpr.android.calls;
 
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.garpr.android.BuildConfig;
+import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Utils;
 

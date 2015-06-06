@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
-import com.garpr.android.data.Matches;
-import com.garpr.android.data.ResponseOnUi;
+import com.garpr.android.calls.Matches;
+import com.garpr.android.calls.ResponseOnUi;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.MonthlyComparable;

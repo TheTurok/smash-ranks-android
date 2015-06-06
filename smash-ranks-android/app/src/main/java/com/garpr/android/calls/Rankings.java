@@ -1,6 +1,7 @@
-package com.garpr.android.data;
+package com.garpr.android.calls;
 
 
+import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.RankingsBundle;

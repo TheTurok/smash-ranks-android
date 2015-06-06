@@ -1,0 +1,50 @@
+package com.garpr.android.data;
+
+
+import android.content.SharedPreferences;
+
+import com.garpr.android.misc.Utils;
+
+
+public abstract class Setting<T> {
+
+
+    final T mDefaultValue;
+    final String mKey;
+
+
+
+
+    Setting(final String key, final T defaultValue) {
+        if (!Utils.validStrings(key)) {
+            throw new IllegalArgumentException();
+        }
+
+        mKey = key;
+        mDefaultValue = defaultValue;
+    }
+
+
+    public abstract T get();
+
+
+    final SharedPreferences readSharedPreferences() {
+        return Settings.get();
+    }
+
+
+    public abstract void set(final T newValue);
+
+
+    @Override
+    public final String toString() {
+        return mKey + ':' + mDefaultValue;
+    }
+
+
+    final SharedPreferences.Editor writeSharedPreferences() {
+        return Settings.edit();
+    }
+
+
+}

@@ -1,4 +1,4 @@
-package com.garpr.android.sync;
+package com.garpr.android.misc;
 
 
 import com.google.android.gms.gcm.GcmTaskService;

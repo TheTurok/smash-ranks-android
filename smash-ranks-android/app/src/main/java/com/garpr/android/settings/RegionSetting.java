@@ -69,6 +69,12 @@ public final class RegionSetting extends Setting<Region> {
     }
 
 
+    @Override
+    public void delete() {
+        throw new UnsupportedOperationException();
+    }
+
+
     public void detachListener(final RegionListener listener) {
         synchronized (mListeners) {
             for (int i = 0; i < mListeners.size(); ) {

@@ -22,6 +22,12 @@ public final class JSONSetting extends Setting<JSONObject> {
 
 
     @Override
+    public void delete() {
+        mStringSetting.delete();
+    }
+
+
+    @Override
     public JSONObject get() {
         final String string = mStringSetting.get();
 

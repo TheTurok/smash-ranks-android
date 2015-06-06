@@ -22,6 +22,12 @@ public final class PlayerSetting extends Setting<Player> {
 
 
     @Override
+    public void delete() {
+        mJSONSetting.delete();
+    }
+
+
+    @Override
     public Player get() {
         final JSONObject json = mJSONSetting.get();
         final Player player;

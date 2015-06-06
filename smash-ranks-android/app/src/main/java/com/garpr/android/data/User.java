@@ -1,20 +1,22 @@
 package com.garpr.android.data;
 
 
-public class User {
+public final class User {
 
 
-    public final IntegerSetting Rank;
-    public final PlayerSetting Player;
-    public final RegionSetting Region;
+    private static final String CNAME = "com.garpr.android.data.User";
+
+    public static final IntegerSetting Rank;
+    public static final PlayerSetting Player;
+    public static final RegionSetting Region;
 
 
 
 
-    User(final String key) {
-        Rank = new IntegerSetting(key + ".RANK", 0);
-        Player = new PlayerSetting(key + ".PLAYER");
-        Region = new RegionSetting(key + ".REGION");
+    static {
+        Rank = new IntegerSetting(CNAME + ".Rank", 0);
+        Player = new PlayerSetting(CNAME + ".Player");
+        Region = new RegionSetting(CNAME + ".Region");
     }
 
 

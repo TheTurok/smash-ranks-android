@@ -1,4 +1,4 @@
-package com.garpr.android.data;
+package com.garpr.android.settings;
 
 
 import com.garpr.android.models.Player;
@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class PlayerSetting extends Setting<Player> {
+public final class PlayerSetting extends Setting<Player> {
 
 
     private final JSONSetting mJSONSetting;

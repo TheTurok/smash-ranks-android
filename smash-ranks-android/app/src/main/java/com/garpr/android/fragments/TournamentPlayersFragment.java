@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 
 import com.garpr.android.R;
 import com.garpr.android.activities.PlayerActivity;
-import com.garpr.android.data.User;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.TournamentBundle;
+import com.garpr.android.settings.User;
 import com.garpr.android.views.PlayerItemView;
 import com.garpr.android.views.SimpleSeparatorView;
 

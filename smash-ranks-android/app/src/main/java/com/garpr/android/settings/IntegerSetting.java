@@ -1,7 +1,7 @@
-package com.garpr.android.data;
+package com.garpr.android.settings;
 
 
-public class IntegerSetting extends Setting<Integer> {
+public final class IntegerSetting extends Setting<Integer> {
 
 
     IntegerSetting(final String key, final Integer defaultValue) {

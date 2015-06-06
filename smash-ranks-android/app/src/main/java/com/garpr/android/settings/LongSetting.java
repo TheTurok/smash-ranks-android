@@ -1,7 +1,7 @@
-package com.garpr.android.data;
+package com.garpr.android.settings;
 
 
-public class LongSetting extends Setting<Long> {
+public final class LongSetting extends Setting<Long> {
 
 
     LongSetting(final String key, final Long defaultValue) {

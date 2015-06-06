@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 
 import com.garpr.android.R;
-import com.garpr.android.data.Settings;
 import com.garpr.android.models.Region;
+import com.garpr.android.settings.Settings;
 import com.garpr.android.views.CheckableItemView;
 import com.melnykov.fab.FloatingActionButton;
 

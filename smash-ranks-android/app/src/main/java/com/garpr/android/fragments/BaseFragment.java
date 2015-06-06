@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.garpr.android.App;
-import com.garpr.android.data.RegionSetting;
-import com.garpr.android.data.Settings;
 import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.models.Region;
+import com.garpr.android.settings.RegionSetting;
+import com.garpr.android.settings.Settings;
 
 
 public abstract class BaseFragment extends Fragment implements HeartbeatWithUi,

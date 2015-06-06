@@ -11,7 +11,7 @@ import android.view.accessibility.AccessibilityEvent;
  * Gross annoying workaround class for what appears to be a strange, device-specific, crasher.
  * http://stackoverflow.com/questions/29241676/android-recyclerview-last-item-remove-runtime-error
  */
-public class LinearLayoutManagerWrapper extends LinearLayoutManager {
+public final class LinearLayoutManagerWrapper extends LinearLayoutManager {
 
 
     private static final String TAG = "LinearLayoutManagerWrapper";

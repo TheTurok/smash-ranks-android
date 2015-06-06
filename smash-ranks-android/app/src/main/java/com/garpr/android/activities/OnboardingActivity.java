@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 
 import com.crashlytics.android.Crashlytics;
 import com.garpr.android.R;
-import com.garpr.android.data.Settings;
-import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.fragments.ToolbarRegionsFragment;
@@ -21,6 +19,8 @@ import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
+import com.garpr.android.settings.Settings;
+import com.garpr.android.settings.User;
 import com.garpr.android.views.NonSwipeableViewPager;
 
 

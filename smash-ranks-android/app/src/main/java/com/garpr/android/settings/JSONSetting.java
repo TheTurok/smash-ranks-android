@@ -1,4 +1,4 @@
-package com.garpr.android.data;
+package com.garpr.android.settings;
 
 
 import com.garpr.android.misc.Utils;
@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class JSONSetting extends Setting<JSONObject> {
+public final class JSONSetting extends Setting<JSONObject> {
 
 
     private final StringSetting mStringSetting;

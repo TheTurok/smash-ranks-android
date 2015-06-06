@@ -16,10 +16,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
-import com.garpr.android.data.Settings;
-import com.garpr.android.data.User;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
+import com.garpr.android.settings.Settings;
+import com.garpr.android.settings.User;
 
 
 public abstract class BaseToolbarActivity extends BaseActivity {

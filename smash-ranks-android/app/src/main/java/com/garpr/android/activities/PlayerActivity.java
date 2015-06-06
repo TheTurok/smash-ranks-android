@@ -17,7 +17,6 @@ import android.widget.Filter;
 import com.garpr.android.R;
 import com.garpr.android.calls.Matches;
 import com.garpr.android.calls.ResponseOnUi;
-import com.garpr.android.data.User;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
@@ -30,6 +29,7 @@ import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 import com.garpr.android.models.Result;
 import com.garpr.android.models.Tournament;
+import com.garpr.android.settings.User;
 import com.garpr.android.views.PlayerItemView;
 import com.garpr.android.views.TournamentSeparatorView;
 

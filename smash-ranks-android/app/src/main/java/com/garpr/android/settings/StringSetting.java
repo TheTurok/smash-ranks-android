@@ -1,7 +1,7 @@
-package com.garpr.android.data;
+package com.garpr.android.settings;
 
 
-public class StringSetting extends Setting<String> {
+public final class StringSetting extends Setting<String> {
 
 
     StringSetting(final String key) {

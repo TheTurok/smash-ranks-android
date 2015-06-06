@@ -1,4 +1,4 @@
-package com.garpr.android.data;
+package com.garpr.android.settings;
 
 
 import android.content.SharedPreferences;

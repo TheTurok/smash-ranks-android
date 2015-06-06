@@ -5,9 +5,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-import com.garpr.android.data.Settings;
 import com.garpr.android.fragments.FloatingActionButtonRegionsFragment;
 import com.garpr.android.fragments.RegionsFragment;
+import com.garpr.android.settings.Settings;
 
 
 public class RegionsActivity extends BaseFragmentActivity implements

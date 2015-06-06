@@ -1,7 +1,7 @@
-package com.garpr.android.data;
+package com.garpr.android.settings;
 
 
-public class BooleanSetting extends Setting<Boolean> {
+public final class BooleanSetting extends Setting<Boolean> {
 
 
     BooleanSetting(final String key, final Boolean defaultValue) {

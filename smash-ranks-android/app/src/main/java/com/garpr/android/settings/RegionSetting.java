@@ -1,4 +1,4 @@
-package com.garpr.android.data;
+package com.garpr.android.settings;
 
 
 import com.crashlytics.android.Crashlytics;
@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
 
-public class RegionSetting extends Setting<Region> {
+public final class RegionSetting extends Setting<Region> {
 
 
     private static final String TAG = "RegionSetting";

@@ -10,8 +10,8 @@ import android.support.v4.app.NotificationManagerCompat;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.activities.RankingsActivity;
-import com.garpr.android.data.Settings;
 import com.garpr.android.models.Region;
+import com.garpr.android.settings.Settings;
 
 
 /**

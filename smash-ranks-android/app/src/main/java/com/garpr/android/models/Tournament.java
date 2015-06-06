@@ -4,11 +4,11 @@ package com.garpr.android.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.garpr.android.data.Settings;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.ListUtils.MonthlyComparable;
 import com.garpr.android.misc.Utils;
+import com.garpr.android.settings.Settings;
 
 import org.json.JSONException;
 import org.json.JSONObject;

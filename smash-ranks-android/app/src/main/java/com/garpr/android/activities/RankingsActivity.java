@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.garpr.android.R;
 import com.garpr.android.calls.Rankings;
 import com.garpr.android.calls.ResponseOnUi;
-import com.garpr.android.data.User;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
@@ -28,6 +27,7 @@ import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.RankingsBundle;
 import com.garpr.android.models.Region;
+import com.garpr.android.settings.User;
 import com.garpr.android.views.RankingItemView;
 import com.garpr.android.views.SimpleSeparatorView;
 

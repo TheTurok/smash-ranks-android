@@ -40,7 +40,7 @@ public class RegionsActivity extends BaseFragmentActivity implements
     @Override
     public void onRegionSaved() {
         final RegionsFragment fragment = (RegionsFragment) getFragment();
-        Settings.Region.set(fragment.getSelectedRegion());
+        Settings.Region.set(fragment.getSelectedRegion(), true);
         finish();
     }
 

@@ -17,7 +17,7 @@ public class BooleanSetting extends Setting<Boolean> {
 
     @Override
     public void set(final Boolean newValue) {
-        writeSharedPreferences().putBoolean(mKey, mDefaultValue).apply();
+        writeSharedPreferences().putBoolean(mKey, newValue).apply();
     }
 
 

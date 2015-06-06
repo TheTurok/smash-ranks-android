@@ -17,7 +17,7 @@ public class IntegerSetting extends Setting<Integer> {
 
     @Override
     public void set(final Integer newValue) {
-        writeSharedPreferences().putInt(mKey, mDefaultValue).apply();
+        writeSharedPreferences().putInt(mKey, newValue).apply();
     }
 
 

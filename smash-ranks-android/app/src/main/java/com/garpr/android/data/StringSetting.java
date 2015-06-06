@@ -22,7 +22,7 @@ public class StringSetting extends Setting<String> {
 
     @Override
     public void set(final String newValue) {
-        writeSharedPreferences().putString(mKey, mDefaultValue).apply();
+        writeSharedPreferences().putString(mKey, newValue).apply();
     }
 
 

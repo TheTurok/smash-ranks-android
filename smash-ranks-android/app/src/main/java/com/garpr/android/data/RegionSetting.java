@@ -1,7 +1,9 @@
 package com.garpr.android.data;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.garpr.android.misc.Console;
+import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
@@ -90,7 +92,8 @@ public class RegionSetting extends Setting<Region> {
         final Region region;
 
         if (json == null) {
-            region = null;
+            region = User.getRegion();
+            set(region);
         } else {
             try {
                 region = new Region(json);
@@ -110,15 +113,8 @@ public class RegionSetting extends Setting<Region> {
         }
 
         final JSONObject json = newValue.toJSON();
-        final Region oldValue = get();
-
-        String consoleMsg = "Region is now " + json.toString();
-
-        if (oldValue != null) {
-            consoleMsg += " (old region was " + oldValue.toJSON().toString() + ')';
-        }
-
-        Console.d(TAG, consoleMsg);
+        Console.d(TAG, "Region is now " + json.toString());
+        Crashlytics.getInstance().core.setString(Constants.REGION, json.toString());
         mJSONSetting.set(json);
     }
 

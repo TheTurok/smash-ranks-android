@@ -15,6 +15,11 @@ public abstract class Setting<T> {
 
 
 
+    Setting(final String key) {
+        this(key, null);
+    }
+
+
     Setting(final String key, final T defaultValue) {
         if (!Utils.validStrings(key)) {
             throw new IllegalArgumentException();

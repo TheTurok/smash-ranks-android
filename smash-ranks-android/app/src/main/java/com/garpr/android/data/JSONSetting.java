@@ -10,14 +10,20 @@ import org.json.JSONObject;
 public class JSONSetting extends Setting<JSONObject> {
 
 
+    private final StringSetting mStringSetting;
+
+
+
+
     JSONSetting(final String key) {
         super(key, null);
+        mStringSetting = new StringSetting(key);
     }
 
 
     @Override
     public JSONObject get() {
-        final String string = readSharedPreferences().getString(mKey, null);
+        final String string = mStringSetting.get();
 
         if (Utils.validStrings(string)) {
             try {
@@ -41,7 +47,7 @@ public class JSONSetting extends Setting<JSONObject> {
             newValueString = newValue.toString();
         }
 
-        writeSharedPreferences().putString(mKey, newValueString).apply();
+        mStringSetting.set(newValueString);
     }
 
 

@@ -148,7 +148,7 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
     public void onGoClick() {
         final Player player = mPlayersFragment.getSelectedPlayer();
 
-        new AlertDialog.Builder(this, R.style.dialog_theme)
+        new AlertDialog.Builder(this)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
@@ -197,7 +197,7 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
 
     @Override
     public void onSkipClick() {
-        new AlertDialog.Builder(this, R.style.dialog_theme)
+        new AlertDialog.Builder(this)
                 .setMessage(R.string.are_you_sure_you_dont_want_to_select_your_tag)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override

@@ -102,7 +102,6 @@ public final class App extends Application {
 
         if (level >= TRIM_MEMORY_BACKGROUND) {
             Console.clearLogMessages();
-
             Console.d(TAG, "onTrimMemory(" + level + ')');
         }
     }

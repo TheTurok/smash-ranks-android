@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="com.garpr.android"
-    android:allowParallelSyncs="false"
-    android:contentAuthority="com.garpr.android"
-    android:isAlwaysSyncable="true"
-    android:syncable="true"
-    android:supportsUploading="false"
-    android:userVisible="true" />

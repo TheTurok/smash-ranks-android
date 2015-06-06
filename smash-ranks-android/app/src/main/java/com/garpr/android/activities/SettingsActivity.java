@@ -1,11 +1,7 @@
 package com.garpr.android.activities;
 
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,9 +24,6 @@ import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 
-import static android.provider.Settings.ACTION_SYNC_SETTINGS;
-import static android.provider.Settings.EXTRA_AUTHORITIES;
-
 
 public class SettingsActivity extends BaseToolbarActivity {
 
@@ -40,7 +33,6 @@ public class SettingsActivity extends BaseToolbarActivity {
     private CheckedTextView mSyncChargingLabel;
     private CheckedTextView mSyncWifiLabel;
     private ImageButton mOrb;
-    private Intent mSyncSettingsIntent;
     private LinearLayout mAuthor;
     private LinearLayout mConsole;
     private LinearLayout mGitHub;
@@ -164,11 +156,10 @@ public class SettingsActivity extends BaseToolbarActivity {
 
 
     private void pollSyncStatus() {
-        // this code was taken from Stack Overflow: http://stackoverflow.com/a/20098676/823952
-        final AccountManager am = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
-        final String packageName = getPackageName();
-        final Account account = am.getAccountsByType(packageName)[0];
+        // TODO
+        // is syncing enabled?
 
+        /*
         if (ContentResolver.getSyncAutomatically(account, packageName)) {
             mSyncStatus.setText(R.string.periodic_sync_is_enabled);
             mSyncCharging.setEnabled(true);
@@ -182,6 +173,7 @@ public class SettingsActivity extends BaseToolbarActivity {
             mSyncWifi.setEnabled(false);
             mSyncWifi.setAlpha(0.6f);
         }
+        */
     }
 
 
@@ -201,13 +193,8 @@ public class SettingsActivity extends BaseToolbarActivity {
         mSync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if (mSyncSettingsIntent == null) {
-                    mSyncSettingsIntent = new Intent(ACTION_SYNC_SETTINGS);
-                    final String[] authorities = { getPackageName() };
-                    mSyncSettingsIntent.putExtra(EXTRA_AUTHORITIES, authorities);
-                }
-
-                startActivity(mSyncSettingsIntent);
+                // TODO
+                // toggle sync on / off
             }
         });
 

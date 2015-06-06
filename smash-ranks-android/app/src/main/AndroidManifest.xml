@@ -4,11 +4,7 @@
     package="com.garpr.android">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <application
         android:allowBackup="true"
@@ -134,35 +130,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.RankingsActivity" />
         </activity>
-
-        <provider
-            android:authorities="com.garpr.android"
-            android:exported="false"
-            android:name=".data.sync.SyncProvider"
-            android:syncable="true" />
-
-        <service
-            android:exported="true"
-            android:name=".data.sync.SyncService"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_adapter" />
-        </service>
-
-        <service
-            android:exported="false"
-            android:name=".data.sync.AccountService">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/account_authenticator" />
-        </service>
 
         <meta-data
             android:name="com.crashlytics.ApiKey"

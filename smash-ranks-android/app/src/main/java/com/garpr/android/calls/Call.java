@@ -10,6 +10,7 @@ import com.garpr.android.App;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
+import com.garpr.android.misc.NetworkCache;
 
 import org.json.JSONException;
 import org.json.JSONObject;

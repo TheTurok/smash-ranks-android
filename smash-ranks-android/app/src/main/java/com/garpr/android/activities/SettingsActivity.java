@@ -18,8 +18,8 @@ import android.widget.TextView;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
-import com.garpr.android.calls.NetworkCache;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.NetworkCache;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;

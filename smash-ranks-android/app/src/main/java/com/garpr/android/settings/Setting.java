@@ -46,12 +46,6 @@ public abstract class Setting<T> {
     public abstract void set(final T newValue);
 
 
-    @Override
-    public final String toString() {
-        return mKey + ':' + mDefaultValue;
-    }
-
-
     final SharedPreferences.Editor writeSharedPreferences() {
         return Settings.edit();
     }

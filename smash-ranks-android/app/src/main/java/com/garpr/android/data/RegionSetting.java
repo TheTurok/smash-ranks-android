@@ -105,14 +105,20 @@ public class RegionSetting extends Setting<Region> {
 
     @Override
     public void set(final Region newValue) {
-        final JSONObject json;
-
         if (newValue == null) {
-            json = null;
-        } else {
-            json = newValue.toJSON();
+            throw new IllegalArgumentException("newValue can't be null");
         }
 
+        final JSONObject json = newValue.toJSON();
+        final Region oldValue = get();
+
+        String consoleMsg = "Region is now " + json.toString();
+
+        if (oldValue != null) {
+            consoleMsg += " (old region was " + oldValue.toJSON().toString() + ')';
+        }
+
+        Console.d(TAG, consoleMsg);
         mJSONSetting.set(json);
     }
 

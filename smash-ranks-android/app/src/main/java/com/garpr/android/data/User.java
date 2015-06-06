@@ -20,4 +20,14 @@ public final class User {
     }
 
 
+    public static boolean areWeInTheUsersRegion() {
+        return Region.get().equals(Settings.Region.get());
+    }
+
+
+    public static boolean hasPlayer() {
+        return Player.get() != null;
+    }
+
+
 }

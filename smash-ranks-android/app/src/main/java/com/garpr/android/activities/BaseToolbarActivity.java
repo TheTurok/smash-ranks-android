@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
-import com.garpr.android.User;
+import com.garpr.android.data.User;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 
@@ -100,7 +100,7 @@ public abstract class BaseToolbarActivity extends BaseActivity {
         }
 
         if (User.hasPlayer()) {
-            final Player player = User.getPlayer();
+            final Player player = User.Player.get();
             mDrawerUserName.setText(player.getName());
         } else {
             mDrawerUserName.setVisibility(View.GONE);
@@ -277,7 +277,7 @@ public abstract class BaseToolbarActivity extends BaseActivity {
 
 
     private void updateDrawerRegion() {
-        final Region userRegion = User.getRegion();
+        final Region userRegion = User.Region.get();
         final Region settingsRegion = Settings.Region.get();
         final String regionText;
 

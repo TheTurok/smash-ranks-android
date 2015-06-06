@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.crashlytics.android.Crashlytics;
 import com.garpr.android.R;
 import com.garpr.android.data.Settings;
-import com.garpr.android.User;
+import com.garpr.android.data.User;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.fragments.ToolbarRegionsFragment;
@@ -55,7 +55,8 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
 
     private void finishOnboarding(final boolean savePlayer) {
         if (savePlayer) {
-            User.setPlayer(mPlayersFragment.getSelectedPlayer());
+            final Player player = mPlayersFragment.getSelectedPlayer();
+            User.Player.set(player);
         }
 
         final Editor editor = Settings.edit(CNAME);
@@ -87,7 +88,7 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
 
             if (!region.equals(mSelectedRegion)) {
                 mSelectedRegion = region;
-                User.setRegion(mSelectedRegion);
+                User.Region.set(mSelectedRegion);
                 mPlayersFragment.refresh();
             }
 

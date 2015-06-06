@@ -17,7 +17,7 @@ import android.widget.Filter;
 import com.garpr.android.R;
 import com.garpr.android.calls.Matches;
 import com.garpr.android.calls.ResponseOnUi;
-import com.garpr.android.User;
+import com.garpr.android.data.User;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.ListUtils;
@@ -206,7 +206,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         }
 
         mInUsersRegion = User.areWeInTheUsersRegion();
-        mUserPlayer = User.getPlayer();
+        mUserPlayer = User.Player.get();
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mMatches = savedInstanceState.getParcelableArrayList(KEY_MATCHES);

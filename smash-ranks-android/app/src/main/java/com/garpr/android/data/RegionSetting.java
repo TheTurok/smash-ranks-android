@@ -2,7 +2,6 @@ package com.garpr.android.data;
 
 
 import com.crashlytics.android.Crashlytics;
-import com.garpr.android.User;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
@@ -93,7 +92,7 @@ public class RegionSetting extends Setting<Region> {
         final Region region;
 
         if (json == null) {
-            region = User.getRegion();
+            region = User.Region.get();
             set(region);
         } else {
             try {

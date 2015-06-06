@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.garpr.android.R;
 import com.garpr.android.calls.Rankings;
 import com.garpr.android.calls.ResponseOnUi;
-import com.garpr.android.User;
+import com.garpr.android.data.User;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
@@ -176,7 +176,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mInUsersRegion = User.areWeInTheUsersRegion();
-        mUserPlayer = User.getPlayer();
+        mUserPlayer = User.Player.get();
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mPlayers = savedInstanceState.getParcelableArrayList(KEY_PLAYERS);

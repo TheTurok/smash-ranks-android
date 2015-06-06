@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.garpr.android.R;
 import com.garpr.android.activities.HeadToHeadActivity;
 import com.garpr.android.activities.PlayerActivity;
-import com.garpr.android.User;
+import com.garpr.android.data.User;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.TournamentBundle;
@@ -61,7 +61,7 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mInUsersRegion = User.areWeInTheUsersRegion();
-        mUserPlayer = User.getPlayer();
+        mUserPlayer = User.Player.get();
     }
 
 

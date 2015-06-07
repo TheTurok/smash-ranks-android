@@ -13,6 +13,8 @@
             tools:text="@string/enable_or_disable_sync"
             style="@style/settings_title" />
         <CheckBox
+            android:background="@null"
+            android:clickable="false"
             android:id="@+id/view_check_preference_check_box"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/root_padding"

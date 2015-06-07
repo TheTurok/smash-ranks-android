@@ -160,7 +160,4 @@
     <string name="yes">Yes</string>
     <string name="youre_x_from_y_ready">You\'re %1$s from %2$s. Ready?</string>
 
-    <string name="preferences_sync_charging">preferences_sync_charging</string>
-    <string name="preferences_sync_wifi">preferences_sync_wifi</string>
-
 </resources>

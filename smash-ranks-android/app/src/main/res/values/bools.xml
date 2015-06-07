@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <bool name="preferences_sync_charging_default">false</bool>
-    <bool name="preferences_sync_wifi_default">true</bool>
-
-</resources>

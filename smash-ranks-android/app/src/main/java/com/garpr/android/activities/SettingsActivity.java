@@ -4,7 +4,6 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -23,6 +22,8 @@ import com.garpr.android.misc.NetworkCache;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
+import com.garpr.android.settings.Sync;
+import com.garpr.android.views.CheckPreferenceView;
 
 
 public class SettingsActivity extends BaseToolbarActivity {
@@ -30,8 +31,8 @@ public class SettingsActivity extends BaseToolbarActivity {
 
     private static final String TAG = "SettingsActivity";
 
-    private CheckedTextView mSyncChargingLabel;
-    private CheckedTextView mSyncWifiLabel;
+    private CheckPreferenceView mSyncCharging;
+    private CheckPreferenceView mSyncWifi;
     private ImageButton mOrb;
     private LinearLayout mAuthor;
     private LinearLayout mConsole;
@@ -40,13 +41,8 @@ public class SettingsActivity extends BaseToolbarActivity {
     private LinearLayout mRegion;
     private LinearLayout mServer;
     private LinearLayout mSync;
-    private LinearLayout mSyncCharging;
-    private LinearLayout mSyncWifi;
     private TextView mRegionName;
     private TextView mNetworkCacheSize;
-    private TextView mSyncChargingDesc;
-    private TextView mSyncStatus;
-    private TextView mSyncWifiDesc;
     private TextView mVersion;
 
 
@@ -70,13 +66,8 @@ public class SettingsActivity extends BaseToolbarActivity {
         mOrb = (ImageButton) findViewById(R.id.activity_settings_orb);
         mServer = (LinearLayout) findViewById(R.id.activity_settings_server);
         mSync = (LinearLayout) findViewById(R.id.activity_settings_sync);
-        mSyncCharging = (LinearLayout) findViewById(R.id.activity_settings_sync_charging);
-        mSyncChargingDesc = (TextView) findViewById(R.id.activity_settings_sync_charging_desc);
-        mSyncChargingLabel = (CheckedTextView) findViewById(R.id.activity_settings_sync_charging_label);
-        mSyncStatus = (TextView) findViewById(R.id.activity_settings_sync_status);
-        mSyncWifi = (LinearLayout) findViewById(R.id.activity_settings_sync_wifi);
-        mSyncWifiDesc = (TextView) findViewById(R.id.activity_settings_sync_wifi_desc);
-        mSyncWifiLabel = (CheckedTextView) findViewById(R.id.activity_settings_sync_wifi_label);
+        mSyncCharging = (CheckPreferenceView) findViewById(R.id.activity_settings_sync_charging);
+        mSyncWifi = (CheckPreferenceView) findViewById(R.id.activity_settings_sync_wifi);
         mVersion = (TextView) findViewById(R.id.activity_settings_version);
     }
 
@@ -198,49 +189,13 @@ public class SettingsActivity extends BaseToolbarActivity {
             }
         });
 
-        final String syncChargingKey = getString(R.string.preferences_sync_charging);
-        final String syncWifiKey = getString(R.string.preferences_sync_wifi);
+        mSyncCharging.set(Sync.ChargingNecessary, R.string.only_sync_when_charging,
+                R.string.will_sync_regardless_of_being_plugged_in_or_not,
+                R.string.will_only_sync_if_plugged_in);
 
-        final Resources res = getResources();
-        final boolean syncChargingDefault = res.getBoolean(R.bool.preferences_sync_charging_default);
-        final boolean syncWifiDefault = res.getBoolean(R.bool.preferences_sync_wifi_default);
-
-        final SharedPreferences sPreferences = Settings.get();
-
-        if (sPreferences.getBoolean(syncChargingKey, syncChargingDefault)) {
-            mSyncChargingLabel.setChecked(true);
-            mSyncChargingDesc.setText(R.string.will_only_sync_if_plugged_in);
-        } else {
-            mSyncChargingLabel.setChecked(false);
-            mSyncChargingDesc.setText(R.string.will_sync_regardless_of_being_plugged_in_or_not);
-        }
-
-        if (sPreferences.getBoolean(syncWifiKey, syncWifiDefault)) {
-            mSyncWifiLabel.setChecked(true);
-            mSyncWifiDesc.setText(R.string.will_only_sync_if_connected_to_wifi);
-        } else {
-            mSyncWifiLabel.setChecked(false);
-            mSyncWifiDesc.setText(R.string.will_sync_on_any_data_connection);
-        }
-
-        mSyncCharging.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                toggleCheckPreferenceAndViews(R.string.preferences_sync_charging,
-                        mSyncChargingLabel, mSyncChargingDesc,
-                        R.string.will_only_sync_if_plugged_in,
-                        R.string.will_sync_regardless_of_being_plugged_in_or_not);
-            }
-        });
-
-        mSyncWifi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                toggleCheckPreferenceAndViews(R.string.preferences_sync_wifi, mSyncWifiLabel,
-                        mSyncWifiDesc, R.string.will_only_sync_if_connected_to_wifi,
-                        R.string.will_sync_on_any_data_connection);
-            }
-        });
+        mSyncWifi.set(Sync.WifiNecessary, R.string.only_sync_on_wifi,
+                R.string.will_sync_on_any_data_connection,
+                R.string.will_only_sync_if_connected_to_wifi);
 
         mAuthor.setOnClickListener(new View.OnClickListener() {
             @Override

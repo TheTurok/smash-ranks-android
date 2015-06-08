@@ -27,7 +27,13 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
 
 
 
-    public static void initialize() {
+    public static void cancel() {
+        GcmNetworkManager.getInstance(App.getContext()).cancelAllTasks(SyncManager.class);
+        Settings.SyncIsPending.set(false);
+    }
+
+
+    public static void schedule() {
         final Context context = App.getContext();
 
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)
@@ -52,6 +58,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
 
         final PeriodicTask task = builder.build();
         GcmNetworkManager.getInstance(context).schedule(task);
+        Settings.SyncIsPending.set(true);
     }
 
 

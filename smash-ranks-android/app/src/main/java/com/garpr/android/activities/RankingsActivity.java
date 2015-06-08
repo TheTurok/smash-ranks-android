@@ -28,6 +28,7 @@ import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.RankingsBundle;
 import com.garpr.android.models.Region;
+import com.garpr.android.settings.Settings;
 import com.garpr.android.settings.User;
 import com.garpr.android.views.RankingItemView;
 import com.garpr.android.views.SimpleSeparatorView;
@@ -190,7 +191,9 @@ public class RankingsActivity extends BaseToolbarListActivity implements
             prepareList();
         }
 
-        SyncManager.initialize();
+        if (Settings.SyncIsEnabled.get() && !Settings.SyncIsPending.get()) {
+            SyncManager.schedule();
+        }
     }
 
 

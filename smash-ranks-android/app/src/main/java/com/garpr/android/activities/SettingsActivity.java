@@ -15,6 +15,7 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.NetworkCache;
+import com.garpr.android.misc.SyncManager;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
@@ -150,6 +151,12 @@ public class SettingsActivity extends BaseToolbarActivity {
                 final boolean isEnabled = v.getSetting().get();
                 mSyncCharging.setEnabled(isEnabled);
                 mSyncWifi.setEnabled(isEnabled);
+
+                if (isEnabled) {
+                    SyncManager.schedule();
+                } else {
+                    SyncManager.cancel();
+                }
             }
         });
 

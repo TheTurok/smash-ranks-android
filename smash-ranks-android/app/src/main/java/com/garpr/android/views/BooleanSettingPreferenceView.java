@@ -14,6 +14,7 @@ public class BooleanSettingPreferenceView extends PreferenceView {
     private BooleanSetting mSetting;
     private int mSubTitleEnabledText;
     private int mSubTitleDisabledText;
+    private OnToggleListener mToggleListener;
 
 
 
@@ -50,6 +51,11 @@ public class BooleanSettingPreferenceView extends PreferenceView {
     }
 
 
+    public void setOnToggleListener(final OnToggleListener l) {
+        mToggleListener = l;
+    }
+
+
     public void toggle() {
         final boolean newValue = mSetting.toggle();
 
@@ -58,6 +64,21 @@ public class BooleanSettingPreferenceView extends PreferenceView {
         } else {
             setSubTitleText(mSubTitleDisabledText);
         }
+
+        if (mToggleListener != null) {
+            mToggleListener.onToggle(this);
+        }
+    }
+
+
+
+
+    public interface OnToggleListener {
+
+
+        void onToggle(final BooleanSettingPreferenceView v);
+
+
     }
 
 

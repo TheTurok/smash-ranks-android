@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.garpr.android.App;
@@ -19,6 +18,7 @@ import com.garpr.android.misc.NetworkCache;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
+import com.garpr.android.views.BooleanSettingPreferenceView;
 import com.garpr.android.views.CheckPreferenceView;
 import com.garpr.android.views.PreferenceView;
 import com.garpr.android.views.SwitchPreferenceView;
@@ -116,13 +116,7 @@ public class SettingsActivity extends BaseToolbarActivity {
 
     private void pollNetworkCache() {
         final int networkCacheSize = NetworkCache.size();
-
-        if (networkCacheSize >= 1) {
-            mNetworkCache.enable();
-        } else {
-            mNetworkCache.disable();
-        }
-
+        mNetworkCache.setEnabled(networkCacheSize >= 1);
         mNetworkCache.setSubTitleText(getResources().getQuantityString(
                 R.plurals.currently_contains_x_entries, networkCacheSize, networkCacheSize));
     }
@@ -151,6 +145,14 @@ public class SettingsActivity extends BaseToolbarActivity {
 
         mSync.set(Settings.SyncIsEnabled, R.string.enable_or_disable_sync,
                 R.string.periodic_sync_is_on, R.string.periodic_sync_is_turned_off);
+        mSync.setOnToggleListener(new BooleanSettingPreferenceView.OnToggleListener() {
+            @Override
+            public void onToggle(final BooleanSettingPreferenceView v) {
+                final boolean isEnabled = v.getSetting().get();
+                mSyncCharging.setEnabled(isEnabled);
+                mSyncWifi.setEnabled(isEnabled);
+            }
+        });
 
         mSyncCharging.set(Settings.SyncChargingIsNecessary, R.string.only_sync_when_charging,
                 R.string.will_only_sync_if_plugged_in,
@@ -192,7 +194,7 @@ public class SettingsActivity extends BaseToolbarActivity {
             }
         });
 
-        mVersion.disable();
+        mVersion.setEnabled(false);
         mVersion.setTitleText(R.string.version_information);
         mVersion.setSubTitleText(getString(R.string.x_build_y, App.getVersionName(),
                 App.getVersionCode()));

@@ -23,23 +23,23 @@ public class PreferenceView extends LinearLayout {
     }
 
 
-    public void disable() {
-        setEnabled(false);
-        setAlpha(0.6f);
-    }
-
-
-    public void enable() {
-        setAlpha(1f);
-        setEnabled(true);
-    }
-
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mSubTitle = (TextView) findViewById(R.id.view_preference_sub_title);
         mTitle = (TextView) findViewById(R.id.view_preference_title);
+    }
+
+
+    @Override
+    public void setEnabled(final boolean enabled) {
+        super.setEnabled(enabled);
+
+        if (enabled) {
+            setAlpha(1f);
+        } else {
+            setAlpha(0.6f);
+        }
     }
 
 

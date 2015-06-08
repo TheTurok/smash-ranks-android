@@ -32,10 +32,10 @@ public class SettingsActivity extends BaseToolbarActivity {
     private CheckPreferenceView mSyncCharging;
     private CheckPreferenceView mSyncWifi;
     private ImageButton mOrb;
-    private LinearLayout mAuthor;
-    private LinearLayout mConsole;
-    private LinearLayout mServer;
     private LinearLayout mGitHub;
+    private LinearLayout mServer;
+    private PreferenceView mAuthor;
+    private PreferenceView mConsole;
     private PreferenceView mNetworkCache;
     private PreferenceView mRegion;
     private PreferenceView mVersion;
@@ -52,8 +52,8 @@ public class SettingsActivity extends BaseToolbarActivity {
 
 
     private void findViews() {
-        mAuthor = (LinearLayout) findViewById(R.id.activity_settings_author);
-        mConsole = (LinearLayout) findViewById(R.id.activity_settings_console);
+        mAuthor = (PreferenceView) findViewById(R.id.activity_settings_author);
+        mConsole = (PreferenceView) findViewById(R.id.activity_settings_console);
         mGitHub = (LinearLayout) findViewById(R.id.activity_settings_github);
         mNetworkCache = (PreferenceView) findViewById(R.id.activity_settings_network_cache);
         mRegion = (PreferenceView) findViewById(R.id.activity_settings_region);
@@ -160,6 +160,8 @@ public class SettingsActivity extends BaseToolbarActivity {
                 R.string.will_sync_on_any_data_connection,
                 R.string.will_only_sync_if_connected_to_wifi);
 
+        mAuthor.setTitleText(R.string.app_written_by);
+        mAuthor.setSubTitleText(R.string.app_authors);
         mAuthor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -181,6 +183,8 @@ public class SettingsActivity extends BaseToolbarActivity {
             }
         });
 
+        mConsole.setTitleText(R.string.log_console);
+        mConsole.setSubTitleText(R.string.log_console_description);
         mConsole.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

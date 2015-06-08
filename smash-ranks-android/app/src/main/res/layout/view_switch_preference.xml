@@ -13,6 +13,7 @@
             tools:text="@string/enable_or_disable_sync"
             style="@style/settings_title" />
         <android.support.v7.widget.SwitchCompat
+            android:background="@null"
             android:clickable="false"
             android:id="@+id/view_switch_preference_switch"
             android:layout_height="wrap_content"

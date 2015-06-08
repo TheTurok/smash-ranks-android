@@ -117,7 +117,6 @@ public class SettingsActivity extends BaseToolbarActivity {
     protected void onResume() {
         super.onResume();
         pollNetworkCache();
-        pollSyncStatus();
     }
 
 
@@ -143,28 +142,6 @@ public class SettingsActivity extends BaseToolbarActivity {
                 pollNetworkCache();
             }
         });
-    }
-
-
-    private void pollSyncStatus() {
-        // TODO
-        // is syncing enabled?
-
-        /*
-        if (ContentResolver.getSyncAutomatically(account, packageName)) {
-            mSyncStatus.setText(R.string.periodic_sync_is_enabled);
-            mSyncCharging.setEnabled(true);
-            mSyncCharging.setAlpha(1f);
-            mSyncWifi.setEnabled(true);
-            mSyncWifi.setAlpha(1f);
-        } else {
-            mSyncStatus.setText(R.string.periodic_sync_is_disabled);
-            mSyncCharging.setEnabled(false);
-            mSyncCharging.setAlpha(0.6f);
-            mSyncWifi.setEnabled(false);
-            mSyncWifi.setAlpha(0.6f);
-        }
-        */
     }
 
 
@@ -265,25 +242,6 @@ public class SettingsActivity extends BaseToolbarActivity {
                     }
                 })
                 .show();
-    }
-
-
-    private void toggleCheckPreferenceAndViews(final int preferenceskeyId,
-            final CheckedTextView label, final TextView desc, final int onDescStringId,
-            final int offDescStringId) {
-        final Editor editor = Settings.edit();
-        final String key = getString(preferenceskeyId);
-        final boolean checked = !label.isChecked();
-        editor.putBoolean(key, checked);
-        editor.apply();
-
-        label.setChecked(checked);
-
-        if (checked) {
-            desc.setText(onDescStringId);
-        } else {
-            desc.setText(offDescStringId);
-        }
     }
 
 

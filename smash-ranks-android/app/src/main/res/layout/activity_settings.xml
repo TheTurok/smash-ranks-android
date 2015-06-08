@@ -96,17 +96,9 @@
                             android:text="@string/log_console_description"
                             style="@style/settings_sub_title" />
                     </LinearLayout>
-                    <LinearLayout
-                        style="@style/settings_container.disabled">
-                        <TextView
-                            android:id="@+id/activity_settings"
-                            android:text="@string/version_information"
-                            style="@style/settings_title" />
-                        <TextView
-                            android:id="@+id/activity_settings_version"
-                            tools:text="1.0 (build 1)"
-                            style="@style/settings_sub_title" />
-                    </LinearLayout>
+                    <include
+                        android:id="@+id/activity_settings_version"
+                        layout="@layout/view_preference" />
                 </LinearLayout>
                 <ImageButton
                     android:background="?attr/selectableItemBackgroundBorderless"

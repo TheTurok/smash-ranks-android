@@ -38,8 +38,8 @@ public class SettingsActivity extends BaseToolbarActivity {
     private LinearLayout mGitHub;
     private PreferenceView mNetworkCache;
     private PreferenceView mRegion;
+    private PreferenceView mVersion;
     private SwitchPreferenceView mSync;
-    private TextView mVersion;
 
 
 
@@ -62,7 +62,7 @@ public class SettingsActivity extends BaseToolbarActivity {
         mSync = (SwitchPreferenceView) findViewById(R.id.activity_settings_sync);
         mSyncCharging = (CheckPreferenceView) findViewById(R.id.activity_settings_sync_charging);
         mSyncWifi = (CheckPreferenceView) findViewById(R.id.activity_settings_sync_wifi);
-        mVersion = (TextView) findViewById(R.id.activity_settings_version);
+        mVersion = (PreferenceView) findViewById(R.id.activity_settings_version);
     }
 
 
@@ -188,9 +188,9 @@ public class SettingsActivity extends BaseToolbarActivity {
             }
         });
 
-        final String versionName = App.getVersionName();
-        final int versionCode = App.getVersionCode();
-        mVersion.setText(getString(R.string.x_build_y, versionName, versionCode));
+        mVersion.setTitleText(R.string.version_information);
+        mVersion.setSubTitleText(getString(R.string.x_build_y, App.getVersionName(),
+                App.getVersionCode()));
 
         mOrb.setOnClickListener(new View.OnClickListener() {
             @Override

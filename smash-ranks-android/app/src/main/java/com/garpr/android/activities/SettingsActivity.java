@@ -32,13 +32,13 @@ public class SettingsActivity extends BaseToolbarActivity {
     private CheckPreferenceView mSyncCharging;
     private CheckPreferenceView mSyncWifi;
     private ImageButton mOrb;
-    private LinearLayout mGitHub;
-    private LinearLayout mServer;
     private PreferenceView mAuthor;
     private PreferenceView mConsole;
     private PreferenceView mNetworkCache;
     private PreferenceView mRegion;
     private PreferenceView mVersion;
+    private TextView mGitHub;
+    private TextView mServer;
     private SwitchPreferenceView mSync;
 
 
@@ -54,11 +54,11 @@ public class SettingsActivity extends BaseToolbarActivity {
     private void findViews() {
         mAuthor = (PreferenceView) findViewById(R.id.activity_settings_author);
         mConsole = (PreferenceView) findViewById(R.id.activity_settings_console);
-        mGitHub = (LinearLayout) findViewById(R.id.activity_settings_github);
+        mGitHub = (TextView) findViewById(R.id.activity_settings_github);
         mNetworkCache = (PreferenceView) findViewById(R.id.activity_settings_network_cache);
         mRegion = (PreferenceView) findViewById(R.id.activity_settings_region);
         mOrb = (ImageButton) findViewById(R.id.activity_settings_orb);
-        mServer = (LinearLayout) findViewById(R.id.activity_settings_server);
+        mServer = (TextView) findViewById(R.id.activity_settings_server);
         mSync = (SwitchPreferenceView) findViewById(R.id.activity_settings_sync);
         mSyncCharging = (CheckPreferenceView) findViewById(R.id.activity_settings_sync_charging);
         mSyncWifi = (CheckPreferenceView) findViewById(R.id.activity_settings_sync_wifi);
@@ -192,6 +192,7 @@ public class SettingsActivity extends BaseToolbarActivity {
             }
         });
 
+        mVersion.disable();
         mVersion.setTitleText(R.string.version_information);
         mVersion.setSubTitleText(getString(R.string.x_build_y, App.getVersionName(),
                 App.getVersionCode()));

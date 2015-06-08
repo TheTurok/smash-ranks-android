@@ -192,8 +192,10 @@
         <item name="android:padding">@dimen/root_padding</item>
     </style>
 
-    <style name="settings_container.disabled">
-        <item name="android:alpha">0.6</item>
+    <style name="settings_container.title">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="settings_section">

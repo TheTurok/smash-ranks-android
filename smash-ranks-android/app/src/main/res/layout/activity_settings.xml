@@ -59,20 +59,14 @@
                     <include
                         android:id="@+id/activity_settings_author"
                         layout="@layout/view_preference" />
-                    <LinearLayout
+                    <TextView
                         android:id="@+id/activity_settings_github"
-                        style="@style/settings_container">
-                        <TextView
-                            android:text="@string/open_source_on_github"
-                            style="@style/settings_title" />
-                    </LinearLayout>
-                    <LinearLayout
+                        android:text="@string/open_source_on_github"
+                        style="@style/settings_container.title" />
+                    <TextView
                         android:id="@+id/activity_settings_server"
-                        style="@style/settings_container">
-                        <TextView
-                            android:text="@string/server_backend_by_ivan_van"
-                            style="@style/settings_title" />
-                    </LinearLayout>
+                        android:text="@string/server_backend_by_ivan_van"
+                        style="@style/settings_container.title" />
                 </LinearLayout>
                 <LinearLayout
                     style="@style/settings_section">

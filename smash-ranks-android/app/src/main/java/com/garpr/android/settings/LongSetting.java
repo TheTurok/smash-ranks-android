@@ -6,6 +6,10 @@ public final class LongSetting extends Setting<Long> {
 
     LongSetting(final String key, final Long defaultValue) {
         super(key, defaultValue);
+
+        if (defaultValue == null) {
+            throw new IllegalArgumentException("defaultValue can't be null");
+        }
     }
 
 

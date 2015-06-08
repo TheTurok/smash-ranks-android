@@ -6,6 +6,10 @@ public final class IntegerSetting extends Setting<Integer> {
 
     IntegerSetting(final String key, final Integer defaultValue) {
         super(key, defaultValue);
+
+        if (defaultValue == null) {
+            throw new IllegalArgumentException("defaultValue can't be null");
+        }
     }
 
 

@@ -6,6 +6,10 @@ public final class BooleanSetting extends Setting<Boolean> {
 
     BooleanSetting(final String key, final Boolean defaultValue) {
         super(key, defaultValue);
+
+        if (defaultValue == null) {
+            throw new IllegalArgumentException("defaultValue can't be null");
+        }
     }
 
 

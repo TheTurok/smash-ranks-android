@@ -22,7 +22,7 @@ public abstract class Setting<T> {
 
     Setting(final String key, final T defaultValue) {
         if (!Utils.validStrings(key)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("key can't be null / empty / whitespace");
         }
 
         mKey = key;

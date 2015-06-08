@@ -59,6 +59,8 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
         final PeriodicTask task = builder.build();
         GcmNetworkManager.getInstance(context).schedule(task);
         Settings.SyncIsScheduled.set(true);
+
+        Console.d(TAG, "GcmNetworkTask has been scheduled");
     }
 
 

@@ -154,6 +154,10 @@ public class SettingsActivity extends BaseToolbarActivity {
             }
         });
 
+        final boolean isSyncEnabled = mSync.getSetting().get();
+        mSyncCharging.setEnabled(isSyncEnabled);
+        mSyncWifi.setEnabled(isSyncEnabled);
+
         mSyncCharging.set(Settings.SyncChargingIsNecessary, R.string.only_sync_when_charging,
                 R.string.will_only_sync_if_plugged_in,
                 R.string.will_sync_regardless_of_being_plugged_in_or_not);

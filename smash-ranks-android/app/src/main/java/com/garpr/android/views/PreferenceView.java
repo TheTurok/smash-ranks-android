@@ -3,7 +3,6 @@ package com.garpr.android.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,20 +43,6 @@ public class PreferenceView extends LinearLayout {
     }
 
 
-    public void setOnClickListener(final OnClickListener l) {
-        if (l == null) {
-            setClickable(false);
-        } else {
-            setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    l.onClick(PreferenceView.this);
-                }
-            });
-        }
-    }
-
-
     public void setSubTitleText(final CharSequence text) {
         mSubTitle.setText(text);
     }
@@ -75,17 +60,6 @@ public class PreferenceView extends LinearLayout {
 
     public void setTitleText(final int resId) {
         mTitle.setText(resId);
-    }
-
-
-
-
-    public interface OnClickListener {
-
-
-        void onClick(final PreferenceView v);
-
-
     }
 
 

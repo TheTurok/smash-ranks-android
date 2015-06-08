@@ -3,6 +3,7 @@ package com.garpr.android.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 
 import com.garpr.android.settings.BooleanSetting;
 
@@ -42,7 +43,7 @@ public class BooleanSettingPreferenceView extends PreferenceView {
 
         setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(final PreferenceView v) {
+            public void onClick(final View v) {
                 toggle();
             }
         });

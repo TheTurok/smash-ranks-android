@@ -23,6 +23,7 @@ import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.ListUtils.SpecialFilterable;
 import com.garpr.android.misc.RecyclerAdapter;
+import com.garpr.android.misc.SyncManager;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.RankingsBundle;
@@ -189,9 +190,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
             prepareList();
         }
 
-        // TODO
-        // prepares the app's data-syncing capabilities
-        // Sync.setup();
+        SyncManager.initialize();
     }
 
 

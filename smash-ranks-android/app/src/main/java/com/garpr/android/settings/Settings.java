@@ -17,7 +17,7 @@ public final class Settings {
     public static final BooleanSetting OnboardingComplete;
     public static final BooleanSetting SyncChargingIsNecessary;
     public static final BooleanSetting SyncIsEnabled;
-    public static final BooleanSetting SyncIsPending;
+    public static final BooleanSetting SyncIsScheduled;
     public static final BooleanSetting SyncWifiIsNecessary;
     public static final IntegerSetting LastVersion;
     public static final LongSetting RankingsDate;
@@ -33,7 +33,7 @@ public final class Settings {
         Region = new RegionSetting(CNAME + ".REGION_SETTING");
         SyncChargingIsNecessary = new BooleanSetting(CNAME + ".SYNC_CHARGING_NECESSARY", false);
         SyncIsEnabled = new BooleanSetting(CNAME + ".SYNC_ENABLED", true);
-        SyncIsPending = new BooleanSetting(CNAME + ".SYNC_PENDING", false);
+        SyncIsScheduled = new BooleanSetting(CNAME + ".SYNC_SCHEDULED", false);
         SyncWifiIsNecessary = new BooleanSetting(CNAME + ".SYNC_WIFI_NECESSARY", true);
     }
 

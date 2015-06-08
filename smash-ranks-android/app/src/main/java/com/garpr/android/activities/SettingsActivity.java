@@ -153,12 +153,12 @@ public class SettingsActivity extends BaseToolbarActivity {
                 R.string.periodic_sync_is_on, R.string.periodic_sync_is_turned_off);
 
         mSyncCharging.set(Settings.SyncChargingIsNecessary, R.string.only_sync_when_charging,
-                R.string.will_sync_regardless_of_being_plugged_in_or_not,
-                R.string.will_only_sync_if_plugged_in);
+                R.string.will_only_sync_if_plugged_in,
+                R.string.will_sync_regardless_of_being_plugged_in_or_not);
 
         mSyncWifi.set(Settings.SyncWifiIsNecessary, R.string.only_sync_on_wifi,
-                R.string.will_sync_on_any_data_connection,
-                R.string.will_only_sync_if_connected_to_wifi);
+                R.string.will_only_sync_if_connected_to_wifi,
+                R.string.will_sync_on_any_data_connection);
 
         mAuthor.setTitleText(R.string.app_written_by);
         mAuthor.setSubTitleText(R.string.app_authors);

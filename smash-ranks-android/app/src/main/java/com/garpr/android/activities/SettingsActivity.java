@@ -124,8 +124,7 @@ public class SettingsActivity extends BaseToolbarActivity {
 
     private void prepareViews() {
         mRegion.setTitleText(R.string.change_region);
-        final Region region = Settings.Region.get();
-        mRegion.setSubTitleText(region.getName());
+        mRegion.setSubTitleText(Settings.Region.get().getName());
 
         mRegion.setOnClickListener(new View.OnClickListener() {
             @Override

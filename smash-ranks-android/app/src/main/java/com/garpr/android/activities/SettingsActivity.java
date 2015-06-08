@@ -129,6 +129,7 @@ public class SettingsActivity extends BaseToolbarActivity {
 
 
     private void prepareViews() {
+        mRegion.setTitleText(R.string.change_region);
         final Region region = Settings.Region.get();
         mRegion.setSubTitleText(region.getName());
 
@@ -139,6 +140,7 @@ public class SettingsActivity extends BaseToolbarActivity {
             }
         });
 
+        mNetworkCache.setTitleText(R.string.clear_network_cache);
         mNetworkCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

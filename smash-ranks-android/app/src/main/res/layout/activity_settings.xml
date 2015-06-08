@@ -78,7 +78,7 @@
                 <LinearLayout
                     style="@style/settings_section">
                     <TextView
-                        android:text="@string/miscellaneous"
+                        android:text="@string/credits"
                         style="@style/settings_separator" />
                     <LinearLayout
                         android:id="@+id/activity_settings_author"
@@ -104,6 +104,12 @@
                             android:text="@string/server_backend_by_ivan_van"
                             style="@style/settings_title" />
                     </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    style="@style/settings_section">
+                    <TextView
+                        android:text="@string/miscellaneous"
+                        style="@style/settings_separator" />
                     <LinearLayout
                         android:id="@+id/activity_settings_console"
                         style="@style/settings_container">

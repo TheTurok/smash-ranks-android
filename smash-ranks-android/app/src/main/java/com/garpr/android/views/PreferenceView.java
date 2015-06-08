@@ -25,12 +25,14 @@ public class PreferenceView extends LinearLayout {
 
 
     public void disable() {
-        // TODO change alpha of text
+        setEnabled(false);
+        setAlpha(0.6f);
     }
 
 
     public void enable() {
-        // TODO change alpha of text
+        setAlpha(1f);
+        setEnabled(true);
     }
 
 

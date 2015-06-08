@@ -24,6 +24,7 @@ import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
 import com.garpr.android.settings.Sync;
 import com.garpr.android.views.CheckPreferenceView;
+import com.garpr.android.views.SwitchPreferenceView;
 
 
 public class SettingsActivity extends BaseToolbarActivity {
@@ -40,7 +41,7 @@ public class SettingsActivity extends BaseToolbarActivity {
     private LinearLayout mNetworkCache;
     private LinearLayout mRegion;
     private LinearLayout mServer;
-    private LinearLayout mSync;
+    private SwitchPreferenceView mSync;
     private TextView mRegionName;
     private TextView mNetworkCacheSize;
     private TextView mVersion;
@@ -65,7 +66,7 @@ public class SettingsActivity extends BaseToolbarActivity {
         mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
         mOrb = (ImageButton) findViewById(R.id.activity_settings_orb);
         mServer = (LinearLayout) findViewById(R.id.activity_settings_server);
-        mSync = (LinearLayout) findViewById(R.id.activity_settings_sync);
+        mSync = (SwitchPreferenceView) findViewById(R.id.activity_settings_sync);
         mSyncCharging = (CheckPreferenceView) findViewById(R.id.activity_settings_sync_charging);
         mSyncWifi = (CheckPreferenceView) findViewById(R.id.activity_settings_sync_wifi);
         mVersion = (TextView) findViewById(R.id.activity_settings_version);
@@ -181,13 +182,8 @@ public class SettingsActivity extends BaseToolbarActivity {
 
         pollNetworkCache();
 
-        mSync.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                // TODO
-                // toggle sync on / off
-            }
-        });
+        mSync.set(Sync.Enabled, R.string.enable_or_disable_sync, R.string.periodic_sync_is_on,
+                R.string.periodic_sync_is_turned_off);
 
         mSyncCharging.set(Sync.ChargingNecessary, R.string.only_sync_when_charging,
                 R.string.will_sync_regardless_of_being_plugged_in_or_not,

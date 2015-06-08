@@ -2,22 +2,22 @@ package com.garpr.android.views;
 
 
 import android.content.Context;
+import android.support.v7.widget.SwitchCompat;
 import android.util.AttributeSet;
-import android.widget.CheckBox;
 
 import com.garpr.android.R;
 import com.garpr.android.settings.BooleanSetting;
 
 
-public class CheckPreferenceView extends BooleanSettingPreferenceView {
+public class SwitchPreferenceView extends BooleanSettingPreferenceView {
 
 
-    private CheckBox mCheckBox;
+    private SwitchCompat mSwitch;
 
 
 
 
-    public CheckPreferenceView(final Context context, final AttributeSet attrs) {
+    public SwitchPreferenceView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -25,7 +25,7 @@ public class CheckPreferenceView extends BooleanSettingPreferenceView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mCheckBox = (CheckBox) findViewById(R.id.view_check_preference_check);
+        mSwitch = (SwitchCompat) findViewById(R.id.view_switch_preference_switch);
     }
 
 
@@ -33,14 +33,14 @@ public class CheckPreferenceView extends BooleanSettingPreferenceView {
     public void set(final BooleanSetting setting, final int titleText,
             final int subTitleEnabledText, final int subTitleDisabledText) {
         super.set(setting, titleText, subTitleEnabledText, subTitleDisabledText);
-        mCheckBox.setChecked(getSetting().get());
+        mSwitch.setChecked(getSetting().get());
     }
 
 
     @Override
     public void toggle() {
         super.toggle();
-        mCheckBox.setChecked(getSetting().get());
+        mSwitch.setChecked(getSetting().get());
     }
 
 

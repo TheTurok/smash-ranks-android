@@ -21,4 +21,10 @@ public final class BooleanSetting extends Setting<Boolean> {
     }
 
 
+    public Boolean toggle() {
+        set(!get());
+        return get();
+    }
+
+
 }

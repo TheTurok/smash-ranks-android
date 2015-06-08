@@ -27,6 +27,7 @@
     <string name="debug">Debug</string>
     <string name="developer">Developer</string>
     <string name="enable_or_disable_sync">Enable or disable sync</string>
+    <string name="enable_sync">Enable sync</string>
     <string name="entrants">Entrants</string>
     <string name="error">Error</string>
     <string name="error_">Error!</string>
@@ -73,8 +74,8 @@
     <string name="open_source_on_github">Open source on GitHub</string>
     <string name="other">Other</string>
     <string name="periodic_sync">Periodic Sync</string>
-    <string name="periodic_sync_is_disabled">Periodic sync is disabled</string>
-    <string name="periodic_sync_is_enabled">Periodic sync is enabled</string>
+    <string name="periodic_sync_is_turned_off">Periodic sync is turned off</string>
+    <string name="periodic_sync_is_on">Periodic sync is on</string>
     <string name="player">Player</string>
     <string name="players">Players</string>
     <string name="player_x_region_y">Player: (%1$s) Region: (%2$s)</string>

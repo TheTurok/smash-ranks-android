@@ -3,6 +3,7 @@ package com.garpr.android.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,7 +21,16 @@ public class PreferenceView extends LinearLayout {
 
     public PreferenceView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
-        parseAttributes(attrs);
+    }
+
+
+    public void disable() {
+        // TODO change alpha of text
+    }
+
+
+    public void enable() {
+        // TODO change alpha of text
     }
 
 
@@ -32,8 +42,38 @@ public class PreferenceView extends LinearLayout {
     }
 
 
-    private void parseAttributes(final AttributeSet attrs) {
-        // TODO
+    public void setOnClickListener(final OnClickListener l) {
+        if (l == null) {
+            setClickable(false);
+        } else {
+            setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    l.onClick(PreferenceView.this);
+                }
+            });
+        }
+    }
+
+
+    public void setSubTitleText(final int resId) {
+        mSubTitle.setText(resId);
+    }
+
+
+    public void setTitleText(final int resId) {
+        mTitle.setText(resId);
+    }
+
+
+
+
+    public interface OnClickListener {
+
+
+        void onClick(final PreferenceView v);
+
+
     }
 
 

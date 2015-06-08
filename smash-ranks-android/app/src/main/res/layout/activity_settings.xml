@@ -57,17 +57,9 @@
                         android:paddingRight="@dimen/root_padding"
                         android:text="@string/sync_description"
                         style="@style/settings_sub_title" />
-                    <LinearLayout
+                    <include
                         android:id="@+id/activity_settings_sync"
-                        style="@style/settings_container">
-                        <TextView
-                            android:text="@string/enable_or_disable_sync"
-                            style="@style/settings_title" />
-                        <TextView
-                            android:id="@+id/activity_settings_sync_status"
-                            tools:text="@string/periodic_sync_is_enabled"
-                            style="@style/settings_sub_title" />
-                    </LinearLayout>
+                        layout="@layout/view_switch_preference" />
                     <include
                         android:id="@+id/activity_settings_sync_charging"
                         layout="@layout/view_check_preference" />

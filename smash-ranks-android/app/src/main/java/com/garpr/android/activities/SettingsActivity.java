@@ -22,7 +22,6 @@ import com.garpr.android.misc.NetworkCache;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
-import com.garpr.android.settings.Sync;
 import com.garpr.android.views.CheckPreferenceView;
 import com.garpr.android.views.SwitchPreferenceView;
 
@@ -182,14 +181,14 @@ public class SettingsActivity extends BaseToolbarActivity {
 
         pollNetworkCache();
 
-        mSync.set(Sync.Enabled, R.string.enable_or_disable_sync, R.string.periodic_sync_is_on,
-                R.string.periodic_sync_is_turned_off);
+        mSync.set(Settings.SyncIsEnabled, R.string.enable_or_disable_sync,
+                R.string.periodic_sync_is_on, R.string.periodic_sync_is_turned_off);
 
-        mSyncCharging.set(Sync.ChargingNecessary, R.string.only_sync_when_charging,
+        mSyncCharging.set(Settings.SyncChargingIsNecessary, R.string.only_sync_when_charging,
                 R.string.will_sync_regardless_of_being_plugged_in_or_not,
                 R.string.will_only_sync_if_plugged_in);
 
-        mSyncWifi.set(Sync.WifiNecessary, R.string.only_sync_on_wifi,
+        mSyncWifi.set(Settings.SyncWifiIsNecessary, R.string.only_sync_on_wifi,
                 R.string.will_sync_on_any_data_connection,
                 R.string.will_only_sync_if_connected_to_wifi);
 

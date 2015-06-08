@@ -15,6 +15,9 @@ public final class Settings {
     private static final String CNAME = "com.garpr.android.settings.Settings";
 
     public static final BooleanSetting OnboardingComplete;
+    public static final BooleanSetting SyncChargingIsNecessary;
+    public static final BooleanSetting SyncIsEnabled;
+    public static final BooleanSetting SyncWifiIsNecessary;
     public static final IntegerSetting LastVersion;
     public static final LongSetting RankingsDate;
     public static final RegionSetting Region;
@@ -27,6 +30,9 @@ public final class Settings {
         LastVersion = new IntegerSetting(CNAME + ".LAST_VERSION", 0);
         RankingsDate = new LongSetting(CNAME + ".RANKINGS_DATE", 0L);
         Region = new RegionSetting(CNAME + ".REGION_SETTING");
+        SyncChargingIsNecessary = new BooleanSetting(CNAME + ".CHARGING_NECESSARY", false);
+        SyncIsEnabled = new BooleanSetting(CNAME + ".ENABLED", true);
+        SyncWifiIsNecessary = new BooleanSetting(CNAME + ".WIFI_NECESSARY", true);
     }
 
 

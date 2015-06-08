@@ -22,28 +22,12 @@
                     <TextView
                         android:text="@string/general"
                         style="@style/settings_separator" />
-                    <LinearLayout
+                    <include
                         android:id="@+id/activity_settings_region"
-                        style="@style/settings_container">
-                        <TextView
-                            android:text="@string/change_region"
-                            style="@style/settings_title" />
-                        <TextView
-                            android:id="@+id/activity_settings_region_name"
-                            tools:text="@string/norcal"
-                            style="@style/settings_sub_title" />
-                    </LinearLayout>
-                    <LinearLayout
+                        layout="@layout/view_preference" />
+                    <include
                         android:id="@+id/activity_settings_network_cache"
-                        style="@style/settings_container">
-                        <TextView
-                            android:text="@string/clear_network_cache"
-                            style="@style/settings_title" />
-                        <TextView
-                            android:id="@+id/activity_settings_network_cache_size"
-                            tools:text="Currently contains 47 entries"
-                            style="@style/settings_sub_title" />
-                    </LinearLayout>
+                        layout="@layout/view_preference" />
                 </LinearLayout>
                 <LinearLayout
                     style="@style/settings_section">

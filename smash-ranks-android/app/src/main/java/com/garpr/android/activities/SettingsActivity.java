@@ -4,13 +4,10 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +20,7 @@ import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
 import com.garpr.android.views.CheckPreferenceView;
+import com.garpr.android.views.PreferenceView;
 import com.garpr.android.views.SwitchPreferenceView;
 
 
@@ -36,13 +34,11 @@ public class SettingsActivity extends BaseToolbarActivity {
     private ImageButton mOrb;
     private LinearLayout mAuthor;
     private LinearLayout mConsole;
-    private LinearLayout mGitHub;
-    private LinearLayout mNetworkCache;
-    private LinearLayout mRegion;
     private LinearLayout mServer;
+    private LinearLayout mGitHub;
+    private PreferenceView mNetworkCache;
+    private PreferenceView mRegion;
     private SwitchPreferenceView mSync;
-    private TextView mRegionName;
-    private TextView mNetworkCacheSize;
     private TextView mVersion;
 
 
@@ -59,10 +55,8 @@ public class SettingsActivity extends BaseToolbarActivity {
         mAuthor = (LinearLayout) findViewById(R.id.activity_settings_author);
         mConsole = (LinearLayout) findViewById(R.id.activity_settings_console);
         mGitHub = (LinearLayout) findViewById(R.id.activity_settings_github);
-        mNetworkCache = (LinearLayout) findViewById(R.id.activity_settings_network_cache);
-        mNetworkCacheSize = (TextView) findViewById(R.id.activity_settings_network_cache_size);
-        mRegion = (LinearLayout) findViewById(R.id.activity_settings_region);
-        mRegionName = (TextView) findViewById(R.id.activity_settings_region_name);
+        mNetworkCache = (PreferenceView) findViewById(R.id.activity_settings_network_cache);
+        mRegion = (PreferenceView) findViewById(R.id.activity_settings_region);
         mOrb = (ImageButton) findViewById(R.id.activity_settings_orb);
         mServer = (LinearLayout) findViewById(R.id.activity_settings_server);
         mSync = (SwitchPreferenceView) findViewById(R.id.activity_settings_sync);
@@ -109,7 +103,7 @@ public class SettingsActivity extends BaseToolbarActivity {
     @Override
     public void onRegionChanged(final Region region) {
         super.onRegionChanged(region);
-        mRegionName.setText(region.getName());
+        mRegion.setSubTitleText(region.getName());
     }
 
 
@@ -124,16 +118,26 @@ public class SettingsActivity extends BaseToolbarActivity {
         final int networkCacheSize = NetworkCache.size();
 
         if (networkCacheSize >= 1) {
-            mNetworkCache.setEnabled(true);
-            mNetworkCache.setAlpha(1f);
+            mNetworkCache.enable();
         } else {
-            mNetworkCache.setEnabled(false);
-            mNetworkCache.setAlpha(0.6f);
+            mNetworkCache.disable();
         }
 
-        final Resources res = getResources();
-        mNetworkCacheSize.setText(res.getQuantityString(R.plurals.currently_contains_x_entries,
-                networkCacheSize, networkCacheSize));
+        mNetworkCache.setSubTitleText(getResources().getQuantityString(
+                R.plurals.currently_contains_x_entries, networkCacheSize, networkCacheSize));
+    }
+
+
+    private void prepareViews() {
+        final Region region = Settings.Region.get();
+        mRegion.setSubTitleText(region.getName());
+
+        mRegion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                RegionsActivity.start(SettingsActivity.this);
+            }
+        });
 
         mNetworkCache.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,21 +146,6 @@ public class SettingsActivity extends BaseToolbarActivity {
                 pollNetworkCache();
             }
         });
-    }
-
-
-    private void prepareViews() {
-        mRegion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                RegionsActivity.start(SettingsActivity.this);
-            }
-        });
-
-        final Region region = Settings.Region.get();
-        mRegionName.setText(region.getName());
-
-        pollNetworkCache();
 
         mSync.set(Settings.SyncIsEnabled, R.string.enable_or_disable_sync,
                 R.string.periodic_sync_is_on, R.string.periodic_sync_is_turned_off);

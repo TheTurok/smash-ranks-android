@@ -58,8 +58,18 @@ public class PreferenceView extends LinearLayout {
     }
 
 
+    public void setSubTitleText(final CharSequence text) {
+        mSubTitle.setText(text);
+    }
+
+
     public void setSubTitleText(final int resId) {
         mSubTitle.setText(resId);
+    }
+
+
+    public void setTitleText(final CharSequence text) {
+        mTitle.setText(text);
     }
 
 

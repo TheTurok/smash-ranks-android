@@ -57,6 +57,8 @@ public final class Settings {
     public static final class Sync {
 
 
+        private static final String CNAME = "com.garpr.android.settings.Settings.Sync";
+
         public static final BooleanSetting ChargingIsNecessary;
         public static final BooleanSetting IsEnabled;
         public static final BooleanSetting IsScheduled;
@@ -65,11 +67,11 @@ public final class Settings {
 
 
         static {
-            ChargingIsNecessary = new BooleanSetting(CNAME + ".SYNC_CHARGING_NECESSARY", false);
-            IsEnabled = new BooleanSetting(CNAME + ".SYNC_ENABLED", true);
-            IsScheduled = new BooleanSetting(CNAME + ".SYNC_SCHEDULED", false);
-            LastDate = new LongSetting(CNAME + ".SYNC_LAST_DATE", 0L);
-            WifiIsNecessary = new BooleanSetting(CNAME + ".SYNC_WIFI_NECESSARY", true);
+            ChargingIsNecessary = new BooleanSetting(CNAME + ".CHARGING_IS_NECESSARY", false);
+            IsEnabled = new BooleanSetting(CNAME + ".IS_ENABLED", true);
+            IsScheduled = new BooleanSetting(CNAME + ".IS_SCHEDULED", false);
+            LastDate = new LongSetting(CNAME + ".LAST_DATE", 0L);
+            WifiIsNecessary = new BooleanSetting(CNAME + ".WIFI_NECESSARY", true);
         }
 
 

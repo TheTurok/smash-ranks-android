@@ -21,6 +21,7 @@ public final class Settings {
     public static final BooleanSetting SyncWifiIsNecessary;
     public static final IntegerSetting LastVersion;
     public static final LongSetting RankingsDate;
+    public static final LongSetting SyncLastDate;
     public static final RegionSetting Region;
 
 
@@ -34,6 +35,7 @@ public final class Settings {
         SyncChargingIsNecessary = new BooleanSetting(CNAME + ".SYNC_CHARGING_NECESSARY", false);
         SyncIsEnabled = new BooleanSetting(CNAME + ".SYNC_ENABLED", true);
         SyncIsScheduled = new BooleanSetting(CNAME + ".SYNC_SCHEDULED", false);
+        SyncLastDate = new LongSetting(CNAME + ".SYNC_LAST_DATE", 0L);
         SyncWifiIsNecessary = new BooleanSetting(CNAME + ".SYNC_WIFI_NECESSARY", true);
     }
 

@@ -98,6 +98,8 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
                 } else {
                     Console.d(TAG, "No new roster available");
                 }
+
+                Settings.SyncLastDate.set(System.currentTimeMillis());
             }
         });
 

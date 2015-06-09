@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class SettingsActivity extends BaseToolbarActivity {
     private PreferenceView mConsole;
     private PreferenceView mNetworkCache;
     private PreferenceView mRegion;
+    private PreferenceView mSyncStatus;
     private PreferenceView mVersion;
     private TextView mGitHub;
     private TextView mServer;
@@ -62,6 +64,7 @@ public class SettingsActivity extends BaseToolbarActivity {
         mServer = (TextView) findViewById(R.id.activity_settings_server);
         mSync = (SwitchPreferenceView) findViewById(R.id.activity_settings_sync);
         mSyncCharging = (CheckPreferenceView) findViewById(R.id.activity_settings_sync_charging);
+        mSyncStatus = (PreferenceView) findViewById(R.id.activity_settings_sync_status);
         mSyncWifi = (CheckPreferenceView) findViewById(R.id.activity_settings_sync_wifi);
         mVersion = (PreferenceView) findViewById(R.id.activity_settings_version);
     }
@@ -90,7 +93,10 @@ public class SettingsActivity extends BaseToolbarActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViews();
-        prepareViews();
+        prepareGeneralViews();
+        prepareSyncViews();
+        prepareCreditsViews();
+        prepareMiscellaneousViews();
     }
 
 
@@ -123,7 +129,31 @@ public class SettingsActivity extends BaseToolbarActivity {
     }
 
 
-    private void prepareViews() {
+    private void prepareCreditsViews() {
+        mConsole.setTitleText(R.string.log_console);
+        mConsole.setSubTitleText(R.string.log_console_description);
+        mConsole.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                ConsoleActivity.start(SettingsActivity.this);
+            }
+        });
+
+        mVersion.setEnabled(false);
+        mVersion.setTitleText(R.string.version_information);
+        mVersion.setSubTitleText(getString(R.string.x_build_y, App.getVersionName(),
+                App.getVersionCode()));
+
+        mOrb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                randomYoutubeVideo();
+            }
+        });
+    }
+
+
+    private void prepareGeneralViews() {
         mRegion.setTitleText(R.string.change_region);
         mRegion.setSubTitleText(Settings.Region.get().getName());
 
@@ -142,7 +172,36 @@ public class SettingsActivity extends BaseToolbarActivity {
                 pollNetworkCache();
             }
         });
+    }
 
+
+    private void prepareMiscellaneousViews() {
+        mAuthor.setTitleText(R.string.app_written_by);
+        mAuthor.setSubTitleText(R.string.app_authors);
+        mAuthor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                showAuthorsDialog();
+            }
+        });
+
+        mServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                openLink(Constants.IVAN_TWITTER_URL);
+            }
+        });
+
+        mGitHub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                openLink(Constants.GITHUB_URL);
+            }
+        });
+    }
+
+
+    private void prepareSyncViews() {
         mSync.set(Settings.SyncIsEnabled, R.string.enable_or_disable_sync,
                 R.string.periodic_sync_is_on, R.string.periodic_sync_is_turned_off);
         mSync.setOnToggleListener(new BooleanSettingPreferenceView.OnToggleListener() {
@@ -164,67 +223,35 @@ public class SettingsActivity extends BaseToolbarActivity {
         mSyncCharging.setEnabled(isSyncEnabled);
         mSyncWifi.setEnabled(isSyncEnabled);
 
-        final BooleanSettingPreferenceView.OnToggleListener syncToggleListener =
-                new BooleanSettingPreferenceView.OnToggleListener() {
-            @Override
-            public void onToggle(final BooleanSettingPreferenceView v) {
-                SyncManager.schedule();
-            }
-        };
-
         mSyncCharging.set(Settings.SyncChargingIsNecessary, R.string.only_sync_when_charging,
                 R.string.will_only_sync_if_plugged_in,
                 R.string.will_sync_regardless_of_being_plugged_in_or_not);
-        mSyncCharging.setOnToggleListener(syncToggleListener);
 
         mSyncWifi.set(Settings.SyncWifiIsNecessary, R.string.only_sync_on_wifi,
                 R.string.will_only_sync_if_connected_to_wifi,
                 R.string.will_sync_on_any_data_connection);
+
+        final BooleanSettingPreferenceView.OnToggleListener syncToggleListener =
+                new BooleanSettingPreferenceView.OnToggleListener() {
+                    @Override
+                    public void onToggle(final BooleanSettingPreferenceView v) {
+                        SyncManager.schedule();
+                    }
+                };
+
+        mSyncCharging.setOnToggleListener(syncToggleListener);
         mSyncWifi.setOnToggleListener(syncToggleListener);
 
-        mAuthor.setTitleText(R.string.app_written_by);
-        mAuthor.setSubTitleText(R.string.app_authors);
-        mAuthor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                showAuthorsDialog();
-            }
-        });
+        mSyncStatus.setEnabled(false);
+        mSyncStatus.setTitleText(R.string.last_sync);
 
-        mGitHub.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                openLink(Constants.GITHUB_URL);
-            }
-        });
-
-        mServer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                openLink(Constants.IVAN_TWITTER_URL);
-            }
-        });
-
-        mConsole.setTitleText(R.string.log_console);
-        mConsole.setSubTitleText(R.string.log_console_description);
-        mConsole.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                ConsoleActivity.start(SettingsActivity.this);
-            }
-        });
-
-        mVersion.setEnabled(false);
-        mVersion.setTitleText(R.string.version_information);
-        mVersion.setSubTitleText(getString(R.string.x_build_y, App.getVersionName(),
-                App.getVersionCode()));
-
-        mOrb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                randomYoutubeVideo();
-            }
-        });
+        if (Settings.SyncLastDate.exists()) {
+            final long lastDate = Settings.SyncLastDate.get();
+            mSyncStatus.setSubTitleText(DateUtils.getRelativeDateTimeString(this, lastDate,
+                    DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0));
+        } else {
+            mSyncStatus.setSubTitleText(R.string.sync_has_yet_to_occur);
+        }
     }
 
 

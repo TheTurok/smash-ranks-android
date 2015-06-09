@@ -35,6 +35,11 @@ public abstract class Setting<T> {
     }
 
 
+    public boolean exists() {
+        return readSharedPreferences().contains(mKey);
+    }
+
+
     public abstract T get();
 
 

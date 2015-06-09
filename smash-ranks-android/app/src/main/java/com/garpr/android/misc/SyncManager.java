@@ -77,7 +77,8 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
         Console.d(TAG, "Running GcmNetworkTask!");
 
         if (Settings.Sync.WifiIsNecessary.get()) {
-            final ConnectivityManager cm = (ConnectivityManager) App.getContext()
+            final Context context = App.getContext();
+            final ConnectivityManager cm = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             if (ConnectivityManagerCompat.isActiveNetworkMetered(cm)) {
                 Console.d(TAG, "Rescheduling GcmNetworkTask, we're on a metered network");

@@ -34,10 +34,6 @@
                     <TextView
                         android:text="@string/periodic_sync"
                         style="@style/settings_separator" />
-                    <include
-                        android:id="@+id/activity_settings_google_play_services_error"
-                        android:visibility="gone"
-                        layout="@layout/view_preference" />
                     <TextView
                         android:layout_marginBottom="@dimen/root_padding_half"
                         android:layout_marginTop="@dimen/root_padding_half"
@@ -45,6 +41,10 @@
                         android:paddingRight="@dimen/root_padding"
                         android:text="@string/sync_description"
                         style="@style/settings_sub_title" />
+                    <include
+                        android:id="@+id/activity_settings_google_play_services_error"
+                        android:visibility="gone"
+                        layout="@layout/view_preference_error" />
                     <include
                         android:id="@+id/activity_settings_sync"
                         layout="@layout/view_switch_preference" />

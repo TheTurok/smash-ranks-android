@@ -164,13 +164,23 @@ public class SettingsActivity extends BaseToolbarActivity {
         mSyncCharging.setEnabled(isSyncEnabled);
         mSyncWifi.setEnabled(isSyncEnabled);
 
+        final BooleanSettingPreferenceView.OnToggleListener syncToggleListener =
+                new BooleanSettingPreferenceView.OnToggleListener() {
+            @Override
+            public void onToggle(final BooleanSettingPreferenceView v) {
+                SyncManager.schedule();
+            }
+        };
+
         mSyncCharging.set(Settings.SyncChargingIsNecessary, R.string.only_sync_when_charging,
                 R.string.will_only_sync_if_plugged_in,
                 R.string.will_sync_regardless_of_being_plugged_in_or_not);
+        mSyncCharging.setOnToggleListener(syncToggleListener);
 
         mSyncWifi.set(Settings.SyncWifiIsNecessary, R.string.only_sync_on_wifi,
                 R.string.will_only_sync_if_connected_to_wifi,
                 R.string.will_sync_on_any_data_connection);
+        mSyncWifi.setOnToggleListener(syncToggleListener);
 
         mAuthor.setTitleText(R.string.app_written_by);
         mAuthor.setSubTitleText(R.string.app_authors);

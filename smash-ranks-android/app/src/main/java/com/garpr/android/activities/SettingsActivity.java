@@ -202,7 +202,7 @@ public class SettingsActivity extends BaseToolbarActivity {
 
 
     private void prepareSyncViews() {
-        mSync.set(Settings.SyncIsEnabled, R.string.enable_or_disable_sync,
+        mSync.set(Settings.Sync.IsEnabled, R.string.enable_or_disable_sync,
                 R.string.periodic_sync_is_on, R.string.periodic_sync_is_turned_off);
         mSync.setOnToggleListener(new BooleanSettingPreferenceView.OnToggleListener() {
             @Override
@@ -223,11 +223,11 @@ public class SettingsActivity extends BaseToolbarActivity {
         mSyncCharging.setEnabled(isSyncEnabled);
         mSyncWifi.setEnabled(isSyncEnabled);
 
-        mSyncCharging.set(Settings.SyncChargingIsNecessary, R.string.only_sync_when_charging,
+        mSyncCharging.set(Settings.Sync.ChargingIsNecessary, R.string.only_sync_when_charging,
                 R.string.will_only_sync_if_plugged_in,
                 R.string.will_sync_regardless_of_being_plugged_in_or_not);
 
-        mSyncWifi.set(Settings.SyncWifiIsNecessary, R.string.only_sync_on_wifi,
+        mSyncWifi.set(Settings.Sync.WifiIsNecessary, R.string.only_sync_on_wifi,
                 R.string.will_only_sync_if_connected_to_wifi,
                 R.string.will_sync_on_any_data_connection);
 
@@ -245,8 +245,8 @@ public class SettingsActivity extends BaseToolbarActivity {
         mSyncStatus.setEnabled(false);
         mSyncStatus.setTitleText(R.string.last_sync);
 
-        if (Settings.SyncLastDate.exists()) {
-            final long lastDate = Settings.SyncLastDate.get();
+        if (Settings.Sync.LastDate.exists()) {
+            final long lastDate = Settings.Sync.LastDate.get();
             mSyncStatus.setSubTitleText(DateUtils.getRelativeDateTimeString(this, lastDate,
                     DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0));
         } else {

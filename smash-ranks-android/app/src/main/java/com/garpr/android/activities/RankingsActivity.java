@@ -191,7 +191,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
             prepareList();
         }
 
-        if (Settings.SyncIsEnabled.get() && !Settings.SyncIsScheduled.get()) {
+        if (Settings.Sync.IsEnabled.get() && !Settings.Sync.IsScheduled.get()) {
             SyncManager.schedule();
         }
     }

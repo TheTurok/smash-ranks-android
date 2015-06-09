@@ -29,7 +29,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
 
     public static void cancel() {
         GcmNetworkManager.getInstance(App.getContext()).cancelAllTasks(SyncManager.class);
-        Settings.SyncIsScheduled.set(false);
+        Settings.Sync.IsScheduled.set(false);
     }
 
 
@@ -46,7 +46,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
 
         final PeriodicTask.Builder builder = new PeriodicTask.Builder()
                 .setPersisted(true)
-                .setRequiresCharging(Settings.SyncChargingIsNecessary.get())
+                .setRequiresCharging(Settings.Sync.ChargingIsNecessary.get())
                 .setRequiredNetwork(Task.NETWORK_STATE_CONNECTED)
                 .setService(SyncManager.class)
                 .setTag(TAG)
@@ -60,7 +60,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
 
         final PeriodicTask task = builder.build();
         GcmNetworkManager.getInstance(context).schedule(task);
-        Settings.SyncIsScheduled.set(true);
+        Settings.Sync.IsScheduled.set(true);
 
         Console.d(TAG, "GcmNetworkTask has been scheduled");
     }
@@ -76,7 +76,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
     public int onRunTask(final TaskParams taskParams) {
         Console.d(TAG, "Running GcmNetworkTask!");
 
-        if (Settings.SyncWifiIsNecessary.get()) {
+        if (Settings.Sync.WifiIsNecessary.get()) {
             final ConnectivityManager cm = (ConnectivityManager) App.getContext()
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             if (ConnectivityManagerCompat.isActiveNetworkMetered(cm)) {
@@ -101,7 +101,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
                     Console.d(TAG, "No new roster available");
                 }
 
-                Settings.SyncLastDate.set(System.currentTimeMillis());
+                Settings.Sync.LastDate.set(System.currentTimeMillis());
             }
         });
 

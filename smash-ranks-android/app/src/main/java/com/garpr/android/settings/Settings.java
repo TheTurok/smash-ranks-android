@@ -15,13 +15,8 @@ public final class Settings {
     private static final String CNAME = "com.garpr.android.settings.Settings";
 
     public static final BooleanSetting OnboardingComplete;
-    public static final BooleanSetting SyncChargingIsNecessary;
-    public static final BooleanSetting SyncIsEnabled;
-    public static final BooleanSetting SyncIsScheduled;
-    public static final BooleanSetting SyncWifiIsNecessary;
     public static final IntegerSetting LastVersion;
     public static final LongSetting RankingsDate;
-    public static final LongSetting SyncLastDate;
     public static final RegionSetting Region;
 
 
@@ -32,11 +27,6 @@ public final class Settings {
         LastVersion = new IntegerSetting(CNAME + ".LAST_VERSION", 0);
         RankingsDate = new LongSetting(CNAME + ".RANKINGS_DATE", 0L);
         Region = new RegionSetting(CNAME + ".REGION_SETTING");
-        SyncChargingIsNecessary = new BooleanSetting(CNAME + ".SYNC_CHARGING_NECESSARY", false);
-        SyncIsEnabled = new BooleanSetting(CNAME + ".SYNC_ENABLED", true);
-        SyncIsScheduled = new BooleanSetting(CNAME + ".SYNC_SCHEDULED", false);
-        SyncLastDate = new LongSetting(CNAME + ".SYNC_LAST_DATE", 0L);
-        SyncWifiIsNecessary = new BooleanSetting(CNAME + ".SYNC_WIFI_NECESSARY", true);
     }
 
 
@@ -59,6 +49,30 @@ public final class Settings {
     public static SharedPreferences get(final String name) {
         final Context context = App.getContext();
         return context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    }
+
+
+
+
+    public static final class Sync {
+
+
+        public static final BooleanSetting ChargingIsNecessary;
+        public static final BooleanSetting IsEnabled;
+        public static final BooleanSetting IsScheduled;
+        public static final BooleanSetting WifiIsNecessary;
+        public static final LongSetting LastDate;
+
+
+        static {
+            ChargingIsNecessary = new BooleanSetting(CNAME + ".SYNC_CHARGING_NECESSARY", false);
+            IsEnabled = new BooleanSetting(CNAME + ".SYNC_ENABLED", true);
+            IsScheduled = new BooleanSetting(CNAME + ".SYNC_SCHEDULED", false);
+            LastDate = new LongSetting(CNAME + ".SYNC_LAST_DATE", 0L);
+            WifiIsNecessary = new BooleanSetting(CNAME + ".SYNC_WIFI_NECESSARY", true);
+        }
+
+
     }
 
 

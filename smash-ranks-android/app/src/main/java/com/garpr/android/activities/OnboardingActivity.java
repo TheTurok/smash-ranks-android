@@ -2,12 +2,10 @@ package com.garpr.android.activities;
 
 
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.crashlytics.android.Crashlytics;
@@ -38,14 +36,12 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
     private PlayersFragment mPlayersFragment;
     private Region mSelectedRegion;
     private RegionsFragment mRegionsFragment;
-    private View mTop;
 
 
 
 
     private void findViews() {
         mPager = (NonSwipeableViewPager) findViewById(R.id.activity_onboarding_pager);
-        mTop = findViewById(R.id.activity_onboarding_top);
     }
 
 
@@ -115,18 +111,14 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
         super.onCreate(savedInstanceState);
 
         final boolean onboardingCompleted = Settings.OnboardingComplete.get();
-        Crashlytics.getInstance().core.setBool(Constants.ONBOARDING_ALREADY_COMPLETED, onboardingCompleted);
+        Crashlytics.getInstance().core.setBool(Constants.ONBOARDING_ALREADY_COMPLETED,
+                onboardingCompleted);
 
         if (onboardingCompleted) {
             RankingsActivity.start(this);
             finish();
         } else {
             findViews();
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                prepareStatusBar();
-            }
-
             mPager.setAdapter(new OnboardingFragmentAdapter());
         }
     }
@@ -201,16 +193,6 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
                     }
                 })
                 .show();
-    }
-
-
-    private void prepareStatusBar() {
-        if (isOrientationLandscape()) {
-            applyStatusBarHeightAsHeight(mTop);
-            mTop.setVisibility(View.VISIBLE);
-        } else {
-            applyStatusBarHeightAsTopPadding(mTop);
-        }
     }
 
 

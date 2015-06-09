@@ -119,21 +119,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
     }
 
 
-    protected boolean isOrientationLandscape() {
-        return isOrientation(Configuration.ORIENTATION_LANDSCAPE);
-    }
-
-
-    protected boolean isOrientationPortrait() {
-        return isOrientation(Configuration.ORIENTATION_PORTRAIT);
-    }
-
-
-    private boolean isOrientation(final int orientation) {
-        return getResources().getConfiguration().orientation == orientation;
-    }
-
-
     /**
      * This method's code was taken from the Android documentation:
      * https://developer.android.com/training/implementing-navigation/ancestral.html

@@ -1,41 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     style="@style/root.no_padding">
-    <LinearLayout
-        android:background="@color/gray_dark"
-        android:elevation="@dimen/elevation"
-        android:id="@+id/activity_onboarding_top"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        tools:ignore="UnusedAttribute">
-        <TextView
-            android:gravity="center"
-            android:id="@+id/activity_onboarding_title"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/root_padding_double"
-            android:layout_marginLeft="@dimen/root_padding"
-            android:layout_marginRight="@dimen/root_padding"
-            android:layout_marginTop="@dimen/root_padding_double"
-            android:layout_width="wrap_content"
-            android:text="@string/gar_pr"
-            style="@style/garpr_text" />
-        <ImageView
-            android:id="@+id/activity_onboarding_orb"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/root_padding_double"
-            android:layout_width="wrap_content"
-            android:scaleType="centerInside"
-            android:src="@drawable/smash_orb"
-            tools:ignore="ContentDescription" />
-    </LinearLayout>
+    <include
+        layout="@layout/view_status_bar_buffer" />
     <com.garpr.android.views.NonSwipeableViewPager
         android:id="@+id/activity_onboarding_pager"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:layout_width="match_parent" />
 </LinearLayout>

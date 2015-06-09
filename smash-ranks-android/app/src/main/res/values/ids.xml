@@ -3,6 +3,7 @@
 
     <item name="drawer_layout" type="id" />
     <item name="navigation_drawer" type="id" />
+    <item name="status_bar_buffer" type="id" />
     <item name="toolbar" type="id" />
 
 </resources>

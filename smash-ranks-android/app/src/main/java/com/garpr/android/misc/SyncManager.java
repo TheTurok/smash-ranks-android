@@ -35,10 +35,12 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
 
     public static void schedule() {
         final Context context = App.getContext();
+        final int connectionResult = GoogleApiAvailability.getInstance()
+                .isGooglePlayServicesAvailable(context);
 
-        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)
-                != ConnectionResult.SUCCESS) {
-            Console.w(TAG, "Google Play Services are unavailable, not scheduling GcmNetworkTask...");
+        if (connectionResult != ConnectionResult.SUCCESS) {
+            Console.w(TAG, "Google Play Services are unavailable (connectionResult " +
+                    connectionResult + "), not scheduling GcmNetworkTask...");
             return;
         }
 

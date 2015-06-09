@@ -2,6 +2,7 @@ package com.garpr.android.activities;
 
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -145,13 +146,23 @@ public class SettingsActivity extends BaseToolbarActivity {
                 @Override
                 public void onClick(final View v) {
                     final GoogleApiAvailability gaa = GoogleApiAvailability.getInstance();
-                    gaa.getErrorDialog(SettingsActivity.this, googlePlayServicesConnectionStatus,
-                            0, new DialogInterface.OnCancelListener() {
+                    final Dialog dialog = gaa.getErrorDialog(SettingsActivity.this,
+                            googlePlayServicesConnectionStatus, 0,
+                            new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(final DialogInterface dialog) {
                                     pollGooglePlayServices();
                                 }
                             });
+
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(final DialogInterface dialog) {
+                            pollGooglePlayServices();
+                        }
+                    });
+
+                    dialog.show();
                 }
             });
         }

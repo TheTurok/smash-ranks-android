@@ -50,6 +50,9 @@
                     <include
                         android:id="@+id/activity_settings_sync_wifi"
                         layout="@layout/view_check_preference" />
+                    <include
+                        android:id="@+id/activity_settings_sync_status"
+                        layout="@layout/view_preference" />
                 </LinearLayout>
                 <LinearLayout
                     style="@style/settings_section">

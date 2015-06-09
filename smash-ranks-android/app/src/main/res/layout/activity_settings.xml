@@ -60,12 +60,12 @@
                         android:id="@+id/activity_settings_author"
                         layout="@layout/view_preference" />
                     <TextView
-                        android:id="@+id/activity_settings_github"
-                        android:text="@string/open_source_on_github"
-                        style="@style/settings_container.title" />
-                    <TextView
                         android:id="@+id/activity_settings_server"
                         android:text="@string/server_backend_by_ivan_van"
+                        style="@style/settings_container.title" />
+                    <TextView
+                        android:id="@+id/activity_settings_github"
+                        android:text="@string/open_source_on_github"
                         style="@style/settings_container.title" />
                 </LinearLayout>
                 <LinearLayout

@@ -43,6 +43,7 @@
     <string name="gar_pr_x">GAR PR: %s</string>
     <string name="general">General</string>
     <string name="go">Go</string>
+    <string name="google_play_services_unavailable">Google Play services unavailable</string>
     <string name="go_">Go!</string>
     <string name="header">Header</string>
     <string name="head_to_head">Head to Head</string>
@@ -77,6 +78,9 @@
     <string name="periodic_sync">Periodic Sync</string>
     <string name="periodic_sync_is_turned_off">Periodic sync is turned off</string>
     <string name="periodic_sync_is_on">Periodic sync is on</string>
+    <string name="period_sync_requires_google_play_services">Periodic sync requires Google Play
+        services in order to function. Click here to try to resolve the issues with your Google
+        Play services installation.</string>
     <string name="player">Player</string>
     <string name="players">Players</string>
     <string name="player_x_region_y">Player: (%1$s) Region: (%2$s)</string>

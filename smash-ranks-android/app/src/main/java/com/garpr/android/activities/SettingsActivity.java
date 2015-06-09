@@ -24,6 +24,8 @@ import com.garpr.android.views.BooleanSettingPreferenceView;
 import com.garpr.android.views.CheckPreferenceView;
 import com.garpr.android.views.PreferenceView;
 import com.garpr.android.views.SwitchPreferenceView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 
 public class SettingsActivity extends BaseToolbarActivity {
@@ -36,6 +38,7 @@ public class SettingsActivity extends BaseToolbarActivity {
     private ImageButton mOrb;
     private PreferenceView mAuthor;
     private PreferenceView mConsole;
+    private PreferenceView mGooglePlayServicesError;
     private PreferenceView mNetworkCache;
     private PreferenceView mRegion;
     private PreferenceView mSyncStatus;
@@ -58,6 +61,7 @@ public class SettingsActivity extends BaseToolbarActivity {
         mAuthor = (PreferenceView) findViewById(R.id.activity_settings_author);
         mConsole = (PreferenceView) findViewById(R.id.activity_settings_console);
         mGitHub = (TextView) findViewById(R.id.activity_settings_github);
+        mGooglePlayServicesError = (PreferenceView) findViewById(R.id.activity_settings_google_play_services_error);
         mNetworkCache = (PreferenceView) findViewById(R.id.activity_settings_network_cache);
         mRegion = (PreferenceView) findViewById(R.id.activity_settings_region);
         mOrb = (ImageButton) findViewById(R.id.activity_settings_orb);
@@ -118,6 +122,7 @@ public class SettingsActivity extends BaseToolbarActivity {
     protected void onResume() {
         super.onResume();
         pollNetworkCache();
+        pollGooglePlayServices();
     }
 
 
@@ -126,6 +131,34 @@ public class SettingsActivity extends BaseToolbarActivity {
         mNetworkCache.setEnabled(networkCacheSize >= 1);
         mNetworkCache.setSubTitleText(getResources().getQuantityString(
                 R.plurals.currently_contains_x_entries, networkCacheSize, networkCacheSize));
+    }
+
+
+    private void pollGooglePlayServices() {
+        final int googlePlayServicesConnectionStatus = Utils.googlePlayServicesConnectionStatus();
+
+        if (googlePlayServicesConnectionStatus == ConnectionResult.SUCCESS) {
+            mGooglePlayServicesError.setVisibility(View.GONE);
+        } else {
+            mGooglePlayServicesError.setVisibility(View.VISIBLE);
+            mGooglePlayServicesError.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    final GoogleApiAvailability gaa = GoogleApiAvailability.getInstance();
+                    gaa.getErrorDialog(SettingsActivity.this, googlePlayServicesConnectionStatus,
+                            0, new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(final DialogInterface dialog) {
+                                    pollGooglePlayServices();
+                                }
+                            });
+                }
+            });
+        }
+
+        mSync.setEnabled(googlePlayServicesConnectionStatus == ConnectionResult.SUCCESS);
+        mSyncCharging.setEnabled(googlePlayServicesConnectionStatus == ConnectionResult.SUCCESS);
+        mSyncWifi.setEnabled(googlePlayServicesConnectionStatus == ConnectionResult.SUCCESS);
     }
 
 
@@ -202,6 +235,9 @@ public class SettingsActivity extends BaseToolbarActivity {
 
 
     private void prepareSyncViews() {
+        mGooglePlayServicesError.setTitleText(R.string.google_play_services_unavailable);
+        mGooglePlayServicesError.setSubTitleText(R.string.period_sync_requires_google_play_services);
+
         mSync.set(Settings.Sync.IsEnabled, R.string.enable_or_disable_sync,
                 R.string.periodic_sync_is_on, R.string.periodic_sync_is_turned_off);
         mSync.setOnToggleListener(new BooleanSettingPreferenceView.OnToggleListener() {

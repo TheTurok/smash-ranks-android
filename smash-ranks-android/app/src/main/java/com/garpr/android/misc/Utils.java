@@ -1,8 +1,13 @@
 package com.garpr.android.misc;
 
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.MenuItem;
+
+import com.garpr.android.App;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,14 +18,10 @@ import java.util.Random;
 public final class Utils {
 
 
-    public static final Random RANDOM;
+    public static final Random RANDOM = new Random();
+    private static final String TAG = "Utils";
 
 
-
-
-    static {
-        RANDOM = new Random();
-    }
 
 
     public static boolean areAnyObjectsNull(final Object... objects) {
@@ -49,6 +50,28 @@ public final class Utils {
         }
 
         return string;
+    }
+
+
+    public static int googlePlayServicesConnectionStatus() {
+        final Context context = App.getContext();
+        return GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
+    }
+
+
+    public static boolean googlePlayServicesAreAvailable() {
+        final int connectionResult = googlePlayServicesConnectionStatus();
+        final boolean googlePlayServicesAreAvailable;
+
+        if (connectionResult == ConnectionResult.SUCCESS) {
+            googlePlayServicesAreAvailable = true;
+        } else {
+            Console.w(TAG, "Google Play Services are unavailable (connectionResult " +
+                    connectionResult + ')');
+            googlePlayServicesAreAvailable = false;
+        }
+
+        return googlePlayServicesAreAvailable;
     }
 
 

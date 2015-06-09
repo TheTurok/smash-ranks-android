@@ -226,6 +226,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="settings_sub_title.error">
+        <item name="android:textColor">@color/console_warn</item>
+    </style>
+
     <style name="settings_text">
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_gravity">center_vertical</item>
@@ -235,6 +239,10 @@
 
     <style name="settings_title" parent="settings_text">
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="settings_title.error">
+        <item name="android:textColor">@color/console_warn</item>
     </style>
 
     <style name="singleline">

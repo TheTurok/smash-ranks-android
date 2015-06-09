@@ -10,8 +10,6 @@ import com.garpr.android.BuildConfig;
 import com.garpr.android.calls.Rankings;
 import com.garpr.android.calls.Response;
 import com.garpr.android.settings.Settings;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.PeriodicTask;
@@ -34,13 +32,9 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
 
 
     public static void schedule() {
-        final Context context = App.getContext();
-        final int connectionResult = GoogleApiAvailability.getInstance()
-                .isGooglePlayServicesAvailable(context);
-
-        if (connectionResult != ConnectionResult.SUCCESS) {
-            Console.w(TAG, "Google Play Services are unavailable (connectionResult " +
-                    connectionResult + "), not scheduling GcmNetworkTask...");
+        if (!Utils.googlePlayServicesAreAvailable()) {
+            Console.w(TAG, "Failed to schedule GcmNetworkTask because Google Play Services "
+                    + " are unavailable");
             return;
         }
 
@@ -58,6 +52,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
             builder.setPeriod(60L * 60L * 24L);
         }
 
+        final Context context = App.getContext();
         final PeriodicTask task = builder.build();
         GcmNetworkManager.getInstance(context).schedule(task);
         Settings.Sync.IsScheduled.set(true);

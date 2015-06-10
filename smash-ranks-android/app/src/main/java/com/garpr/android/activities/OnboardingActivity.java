@@ -13,6 +13,7 @@ import com.garpr.android.R;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
 import com.garpr.android.fragments.ToolbarRegionsFragment;
+import com.garpr.android.fragments.WelcomeFragment;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.Player;
@@ -26,9 +27,10 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
         ToolbarRegionsFragment.NextListener {
 
 
-    private static final int ONBOARDING_FRAGMENT_COUNT = 2;
-    private static final int ONBOARDING_FRAGMENT_PLAYERS = 1;
-    private static final int ONBOARDING_FRAGMENT_REGIONS = 0;
+    private static final int ONBOARDING_FRAGMENT_COUNT = 3;
+    private static final int ONBOARDING_FRAGMENT_PLAYERS = 2;
+    private static final int ONBOARDING_FRAGMENT_REGIONS = 1;
+    private static final int ONBOARDING_FRAGMENT_WELCOME = 0;
     private static final String KEY_SELECTED_REGION = "KEY_SELECTED_REGION";
     private static final String TAG = "OnboardingActivity";
 
@@ -90,18 +92,10 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
 
     @Override
     public void onBackPressed() {
-        if (mPager == null || mPager.getCurrentItem() == 0) {
+        if (mPager == null || mPager.getCurrentItem() != ONBOARDING_FRAGMENT_PLAYERS) {
             super.onBackPressed();
-        } else {
-            final int currentPagerItem = mPager.getCurrentItem();
-
-            if (currentPagerItem == ONBOARDING_FRAGMENT_PLAYERS) {
-                if (!mPlayersFragment.onBackPressed()) {
-                    mPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
-                }
-            } else {
-                Console.w(TAG, "Illegal currentPagerItem in onBackPressed(): " + currentPagerItem);
-            }
+        } else if (!mPlayersFragment.onBackPressed()) {
+            mPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
         }
     }
 
@@ -217,6 +211,10 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
             final Fragment fragment;
 
             switch (position) {
+                case ONBOARDING_FRAGMENT_WELCOME:
+                    fragment = WelcomeFragment.create();
+                    break;
+
                 case ONBOARDING_FRAGMENT_REGIONS:
                     fragment = ToolbarRegionsFragment.create();
                     break;

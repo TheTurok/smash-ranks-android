@@ -10,5 +10,7 @@
     <dimen name="root_padding_eighth">3dp</dimen>
     <dimen name="root_padding_fourth">6dp</dimen>
     <dimen name="root_padding_half">12dp</dimen>
+    <dimen name="root_padding_quadruple">96dp</dimen>
+    <dimen name="root_padding_triple">72dp</dimen>
 
 </resources>

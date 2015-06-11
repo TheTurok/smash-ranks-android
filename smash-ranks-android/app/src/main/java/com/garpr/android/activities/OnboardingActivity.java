@@ -24,7 +24,7 @@ import com.garpr.android.views.NonSwipeableViewPager;
 
 
 public class OnboardingActivity extends BaseActivity implements PlayersFragment.Listeners,
-        ToolbarRegionsFragment.NextListener {
+        ToolbarRegionsFragment.NextListener, WelcomeFragment.Listener {
 
 
     private static final int ONBOARDING_FRAGMENT_COUNT = 3;
@@ -74,18 +74,26 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
     private void nextOnboardingStep() {
         final int currentPagerItem = mPager.getCurrentItem();
 
-        if (currentPagerItem == ONBOARDING_FRAGMENT_REGIONS) {
-            final Region region = mRegionsFragment.getSelectedRegion();
+        switch (currentPagerItem) {
+            case ONBOARDING_FRAGMENT_REGIONS:
+                final Region region = mRegionsFragment.getSelectedRegion();
 
-            if (!region.equals(mSelectedRegion)) {
-                mSelectedRegion = region;
-                User.Region.set(mSelectedRegion);
-                mPlayersFragment.refresh();
-            }
+                if (!region.equals(mSelectedRegion)) {
+                    mSelectedRegion = region;
+                    User.Region.set(mSelectedRegion);
+                    mPlayersFragment.refresh();
+                }
 
-            mPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
-        } else {
-            Console.w(TAG, "Illegal currentPagerItem in nextOnboardingStep(): " + currentPagerItem);
+                mPager.setCurrentItem(ONBOARDING_FRAGMENT_PLAYERS, true);
+                break;
+
+            case ONBOARDING_FRAGMENT_WELCOME:
+                mPager.setCurrentItem(ONBOARDING_FRAGMENT_REGIONS, true);
+                break;
+
+            default:
+                Console.w(TAG, "Illegal currentPagerItem in nextOnboardingStep(): " + currentPagerItem);
+                break;
         }
     }
 
@@ -187,6 +195,12 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
                     }
                 })
                 .show();
+    }
+
+
+    @Override
+    public void onWelcomeNextClick() {
+        nextOnboardingStep();
     }
 
 

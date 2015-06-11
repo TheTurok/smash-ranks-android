@@ -19,6 +19,10 @@
         <item name="android:layout_gravity">bottom|end</item>
     </style>
 
+    <style name="layout_gravity_end">
+        <item name="android:layout_gravity">end</item>
+    </style>
+
     <style name="navigation_drawer">
         <item name="android:layout_gravity">start</item>
     </style>

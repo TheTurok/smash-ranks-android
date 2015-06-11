@@ -1,38 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/gray_dark"
     android:orientation="vertical"
     style="@style/root.no_padding">
     <include
         layout="@layout/view_status_bar_buffer" />
-    <LinearLayout
-        android:orientation="vertical"
-        style="@style/root">
-        <ImageView
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/gar_pr"
-            android:layout_gravity="center"
+    <ScrollView
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent">
+        <LinearLayout
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/root_padding_triple"
-            android:layout_marginTop="@dimen/root_padding_quadruple"
-            android:layout_width="wrap_content"
-            android:scaleType="centerInside"
-            android:src="@drawable/smash_orb" />
-        <TextView
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/root_padding_triple"
-            android:layout_width="match_parent"
-            android:text="@string/gar_pr"
-            style="@style/garpr_text" />
-        <TextView
-            android:id="@+id/fragment_welcome_text"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/root_padding"
-            android:layout_marginRight="@dimen/root_padding"
-            android:layout_width="match_parent"
-            android:lineSpacingExtra="4dp"
-            android:textSize="17sp"
-            tools:text="@string/gar_pr_welcome_text" />
-    </LinearLayout>
+            android:orientation="vertical"
+            style="@style/root">
+            <ImageView
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/gar_pr"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/root_padding_triple"
+                android:layout_marginTop="@dimen/root_padding_quadruple"
+                android:layout_width="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/smash_orb" />
+            <TextView
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/root_padding_triple"
+                android:layout_width="match_parent"
+                android:text="@string/gar_pr"
+                style="@style/garpr_text" />
+            <TextView
+                android:id="@+id/fragment_welcome_text"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/root_padding"
+                android:layout_marginRight="@dimen/root_padding"
+                android:layout_width="match_parent"
+                android:lineSpacingExtra="4dp"
+                android:textSize="17sp"
+                tools:text="@string/gar_pr_welcome_text" />
+        </LinearLayout>
+    </ScrollView>
+    <ImageButton
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:id="@+id/fragment_welcome_next"
+        android:layout_height="48dp"
+        android:layout_width="48dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_back"
+        tools:ignore="ContentDescription"
+        style="@style/layout_gravity_end"/>
 </LinearLayout>

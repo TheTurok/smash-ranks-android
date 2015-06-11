@@ -15,9 +15,9 @@ public final class JSONSetting extends Setting<JSONObject> {
 
 
 
-    JSONSetting(final String key) {
-        super(key);
-        mStringSetting = new StringSetting(key);
+    JSONSetting(final String name, final String key) {
+        super(name, key);
+        mStringSetting = new StringSetting(name, key);
     }
 
 

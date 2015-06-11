@@ -15,9 +15,9 @@ public final class PlayerSetting extends Setting<Player> {
 
 
 
-    PlayerSetting(final String key) {
-        super(key);
-        mJSONSetting = new JSONSetting(key);
+    PlayerSetting(final String name, final String key) {
+        super(name, key);
+        mJSONSetting = new JSONSetting(name, key);
     }
 
 

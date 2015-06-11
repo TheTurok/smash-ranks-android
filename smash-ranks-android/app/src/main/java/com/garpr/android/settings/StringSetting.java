@@ -10,7 +10,7 @@ public final class StringSetting extends Setting<String> {
 
 
     StringSetting(final String name, final String key, final String defaultValue) {
-        super(key, defaultValue);
+        super(name, key, defaultValue);
     }
 
 

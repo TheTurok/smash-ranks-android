@@ -7,6 +7,7 @@ import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
+import com.garpr.android.settings.Settings.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,9 +27,9 @@ public final class RegionSetting extends Setting<Region> {
 
 
 
-    RegionSetting(final String key) {
-        super(key);
-        mJSONSetting = new JSONSetting(key);
+    RegionSetting(final String name, final String key) {
+        super(name, key);
+        mJSONSetting = new JSONSetting(name, key);
         mListeners = new LinkedList<>();
     }
 

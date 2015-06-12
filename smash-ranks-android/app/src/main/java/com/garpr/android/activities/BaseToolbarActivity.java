@@ -19,7 +19,7 @@ import com.garpr.android.R;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
-import com.garpr.android.settings.User;
+import com.garpr.android.settings.Settings.User;
 
 
 public abstract class BaseToolbarActivity extends BaseActivity {

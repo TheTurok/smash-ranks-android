@@ -4,8 +4,8 @@ package com.garpr.android.settings;
 public final class BooleanSetting extends Setting<Boolean> {
 
 
-    BooleanSetting(final String key, final Boolean defaultValue) {
-        super(key, defaultValue);
+    BooleanSetting(final String name, final String key, final Boolean defaultValue) {
+        super(name, key, defaultValue);
 
         if (defaultValue == null) {
             throw new IllegalArgumentException("defaultValue can't be null");

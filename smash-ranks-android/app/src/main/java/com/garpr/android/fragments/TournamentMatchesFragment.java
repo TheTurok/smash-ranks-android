@@ -13,7 +13,7 @@ import com.garpr.android.activities.PlayerActivity;
 import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.TournamentBundle;
-import com.garpr.android.settings.User;
+import com.garpr.android.settings.Settings.User;
 import com.garpr.android.views.MatchItemView;
 
 import java.util.ArrayList;

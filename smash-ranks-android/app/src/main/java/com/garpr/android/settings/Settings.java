@@ -8,11 +8,14 @@ import android.preference.PreferenceManager;
 
 import com.garpr.android.App;
 
+import java.util.Map;
+import java.util.Set;
+
 
 public final class Settings {
 
 
-    private static final String CNAME = "com.garpr.android.settings.Settings";
+    private static final String BASE_CNAME = "com.garpr.android.settings.Settings";
 
     public static final BooleanSetting OnboardingComplete;
     public static final IntegerSetting LastVersion;
@@ -23,10 +26,39 @@ public final class Settings {
 
 
     static {
-        OnboardingComplete = new BooleanSetting(CNAME + ".ONBOARDING_COMPLETE", false);
-        LastVersion = new IntegerSetting(CNAME + ".LAST_VERSION", 0);
-        RankingsDate = new LongSetting(CNAME + ".RANKINGS_DATE", 0L);
-        Region = new RegionSetting(CNAME + ".REGION_SETTING");
+        LastVersion = new IntegerSetting(BASE_CNAME, "LAST_VERSION", 0);
+        OnboardingComplete = new BooleanSetting(BASE_CNAME, "ONBOARDING_COMPLETE", false);
+        RankingsDate = new LongSetting(BASE_CNAME, "RANKINGS_DATE", 0L);
+        Region = new RegionSetting(BASE_CNAME, "REGION_SETTING");
+    }
+
+
+    private static void delete(final String... cnames) {
+        if (cnames != null && cnames.length >= 1) {
+            for (final String cname : cnames) {
+                final SharedPreferences sPreferences = get(cname);
+                final Editor editor = sPreferences.edit();
+
+                final Map<String, ?> all = sPreferences.getAll();
+
+                if (all != null && !all.isEmpty()) {
+                    final Set<String> keys = all.keySet();
+
+                    if (!keys.isEmpty()) {
+                        for (final String key : keys) {
+                            editor.remove(key);
+                        }
+
+                        editor.apply();
+                    }
+                }
+            }
+        }
+    }
+
+
+    public static void deleteAll() {
+        delete(BASE_CNAME, Sync.CNAME, User.CNAME);
     }
 
 
@@ -57,7 +89,7 @@ public final class Settings {
     public static final class Sync {
 
 
-        private static final String CNAME = "com.garpr.android.settings.Settings.Sync";
+        private static final String CNAME = BASE_CNAME + ".Sync";
 
         public static final BooleanSetting ChargingIsNecessary;
         public static final BooleanSetting IsEnabled;
@@ -67,11 +99,41 @@ public final class Settings {
 
 
         static {
-            ChargingIsNecessary = new BooleanSetting(CNAME + ".CHARGING_IS_NECESSARY", false);
-            IsEnabled = new BooleanSetting(CNAME + ".IS_ENABLED", true);
-            IsScheduled = new BooleanSetting(CNAME + ".IS_SCHEDULED", false);
-            LastDate = new LongSetting(CNAME + ".LAST_DATE", 0L);
-            WifiIsNecessary = new BooleanSetting(CNAME + ".WIFI_NECESSARY", true);
+            ChargingIsNecessary = new BooleanSetting(CNAME, "CHARGING_IS_NECESSARY", false);
+            IsEnabled = new BooleanSetting(CNAME, "IS_ENABLED", true);
+            IsScheduled = new BooleanSetting(CNAME, "IS_SCHEDULED", false);
+            LastDate = new LongSetting(CNAME, "LAST_DATE", 0L);
+            WifiIsNecessary = new BooleanSetting(CNAME, "WIFI_NECESSARY", true);
+        }
+
+
+    }
+
+
+    public static final class User {
+
+
+        private static final String CNAME = BASE_CNAME + ".User";
+
+        public static final IntegerSetting Rank;
+        public static final PlayerSetting Player;
+        public static final RegionSetting Region;
+
+
+        static {
+            Rank = new IntegerSetting(CNAME, "RANK", 0);
+            Player = new PlayerSetting(CNAME, "PLAYER");
+            Region = new RegionSetting(CNAME, "REGION");
+        }
+
+
+        public static boolean areWeInTheUsersRegion() {
+            return Region.get().equals(Settings.Region.get());
+        }
+
+
+        public static boolean hasPlayer() {
+            return Player.get() != null;
         }
 
 

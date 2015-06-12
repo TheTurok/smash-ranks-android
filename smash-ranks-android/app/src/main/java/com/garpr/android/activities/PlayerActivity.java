@@ -29,7 +29,7 @@ import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 import com.garpr.android.models.Result;
 import com.garpr.android.models.Tournament;
-import com.garpr.android.settings.User;
+import com.garpr.android.settings.Settings.User;
 import com.garpr.android.views.PlayerItemView;
 import com.garpr.android.views.TournamentSeparatorView;
 

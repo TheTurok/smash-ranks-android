@@ -4,8 +4,8 @@ package com.garpr.android.settings;
 public final class LongSetting extends Setting<Long> {
 
 
-    LongSetting(final String key, final Long defaultValue) {
-        super(key, defaultValue);
+    LongSetting(final String name, final String key, final Long defaultValue) {
+        super(name, key, defaultValue);
 
         if (defaultValue == null) {
             throw new IllegalArgumentException("defaultValue can't be null");

@@ -11,20 +11,22 @@ public abstract class Setting<T> {
 
     final T mDefaultValue;
     final String mKey;
+    private final String mName;
 
 
 
 
-    Setting(final String key) {
-        this(key, null);
+    Setting(final String name, final String key) {
+        this(name, key, null);
     }
 
 
-    Setting(final String key, final T defaultValue) {
-        if (!Utils.validStrings(key)) {
-            throw new IllegalArgumentException("key can't be null / empty / whitespace");
+    Setting(final String name, final String key, final T defaultValue) {
+        if (!Utils.validStrings(name, key)) {
+            throw new IllegalArgumentException("name and key can't be null / empty / whitespace");
         }
 
+        mName = name;
         mKey = key;
         mDefaultValue = defaultValue;
     }
@@ -44,7 +46,7 @@ public abstract class Setting<T> {
 
 
     final SharedPreferences readSharedPreferences() {
-        return Settings.get();
+        return Settings.get(mName);
     }
 
 
@@ -52,7 +54,7 @@ public abstract class Setting<T> {
 
 
     final SharedPreferences.Editor writeSharedPreferences() {
-        return Settings.edit();
+        return Settings.edit(mName);
     }
 
 

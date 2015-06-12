@@ -32,6 +32,7 @@
                 android:text="@string/gar_pr"
                 style="@style/garpr_text" />
             <TextView
+                android:gravity="center"
                 android:id="@+id/fragment_welcome_text"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/root_padding"

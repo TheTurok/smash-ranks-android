@@ -1,6 +1,8 @@
 package com.garpr.android.fragments;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.os.Bundle;
@@ -34,22 +36,31 @@ public class WelcomeFragment extends BaseFragment {
     }
 
 
-    private void animateView(final View view, final long duration) {
-        final ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(final ValueAnimator animation) {
-                view.setAlpha((Float) animation.getAnimatedValue());
-            }
-        });
+    private Animator[] createAnimators(final View... views) {
+        final Animator[] animators = new Animator[views.length];
 
-        if (mAnimationInterpolator == null) {
-            mAnimationInterpolator = new AccelerateDecelerateInterpolator();
+        for (int i = 0; i < views.length; ++i) {
+            final View v = views[i];
+
+            final ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(final ValueAnimator animation) {
+                    v.setAlpha((Float) animation.getAnimatedValue());
+                }
+            });
+
+            if (mAnimationInterpolator == null) {
+                mAnimationInterpolator = new AccelerateDecelerateInterpolator();
+            }
+
+            animator.setInterpolator(mAnimationInterpolator);
+            animator.setDuration(500L);
+
+            animators[i] = animator;
         }
 
-        animator.setInterpolator(mAnimationInterpolator);
-        animator.setDuration(duration);
-        animator.start();
+        return animators;
     }
 
 
@@ -99,10 +110,9 @@ public class WelcomeFragment extends BaseFragment {
 
         mWelcomeText.setText(Html.fromHtml(getString(R.string.gar_pr_welcome_text)));
 
-        animateView(mOrb, 750L);
-        animateView(mGarPr, 1000L);
-        animateView(mWelcomeText, 2000L);
-        animateView(mNext, 3000L);
+        final AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playSequentially(createAnimators(mOrb, mGarPr, mWelcomeText, mNext));
+        animatorSet.start();
     }
 
 

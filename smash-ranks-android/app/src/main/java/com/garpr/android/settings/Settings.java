@@ -61,12 +61,12 @@ public final class Settings {
     }
 
 
-    static Editor edit(final String name) {
+    public static Editor edit(final String name) {
         return get(name).edit();
     }
 
 
-    static SharedPreferences get(final String name) {
+    public static SharedPreferences get(final String name) {
         final Context context = App.getContext();
         return context.getSharedPreferences(name, Context.MODE_PRIVATE);
     }

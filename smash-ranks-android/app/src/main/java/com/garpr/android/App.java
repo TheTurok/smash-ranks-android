@@ -93,6 +93,11 @@ public final class App extends Application {
             // network cache is potentially corrupted and should be cleared
             NetworkCache.clear();
         }
+
+        if (lastVersion < 40) {
+            // entirely new settings model
+            Settings.deleteAll();
+        }
     }
 
 

@@ -8,11 +8,14 @@ import android.preference.PreferenceManager;
 
 import com.garpr.android.App;
 
+import java.util.Map;
+import java.util.Set;
+
 
 public final class Settings {
 
 
-    private static final String BASE_CNAME = "com.garpr.android.settings.39.Settings.";
+    private static final String BASE_CNAME = "com.garpr.android.settings.Settings";
 
     public static final BooleanSetting OnboardingComplete;
     public static final IntegerSetting LastVersion;
@@ -27,6 +30,35 @@ public final class Settings {
         OnboardingComplete = new BooleanSetting(BASE_CNAME, "ONBOARDING_COMPLETE", false);
         RankingsDate = new LongSetting(BASE_CNAME, "RANKINGS_DATE", 0L);
         Region = new RegionSetting(BASE_CNAME, "REGION_SETTING");
+    }
+
+
+    private static void delete(final String... cnames) {
+        if (cnames != null && cnames.length >= 1) {
+            for (final String cname : cnames) {
+                final SharedPreferences sPreferences = get(cname);
+                final Editor editor = sPreferences.edit();
+
+                final Map<String, ?> all = sPreferences.getAll();
+
+                if (all != null && !all.isEmpty()) {
+                    final Set<String> keys = all.keySet();
+
+                    if (!keys.isEmpty()) {
+                        for (final String key : keys) {
+                            editor.remove(key);
+                        }
+
+                        editor.apply();
+                    }
+                }
+            }
+        }
+    }
+
+
+    public static void deleteAll() {
+        delete(BASE_CNAME, Sync.CNAME, User.CNAME);
     }
 
 
@@ -57,7 +89,7 @@ public final class Settings {
     public static final class Sync {
 
 
-        private static final String CNAME = BASE_CNAME + ".Sync.";
+        private static final String CNAME = BASE_CNAME + ".Sync";
 
         public static final BooleanSetting ChargingIsNecessary;
         public static final BooleanSetting IsEnabled;
@@ -81,7 +113,7 @@ public final class Settings {
     public static final class User {
 
 
-        private static final String CNAME = BASE_CNAME + ".User.";
+        private static final String CNAME = BASE_CNAME + ".User";
 
         public static final IntegerSetting Rank;
         public static final PlayerSetting Player;

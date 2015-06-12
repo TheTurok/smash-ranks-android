@@ -16,22 +16,29 @@
             style="@style/root">
             <ImageView
                 android:adjustViewBounds="true"
+                android:alpha="0"
                 android:contentDescription="@string/gar_pr"
+                android:id="@+id/fragment_welcome_orb"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/root_padding_triple"
                 android:layout_marginTop="@dimen/root_padding_quadruple"
                 android:layout_width="wrap_content"
                 android:scaleType="centerInside"
-                android:src="@drawable/smash_orb" />
+                android:src="@drawable/smash_orb"
+                tools:alpha="1" />
             <TextView
+                android:alpha="0"
+                android:id="@+id/fragment_welcome_gar_pr"
                 android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/root_padding_double"
                 android:layout_width="match_parent"
                 android:text="@string/gar_pr"
+                tools:alpha="1"
                 style="@style/garpr_text" />
             <TextView
+                android:alpha="0"
                 android:gravity="center"
                 android:id="@+id/fragment_welcome_text"
                 android:layout_height="wrap_content"
@@ -40,16 +47,19 @@
                 android:layout_width="match_parent"
                 android:lineSpacingExtra="4dp"
                 android:textSize="17sp"
+                tools:alpha="1"
                 tools:text="@string/gar_pr_welcome_text" />
         </LinearLayout>
     </ScrollView>
     <ImageButton
+        android:alpha="0"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:id="@+id/fragment_welcome_next"
         android:layout_height="@dimen/list_item_height"
         android:layout_width="@dimen/list_item_height"
         android:scaleType="center"
         android:src="@drawable/ic_forward"
+        tools:alpha="1"
         tools:ignore="ContentDescription"
         style="@style/layout_gravity_end"/>
 </LinearLayout>

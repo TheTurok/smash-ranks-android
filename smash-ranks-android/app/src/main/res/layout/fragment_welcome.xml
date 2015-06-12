@@ -27,7 +27,7 @@
             <TextView
                 android:gravity="center"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/root_padding_triple"
+                android:layout_marginBottom="@dimen/root_padding_double"
                 android:layout_width="match_parent"
                 android:text="@string/gar_pr"
                 style="@style/garpr_text" />
@@ -45,10 +45,10 @@
     <ImageButton
         android:background="?attr/selectableItemBackgroundBorderless"
         android:id="@+id/fragment_welcome_next"
-        android:layout_height="48dp"
-        android:layout_width="48dp"
+        android:layout_height="@dimen/list_item_height"
+        android:layout_width="@dimen/list_item_height"
         android:scaleType="center"
-        android:src="@drawable/ic_back"
+        android:src="@drawable/ic_forward"
         tools:ignore="ContentDescription"
         style="@style/layout_gravity_end"/>
 </LinearLayout>

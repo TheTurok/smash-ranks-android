@@ -2,7 +2,6 @@ package com.garpr.android.activities;
 
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;

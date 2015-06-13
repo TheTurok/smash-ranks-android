@@ -89,13 +89,9 @@ public final class App extends Application {
     private void onUpgrade(final int lastVersion, final int currentVersion) {
         Console.d(TAG, "Upgrading from " + lastVersion + " to " + currentVersion);
 
-        if (lastVersion < 34) {
-            // network cache is potentially corrupted and should be cleared
-            NetworkCache.clear();
-        }
-
         if (lastVersion < 40) {
-            // entirely new settings model
+            // entirely new settings model and classes, all SharedPreferences must be cleared
+            NetworkCache.clear();
             Settings.deleteAll();
         }
     }

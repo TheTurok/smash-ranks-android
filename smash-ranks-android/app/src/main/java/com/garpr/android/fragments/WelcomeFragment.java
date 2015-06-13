@@ -39,6 +39,10 @@ public class WelcomeFragment extends BaseFragment {
     private Animator[] createAnimators(final View... views) {
         final Animator[] animators = new Animator[views.length];
 
+        if (mAnimationInterpolator == null) {
+            mAnimationInterpolator = new AccelerateDecelerateInterpolator();
+        }
+
         for (int i = 0; i < views.length; ++i) {
             final View v = views[i];
 
@@ -49,10 +53,6 @@ public class WelcomeFragment extends BaseFragment {
                     v.setAlpha((Float) animation.getAnimatedValue());
                 }
             });
-
-            if (mAnimationInterpolator == null) {
-                mAnimationInterpolator = new AccelerateDecelerateInterpolator();
-            }
 
             animator.setInterpolator(mAnimationInterpolator);
             animator.setDuration(500L);

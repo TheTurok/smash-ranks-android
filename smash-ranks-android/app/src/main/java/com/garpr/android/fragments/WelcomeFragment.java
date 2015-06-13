@@ -1,16 +1,18 @@
 package com.garpr.android.fragments;
 
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -24,6 +26,7 @@ public class WelcomeFragment extends BaseFragment {
     private AccelerateDecelerateInterpolator mAnimationInterpolator;
     private ImageButton mNext;
     private ImageView mOrb;
+    private LinearLayout mContent;
     private Listener mListener;
     private TextView mGarPr;
     private TextView mWelcomeText;
@@ -36,28 +39,22 @@ public class WelcomeFragment extends BaseFragment {
     }
 
 
-    private Animator[] createAnimators(final View... views) {
-        final Animator[] animators = new Animator[views.length];
-
-        if (mAnimationInterpolator == null) {
-            mAnimationInterpolator = new AccelerateDecelerateInterpolator();
-        }
+    private ValueAnimator[] createAnimators(final View... views) {
+        final ValueAnimator[] animators = new ValueAnimator[views.length];
 
         for (int i = 0; i < views.length; ++i) {
             final View v = views[i];
 
-            final ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            animators[i] = ValueAnimator.ofFloat(0f, 1f);
+            animators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(final ValueAnimator animation) {
                     v.setAlpha((Float) animation.getAnimatedValue());
                 }
             });
 
-            animator.setInterpolator(mAnimationInterpolator);
-            animator.setDuration(500L);
-
-            animators[i] = animator;
+            animators[i].setInterpolator(mAnimationInterpolator);
+            animators[i].setDuration(500L);
         }
 
         return animators;
@@ -66,6 +63,7 @@ public class WelcomeFragment extends BaseFragment {
 
     private void findViews() {
         final View view = getView();
+        mContent = (LinearLayout) view.findViewById(R.id.fragment_welcome_content);
         mGarPr = (TextView) view.findViewById(R.id.fragment_welcome_gar_pr);
         mNext = (ImageButton) view.findViewById(R.id.fragment_welcome_next);
         mOrb = (ImageView) view.findViewById(R.id.fragment_welcome_orb);
@@ -100,7 +98,30 @@ public class WelcomeFragment extends BaseFragment {
     }
 
 
+    @SuppressWarnings("deprecation")
     private void prepareViews() {
+        mAnimationInterpolator = new AccelerateDecelerateInterpolator();
+        final ColorDrawable background = new ColorDrawable(getResources().getColor(R.color.indigo));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mContent.setBackground(background);
+        } else {
+            mContent.setBackgroundDrawable(background);
+        }
+
+        final ValueAnimator animator = ValueAnimator.ofInt(255, 0);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(final ValueAnimator animation) {
+                background.setAlpha((Integer) animation.getAnimatedValue());
+            }
+        });
+
+        animator.setInterpolator(mAnimationInterpolator);
+        animator.setDuration(4000L);
+        animator.start();
+
+
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

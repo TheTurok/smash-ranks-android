@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/gray_dark"
+    android:id="@+id/fragment_welcome_content"
+    android:background="@color/indigo"
     android:orientation="vertical"
     style="@style/root.no_padding">
     <include

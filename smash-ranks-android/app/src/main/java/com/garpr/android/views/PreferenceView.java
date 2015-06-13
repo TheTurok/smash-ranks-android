@@ -38,7 +38,7 @@ public class PreferenceView extends LinearLayout {
         if (enabled) {
             setAlpha(1f);
         } else {
-            setAlpha(0.6f);
+            setAlpha(0.5f);
         }
     }
 

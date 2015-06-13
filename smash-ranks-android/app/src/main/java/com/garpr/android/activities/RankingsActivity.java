@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.garpr.android.R;
 import com.garpr.android.calls.Rankings;
@@ -220,6 +221,22 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.activity_rankings_menu_date:
+                Toast.makeText(this, getString(R.string.updated_x, mRankingsDate),
+                        Toast.LENGTH_LONG).show();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
+
+    @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         mDate = menu.findItem(R.id.activity_rankings_menu_date);
         mSearch = menu.findItem(R.id.activity_rankings_menu_search);
@@ -314,7 +331,6 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     private void showMenuItems() {
-        mDate.setTitle(getString(R.string.updated_x, mRankingsDate));
         Utils.showMenuItems(mDate, mSearch);
     }
 

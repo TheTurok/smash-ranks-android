@@ -331,7 +331,6 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     private void showMenuItems() {
-        mDate.setTitle(getString(R.string.updated_x, mRankingsDate));
         Utils.showMenuItems(mDate, mSearch);
     }
 

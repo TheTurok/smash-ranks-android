@@ -53,6 +53,7 @@
     <string name="hello">Hello</string>
     <string name="hello_">Hello!</string>
     <string name="hello_world">Hello, World!</string>
+    <string name="last_rankings_update">Last rankings update</string>
     <string name="last_sync">Last sync</string>
     <string name="lets_go">Let\'s go!</string>
     <string name="log_console">Log console</string>

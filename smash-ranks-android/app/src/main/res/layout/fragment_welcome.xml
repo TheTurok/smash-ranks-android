@@ -4,6 +4,7 @@
     android:id="@+id/fragment_welcome_content"
     android:background="@color/indigo"
     android:orientation="vertical"
+    tools:ignore="Overdraw"
     style="@style/root.no_padding">
     <include
         layout="@layout/view_status_bar_buffer" />

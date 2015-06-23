@@ -4,6 +4,7 @@ package com.garpr.android.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 
 import com.garpr.android.App;
 
@@ -32,27 +33,32 @@ public final class Settings {
     }
 
 
+    private static void delete(final SharedPreferences sPreferences) {
+        final Map<String, ?> all = sPreferences.getAll();
+
+        if (all != null && !all.isEmpty()) {
+            final Editor editor = sPreferences.edit();
+            final Set<String> keys = all.keySet();
+
+            if (!keys.isEmpty()) {
+                for (final String key : keys) {
+                    editor.remove(key);
+                }
+
+                editor.apply();
+            }
+        }
+    }
+
+
     private static void delete(final String... cnames) {
         if (cnames != null && cnames.length >= 1) {
             for (final String cname : cnames) {
-                final SharedPreferences sPreferences = get(cname);
-                final Editor editor = sPreferences.edit();
-
-                final Map<String, ?> all = sPreferences.getAll();
-
-                if (all != null && !all.isEmpty()) {
-                    final Set<String> keys = all.keySet();
-
-                    if (!keys.isEmpty()) {
-                        for (final String key : keys) {
-                            editor.remove(key);
-                        }
-
-                        editor.apply();
-                    }
-                }
+                delete(get(cname));
             }
         }
+
+        delete(PreferenceManager.getDefaultSharedPreferences(App.getContext()));
     }
 
 

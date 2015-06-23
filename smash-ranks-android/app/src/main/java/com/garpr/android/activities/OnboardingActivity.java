@@ -80,6 +80,7 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
 
                 if (!region.equals(mSelectedRegion)) {
                     mSelectedRegion = region;
+                    Settings.Region.set(mSelectedRegion);
                     User.Region.set(mSelectedRegion);
                     mPlayersFragment.refresh();
                 }

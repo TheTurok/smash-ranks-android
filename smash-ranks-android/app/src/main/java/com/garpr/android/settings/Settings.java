@@ -97,7 +97,7 @@ public final class Settings {
             IsEnabled = new BooleanSetting(CNAME, "IS_ENABLED", true);
             IsScheduled = new BooleanSetting(CNAME, "IS_SCHEDULED", false);
             LastDate = new LongSetting(CNAME, "LAST_DATE", 0L);
-            WifiIsNecessary = new BooleanSetting(CNAME, "WIFI_NECESSARY", true);
+            WifiIsNecessary = new BooleanSetting(CNAME, "WIFI_IS_NECESSARY", true);
         }
 
 

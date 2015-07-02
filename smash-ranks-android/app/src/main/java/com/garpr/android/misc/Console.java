@@ -118,18 +118,18 @@ public final class Console {
                 final WeakReference<Listener> wrl = new WeakReference<>(listener);
                 LOG_LISTENERS.add(wrl);
             } else {
-                for (int i = 0; i < LOG_LISTENERS.size(); ) {
-                    final WeakReference<Listener> wrl = LOG_LISTENERS.get(i);
+                final Iterator<WeakReference<Listener>> iterator = LOG_LISTENERS.iterator();
+
+                while (iterator.hasNext()) {
+                    final WeakReference<Listener> wrl = iterator.next();
 
                     if (wrl == null) {
-                        LOG_LISTENERS.remove(i);
+                        iterator.remove();
                     } else {
                         final Listener l = wrl.get();
 
                         if (l == null || l == listener) {
-                            LOG_LISTENERS.remove(i);
-                        } else {
-                            ++i;
+                            iterator.remove();
                         }
                     }
                 }

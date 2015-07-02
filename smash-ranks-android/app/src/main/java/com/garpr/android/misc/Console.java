@@ -7,6 +7,7 @@ import com.crashlytics.android.Crashlytics;
 import com.garpr.android.models.LogMessage;
 
 import java.lang.ref.WeakReference;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 
@@ -176,19 +177,20 @@ public final class Console {
                 return;
             }
 
-            for (int i = 0; i < LOG_LISTENERS.size(); ) {
-                final WeakReference<Listener> wrl = LOG_LISTENERS.get(i);
+            final Iterator<WeakReference<Listener>> iterator = LOG_LISTENERS.iterator();
+
+            while (iterator.hasNext()) {
+                final WeakReference<Listener> wrl = iterator.next();
 
                 if (wrl == null) {
-                    LOG_LISTENERS.remove(i);
+                    iterator.remove();
                 } else {
                     final Listener l = wrl.get();
 
                     if (l == null) {
-                        LOG_LISTENERS.remove(i);
+                        iterator.remove();
                     } else {
                         l.onLogMessagesChanged();
-                        ++i;
                     }
                 }
             }

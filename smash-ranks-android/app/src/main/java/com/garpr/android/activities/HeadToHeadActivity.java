@@ -27,7 +27,7 @@ import com.garpr.android.models.Match;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Result;
 import com.garpr.android.models.Tournament;
-import com.garpr.android.views.MatchResultsItem;
+import com.garpr.android.views.MatchResultsItemView;
 import com.garpr.android.views.SimpleSeparatorView;
 import com.garpr.android.views.TournamentItemView;
 
@@ -530,7 +530,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
                     break;
 
                 case RESULTS:
-                    ((MatchResultsItem.ViewHolder) holder).getView().setResults(listItem.mResults);
+                    ((MatchResultsItemView.ViewHolder) holder).getView().setResults(listItem.mResults);
                     break;
 
                 case TOURNAMENT:
@@ -563,7 +563,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
                     break;
 
                 case RESULTS:
-                    holder = MatchResultsItem.inflate(HeadToHeadActivity.this, parent)
+                    holder = MatchResultsItemView.inflate(HeadToHeadActivity.this, parent)
                             .getViewHolder();
                     break;
 

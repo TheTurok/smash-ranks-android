@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.garpr.android.R;
 
 
-public class MatchResultsItem extends FrameLayout implements OnGlobalLayoutListener {
+public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutListener {
 
 
     private boolean mMeasured;
@@ -31,13 +31,13 @@ public class MatchResultsItem extends FrameLayout implements OnGlobalLayoutListe
 
 
 
-    public static MatchResultsItem inflate(final Context context, final ViewGroup parent) {
+    public static MatchResultsItemView inflate(final Context context, final ViewGroup parent) {
         final LayoutInflater inflater = LayoutInflater.from(context);
-        return (MatchResultsItem) inflater.inflate(R.layout.view_match_results_item, parent, false);
+        return (MatchResultsItemView) inflater.inflate(R.layout.view_match_results_item, parent, false);
     }
 
 
-    public MatchResultsItem(final Context context, final AttributeSet attrs) {
+    public MatchResultsItemView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -142,12 +142,12 @@ public class MatchResultsItem extends FrameLayout implements OnGlobalLayoutListe
 
 
         private ViewHolder() {
-            super(MatchResultsItem.this);
+            super(MatchResultsItemView.this);
         }
 
 
-        public MatchResultsItem getView() {
-            return MatchResultsItem.this;
+        public MatchResultsItemView getView() {
+            return MatchResultsItemView.this;
         }
 
 

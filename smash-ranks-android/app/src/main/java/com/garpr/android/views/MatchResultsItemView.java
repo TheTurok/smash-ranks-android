@@ -85,6 +85,9 @@ public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutL
         winBarParams.height = height;
         winBarParams.width = (int) winPixels;
         mWinsBar.setLayoutParams(winBarParams);
+
+        mLosesBar.setVisibility(View.VISIBLE);
+        mWinsBar.setVisibility(View.VISIBLE);
     }
 
 

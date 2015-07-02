@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.garpr.android.R;
 
+import java.text.NumberFormat;
+
 
 public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutListener {
 
@@ -128,7 +130,10 @@ public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutL
         mWins = wins;
         mLoses = loses;
         mResultsSet = true;
-        mResults.setText(getResources().getString(R.string.x_em_dash_y, mWins, mLoses));
+
+        final NumberFormat nf = NumberFormat.getInstance();
+        mResults.setText(getResources().getString(R.string.x_em_dash_y, nf.format(mWins),
+                nf.format(mLoses)));
 
         if (mMeasured) {
             measureBars();

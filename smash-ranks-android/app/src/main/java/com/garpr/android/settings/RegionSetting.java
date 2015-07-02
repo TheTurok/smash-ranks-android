@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 
@@ -41,31 +42,34 @@ public final class RegionSetting extends Setting<Region> {
 
         synchronized (mListeners) {
             boolean attachListener = true;
+            final Iterator<Attachment> iterator = mListeners.iterator();
 
-            for (int i = 0; i < mListeners.size(); ) {
-                final Attachment attachment = mListeners.get(i);
+            while (iterator.hasNext()) {
+                final Attachment attachment = iterator.next();
 
                 if (attachment.isAlive()) {
                     if (attachment.hasListener(listener)) {
                         attachListener = false;
                     }
-
-                    ++i;
                 } else {
-                    mListeners.remove(i);
+                    iterator.remove();
                 }
             }
 
             if (!heartbeat.isAlive()) {
-                Console.w(TAG, "Attempted to attach a listener with a dead heartbeat");
+                Console.w(TAG, "Attempted to attach a listener (" + listener.toString()
+                        + ") with a dead heartbeat");
                 return;
             }
 
             if (attachListener) {
                 mListeners.add(new Attachment(heartbeat, listener));
+                Console.d(TAG, "Attached " + listener.toString() + ", there are now "
+                        + mListeners.size() + " region listener(s)");
+            } else {
+                Console.d(TAG, "Didn't need to attach " + listener.toString() +
+                        " as it was already attached");
             }
-
-            Console.d(TAG, "There are now " + mListeners.size() + " region listener(s)");
         }
     }
 

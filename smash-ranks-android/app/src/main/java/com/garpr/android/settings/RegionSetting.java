@@ -82,17 +82,22 @@ public final class RegionSetting extends Setting<Region> {
 
     public void detachListener(final RegionListener listener) {
         synchronized (mListeners) {
-            for (int i = 0; i < mListeners.size(); ) {
-                final Attachment attachment = mListeners.get(i);
+            final Iterator<Attachment> iterator = mListeners.iterator();
+
+            while (iterator.hasNext()) {
+                final Attachment attachment = iterator.next();
 
                 if (!attachment.isAlive() || attachment.hasListener(listener)) {
-                    mListeners.remove(i);
-                } else {
-                    ++i;
+                    iterator.remove();
                 }
             }
 
-            Console.d(TAG, "There are now " + mListeners.size() + " region listener(s)");
+            if (listener == null) {
+                Console.d(TAG, "There are now " + mListeners.size() + " region listener(s)");
+            } else {
+                Console.d(TAG, "Detached " + listener.toString() + ", there are now "
+                        + mListeners.size() + " region listener(s)");
+            }
         }
     }
 
@@ -135,14 +140,15 @@ public final class RegionSetting extends Setting<Region> {
 
         if (notifyListeners) {
             synchronized (mListeners) {
-                for (int i = 0; i < mListeners.size(); ) {
-                    final Attachment attachment = mListeners.get(i);
+                final Iterator<Attachment> iterator = mListeners.iterator();
+
+                while (iterator.hasNext()) {
+                    final Attachment attachment = iterator.next();
 
                     if (attachment.isAlive()) {
                         attachment.onRegionChanged(newValue);
-                        ++i;
                     } else {
-                        mListeners.remove(i);
+                        iterator.remove();
                     }
                 }
             }

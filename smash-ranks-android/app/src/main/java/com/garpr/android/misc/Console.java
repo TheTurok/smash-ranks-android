@@ -64,28 +64,26 @@ public final class Console {
 
         synchronized (LOG_LISTENERS) {
             boolean listenerExists = false;
+            final Iterator<WeakReference<Listener>> iterator = LOG_LISTENERS.iterator();
 
-            for (int i = 0; i < LOG_LISTENERS.size() && !listenerExists; ) {
-                final WeakReference<Listener> wrl = LOG_LISTENERS.get(i);
+            while (iterator.hasNext() && !listenerExists) {
+                final WeakReference<Listener> wrl = iterator.next();
 
                 if (wrl == null) {
-                    LOG_LISTENERS.remove(i);
+                    iterator.remove();
                 } else {
                     final Listener l = wrl.get();
 
                     if (l == null) {
-                        LOG_LISTENERS.remove(i);
+                        iterator.remove();
                     } else if (l == listener) {
                         listenerExists = true;
-                    } else {
-                        ++i;
                     }
                 }
             }
 
             if (!listenerExists) {
-                final WeakReference<Listener> wrl = new WeakReference<>(listener);
-                LOG_LISTENERS.add(wrl);
+                LOG_LISTENERS.add(new WeakReference<>(listener));
             }
         }
     }

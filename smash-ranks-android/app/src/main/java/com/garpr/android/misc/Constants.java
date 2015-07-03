@@ -129,7 +129,8 @@ public final class Constants {
             "https://www.youtube.com/watch?v=lSxYS99TwaU", // fly vs silentwolf KoC 3
             "https://www.youtube.com/watch?v=7i0PUCX7VEw", // leffen vs chillin salty suite
             "https://www.youtube.com/watch?v=MlGM0BFv3JU", // westballz sacred combo
-            "https://www.youtube.com/watch?v=4Ogs89Ok9CY" // mango vs armada im not yelling
+            "https://www.youtube.com/watch?v=4Ogs89Ok9CY", // mango vs armada im not yelling
+            "https://www.youtube.com/watch?v=z2myFLUDB74" // synthesizer patel
     };
 
 

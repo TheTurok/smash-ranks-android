@@ -69,7 +69,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
 
     @Override
     public int onRunTask(final TaskParams taskParams) {
-        Console.d(TAG, "Running GcmNetworkTask!");
+        Console.d(TAG, "Running GcmNetworkTask");
 
         if (Settings.Sync.WifiIsNecessary.get()) {
             final Context context = App.getContext();
@@ -91,7 +91,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
             @Override
             public void success(final Rankings.Result result) {
                 if (result.updateAvailable()) {
-                    Console.d(TAG, "A new roster is available!");
+                    Console.d(TAG, "A new roster is available");
                     Notifications.showRankingsUpdated();
                 } else {
                     Console.d(TAG, "No new roster available");

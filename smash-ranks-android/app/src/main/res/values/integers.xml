@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <integer name="gorgonite_max_pulls">11</integer>
+    <integer name="gorgonite_min_pulls">4</integer>
     <integer name="ranks_per_section">10</integer>
 
 </resources>

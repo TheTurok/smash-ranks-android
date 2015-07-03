@@ -28,8 +28,6 @@ import com.garpr.android.models.LogMessage;
 public class ConsoleActivity extends BaseToolbarListActivity implements Console.Listener {
 
 
-    private static final int MINIMUM_PULLS = 3;
-    private static final int MAXIMUM_PULLS = 9;
     private static final String TAG = "ConsoleActivity";
 
     private boolean mPulled;
@@ -43,6 +41,30 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
     public static void start(final Activity activity) {
         final Intent intent = new Intent(activity, ConsoleActivity.class);
         activity.startActivity(intent);
+    }
+
+
+    private void createAdapter() {
+        final ConsoleAdapter adapter;
+
+        if (BuildConfig.DEBUG) {
+            adapter = new DebugConsoleAdapter();
+        } else {
+            adapter = new ReleaseConsoleAdapter();
+        }
+
+        setAdapter(adapter);
+    }
+
+
+    private void determineGorgonitePulls() {
+        final Resources res = getResources();
+        final int maximumPulls = res.getInteger(R.integer.gorgonite_max_pulls);
+        final int minimumPulls = res.getInteger(R.integer.gorgonite_min_pulls);
+
+        do {
+            mNeededPulls = Utils.RANDOM.nextInt(maximumPulls);
+        } while (mNeededPulls < minimumPulls || mNeededPulls > maximumPulls);
     }
 
 
@@ -73,20 +95,8 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        do {
-            mNeededPulls = Utils.RANDOM.nextInt(MAXIMUM_PULLS);
-        } while (mNeededPulls < MINIMUM_PULLS || mNeededPulls > MAXIMUM_PULLS);
-
-        final ConsoleAdapter adapter;
-
-        if (BuildConfig.DEBUG) {
-            adapter = new DebugConsoleAdapter();
-        } else {
-            adapter = new ReleaseConsoleAdapter();
-        }
-
-        setAdapter(adapter);
+        determineGorgonitePulls();
+        createAdapter();
         Console.attachListener(this);
     }
 

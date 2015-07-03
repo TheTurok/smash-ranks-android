@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,11 +54,11 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     private boolean mInUsersRegion;
     private boolean mPulled;
     private boolean mSetMenuItemsVisible;
+    private CharSequence mRankingsDate;
     private Filter mFilter;
     private MenuItem mDate;
     private MenuItem mSearch;
     private Player mUserPlayer;
-    private String mRankingsDate;
 
 
 
@@ -126,8 +127,9 @@ public class RankingsActivity extends BaseToolbarListActivity implements
                 mPlayers = rankingsBundle.getRankings();
 
                 if (rankingsBundle.hasDateWrapper()) {
-                    mRankingsDate = rankingsBundle.getDateWrapper()
-                            .getMonthAndDayOrMonthAndDayAndYear();
+                    mRankingsDate = DateUtils.getRelativeDateTimeString(RankingsActivity.this,
+                            rankingsBundle.getDateWrapper().getDate().getTime(),
+                            DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0);
                 }
 
                 prepareList();
@@ -183,7 +185,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mPlayers = savedInstanceState.getParcelableArrayList(KEY_PLAYERS);
-            mRankingsDate = savedInstanceState.getString(KEY_RANKINGS_DATE);
+            mRankingsDate = savedInstanceState.getCharSequence(KEY_RANKINGS_DATE);
         }
 
         if (mPlayers == null || mPlayers.isEmpty()) {
@@ -294,7 +296,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
         if (mPlayers != null && !mPlayers.isEmpty()) {
             outState.putParcelableArrayList(KEY_PLAYERS, mPlayers);
-            outState.putString(KEY_RANKINGS_DATE, mRankingsDate);
+            outState.putCharSequence(KEY_RANKINGS_DATE, mRankingsDate);
         }
     }
 

@@ -15,9 +15,14 @@ import com.garpr.android.misc.NetworkCache;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
 
+
+    private static final ExecutorService EXECUTOR_SERVICE;
 
     private boolean mPulledFromNetworkCache;
     private final boolean mIgnoreCache;
@@ -25,6 +30,11 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
     protected final Response<T> mResponse;
 
 
+
+
+    static {
+        EXECUTOR_SERVICE = Executors.newFixedThreadPool(3);
+    }
 
 
     Call(final Response<T> response, final boolean ignoreCache) throws IllegalArgumentException {
@@ -77,7 +87,7 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
             }
         };
 
-        new Thread(runnable).start();
+        EXECUTOR_SERVICE.submit(runnable);
     }
 
 
@@ -109,7 +119,7 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
             }
         };
 
-        new Thread(runnable).start();
+        EXECUTOR_SERVICE.submit(runnable);
     }
 
 
@@ -135,7 +145,7 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
             }
         };
 
-        new Thread(runnable).start();
+        EXECUTOR_SERVICE.submit(runnable);
     }
 
 

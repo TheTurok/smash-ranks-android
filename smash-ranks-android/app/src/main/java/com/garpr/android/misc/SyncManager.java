@@ -57,7 +57,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
         GcmNetworkManager.getInstance(context).schedule(task);
         Settings.Sync.IsScheduled.set(true);
 
-        Console.d(TAG, "GcmNetworkTask has been scheduled");
+        Console.d(TAG, "GcmNetworkTask has been scheduled " + printConfigurationString());
     }
 
 
@@ -69,7 +69,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
 
     @Override
     public int onRunTask(final TaskParams taskParams) {
-        Console.d(TAG, "Running GcmNetworkTask");
+        Console.d(TAG, "Running GcmNetworkTask " + printConfigurationString());
 
         if (Settings.Sync.WifiIsNecessary.get()) {
             final Context context = App.getContext();
@@ -102,6 +102,12 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
         });
 
         return GcmNetworkManager.RESULT_SUCCESS;
+    }
+
+
+    private static String printConfigurationString() {
+        return "(charging necessary: " + Settings.Sync.ChargingIsNecessary.get() +
+                ") (wifi necessary: " + Settings.Sync.WifiIsNecessary.get() + ')';
     }
 
 

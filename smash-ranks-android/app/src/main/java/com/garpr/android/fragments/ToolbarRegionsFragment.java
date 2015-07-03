@@ -49,7 +49,7 @@ public class ToolbarRegionsFragment extends RegionsFragment implements
 
     @Override
     protected int getContentView() {
-        return R.layout.fragment_base_list_toolbar;
+        return R.layout.fragment_base_list_toolbar_and_statusbar;
     }
 
 

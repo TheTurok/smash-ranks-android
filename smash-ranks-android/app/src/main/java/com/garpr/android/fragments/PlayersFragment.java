@@ -144,6 +144,12 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     @Override
+    protected int getContentView() {
+        return R.layout.fragment_base_list_toolbar_and_statusbar;
+    }
+
+
+    @Override
     protected String getErrorText() {
         return getString(R.string.error_fetching_players);
     }

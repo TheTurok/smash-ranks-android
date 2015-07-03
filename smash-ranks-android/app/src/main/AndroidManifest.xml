@@ -12,7 +12,6 @@
         android:icon="@mipmap/launcher"
         android:label="@string/gar_pr"
         android:name=".App"
-        android:supportsRtl="true"
         android:theme="@style/app_theme"
         tools:ignore="UnusedAttribute">
 

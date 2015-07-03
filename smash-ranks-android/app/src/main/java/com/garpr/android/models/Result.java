@@ -14,7 +14,9 @@ import org.json.JSONObject;
 
 
 public enum Result implements Parcelable {
-    LOSE, WIN;
+    LOSE(R.string.lose), WIN(R.string.win);
+
+    private final int mResId;
 
 
     public static Result create(final JSONObject json) throws JSONException {
@@ -33,6 +35,11 @@ public enum Result implements Parcelable {
     }
 
 
+    Result(final int resId) {
+        mResId = resId;
+    }
+
+
     public boolean isLose() {
         return equals(LOSE);
     }
@@ -45,23 +52,8 @@ public enum Result implements Parcelable {
 
     @Override
     public String toString() {
-        final int resId;
-
-        switch (this) {
-            case LOSE:
-                resId = R.string.lose;
-                break;
-
-            case WIN:
-                resId = R.string.win;
-                break;
-
-            default:
-                throw new IllegalStateException("Result type is invalid");
-        }
-
         final Context context = App.getContext();
-        return context.getString(resId);
+        return context.getString(mResId);
     }
 
 

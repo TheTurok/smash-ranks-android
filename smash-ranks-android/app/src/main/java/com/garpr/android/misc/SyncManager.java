@@ -105,4 +105,10 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
     }
 
 
+    @Override
+    public String toString() {
+        return TAG;
+    }
+
+
 }

@@ -45,7 +45,7 @@ abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
     }
 
 
-    void make() {
+    final void make() {
         if (!mResponse.isAlive()) {
             return;
         }

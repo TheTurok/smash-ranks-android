@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_welcome_content"
     android:background="@color/indigo"
+    android:id="@+id/fragment_welcome_content"
     android:orientation="vertical"
     tools:ignore="Overdraw"
     style="@style/root.no_padding">

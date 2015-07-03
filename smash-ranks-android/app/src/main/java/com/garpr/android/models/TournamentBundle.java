@@ -54,7 +54,7 @@ public class TournamentBundle implements Parcelable {
         final int matchesLength = matchesJSON.length();
         mMatches = new ArrayList<>(matchesLength);
 
-        for (int i = 0; i < matchesLength; ++i) {
+        for (int i = matchesLength - 1; i >= 0; --i) {
             final JSONObject matchJSON = matchesJSON.getJSONObject(i);
             final String loserId = matchJSON.getString(Constants.LOSER_ID);
             final Player loser = findPlayerById(mPlayers, loserId);

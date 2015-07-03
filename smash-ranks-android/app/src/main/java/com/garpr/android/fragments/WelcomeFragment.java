@@ -121,7 +121,6 @@ public class WelcomeFragment extends BaseFragment {
         animator.setDuration(4000L);
         animator.start();
 
-
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

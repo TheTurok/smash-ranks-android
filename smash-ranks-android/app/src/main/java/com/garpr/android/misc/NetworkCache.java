@@ -3,6 +3,7 @@ package com.garpr.android.misc;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.text.format.DateUtils;
 
 import com.garpr.android.BuildConfig;
 import com.garpr.android.settings.Settings;
@@ -21,7 +22,7 @@ public final class NetworkCache {
 
 
     private static final int MAX_SIZE;
-    private static final long TIMESTAMP_CUTOFF = 60L * 60L * 24L * 5L; // 5 days
+    private static final long TIMESTAMP_CUTOFF = DateUtils.DAY_IN_MILLIS * 5L; // 5 days
     private static final String CNAME = "com.garpr.android.misc.NetworkCache";
     private static final String JSON = CNAME + ".JSON";
     private static final String TAG = "NetworkCache";

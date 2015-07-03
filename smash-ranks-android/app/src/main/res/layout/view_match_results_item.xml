@@ -4,11 +4,15 @@
     android:layout_height="80dp"
     android:layout_width="match_parent">
     <View
+        android:background="@color/transparent_win_green"
         android:id="@+id/view_match_results_item_wins_bar"
-        style="@style/results_bar_wins" />
+        android:layout_gravity="center_vertical|left"
+        style="@style/results_bar" />
     <View
+        android:background="@color/transparent_lose_pink"
         android:id="@+id/view_match_results_item_loses_bar"
-        style="@style/results_bar_loses" />
+        android:layout_gravity="center_vertical|right"
+        style="@style/results_bar" />
     <TextView
         android:gravity="center"
         android:id="@+id/view_match_results_item_results"

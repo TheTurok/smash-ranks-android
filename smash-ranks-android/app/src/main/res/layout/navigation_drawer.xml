@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/gray"
-    android:elevation="@dimen/elevation_quadruple"
-    android:id="@id/navigation_drawer"
-    android:layout_height="match_parent"
-    android:layout_width="@dimen/navigation_drawer_width"
-    tools:ignore="Overdraw,UnusedAttribute"
     style="@style/navigation_drawer">
     <ScrollView
         android:id="@+id/navigation_drawer_list"
@@ -62,24 +56,28 @@
             <include
                 layout="@layout/divider" />
             <TextView
+                android:drawableLeft="@drawable/ic_people"
                 android:id="@+id/navigation_drawer_rankings"
                 android:layout_marginTop="@dimen/root_padding_half"
                 android:text="@string/rankings"
-                style="@style/navigation_drawer_item.rankings" />
+                style="@style/navigation_drawer_item" />
             <TextView
+                android:drawableLeft="@drawable/ic_star"
                 android:id="@+id/navigation_drawer_tournaments"
                 android:text="@string/tournaments"
-                style="@style/navigation_drawer_item.tournaments" />
+                style="@style/navigation_drawer_item" />
             <include
                  layout="@layout/divider_and_padding" />
             <TextView
+                android:drawableLeft="@drawable/ic_settings"
                 android:id="@+id/navigation_drawer_settings"
                 android:text="@string/settings"
-                style="@style/navigation_drawer_item.settings" />
+                style="@style/navigation_drawer_item" />
             <TextView
+                android:drawableLeft="@drawable/ic_about"
                 android:id="@+id/navigation_drawer_about"
                 android:text="@string/about"
-                style="@style/navigation_drawer_item.about" />
+                style="@style/navigation_drawer_item" />
         </LinearLayout>
     </ScrollView>
     <View

@@ -21,7 +21,6 @@ import com.garpr.android.BuildConfig;
 import com.garpr.android.R;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.RecyclerAdapter;
-import com.garpr.android.misc.Utils;
 import com.garpr.android.models.LogMessage;
 
 
@@ -30,9 +29,6 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
 
     private static final String TAG = "ConsoleActivity";
 
-    private boolean mPulled;
-    private int mNeededPulls;
-    private int mPulls;
     private MenuItem mClearLog;
 
 
@@ -54,17 +50,6 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
         }
 
         setAdapter(adapter);
-    }
-
-
-    private void determineGorgonitePulls() {
-        final Resources res = getResources();
-        final int maximumPulls = res.getInteger(R.integer.gorgonite_max_pulls);
-        final int minimumPulls = res.getInteger(R.integer.gorgonite_min_pulls);
-
-        do {
-            mNeededPulls = Utils.RANDOM.nextInt(maximumPulls);
-        } while (mNeededPulls < minimumPulls || mNeededPulls > maximumPulls);
     }
 
 
@@ -95,7 +80,6 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        determineGorgonitePulls();
         createAdapter();
         Console.attachListener(this);
     }
@@ -162,15 +146,6 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
         super.onRefresh();
         notifyDataSetChanged();
         setLoading(false);
-
-        if (!mPulled) {
-            ++mPulls;
-
-            if (mPulls >= mNeededPulls) {
-                mPulled = true;
-                GorgoniteActivity.start(this);
-            }
-        }
     }
 
 

@@ -22,10 +22,6 @@
         <item name="colorAccent">@color/indigo_bright</item>
     </style>
 
-    <style name="gorgonite_theme" parent="app_theme">
-
-    </style>
-
     <style name="toolbar_theme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
     </style>

@@ -38,15 +38,14 @@
         </activity>
 
         <activity
-            android:label="@string/no_gorgonite_johns"
+            android:label="@string/head_to_head"
             android:launchMode="singleTop"
-            android:name=".activities.GorgoniteActivity"
-            android:parentActivityName=".activities.ConsoleActivity"
-            android:theme="@style/gorgonite_theme"
+            android:name=".activities.HeadToHeadActivity"
+            android:parentActivityName=".activities.PlayerActivity"
             tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.ConsoleActivity" />
+                android:value=".activities.PlayerActivity" />
         </activity>
 
         <activity
@@ -57,17 +56,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:label="@string/head_to_head"
-            android:launchMode="singleTop"
-            android:name=".activities.HeadToHeadActivity"
-            android:parentActivityName=".activities.PlayerActivity"
-            tools:ignore="UnusedAttribute">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.PlayerActivity" />
         </activity>
 
         <activity

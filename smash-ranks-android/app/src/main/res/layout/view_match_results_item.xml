@@ -22,7 +22,7 @@
         android:shadowColor="@color/black"
         android:shadowDx="0"
         android:shadowDy="8"
-        android:shadowRadius="32"
+        android:shadowRadius="20"
         tools:text="1 &#8212; 3"
         style="@style/header_text" />
 </com.garpr.android.views.MatchResultsItemView>

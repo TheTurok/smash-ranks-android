@@ -35,6 +35,10 @@
                 android:layout_marginBottom="@dimen/root_padding_double"
                 android:layout_width="match_parent"
                 android:text="@string/gar_pr"
+                android:shadowColor="@color/black"
+                android:shadowDx="0"
+                android:shadowDy="8"
+                android:shadowRadius="16"
                 tools:alpha="1"
                 style="@style/garpr_text" />
             <TextView

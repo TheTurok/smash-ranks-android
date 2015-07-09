@@ -19,7 +19,6 @@ import com.garpr.android.models.Player;
 public class MatchItemView extends FrameLayout {
 
 
-    private LinearLayout mContainer;
     private Match mMatch;
     private TextView mLoser;
     private TextView mWinner;
@@ -36,11 +35,6 @@ public class MatchItemView extends FrameLayout {
 
     public MatchItemView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
-    }
-
-
-    public LinearLayout getContainerView() {
-        return mContainer;
     }
 
 
@@ -71,7 +65,6 @@ public class MatchItemView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mContainer = (LinearLayout) findViewById(R.id.view_match_item_container);
         mLoser = (TextView) findViewById(R.id.view_match_item_loser);
         mWinner = (TextView) findViewById(R.id.view_match_item_winner);
     }
@@ -90,9 +83,9 @@ public class MatchItemView extends FrameLayout {
 
     public void setOnClickListener(final OnClickListener l) {
         if (l == null) {
-            mContainer.setClickable(false);
+            setClickable(false);
         } else {
-            mContainer.setOnClickListener(new View.OnClickListener() {
+            setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
                     l.onClick(MatchItemView.this);
@@ -104,9 +97,9 @@ public class MatchItemView extends FrameLayout {
 
     public void setOnLongClickListener(final OnLongClickListener l) {
         if (l == null) {
-            mContainer.setLongClickable(false);
+            setLongClickable(false);
         } else {
-            mContainer.setOnLongClickListener(new View.OnLongClickListener() {
+            setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(final View v) {
                     return l.onLongClick(MatchItemView.this);

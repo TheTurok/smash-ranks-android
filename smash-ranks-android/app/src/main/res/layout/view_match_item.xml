@@ -2,43 +2,24 @@
 <com.garpr.android.views.MatchItemView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray"
+    android:foreground="?attr/selectableItemBackground"
     android:layout_marginTop="@dimen/root_padding_half"
     style="@style/list_item_root.no_padding">
     <LinearLayout
-        android:id="@+id/view_match_item_container"
-        android:orientation="vertical"
-        style="@style/list_item_root.no_padding">
+        android:orientation="horizontal"
+        style="@style/list_item_root">
         <TextView
-            android:ellipsize="end"
-            android:gravity="center_vertical"
             android:id="@+id/view_match_item_winner"
-            android:layout_gravity="center_vertical"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:minHeight="@dimen/list_item_height"
-            android:paddingBottom="@dimen/root_padding_fourth"
-            android:paddingLeft="@dimen/root_padding"
-            android:paddingRight="@dimen/root_padding"
-            android:paddingTop="@dimen/root_padding_fourth"
-            android:maxLines="3"
             android:textColor="@color/win_green"
-            android:textSize="20sp"
-            tools:text="Shroomed" />
+            tools:text="Shroomed"
+            style="@style/match_item_text" />
+        <Space
+            android:layout_height="1dp"
+            android:layout_width="@dimen/root_padding" />
         <TextView
-            android:ellipsize="end"
-            android:gravity="center_vertical"
             android:id="@+id/view_match_item_loser"
-            android:layout_gravity="center_vertical"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:minHeight="@dimen/list_item_height"
-            android:paddingBottom="@dimen/root_padding_fourth"
-            android:paddingLeft="@dimen/root_padding"
-            android:paddingRight="@dimen/root_padding"
-            android:paddingTop="@dimen/root_padding_fourth"
-            android:maxLines="3"
             android:textColor="@color/lose_pink"
-            android:textSize="20sp"
-            tools:text="Mew2King" />
+            tools:text="Mew2King"
+            style="@style/match_item_text" />
     </LinearLayout>
 </com.garpr.android.views.MatchItemView>

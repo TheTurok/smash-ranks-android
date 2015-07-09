@@ -66,7 +66,7 @@ public abstract class TournamentViewPagerFragment extends BaseFragment {
     }
 
 
-    private void prepareList() {
+    protected void prepareList() {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManagerWrapper(getActivity()));
         mRecyclerView.setAdapter(createAdapter(mBundle));

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.garpr.android.R;
@@ -90,6 +91,16 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
                 .show();
 
         return true;
+    }
+
+
+    @Override
+    protected void prepareList() {
+        super.prepareList();
+
+        final RecyclerView recyclerView = getRecyclerView();
+        recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingBottom(),
+                recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
     }
 
 

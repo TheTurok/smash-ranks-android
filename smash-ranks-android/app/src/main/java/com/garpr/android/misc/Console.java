@@ -3,7 +3,6 @@ package com.garpr.android.misc;
 
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
 import com.garpr.android.models.LogMessage;
 
 import java.lang.ref.WeakReference;
@@ -33,13 +32,13 @@ public final class Console {
         final String stackTrace;
         final String throwableMessage;
 
-        Crashlytics.getInstance().core.log(priority, tag, msg);
+        CrashlyticsManager.log(priority, tag, msg);
 
         if (tr == null) {
             stackTrace = null;
             throwableMessage = null;
         } else {
-            Crashlytics.getInstance().core.logException(tr);
+            CrashlyticsManager.logException(tr);
             stackTrace = Log.getStackTraceString(tr);
             throwableMessage = tr.getMessage();
         }

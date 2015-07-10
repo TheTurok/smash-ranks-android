@@ -8,15 +8,12 @@ import android.content.pm.PackageManager.NameNotFoundException;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.crashlytics.android.Crashlytics;
 import com.garpr.android.misc.Console;
-import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.CrashlyticsManager;
 import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.misc.NetworkCache;
 import com.garpr.android.misc.OkHttpStack;
 import com.garpr.android.settings.Settings;
-
-import io.fabric.sdk.android.Fabric;
 
 
 public final class App extends Application {
@@ -70,10 +67,7 @@ public final class App extends Application {
     public void onCreate() {
         super.onCreate();
         sContext = getApplicationContext();
-        Fabric.with(sContext, new Crashlytics());
-
-        Crashlytics.getInstance().core.setBool(Constants.DEBUG, BuildConfig.DEBUG);
-
+        CrashlyticsManager.initialize();
         sRequestQueue = Volley.newRequestQueue(sContext, new OkHttpStack());
 
         final int currentVersion = getVersionCode();

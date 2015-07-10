@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AlertDialog;
 import android.view.ViewGroup;
 
-import com.crashlytics.android.Crashlytics;
 import com.garpr.android.R;
 import com.garpr.android.fragments.PlayersFragment;
 import com.garpr.android.fragments.RegionsFragment;
@@ -16,6 +15,7 @@ import com.garpr.android.fragments.ToolbarRegionsFragment;
 import com.garpr.android.fragments.WelcomeFragment;
 import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.CrashlyticsManager;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
@@ -113,11 +113,11 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final boolean onboardingCompleted = Settings.OnboardingComplete.get();
-        Crashlytics.getInstance().core.setBool(Constants.ONBOARDING_ALREADY_COMPLETED,
-                onboardingCompleted);
+        final boolean onboardingAlreadyCompleted = Settings.OnboardingComplete.get();
+        CrashlyticsManager.setBool(Constants.ONBOARDING_ALREADY_COMPLETED,
+                onboardingAlreadyCompleted);
 
-        if (onboardingCompleted) {
+        if (onboardingAlreadyCompleted) {
             RankingsActivity.start(this);
             finish();
         } else {

@@ -14,11 +14,11 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
 
-import com.crashlytics.android.Crashlytics;
 import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.fragments.BaseFragment;
 import com.garpr.android.misc.Constants;
+import com.garpr.android.misc.CrashlyticsManager;
 import com.garpr.android.misc.HeartbeatWithUi;
 import com.garpr.android.misc.Notifications;
 import com.garpr.android.models.Region;
@@ -179,7 +179,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        Crashlytics.getInstance().core.setString(Constants.CURRENT_ACTIVITY, getActivityName());
+        CrashlyticsManager.setString(Constants.CURRENT_ACTIVITY, getActivityName());
     }
 
 

@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
+public abstract class Call<T> implements ErrorListener, Listener<JSONObject> {
 
 
     private static final ExecutorService EXECUTOR_SERVICE;

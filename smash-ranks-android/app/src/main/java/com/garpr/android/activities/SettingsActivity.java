@@ -45,6 +45,7 @@ public class SettingsActivity extends BaseToolbarActivity {
     private PreferenceView mSyncStatus;
     private PreferenceView mVersion;
     private TextView mGitHub;
+    private TextView mRateApp;
     private TextView mServer;
     private SwitchPreferenceView mSync;
 
@@ -64,6 +65,7 @@ public class SettingsActivity extends BaseToolbarActivity {
         mGitHub = (TextView) findViewById(R.id.activity_settings_github);
         mGooglePlayServicesError = (PreferenceView) findViewById(R.id.activity_settings_google_play_services_error);
         mNetworkCache = (PreferenceView) findViewById(R.id.activity_settings_network_cache);
+        mRateApp = (TextView) findViewById(R.id.activity_settings_rate_app);
         mRegion = (PreferenceView) findViewById(R.id.activity_settings_region);
         mOrb = (ImageButton) findViewById(R.id.activity_settings_orb);
         mServer = (TextView) findViewById(R.id.activity_settings_server);
@@ -174,24 +176,26 @@ public class SettingsActivity extends BaseToolbarActivity {
 
 
     private void prepareCreditsViews() {
-        mConsole.setTitleText(R.string.log_console);
-        mConsole.setSubTitleText(R.string.log_console_description);
-        mConsole.setOnClickListener(new View.OnClickListener() {
+        mAuthor.setTitleText(R.string.app_written_by);
+        mAuthor.setSubTitleText(R.string.app_authors);
+        mAuthor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                ConsoleActivity.start(SettingsActivity.this);
+                showAuthorsDialog();
             }
         });
 
-        mVersion.setEnabled(false);
-        mVersion.setTitleText(R.string.version_information);
-        mVersion.setSubTitleText(getString(R.string.x_build_y, App.getVersionName(),
-                App.getVersionCode()));
-
-        mOrb.setOnClickListener(new View.OnClickListener() {
+        mServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                randomYoutubeVideo();
+                openLink(Constants.IVAN_TWITTER_URL);
+            }
+        });
+
+        mGitHub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                openLink(Constants.GITHUB_URL);
             }
         });
     }
@@ -220,26 +224,31 @@ public class SettingsActivity extends BaseToolbarActivity {
 
 
     private void prepareMiscellaneousViews() {
-        mAuthor.setTitleText(R.string.app_written_by);
-        mAuthor.setSubTitleText(R.string.app_authors);
-        mAuthor.setOnClickListener(new View.OnClickListener() {
+        mRateApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                showAuthorsDialog();
+                openLink(Constants.GAR_PR_GOOGLE_PLAY_STORE_URL);
             }
         });
 
-        mServer.setOnClickListener(new View.OnClickListener() {
+        mConsole.setTitleText(R.string.log_console);
+        mConsole.setSubTitleText(R.string.log_console_description);
+        mConsole.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                openLink(Constants.IVAN_TWITTER_URL);
+                ConsoleActivity.start(SettingsActivity.this);
             }
         });
 
-        mGitHub.setOnClickListener(new View.OnClickListener() {
+        mVersion.setEnabled(false);
+        mVersion.setTitleText(R.string.version_information);
+        mVersion.setSubTitleText(getString(R.string.x_build_y, App.getVersionName(),
+                App.getVersionCode()));
+
+        mOrb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                openLink(Constants.GITHUB_URL);
+                randomYoutubeVideo();
             }
         });
     }

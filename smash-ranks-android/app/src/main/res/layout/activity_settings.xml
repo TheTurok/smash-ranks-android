@@ -80,6 +80,10 @@
                     <TextView
                         android:text="@string/miscellaneous"
                         style="@style/settings_separator" />
+                    <TextView
+                        android:id="@+id/activity_settings_rate_app"
+                        android:text="@string/rate_this_app"
+                        style="@style/settings_container.title" />
                     <include
                         android:id="@+id/activity_settings_console"
                         layout="@layout/view_preference" />

@@ -95,6 +95,7 @@
     <string name="rank_order">Rank Order</string>
     <string name="rank_x">Rank %d</string>
     <string name="rank_x_rating_y">rank %1$d, rating %2$f</string>
+    <string name="rate_this_app">Rate this app</string>
     <string name="refresh">Refresh</string>
     <string name="region">Region</string>
     <string name="regions">Regions</string>

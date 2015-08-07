@@ -60,7 +60,11 @@ public class BooleanSettingPreferenceView extends PreferenceView implements Chec
 
     @Override
     public void setChecked(final boolean checked) {
-        mSetting.set(checked);
+        if (checked == isChecked()) {
+            return;
+        }
+
+        toggle();
     }
 
 
@@ -71,9 +75,7 @@ public class BooleanSettingPreferenceView extends PreferenceView implements Chec
 
     @Override
     public void toggle() {
-        final boolean newValue = mSetting.toggle();
-
-        if (newValue) {
+        if (mSetting.toggle()) {
             setSubTitleText(mSubTitleEnabledText);
         } else {
             setSubTitleText(mSubTitleDisabledText);

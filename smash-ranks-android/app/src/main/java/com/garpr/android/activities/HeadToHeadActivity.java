@@ -91,7 +91,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
         };
 
         mListItems = (ArrayList<ListItem>) ListUtils.createMonthlyList(mListItems, creator);
-        mListItems.add(0, ListItem.createResults(mBundle.getWins(), mBundle.getLosses()));
+        mListItems.add(0, ListItem.createResults(mBundle.getLosses(), mBundle.getWins()));
         mListItems.trimToSize();
         mListItemsShown = mListItems;
 
@@ -383,9 +383,9 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
         }
 
 
-        private static ListItem createResults(final int wins, final int loses) {
+        private static ListItem createResults(final int loses, final int wins) {
             final ListItem listItem = new ListItem();
-            listItem.mResults = new int[] { wins, loses };
+            listItem.mResults = new int[] { loses, wins };
             listItem.mType = Type.RESULTS;
 
             return listItem;

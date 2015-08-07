@@ -1,28 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.garpr.android.views.MatchResultsItemView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
     android:layout_height="80dp"
-    android:layout_width="match_parent">
-    <View
-        android:background="@color/transparent_win_green"
-        android:id="@+id/view_match_results_item_wins_bar"
-        android:layout_gravity="center_vertical|left"
-        style="@style/results_bar" />
-    <View
-        android:background="@color/transparent_lose_pink"
-        android:id="@+id/view_match_results_item_loses_bar"
-        android:layout_gravity="center_vertical|right"
-        style="@style/results_bar" />
-    <TextView
-        android:gravity="center"
-        android:id="@+id/view_match_results_item_results"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:shadowColor="@color/black"
-        android:shadowDx="0"
-        android:shadowDy="8"
-        android:shadowRadius="20"
-        tools:text="1 &#8212; 3"
-        style="@style/header_text" />
-</com.garpr.android.views.MatchResultsItemView>
+    android:layout_width="match_parent"
+    android:shadowColor="@color/black"
+    android:shadowDx="0"
+    android:shadowDy="8"
+    android:shadowRadius="20"
+    tools:text="1 &#8212; 3"
+    style="@style/header_text" />

@@ -2,6 +2,10 @@ package com.garpr.android.views;
 
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -18,16 +22,15 @@ import com.garpr.android.R;
 import java.text.NumberFormat;
 
 
-public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutListener {
+public class MatchResultsItemView extends TextView {
 
 
-    private boolean mMeasured;
-    private boolean mResultsSet;
     private int mLoses;
     private int mWins;
-    private TextView mResults;
-    private View mLosesBar;
-    private View mWinsBar;
+    private Paint mLosesPaint;
+    private Paint mWinsPaint;
+    private Rect mLosesRect;
+    private Rect mWinsRect;
     private ViewHolder mViewHolder;
 
 
@@ -41,6 +44,12 @@ public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutL
 
     public MatchResultsItemView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
+        initialize();
+    }
+
+
+    private void calculateRects() {
+        // TODO
     }
 
 
@@ -60,6 +69,23 @@ public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutL
         }
 
         return mViewHolder;
+    }
+
+
+    private void initialize() {
+        final Resources res = getResources();
+
+        mLosesRect = new Rect();
+        mLosesPaint = new Paint();
+        mLosesPaint.setAntiAlias(true);
+        mLosesPaint.setColor(res.getColor(R.color.transparent_win_green));
+        mLosesPaint.setStyle(Paint.Style.FILL);
+
+        mWinsRect = new Rect();
+        mWinsPaint = new Paint();
+        mWinsPaint.setAntiAlias(true);
+        mWinsPaint.setColor(res.getColor(R.color.transparent_lose_pink));
+        mWinsPaint.setStyle(Paint.Style.FILL);
     }
 
 
@@ -87,35 +113,23 @@ public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutL
 
 
     @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        mLosesBar = findViewById(R.id.view_match_results_item_loses_bar);
-        mWinsBar = findViewById(R.id.view_match_results_item_wins_bar);
-        mResults = (TextView) findViewById(R.id.view_match_results_item_results);
+    protected void onDraw(final Canvas canvas) {
+        super.onDraw(canvas);
 
-        final ViewTreeObserver vto = mResults.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(this);
+        if (!mLosesRect.isEmpty()) {
+            canvas.drawRect(mLosesRect, mLosesPaint);
+        }
+
+        if (!mWinsRect.isEmpty()) {
+            canvas.drawRect(mWinsRect, mWinsPaint);
+        }
     }
 
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void onGlobalLayout() {
-        final ViewTreeObserver vto = mResults.getViewTreeObserver();
-
-        if (vto.isAlive()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                vto.removeOnGlobalLayoutListener(this);
-            } else {
-                vto.removeGlobalOnLayoutListener(this);
-            }
-        }
-
-        mMeasured = true;
-
-        if (mResultsSet) {
-            measureBars();
-        }
+    protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        calculateRects();
     }
 
 
@@ -124,18 +138,15 @@ public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutL
     }
 
 
-    public void setResults(final int wins, final int loses) {
-        mWins = wins;
+    public void setResults(final int loses, final int wins) {
         mLoses = loses;
-        mResultsSet = true;
+        mWins = wins;
 
         final NumberFormat nf = NumberFormat.getInstance();
-        mResults.setText(getResources().getString(R.string.x_em_dash_y, nf.format(mWins),
+        setText(getResources().getString(R.string.x_em_dash_y, nf.format(mWins),
                 nf.format(mLoses)));
 
-        if (mMeasured) {
-            measureBars();
-        }
+        calculateRects();
     }
 
 

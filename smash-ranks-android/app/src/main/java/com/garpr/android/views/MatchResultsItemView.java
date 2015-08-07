@@ -33,8 +33,8 @@ public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutL
 
 
 
-    public static MatchResultsItemView inflate(final Context context, final ViewGroup parent) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
+    public static MatchResultsItemView inflate(final ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return (MatchResultsItemView) inflater.inflate(R.layout.view_match_results_item, parent, false);
     }
 

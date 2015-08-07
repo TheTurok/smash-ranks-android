@@ -461,13 +461,11 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
             switch (listItemType) {
                 case DATE:
-                    holder = SimpleSeparatorView.inflate(TournamentsActivity.this, parent)
-                            .getViewHolder();
+                    holder = SimpleSeparatorView.inflate(parent).getViewHolder();
                     break;
 
                 case TOURNAMENT:
-                    final TournamentItemView tiv = TournamentItemView.inflate(TournamentsActivity.this,
-                            parent);
+                    final TournamentItemView tiv = TournamentItemView.inflate(parent);
                     tiv.setOnClickListener(TournamentsActivity.this);
                     holder = tiv.getViewHolder();
                     break;

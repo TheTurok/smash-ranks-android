@@ -24,8 +24,8 @@ public class PlayerItemView extends FrameLayout {
 
 
 
-    public static PlayerItemView inflate(final Context context, final ViewGroup parent) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
+    public static PlayerItemView inflate(final ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return (PlayerItemView) inflater.inflate(R.layout.view_player_item, parent, false);
     }
 

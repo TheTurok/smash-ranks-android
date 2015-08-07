@@ -27,8 +27,8 @@ public class CheckableItemView extends FrameLayout implements Checkable {
 
 
 
-    public static CheckableItemView inflate(final Context context, final ViewGroup parent) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
+    public static CheckableItemView inflate(final ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return (CheckableItemView) inflater.inflate(R.layout.view_checkable_item, parent, false);
     }
 

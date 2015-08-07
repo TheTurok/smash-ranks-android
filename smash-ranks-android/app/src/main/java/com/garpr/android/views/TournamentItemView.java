@@ -27,8 +27,8 @@ public class TournamentItemView extends FrameLayout {
 
 
 
-    public static TournamentItemView inflate(final Context context, final ViewGroup parent) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
+    public static TournamentItemView inflate(final ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return (TournamentItemView) inflater.inflate(R.layout.view_tournament_item, parent, false);
     }
 

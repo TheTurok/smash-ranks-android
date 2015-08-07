@@ -22,8 +22,8 @@ public class SimpleSeparatorView extends FrameLayout {
 
 
 
-    public static SimpleSeparatorView inflate(final Context context, final ViewGroup parent) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
+    public static SimpleSeparatorView inflate(final ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return (SimpleSeparatorView) inflater.inflate(R.layout.view_simple_separator_item, parent,
                 false);
     }

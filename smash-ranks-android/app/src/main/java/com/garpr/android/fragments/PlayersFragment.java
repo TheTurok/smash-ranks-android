@@ -559,14 +559,14 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
             switch (listItemType) {
                 case PLAYER: {
-                    final CheckableItemView civ = CheckableItemView.inflate(getActivity(), parent);
+                    final CheckableItemView civ = CheckableItemView.inflate(parent);
                     civ.setOnClickListener(PlayersFragment.this);
                     holder = civ.getViewHolder();
                     break;
                 }
 
                 case TITLE: {
-                    holder = SimpleSeparatorView.inflate(getActivity(), parent).getViewHolder();
+                    holder = SimpleSeparatorView.inflate(parent).getViewHolder();
                     break;
                 }
 

@@ -536,14 +536,13 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
             switch (listItemType) {
                 case PLAYER:
-                    final RankingItemView riv = RankingItemView.inflate(RankingsActivity.this,
-                            parent);
+                    final RankingItemView riv = RankingItemView.inflate(parent);
                     riv.setOnClickListener(RankingsActivity.this);
                     holder = riv.getViewHolder();
                     break;
 
                 case TITLE:
-                    holder = SimpleSeparatorView.inflate(RankingsActivity.this, parent)
+                    holder = SimpleSeparatorView.inflate(parent)
                             .getViewHolder();
                     break;
 

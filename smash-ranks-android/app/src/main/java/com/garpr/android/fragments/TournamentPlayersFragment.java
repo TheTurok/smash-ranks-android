@@ -227,14 +227,14 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
 
             switch (type) {
                 case PLAYER: {
-                    final PlayerItemView piv = PlayerItemView.inflate(getActivity(), parent);
+                    final PlayerItemView piv = PlayerItemView.inflate(parent);
                     piv.setOnClickListener(TournamentPlayersFragment.this);
                     viewHolder = piv.getViewHolder();
                     break;
                 }
 
                 case TITLE: {
-                    viewHolder = SimpleSeparatorView.inflate(getActivity(), parent).getViewHolder();
+                    viewHolder = SimpleSeparatorView.inflate(parent).getViewHolder();
                     break;
                 }
 

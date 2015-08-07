@@ -154,7 +154,7 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
         @Override
         public MatchItemView.ViewHolder onCreateViewHolder(final ViewGroup parent,
                 final int viewType) {
-            final MatchItemView miv = MatchItemView.inflate(getActivity(), parent);
+            final MatchItemView miv = MatchItemView.inflate(parent);
             miv.setOnClickListener(TournamentMatchesFragment.this);
             miv.setOnLongClickListener(TournamentMatchesFragment.this);
 

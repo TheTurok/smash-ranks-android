@@ -28,8 +28,8 @@ public class RankingItemView extends FrameLayout {
 
 
 
-    public static RankingItemView inflate(final Context context, final ViewGroup parent) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
+    public static RankingItemView inflate(final ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return (RankingItemView) inflater.inflate(R.layout.view_ranking_item, parent, false);
     }
 

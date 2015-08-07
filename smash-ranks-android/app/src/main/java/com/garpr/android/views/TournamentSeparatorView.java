@@ -27,8 +27,8 @@ public class TournamentSeparatorView extends FrameLayout {
 
 
 
-    public static TournamentSeparatorView inflate(final Context context, final ViewGroup parent) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
+    public static TournamentSeparatorView inflate(final ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return (TournamentSeparatorView) inflater.inflate(R.layout.view_tournament_separator_item,
                 parent, false);
     }

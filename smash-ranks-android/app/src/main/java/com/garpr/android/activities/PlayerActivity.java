@@ -671,14 +671,13 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
             switch (listItemType) {
                 case MATCH:
-                    final PlayerItemView piv = PlayerItemView.inflate(PlayerActivity.this, parent);
+                    final PlayerItemView piv = PlayerItemView.inflate(parent);
                     piv.setOnClickListener(PlayerActivity.this);
                     holder = piv.getViewHolder();
                     break;
 
                 case TOURNAMENT:
-                    final TournamentSeparatorView tsv = TournamentSeparatorView.inflate(
-                            PlayerActivity.this, parent);
+                    final TournamentSeparatorView tsv = TournamentSeparatorView.inflate(parent);
                     tsv.setOnClickListener(PlayerActivity.this);
                     holder = tsv.getViewHolder();
                     break;

@@ -558,18 +558,15 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
             switch (type) {
                 case DATE:
-                    holder = SimpleSeparatorView.inflate(HeadToHeadActivity.this, parent)
-                            .getViewHolder();
+                    holder = SimpleSeparatorView.inflate(parent).getViewHolder();
                     break;
 
                 case RESULTS:
-                    holder = MatchResultsItemView.inflate(HeadToHeadActivity.this, parent)
-                            .getViewHolder();
+                    holder = MatchResultsItemView.inflate(parent).getViewHolder();
                     break;
 
                 case TOURNAMENT:
-                    final TournamentItemView tiv = TournamentItemView
-                            .inflate(HeadToHeadActivity.this, parent);
+                    final TournamentItemView tiv = TournamentItemView.inflate(parent);
                     tiv.setOnClickListener(HeadToHeadActivity.this);
                     holder = tiv.getViewHolder();
                     break;

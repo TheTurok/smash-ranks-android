@@ -26,8 +26,8 @@ public class MatchItemView extends FrameLayout {
 
 
 
-    public static MatchItemView inflate(final Context context, final ViewGroup parent) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
+    public static MatchItemView inflate(final ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return (MatchItemView) inflater.inflate(R.layout.view_match_item, parent, false);
     }
 

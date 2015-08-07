@@ -335,14 +335,14 @@ public abstract class RegionsFragment extends BaseListFragment implements
 
             switch (listItemType) {
                 case REGION: {
-                    final CheckableItemView civ = CheckableItemView.inflate(getActivity(), parent);
+                    final CheckableItemView civ = CheckableItemView.inflate(parent);
                     civ.setOnClickListener(RegionsFragment.this);
                     holder = civ.getViewHolder();
                     break;
                 }
 
                 case TITLE: {
-                    holder = SimpleSeparatorView.inflate(getActivity(), parent).getViewHolder();
+                    holder = SimpleSeparatorView.inflate(parent).getViewHolder();
                     break;
                 }
 

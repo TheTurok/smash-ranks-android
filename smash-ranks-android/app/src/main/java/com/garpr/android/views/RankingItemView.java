@@ -39,28 +39,8 @@ public class RankingItemView extends FrameLayout {
     }
 
 
-    public LinearLayout getContainerView() {
-        return mContainer;
-    }
-
-
-    public TextView getNameView() {
-        return mName;
-    }
-
-
     public Player getPlayer() {
         return mPlayer;
-    }
-
-
-    public TextView getRankView() {
-        return mRank;
-    }
-
-
-    public TextView getRatingView() {
-        return mRating;
     }
 
 

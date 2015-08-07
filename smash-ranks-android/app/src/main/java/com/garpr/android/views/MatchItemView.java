@@ -37,11 +37,6 @@ public class MatchItemView extends FrameLayout {
     }
 
 
-    public TextView getLoserView() {
-        return mLoser;
-    }
-
-
     public Match getMatch() {
         return mMatch;
     }
@@ -53,11 +48,6 @@ public class MatchItemView extends FrameLayout {
         }
 
         return mViewHolder;
-    }
-
-
-    public TextView getWinnerView() {
-        return mWinner;
     }
 
 

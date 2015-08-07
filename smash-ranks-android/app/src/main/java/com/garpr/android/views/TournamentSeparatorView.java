@@ -39,21 +39,6 @@ public class TournamentSeparatorView extends FrameLayout {
     }
 
 
-    public LinearLayout getContainerView() {
-        return mContainer;
-    }
-
-
-    public TextView getDateView() {
-        return mDate;
-    }
-
-
-    public TextView getNameView() {
-        return mName;
-    }
-
-
     public Tournament getTournament() {
         return mTournament;
     }

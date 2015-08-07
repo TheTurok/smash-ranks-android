@@ -33,14 +33,14 @@ public class CheckPreferenceView extends BooleanSettingPreferenceView {
     public void set(final BooleanSetting setting, final int titleText,
             final int subTitleEnabledText, final int subTitleDisabledText) {
         super.set(setting, titleText, subTitleEnabledText, subTitleDisabledText);
-        mCheckBox.setChecked(getSetting().get());
+        mCheckBox.setChecked(isChecked());
     }
 
 
     @Override
     public void toggle() {
         super.toggle();
-        mCheckBox.setChecked(getSetting().get());
+        mCheckBox.setChecked(isChecked());
     }
 
 

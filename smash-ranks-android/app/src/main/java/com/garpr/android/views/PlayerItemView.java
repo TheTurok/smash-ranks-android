@@ -86,7 +86,7 @@ public class PlayerItemView extends FrameLayout {
     public final class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        public ViewHolder() {
+        private ViewHolder() {
             super(PlayerItemView.this);
         }
 

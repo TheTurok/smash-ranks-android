@@ -38,16 +38,6 @@ public class TournamentItemView extends FrameLayout {
     }
 
 
-    public LinearLayout getContainerView() {
-        return mContainer;
-    }
-
-
-    public TextView getDateView() {
-        return mDate;
-    }
-
-
     public TextView getNameView() {
         return mName;
     }

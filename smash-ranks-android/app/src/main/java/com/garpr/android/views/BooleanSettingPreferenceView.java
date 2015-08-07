@@ -4,11 +4,12 @@ package com.garpr.android.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Checkable;
 
 import com.garpr.android.settings.BooleanSetting;
 
 
-public class BooleanSettingPreferenceView extends PreferenceView {
+public class BooleanSettingPreferenceView extends PreferenceView implements Checkable {
 
 
     private BooleanSetting mSetting;
@@ -29,6 +30,12 @@ public class BooleanSettingPreferenceView extends PreferenceView {
     }
 
 
+    @Override
+    public boolean isChecked() {
+        return mSetting.get();
+    }
+
+
     public void set(final BooleanSetting setting, final int titleText,
             final int subTitleEnabledText, final int subTitleDisabledText) {
         mSetting = setting;
@@ -36,7 +43,7 @@ public class BooleanSettingPreferenceView extends PreferenceView {
         mSubTitleDisabledText = subTitleDisabledText;
         mSubTitleEnabledText = subTitleEnabledText;
 
-        if (mSetting.get()) {
+        if (isChecked()) {
             setSubTitleText(subTitleEnabledText);
         } else {
             setSubTitleText(subTitleDisabledText);
@@ -51,11 +58,18 @@ public class BooleanSettingPreferenceView extends PreferenceView {
     }
 
 
+    @Override
+    public void setChecked(final boolean checked) {
+        mSetting.set(checked);
+    }
+
+
     public void setOnToggleListener(final OnToggleListener l) {
         mToggleListener = l;
     }
 
 
+    @Override
     public void toggle() {
         final boolean newValue = mSetting.toggle();
 

@@ -69,6 +69,11 @@ public class SimpleSeparatorView extends FrameLayout {
     }
 
 
+    public void setText(final int resId) {
+        mText.setText(resId);
+    }
+
+
 
 
     public final class ViewHolder extends RecyclerView.ViewHolder {

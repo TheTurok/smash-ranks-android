@@ -49,11 +49,6 @@ public class MatchResultsItemView extends FrameLayout implements OnGlobalLayoutL
     }
 
 
-    public TextView getResultsView() {
-        return mResults;
-    }
-
-
     public int getWins() {
         return mWins;
     }

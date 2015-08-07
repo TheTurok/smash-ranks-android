@@ -33,14 +33,14 @@ public class SwitchPreferenceView extends BooleanSettingPreferenceView {
     public void set(final BooleanSetting setting, final int titleText,
             final int subTitleEnabledText, final int subTitleDisabledText) {
         super.set(setting, titleText, subTitleEnabledText, subTitleDisabledText);
-        mSwitch.setChecked(getSetting().get());
+        mSwitch.setChecked(isChecked());
     }
 
 
     @Override
     public void toggle() {
         super.toggle();
-        mSwitch.setChecked(getSetting().get());
+        mSwitch.setChecked(isChecked());
     }
 
 

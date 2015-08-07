@@ -33,11 +33,6 @@ public class SimpleItemView extends FrameLayout {
     }
 
 
-    public TextView getTextView() {
-        return mText;
-    }
-
-
     public ViewHolder getViewHolder() {
         if (mViewHolder == null) {
             mViewHolder = new ViewHolder();
@@ -70,6 +65,11 @@ public class SimpleItemView extends FrameLayout {
 
     public void setText(final CharSequence text) {
         mText.setText(text);
+    }
+
+
+    public void setText(final int resId) {
+        mText.setText(resId);
     }
 
 

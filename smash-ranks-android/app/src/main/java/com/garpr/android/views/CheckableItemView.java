@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 import com.garpr.android.R;
 
 
-public class CheckableItemView extends FrameLayout {
+public class CheckableItemView extends FrameLayout implements Checkable {
 
 
     private CheckBox mCheck;
@@ -37,21 +38,6 @@ public class CheckableItemView extends FrameLayout {
     }
 
 
-    public CheckBox getCheckView() {
-        return mCheck;
-    }
-
-
-    public LinearLayout getContainerView() {
-        return mContainer;
-    }
-
-
-    public TextView getTextView() {
-        return mText;
-    }
-
-
     public ViewHolder getViewHolder() {
         if (mViewHolder == null) {
             mViewHolder = new ViewHolder();
@@ -61,6 +47,7 @@ public class CheckableItemView extends FrameLayout {
     }
 
 
+    @Override
     public boolean isChecked() {
         return mCheck.isChecked();
     }
@@ -75,6 +62,7 @@ public class CheckableItemView extends FrameLayout {
     }
 
 
+    @Override
     public void setChecked(final boolean checked) {
         mCheck.setChecked(checked);
     }
@@ -96,6 +84,12 @@ public class CheckableItemView extends FrameLayout {
 
     public void setText(final CharSequence text) {
         mText.setText(text);
+    }
+
+
+    @Override
+    public void toggle() {
+        setChecked(!isChecked());
     }
 
 

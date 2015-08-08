@@ -5,6 +5,7 @@
     android:foreground="?attr/selectableItemBackground"
     style="@style/list_item_root.no_padding">
     <LinearLayout
+        android:background="@null"
         android:orientation="horizontal"
         style="@style/list_item_root">
         <TextView

@@ -6,15 +6,10 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -25,6 +20,7 @@ import java.text.NumberFormat;
 public class MatchResultsItemView extends TextView {
 
 
+    private int mBarHeight;
     private int mLoses;
     private int mWins;
     private Paint mLosesPaint;
@@ -49,7 +45,32 @@ public class MatchResultsItemView extends TextView {
 
 
     private void calculateRects() {
-        // TODO
+        final int height = getHeight(), width = getWidth();
+
+        if (height == 0 || width == 0) {
+            mLosesRect.setEmpty();
+            mWinsRect.setEmpty();
+            return;
+        }
+
+        final int top = (height - mBarHeight) / 2;
+        final int bottom = top + mBarHeight;
+
+        if (mLoses == 0 && mWins == 0) {
+            mLosesRect.setEmpty();
+            mWinsRect.setEmpty();
+        } else if (mLoses == 0) {
+            mLosesRect.setEmpty();
+            mWinsRect.set(0, top, width, bottom);
+        } else if (mWins == 0) {
+            mLosesRect.set(0, top, width, top + mBarHeight);
+            mWinsRect.setEmpty();
+        } else {
+            final float winsPercent = (float) mWins / (float) (mLoses + mWins);
+            final int left = Math.round(winsPercent * width);
+            mLosesRect.set(left, top, width, bottom);
+            mWinsRect.set(0, top, left, bottom);
+        }
     }
 
 
@@ -74,48 +95,24 @@ public class MatchResultsItemView extends TextView {
 
     private void initialize() {
         final Resources res = getResources();
+        mBarHeight = res.getDimensionPixelSize(R.dimen.match_results_bar_height);
 
         mLosesRect = new Rect();
         mLosesPaint = new Paint();
         mLosesPaint.setAntiAlias(true);
-        mLosesPaint.setColor(res.getColor(R.color.transparent_win_green));
+        mLosesPaint.setColor(res.getColor(R.color.transparent_lose_pink));
         mLosesPaint.setStyle(Paint.Style.FILL);
 
         mWinsRect = new Rect();
         mWinsPaint = new Paint();
         mWinsPaint.setAntiAlias(true);
-        mWinsPaint.setColor(res.getColor(R.color.transparent_lose_pink));
+        mWinsPaint.setColor(res.getColor(R.color.transparent_win_green));
         mWinsPaint.setStyle(Paint.Style.FILL);
-    }
-
-
-    private void measureBars() {
-        final int totalMatches = mLoses + mWins;
-
-        final int padding = getResources().getDimensionPixelSize(R.dimen.root_padding);
-        final int height = mResults.getHeight() - (2 * padding);
-
-        final float losesPixels = (float) mLoses / totalMatches * getWidth();
-        final ViewGroup.LayoutParams losesBarParams = mLosesBar.getLayoutParams();
-        losesBarParams.height = height;
-        losesBarParams.width = (int) losesPixels;
-        mLosesBar.setLayoutParams(losesBarParams);
-
-        final float winPixels = (float) mWins / totalMatches * getWidth();
-        final ViewGroup.LayoutParams winBarParams = mWinsBar.getLayoutParams();
-        winBarParams.height = height;
-        winBarParams.width = (int) winPixels;
-        mWinsBar.setLayoutParams(winBarParams);
-
-        mLosesBar.setVisibility(View.VISIBLE);
-        mWinsBar.setVisibility(View.VISIBLE);
     }
 
 
     @Override
     protected void onDraw(final Canvas canvas) {
-        super.onDraw(canvas);
-
         if (!mLosesRect.isEmpty()) {
             canvas.drawRect(mLosesRect, mLosesPaint);
         }
@@ -123,6 +120,8 @@ public class MatchResultsItemView extends TextView {
         if (!mWinsRect.isEmpty()) {
             canvas.drawRect(mWinsRect, mWinsPaint);
         }
+
+        super.onDraw(canvas);
     }
 
 
@@ -130,6 +129,7 @@ public class MatchResultsItemView extends TextView {
     protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         calculateRects();
+        invalidate();
     }
 
 
@@ -138,15 +138,23 @@ public class MatchResultsItemView extends TextView {
     }
 
 
-    public void setResults(final int loses, final int wins) {
+    public void setResults(int loses, int wins) {
+        if (loses < 0) {
+            loses = 0;
+        }
+
+        if (wins < 0) {
+            wins = 0;
+        }
+
         mLoses = loses;
         mWins = wins;
+
+        calculateRects();
 
         final NumberFormat nf = NumberFormat.getInstance();
         setText(getResources().getString(R.string.x_em_dash_y, nf.format(mWins),
                 nf.format(mLoses)));
-
-        calculateRects();
     }
 
 

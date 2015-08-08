@@ -2,7 +2,7 @@
 <com.garpr.android.views.MatchResultsItemView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center"
-    android:layout_height="80dp"
+    android:layout_height="@dimen/match_results_item_height"
     android:layout_width="match_parent"
     android:shadowColor="@color/black"
     android:shadowDx="0"

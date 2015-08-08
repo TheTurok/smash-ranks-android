@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.garpr.android.R;
 import com.garpr.android.models.Player;
 
+import java.text.NumberFormat;
+
 
 public class RankingItemView extends FrameLayout {
 
@@ -80,7 +82,7 @@ public class RankingItemView extends FrameLayout {
     public void setPlayer(final Player player) {
         mPlayer = player;
         mName.setText(mPlayer.getName());
-        mRank.setText(String.valueOf(mPlayer.getRank()));
+        mRank.setText(NumberFormat.getInstance().format(mPlayer.getRank()));
         mRating.setText(mPlayer.getRatingTruncated());
     }
 

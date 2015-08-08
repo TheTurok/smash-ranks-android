@@ -7,6 +7,8 @@
     <dimen name="floating_action_button_enabled">24dp</dimen>
     <dimen name="navigation_drawer_banner_height">128dp</dimen>
     <dimen name="navigation_drawer_width">320dp</dimen>
+    <dimen name="match_results_bar_height">20dp</dimen>
+    <dimen name="match_results_item_height">82dp</dimen>
     <dimen name="root_padding">20dp</dimen>
     <dimen name="root_padding_double">40dp</dimen>
     <dimen name="root_padding_eighth">3dp</dimen>

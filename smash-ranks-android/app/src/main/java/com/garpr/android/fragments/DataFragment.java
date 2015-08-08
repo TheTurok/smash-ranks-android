@@ -1,7 +1,7 @@
 package com.garpr.android.fragments;
 
 
-import android.app.Activity;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.garpr.android.misc.Heartbeat;
@@ -31,16 +31,16 @@ public abstract class DataFragment extends Fragment implements Heartbeat {
 
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mIsAlive = true;
     }
 
 
     @Override
-    public void onDetach() {
+    public void onDestroy() {
         mIsAlive = false;
-        super.onDetach();
+        super.onDestroy();
     }
 
 

@@ -65,7 +65,7 @@ public abstract class RecyclerAdapter<T extends RecyclerView.ViewHolder> extends
 
 
     @Override
-    public String toString() {
+    public final String toString() {
         return getAdapterName();
     }
 

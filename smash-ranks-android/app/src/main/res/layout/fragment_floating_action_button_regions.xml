@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.garpr.android.views.FlexibleSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_base_list_refresh"
     style="@style/root.no_padding">
@@ -21,7 +20,7 @@
             <TextView
                 style="@style/error_line2" />
         </LinearLayout>
-        <com.melnykov.fab.FloatingActionButton
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/fragment_regions_save"
             android:layout_gravity="bottom|right"
             android:layout_height="wrap_content"
@@ -29,9 +28,6 @@
             android:layout_marginLeft="@dimen/root_padding"
             android:layout_marginRight="@dimen/root_padding"
             android:layout_width="wrap_content"
-            app:fab_colorNormal="@color/indigo_bright"
-            app:fab_colorPressed="@color/indigo"
-            app:fab_colorRipple="@color/indigo_dark"
             android:src="@drawable/ic_save" />
     </FrameLayout>
 </com.garpr.android.views.FlexibleSwipeRefreshLayout>

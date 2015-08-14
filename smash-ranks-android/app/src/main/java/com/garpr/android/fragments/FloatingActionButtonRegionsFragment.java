@@ -58,12 +58,12 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
         final RecyclerView recyclerView = getRecyclerView();
         recyclerView.setClipToPadding(false);
 
-        final int frameHeight = mFrame.getHeight();
-        final int distanceFromTop = mSave.getTop();
-
         final Resources res = getResources();
+        final int floatingActionButtonSize = res.getDimensionPixelSize(
+                R.dimen.floating_action_button_size);
         final int rootPadding = res.getDimensionPixelSize(R.dimen.root_padding);
-        final int bottom = frameHeight - distanceFromTop + rootPadding;
+
+        final int bottom = floatingActionButtonSize + (rootPadding * 2);
         final int start = ViewCompat.getPaddingStart(recyclerView);
         final int end = ViewCompat.getPaddingEnd(recyclerView);
         final int top = recyclerView.getPaddingTop();
@@ -111,12 +111,12 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
     protected void prepareViews() {
         super.prepareViews();
 
-        final ViewTreeObserver vto = mSave.getViewTreeObserver();
+        final ViewTreeObserver vto = mFrame.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             @SuppressWarnings("deprecation")
             public void onGlobalLayout() {
-                final ViewTreeObserver vto = mSave.getViewTreeObserver();
+                final ViewTreeObserver vto = mFrame.getViewTreeObserver();
 
                 if (vto.isAlive()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

@@ -2,19 +2,9 @@ package com.garpr.android.misc;
 
 
 import com.crashlytics.android.Crashlytics;
-import com.garpr.android.App;
-import com.garpr.android.BuildConfig;
-
-import io.fabric.sdk.android.Fabric;
 
 
 public final class CrashlyticsManager {
-
-
-    public static void initialize() {
-        Fabric.with(App.getContext(), new Crashlytics());
-        Crashlytics.getInstance().core.setBool(Constants.DEBUG, BuildConfig.DEBUG);
-    }
 
 
     public static void log(final int priority, final String tag, final String msg) {
@@ -34,15 +24,38 @@ public final class CrashlyticsManager {
     }
 
 
+    public static void setDouble(final String key, final double value) {
+        throwIfInvalid(key);
+        Crashlytics.setDouble(key, value);
+    }
+
+
+    public static void setFloat(final String key, final float value) {
+        throwIfInvalid(key);
+        Crashlytics.setFloat(key, value);
+    }
+
+
     public static void setInt(final String key, final int value) {
         throwIfInvalid(key);
         Crashlytics.setInt(key, value);
     }
 
 
+    public static void setLong(final String key, final long value) {
+        throwIfInvalid(key);
+        Crashlytics.setLong(key, value);
+    }
+
+
     public static void setString(final String key, final String value) {
         throwIfInvalid(key);
         Crashlytics.setString(key, value);
+    }
+
+
+    public static void setUserIdentifier(final String identifier) {
+        Crashlytics.setUserIdentifier(identifier);
     }
 
 

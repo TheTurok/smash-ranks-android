@@ -24,7 +24,7 @@ import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.models.LogMessage;
 
 
-public class ConsoleActivity extends BaseToolbarListActivity implements Console.Listener {
+public class ConsoleActivity extends BaseToolbarListActivity {
 
 
     private static final String TAG = "ConsoleActivity";
@@ -81,35 +81,6 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         createAdapter();
-        Console.attachListener(this);
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Console.detachListener(this);
-    }
-
-
-    @Override
-    public void onLogMessagesChanged() {
-        if (!isAlive()) {
-            return;
-        }
-
-        final Runnable action = new Runnable() {
-            @Override
-            public void run() {
-                if (!isAlive()) {
-                    return;
-                }
-
-                notifyDataSetChanged();
-            }
-        };
-
-        runOnUi(action);
     }
 
 
@@ -150,18 +121,9 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (!isFirstResume()) {
-            notifyDataSetChanged();
-        }
-    }
-
-
-    @Override
     protected void prepareViews() {
         super.prepareViews();
+
         final RecyclerView recyclerView = getRecyclerView();
         recyclerView.setVerticalScrollBarEnabled(false);
 
@@ -231,6 +193,10 @@ public class ConsoleActivity extends BaseToolbarListActivity implements Console.
         public long getItemId(final int position) {
             return Console.getLogMessage(position).getId();
         }
+
+
+        @Override
+        public abstract int getItemViewType(final int position);
 
 
     }

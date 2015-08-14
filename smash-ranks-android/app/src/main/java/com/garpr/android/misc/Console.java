@@ -3,6 +3,7 @@ package com.garpr.android.misc;
 
 import android.util.Log;
 
+import com.garpr.android.BuildConfig;
 import com.garpr.android.models.LogMessage;
 
 import java.lang.ref.WeakReference;
@@ -13,7 +14,7 @@ import java.util.LinkedList;
 public final class Console {
 
 
-    private static final int LOG_MESSAGES_MAX_SIZE = 96;
+    private static final int LOG_MESSAGES_MAX_SIZE;
     private static final LinkedList<LogMessage> LOG_MESSAGES;
     private static final LinkedList<WeakReference<Listener>> LOG_LISTENERS;
     private static long sLogMessageIdPointer;
@@ -22,6 +23,12 @@ public final class Console {
 
 
     static {
+        if (BuildConfig.DEBUG) {
+            LOG_MESSAGES_MAX_SIZE = 256;
+        } else {
+            LOG_MESSAGES_MAX_SIZE = 128;
+        }
+
         LOG_LISTENERS = new LinkedList<>();
         LOG_MESSAGES = new LinkedList<>();
     }

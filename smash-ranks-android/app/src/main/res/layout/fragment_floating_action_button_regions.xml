@@ -23,15 +23,15 @@
         </LinearLayout>
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/fragment_regions_save"
+            android:layout_gravity="bottom|right"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/root_padding"
             android:layout_marginLeft="@dimen/root_padding"
             android:layout_marginRight="@dimen/root_padding"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_save"
             app:fab_colorNormal="@color/indigo_bright"
             app:fab_colorPressed="@color/indigo"
             app:fab_colorRipple="@color/indigo_dark"
-            style="@style/layout_gravity_bottom_end" />
+            android:src="@drawable/ic_save" />
     </FrameLayout>
 </com.garpr.android.views.FlexibleSwipeRefreshLayout>

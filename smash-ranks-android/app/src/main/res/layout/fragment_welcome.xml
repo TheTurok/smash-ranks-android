@@ -59,11 +59,11 @@
         android:alpha="0"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:id="@+id/fragment_welcome_next"
+        android:layout_gravity="bottom|right"
         android:layout_height="@dimen/list_item_height"
         android:layout_width="@dimen/list_item_height"
         android:scaleType="center"
         android:src="@drawable/ic_forward"
         tools:alpha="1"
-        tools:ignore="ContentDescription"
-        style="@style/layout_gravity_end"/>
+        tools:ignore="ContentDescription" />
 </LinearLayout>

@@ -41,48 +41,48 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
 
 
     protected void applyStatusBarHeightAsHeight(final View view) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            throw new IllegalStateException("Status bars can't be transparent before API " +
-                    Build.VERSION_CODES.LOLLIPOP + ". This device is " + Build.VERSION.SDK_INT);
-        }
-
-        final LayoutParams params = view.getLayoutParams();
-        params.height = getStatusBarHeight();
-        view.setLayoutParams(params);
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            throw new IllegalStateException("Status bars can't be transparent before API " +
+//                    Build.VERSION_CODES.LOLLIPOP + ". This device is " + Build.VERSION.SDK_INT);
+//        }
+//
+//        final LayoutParams params = view.getLayoutParams();
+//        params.height = getStatusBarHeight();
+//        view.setLayoutParams(params);
     }
 
 
     protected void applyStatusBarHeightAsTopMargin(final View view, final boolean positive) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            throw new IllegalStateException("Status bars can't be transparent before API " +
-                    Build.VERSION_CODES.LOLLIPOP + ". This device is " + Build.VERSION.SDK_INT);
-        }
-
-        final MarginLayoutParams params = (MarginLayoutParams) view.getLayoutParams();
-        final int statusBarHeight = getStatusBarHeight();
-
-        if (positive) {
-            params.topMargin = statusBarHeight;
-        } else {
-            params.topMargin = (-1) * statusBarHeight;
-        }
-
-        view.setLayoutParams(params);
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            throw new IllegalStateException("Status bars can't be transparent before API " +
+//                    Build.VERSION_CODES.LOLLIPOP + ". This device is " + Build.VERSION.SDK_INT);
+//        }
+//
+//        final MarginLayoutParams params = (MarginLayoutParams) view.getLayoutParams();
+//        final int statusBarHeight = getStatusBarHeight();
+//
+//        if (positive) {
+//            params.topMargin = statusBarHeight;
+//        } else {
+//            params.topMargin = (-1) * statusBarHeight;
+//        }
+//
+//        view.setLayoutParams(params);
     }
 
 
     protected void applyStatusBarHeightAsTopPadding(final View view) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            throw new IllegalStateException("Status bars can't be transparent before API " +
-                    Build.VERSION_CODES.LOLLIPOP + ". This device is " + Build.VERSION.SDK_INT);
-        }
-
-        final int start = ViewCompat.getPaddingStart(view);
-        final int top = getStatusBarHeight();
-        final int end = ViewCompat.getPaddingEnd(view);
-        final int bottom = view.getPaddingBottom();
-        ViewCompat.setPaddingRelative(view, start, top, end, bottom);
-        view.requestLayout();
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            throw new IllegalStateException("Status bars can't be transparent before API " +
+//                    Build.VERSION_CODES.LOLLIPOP + ". This device is " + Build.VERSION.SDK_INT);
+//        }
+//
+//        final int start = ViewCompat.getPaddingStart(view);
+//        final int top = getStatusBarHeight();
+//        final int end = ViewCompat.getPaddingEnd(view);
+//        final int bottom = view.getPaddingBottom();
+//        ViewCompat.setPaddingRelative(view, start, top, end, bottom);
+//        view.requestLayout();
     }
 
 

@@ -13,7 +13,7 @@
             android:textColor="@color/win_green"
             tools:text="Shroomed"
             style="@style/match_item_text" />
-        <Space
+        <android.support.v4.widget.Space
             android:layout_height="1dp"
             android:layout_width="@dimen/root_padding" />
         <TextView

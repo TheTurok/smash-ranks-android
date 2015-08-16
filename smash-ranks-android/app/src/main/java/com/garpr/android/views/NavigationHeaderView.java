@@ -9,6 +9,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
+import com.garpr.android.models.Player;
+import com.garpr.android.models.Region;
 
 
 public class NavigationHeaderView extends RelativeLayout {
@@ -43,6 +45,16 @@ public class NavigationHeaderView extends RelativeLayout {
         super.onFinishInflate();
         mPlayer = (TextView) findViewById(R.id.navigation_header_view_player);
         mRegion = (TextView) findViewById(R.id.navigation_header_view_region);
+    }
+
+
+    public void setPlayer(final Player player) {
+        mPlayer.setText(player.getName());
+    }
+
+
+    public void setRegion(final Region region) {
+        mRegion.setText(region.getName());
     }
 
 

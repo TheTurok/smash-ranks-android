@@ -4,6 +4,7 @@ package com.garpr.android.activities;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -20,41 +20,31 @@ import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
 import com.garpr.android.settings.Settings.User;
+import com.garpr.android.views.NavigationHeaderView;
 
 
-public abstract class BaseToolbarActivity extends BaseActivity {
+public abstract class BaseToolbarActivity extends BaseActivity implements
+        NavigationView.OnNavigationItemSelectedListener {
 
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private RelativeLayout mDrawerContents;
-    private TextView mDrawerAbout;
-    private TextView mDrawerRankings;
-    private TextView mDrawerSettings;
-    private TextView mDrawerTournaments;
-    private TextView mDrawerUserName;
-    private TextView mDrawerUserRegion;
+    private NavigationHeaderView mNavigationHeaderView;
+    private NavigationView mNavigationView;
     private Toolbar mToolbar;
-    private View mDrawerBuffer;
 
 
 
 
     protected void closeDrawer() {
-        mDrawerLayout.closeDrawer(mDrawerContents);
+        mDrawerLayout.closeDrawer(mNavigationView);
     }
 
 
     private void findViews() {
-        mDrawerAbout = (TextView) findViewById(R.id.navigation_drawer_about);
-        mDrawerBuffer = findViewById(R.id.navigation_drawer_buffer);
-        mDrawerContents = (RelativeLayout) findViewById(R.id.navigation_drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerRankings = (TextView) findViewById(R.id.navigation_drawer_rankings);
-        mDrawerSettings = (TextView) findViewById(R.id.navigation_drawer_settings);
-        mDrawerTournaments = (TextView) findViewById(R.id.navigation_drawer_tournaments);
-        mDrawerUserName = (TextView) findViewById(R.id.navigation_drawer_user_name);
-        mDrawerUserRegion = (TextView) findViewById(R.id.navigation_drawer_user_region);
+        mNavigationHeaderView = (NavigationHeaderView) findViewById(R.id.navigation_header_view);
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
@@ -93,9 +83,10 @@ public abstract class BaseToolbarActivity extends BaseActivity {
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            applyStatusBarHeightAsTopMargin(mDrawerContents, false);
+//            applyStatusBarHeightAsTopMargin(mDrawerContents, false);
             mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.gray_dark));
         }
 
@@ -177,12 +168,12 @@ public abstract class BaseToolbarActivity extends BaseActivity {
 
 
     protected boolean isDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mDrawerContents);
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mNavigationView);
     }
 
 
     protected boolean isDrawerVisible() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerVisible(mDrawerContents);
+        return mDrawerLayout != null && mDrawerLayout.isDrawerVisible(mNavigationView);
     }
 
 
@@ -233,6 +224,30 @@ public abstract class BaseToolbarActivity extends BaseActivity {
 
     protected void onDrawerOpened() {
         // this method intentionally left blank (children can override)
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(final MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.navigation_view_menu_about:
+                AboutActivity.start(this);
+                break;
+
+            case R.id.navigation_view_menu_rankings:
+                RankingsActivity.start(this);
+                break;
+
+            case R.id.navigation_view_menu_settings:
+                SettingsActivity.start(this);
+                break;
+
+            case R.id.navigation_view_menu_tournaments:
+                TournamentsActivity.start(this);
+                break;
+        }
+
+        return false;
     }
 
 

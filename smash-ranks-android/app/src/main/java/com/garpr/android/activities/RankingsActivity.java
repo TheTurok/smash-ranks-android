@@ -159,9 +159,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected View getSelectedDrawerView(final TextView about, final TextView rankings,
-            final TextView settings, final TextView tournaments) {
-        return rankings;
+    protected int getSelectedNavigationItemId() {
+        return R.id.navigation_view_menu_rankings;
     }
 
 

@@ -9,13 +9,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.garpr.android.R;
+import com.garpr.android.misc.Heartbeat;
 import com.garpr.android.models.Player;
 import com.garpr.android.models.Region;
+import com.garpr.android.settings.RegionSetting;
+import com.garpr.android.settings.Settings;
+import com.garpr.android.settings.Settings.User;
 
 
-public class NavigationHeaderView extends RelativeLayout {
+public class NavigationHeaderView extends RelativeLayout implements Heartbeat,
+        RegionSetting.RegionListener {
 
 
+    private boolean mIsAlive;
     private TextView mPlayer;
     private TextView mRegion;
 
@@ -40,21 +46,81 @@ public class NavigationHeaderView extends RelativeLayout {
     }
 
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
+    private void findViews() {
         mPlayer = (TextView) findViewById(R.id.navigation_header_view_player);
         mRegion = (TextView) findViewById(R.id.navigation_header_view_region);
     }
 
 
-    public void setPlayer(final Player player) {
-        mPlayer.setText(player.getName());
+    @Override
+    public boolean isAlive() {
+        return mIsAlive;
     }
 
 
-    public void setRegion(final Region region) {
-        mRegion.setText(region.getName());
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mIsAlive = true;
+        updateRegion();
+        updatePlayer();
+    }
+
+
+    @Override
+    protected void onDetachedFromWindow() {
+        mIsAlive = false;
+        Settings.Region.detachListener(this);
+        super.onDetachedFromWindow();
+    }
+
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        findViews();
+        updateRegion();
+        updatePlayer();
+    }
+
+
+    @Override
+    public void onRegionChanged(final Region region) {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                updateRegion();
+            }
+        });
+    }
+
+
+    private void updatePlayer() {
+        if (User.hasPlayer()) {
+            final Player player = User.Player.get();
+            mPlayer.setText(player.getName());
+            mPlayer.setVisibility(VISIBLE);
+        } else {
+            mPlayer.setVisibility(GONE);
+        }
+    }
+
+
+    private void updateRegion() {
+        Settings.Region.attachListener(this, this);
+
+        final Region userRegion = User.Region.get();
+        final Region settingsRegion = Settings.Region.get();
+        final String regionText;
+
+        if (userRegion.equals(settingsRegion)) {
+            regionText = userRegion.getName();
+        } else {
+            regionText = getResources().getString(R.string.x_viewing_y, userRegion.getName(),
+                    settingsRegion.getName());
+        }
+
+        mRegion.setText(regionText);
     }
 
 

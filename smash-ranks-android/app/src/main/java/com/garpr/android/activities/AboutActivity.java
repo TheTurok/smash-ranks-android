@@ -49,9 +49,8 @@ public class AboutActivity extends BaseToolbarActivity {
 
 
     @Override
-    protected View getSelectedDrawerView(final TextView about, final TextView rankings,
-            final TextView settings, final TextView tournaments) {
-        return about;
+    protected int getSelectedNavigationItemId() {
+        return R.id.navigation_view_menu_about;
     }
 
 

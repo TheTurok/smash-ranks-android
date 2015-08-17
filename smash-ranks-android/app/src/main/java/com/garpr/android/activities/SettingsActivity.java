@@ -90,9 +90,8 @@ public class SettingsActivity extends BaseToolbarActivity {
 
 
     @Override
-    protected View getSelectedDrawerView(final TextView about, final TextView rankings,
-            final TextView settings, final TextView tournaments) {
-        return settings;
+    protected int getSelectedNavigationItemId() {
+        return R.id.navigation_view_menu_settings;
     }
 
 

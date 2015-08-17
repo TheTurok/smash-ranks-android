@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.garpr.android.views.NavigationHeaderView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation_header_view"
     android:layout_height="@dimen/navigation_drawer_banner_height"
     android:layout_width="match_parent">
     <ImageView
@@ -46,7 +45,9 @@
         android:shadowRadius="4"
         android:singleLine="true"
         android:textIsSelectable="true"
+        android:visibility="gone"
         tools:ignore="UnusedAttribute"
         tools:text="Charlezard"
+        tools:visibility="visible"
         style="@style/fontFamily_medium" />
 </com.garpr.android.views.NavigationHeaderView>

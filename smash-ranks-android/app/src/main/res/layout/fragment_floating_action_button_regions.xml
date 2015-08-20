@@ -28,6 +28,7 @@
             android:layout_marginLeft="@dimen/root_padding"
             android:layout_marginRight="@dimen/root_padding"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_save" />
+            android:src="@drawable/ic_save"
+            android:visibility="invisible" />
     </FrameLayout>
 </com.garpr.android.views.FlexibleSwipeRefreshLayout>

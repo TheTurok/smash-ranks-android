@@ -3,15 +3,14 @@ package com.garpr.android.fragments;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewTreeObserver;
 
 import com.garpr.android.R;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
 import com.garpr.android.views.CheckableItemView;
@@ -76,14 +75,20 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final Region region = Settings.Region.get();
 
-        if (mSelectedRegion == null || region.equals(mSelectedRegion)) {
-            mSelectedRegion = region;
-            mSave.hide();
-        } else {
-            mSave.show();
-        }
+        Utils.onGlobalLayout(mSave, new Runnable() {
+            @Override
+            public void run() {
+                final Region region = Settings.Region.get();
+
+                if (mSelectedRegion == null || region.equals(mSelectedRegion)) {
+                    mSelectedRegion = region;
+                    mSave.hide();
+                } else {
+                    mSave.show();
+                }
+            }
+        });
     }
 
 
@@ -111,21 +116,9 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
     protected void prepareViews() {
         super.prepareViews();
 
-        final ViewTreeObserver vto = mFrame.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        Utils.onGlobalLayout(mFrame, new Runnable() {
             @Override
-            @SuppressWarnings("deprecation")
-            public void onGlobalLayout() {
-                final ViewTreeObserver vto = mFrame.getViewTreeObserver();
-
-                if (vto.isAlive()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        vto.removeOnGlobalLayoutListener(this);
-                    } else {
-                        vto.removeGlobalOnLayoutListener(this);
-                    }
-                }
-
+            public void run() {
                 measureRecyclerViewBottomOffset();
             }
         });

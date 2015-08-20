@@ -3,10 +3,12 @@ package com.garpr.android.misc;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.garpr.android.App;
 import com.garpr.android.R;
@@ -104,6 +106,28 @@ public final class Utils {
 
     public static void hideMenuItems(final MenuItem... items) {
         setMenuItemsVisibility(false, items);
+    }
+
+
+    public static void onGlobalLayout(final View view, final Runnable runnable) {
+        ViewTreeObserver vto = view.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            @SuppressWarnings("deprecation")
+            public void onGlobalLayout() {
+                final ViewTreeObserver vto = view.getViewTreeObserver();
+
+                if (vto.isAlive()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        vto.removeOnGlobalLayoutListener(this);
+                    } else {
+                        vto.removeGlobalOnLayoutListener(this);
+                    }
+                }
+
+                runnable.run();
+            }
+        });
     }
 
 

@@ -167,6 +167,8 @@ public abstract class BaseToolbarActivity extends BaseActivity implements
     @Override
     public boolean onNavigationItemSelected(final MenuItem menuItem) {
         if (!menuItem.isChecked()) {
+            closeDrawer();
+
             switch (menuItem.getItemId()) {
                 case R.id.navigation_view_menu_about:
                     AboutActivity.start(this);

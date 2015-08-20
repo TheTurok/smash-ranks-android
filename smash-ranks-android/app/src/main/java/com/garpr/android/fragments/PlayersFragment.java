@@ -3,6 +3,7 @@ package com.garpr.android.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 
@@ -23,6 +25,7 @@ import com.garpr.android.misc.ListUtils.AlphabeticalSectionCreator;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.ListUtils.SpecialFilterable;
 import com.garpr.android.misc.RecyclerAdapter;
+import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Player;
 import com.garpr.android.views.CheckableItemView;
 import com.garpr.android.views.SimpleSeparatorView;
@@ -180,6 +183,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        prepareViews();
 
         if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
             mPlayers = savedInstanceState.getParcelableArrayList(KEY_PLAYERS);
@@ -317,6 +321,12 @@ public class PlayersFragment extends BaseListToolbarFragment implements
     @Override
     protected void prepareViews() {
         super.prepareViews();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            final View view = getView();
+            final View statusBarBuffer = view.findViewById(R.id.status_bar_buffer);
+            Utils.applyStatusBarHeight(statusBarBuffer);
+        }
 
         final Toolbar toolbar = getToolbar();
         toolbar.setTitle(R.string.select_your_tag);

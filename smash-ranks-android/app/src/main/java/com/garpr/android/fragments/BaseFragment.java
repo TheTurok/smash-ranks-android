@@ -1,7 +1,7 @@
 package com.garpr.android.fragments;
 
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -58,9 +58,9 @@ public abstract class BaseFragment extends Fragment implements HeartbeatWithUi,
 
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-        mListener = (Listener) activity;
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        mListener = (Listener) context;
     }
 
 

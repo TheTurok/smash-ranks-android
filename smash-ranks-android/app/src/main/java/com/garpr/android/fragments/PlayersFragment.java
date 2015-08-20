@@ -202,9 +202,9 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-        mListeners = (Listeners) activity;
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        mListeners = (Listeners) context;
     }
 
 

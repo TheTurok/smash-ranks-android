@@ -4,6 +4,7 @@ package com.garpr.android.fragments;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -92,9 +93,9 @@ public class WelcomeFragment extends BaseFragment {
 
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-        mListener = (Listener) activity;
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        mListener = (Listener) context;
     }
 
 

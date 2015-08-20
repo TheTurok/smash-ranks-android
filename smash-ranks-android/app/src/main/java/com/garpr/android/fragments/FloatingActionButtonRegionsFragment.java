@@ -2,6 +2,7 @@ package com.garpr.android.fragments;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -88,9 +89,9 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
 
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-        mListener = (SaveListener) activity;
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        mListener = (SaveListener) context;
     }
 
 

@@ -2,6 +2,7 @@ package com.garpr.android.fragments;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,9 +61,9 @@ public class ToolbarRegionsFragment extends RegionsFragment implements
 
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-        mListener = (NextListener) activity;
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        mListener = (NextListener) context;
     }
 
 

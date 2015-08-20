@@ -2,6 +2,7 @@ package com.garpr.android.fragments;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 
 import com.garpr.android.misc.ListUtils.SpecialFilterable;
@@ -37,11 +38,11 @@ public class PlayerActivityDataFragment extends DataFragment {
 
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(final Context context) {
+        super.onAttach(context);
 
-        if (activity instanceof Listeners) {
-            mListeners = (Listeners) activity;
+        if (context instanceof Listeners) {
+            mListeners = (Listeners) context;
         } else {
             final Fragment fragment = getParentFragment();
 

@@ -29,15 +29,20 @@ public class Match implements MonthlyComparable, Parcelable {
         final Player opponent = new Player(json);
         final Result result = Result.create(json);
 
-        if (result.isLose()) {
-            mLoser = player;
-            mWinner = opponent;
-        } else if (result.isWin()) {
-            mLoser = opponent;
-            mWinner = player;
-        } else {
-            // this should never happen
-            throw new RuntimeException();
+        switch (result) {
+            case LOSE:
+                mLoser = player;
+                mWinner = opponent;
+                break;
+
+            case WIN:
+                mLoser = opponent;
+                mWinner = player;
+                break;
+
+            default:
+                // this should never happen
+                throw new RuntimeException();
         }
 
         mTournament = new Tournament(json);

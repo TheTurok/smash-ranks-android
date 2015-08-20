@@ -167,29 +167,43 @@ public abstract class BaseToolbarActivity extends BaseActivity implements
 
     @Override
     public boolean onNavigationItemSelected(final MenuItem menuItem) {
-        if (!menuItem.isChecked()) {
-            closeDrawer();
+        boolean handled = false;
 
-            switch (menuItem.getItemId()) {
-                case R.id.navigation_view_menu_about:
+        switch (menuItem.getItemId()) {
+            case R.id.navigation_view_menu_about:
+                if (!(this instanceof AboutActivity)) {
                     AboutActivity.start(this);
-                    break;
+                    handled = true;
+                }
+                break;
 
-                case R.id.navigation_view_menu_rankings:
+            case R.id.navigation_view_menu_rankings:
+                if (!(this instanceof RankingsActivity)) {
                     RankingsActivity.start(this);
-                    break;
+                    handled = true;
+                }
+                break;
 
-                case R.id.navigation_view_menu_settings:
+            case R.id.navigation_view_menu_settings:
+                if (!(this instanceof SettingsActivity)) {
                     SettingsActivity.start(this);
-                    break;
+                    handled = true;
+                }
+                break;
 
-                case R.id.navigation_view_menu_tournaments:
+            case R.id.navigation_view_menu_tournaments:
+                if (!(this instanceof TournamentActivity)) {
                     TournamentsActivity.start(this);
-                    break;
-            }
+                    handled = true;
+                }
+                break;
         }
 
-        return false;
+        if (handled) {
+            closeDrawer();
+        }
+
+        return handled;
     }
 
 

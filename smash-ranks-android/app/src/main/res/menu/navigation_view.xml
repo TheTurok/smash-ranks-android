@@ -10,18 +10,12 @@
             android:id="@+id/navigation_view_menu_tournaments"
             android:title="@string/tournaments" />
         <item
-            android:id="@+id/navigation_view_menu_misc"
-            android:title="@string/miscellaneous">
-            <menu>
-                <item
-                    android:icon="@drawable/ic_settings"
-                    android:id="@+id/navigation_view_menu_settings"
-                    android:title="@string/settings" />
-                <item
-                    android:icon="@drawable/ic_about"
-                    android:id="@+id/navigation_view_menu_about"
-                    android:title="@string/about" />
-            </menu>
-        </item>
+            android:icon="@drawable/ic_settings"
+            android:id="@+id/navigation_view_menu_settings"
+            android:title="@string/settings" />
+        <item
+            android:icon="@drawable/ic_about"
+            android:id="@+id/navigation_view_menu_about"
+            android:title="@string/about" />
     </group>
 </menu>

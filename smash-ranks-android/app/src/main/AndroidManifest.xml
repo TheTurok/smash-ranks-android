@@ -9,6 +9,7 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/launcher"
         android:label="@string/gar_pr"
         android:name=".App"

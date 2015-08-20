@@ -11,10 +11,8 @@ import android.support.v7.widget.SearchView;
 import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.garpr.android.R;

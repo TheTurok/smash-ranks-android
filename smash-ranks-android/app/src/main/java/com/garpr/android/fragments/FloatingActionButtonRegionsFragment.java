@@ -1,7 +1,6 @@
 package com.garpr.android.fragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;

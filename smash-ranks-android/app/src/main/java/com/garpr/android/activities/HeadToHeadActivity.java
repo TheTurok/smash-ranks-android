@@ -4,8 +4,8 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -495,9 +495,8 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
         private MatchesAdapter() {
             super(getRecyclerView());
 
-            final Resources res = getResources();
-            mColorLose = res.getColor(R.color.lose_pink);
-            mColorWin = res.getColor(R.color.win_green);
+            mColorLose = ContextCompat.getColor(HeadToHeadActivity.this, R.color.lose_pink);
+            mColorWin = ContextCompat.getColor(HeadToHeadActivity.this, R.color.win_green);
         }
 
 

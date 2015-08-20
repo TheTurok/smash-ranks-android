@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -156,10 +157,9 @@ public class ConsoleActivity extends BaseToolbarListActivity {
         private ConsoleAdapter() {
             super(getRecyclerView());
 
-            final Resources res = getResources();
-            mDebugTextColor = res.getColor(R.color.white);
-            mErrorTextColor = res.getColor(R.color.console_error);
-            mWarnTextColor = res.getColor(R.color.console_warn);
+            mDebugTextColor = ContextCompat.getColor(ConsoleActivity.this, R.color.white);
+            mErrorTextColor = ContextCompat.getColor(ConsoleActivity.this, R.color.console_error);
+            mWarnTextColor = ContextCompat.getColor(ConsoleActivity.this, R.color.console_warn);
         }
 
 

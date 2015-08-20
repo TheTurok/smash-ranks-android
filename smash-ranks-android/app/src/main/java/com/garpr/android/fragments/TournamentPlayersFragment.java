@@ -1,9 +1,9 @@
 package com.garpr.android.fragments;
 
 
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -182,9 +182,8 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
 
 
         private TournamentPlayersAdapter() {
-            final Resources resources = getResources();
-            mBgGray = resources.getColor(R.color.gray);
-            mBgHighlight = resources.getColor(R.color.overlay_bright);
+            mBgGray = ContextCompat.getColor(getActivity(), R.color.gray);
+            mBgHighlight = ContextCompat.getColor(getActivity(), R.color.overlay_bright);
         }
 
 

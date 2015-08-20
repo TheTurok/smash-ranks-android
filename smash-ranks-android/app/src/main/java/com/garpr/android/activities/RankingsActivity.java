@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -466,9 +467,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         private RankingsAdapter() {
             super(getRecyclerView());
 
-            final Resources resources = getResources();
-            mBgGray = resources.getColor(R.color.gray);
-            mBgHighlight = resources.getColor(R.color.overlay_bright);
+            mBgGray = ContextCompat.getColor(RankingsActivity.this, R.color.gray);
+            mBgHighlight = ContextCompat.getColor(RankingsActivity.this, R.color.overlay_bright);
         }
 
 

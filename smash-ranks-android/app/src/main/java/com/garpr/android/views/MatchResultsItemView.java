@@ -2,10 +2,11 @@ package com.garpr.android.views;
 
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -94,25 +95,25 @@ public class MatchResultsItemView extends TextView {
 
 
     private void initialize() {
-        final Resources res = getResources();
-        mBarHeight = res.getDimensionPixelSize(R.dimen.match_results_bar_height);
+        final Context context = getContext();
+        mBarHeight = getResources().getDimensionPixelSize(R.dimen.match_results_bar_height);
 
         mLosesRect = new Rect();
         mLosesPaint = new Paint();
         mLosesPaint.setAntiAlias(true);
-        mLosesPaint.setColor(res.getColor(R.color.transparent_lose_pink));
+        mLosesPaint.setColor(ContextCompat.getColor(context, R.color.transparent_lose_pink));
         mLosesPaint.setStyle(Paint.Style.FILL);
 
         mWinsRect = new Rect();
         mWinsPaint = new Paint();
         mWinsPaint.setAntiAlias(true);
-        mWinsPaint.setColor(res.getColor(R.color.transparent_win_green));
+        mWinsPaint.setColor(ContextCompat.getColor(context, R.color.transparent_win_green));
         mWinsPaint.setStyle(Paint.Style.FILL);
     }
 
 
     @Override
-    protected void onDraw(final Canvas canvas) {
+    protected void onDraw(@NonNull final Canvas canvas) {
         if (!mLosesRect.isEmpty()) {
             canvas.drawRect(mLosesRect, mLosesPaint);
         }

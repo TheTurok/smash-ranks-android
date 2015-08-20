@@ -90,13 +90,6 @@ public abstract class BaseToolbarActivity extends BaseActivity implements
         }
 
         mNavigationView.setNavigationItemSelectedListener(this);
-        final int selectedNavigationItemId = getSelectedNavigationItemId();
-
-        if (selectedNavigationItemId != 0) {
-            final Menu menu = mNavigationView.getMenu();
-            final MenuItem navigationItem = menu.findItem(selectedNavigationItemId);
-            navigationItem.setChecked(true);
-        }
     }
 
 
@@ -225,6 +218,20 @@ public abstract class BaseToolbarActivity extends BaseActivity implements
     protected void onPostCreate(final Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        final int selectedNavigationItemId = getSelectedNavigationItemId();
+
+        if (selectedNavigationItemId != 0) {
+            final Menu menu = mNavigationView.getMenu();
+            final MenuItem navigationItem = menu.findItem(selectedNavigationItemId);
+            navigationItem.setChecked(true);
+        }
     }
 
 

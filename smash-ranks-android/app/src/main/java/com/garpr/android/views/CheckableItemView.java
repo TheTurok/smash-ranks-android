@@ -7,10 +7,10 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.Checkable;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.garpr.android.R;
@@ -19,8 +19,8 @@ import com.garpr.android.R;
 public class CheckableItemView extends FrameLayout implements Checkable {
 
 
-    private CheckBox mCheck;
     private LinearLayout mContainer;
+    private RadioButton mRadio;
     private TextView mText;
     private ViewHolder mViewHolder;
 
@@ -49,22 +49,22 @@ public class CheckableItemView extends FrameLayout implements Checkable {
 
     @Override
     public boolean isChecked() {
-        return mCheck.isChecked();
+        return mRadio.isChecked();
     }
 
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mCheck = (CheckBox) findViewById(R.id.view_checkable_item_check);
         mContainer = (LinearLayout) findViewById(R.id.view_checkable_item_container);
+        mRadio = (RadioButton) findViewById(R.id.view_checkable_item_radio);
         mText = (TextView) findViewById(R.id.view_checkable_item_text);
     }
 
 
     @Override
     public void setChecked(final boolean checked) {
-        mCheck.setChecked(checked);
+        mRadio.setChecked(checked);
     }
 
 

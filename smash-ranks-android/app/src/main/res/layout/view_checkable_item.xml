@@ -18,12 +18,12 @@
             android:layout_width="0dp"
             android:textSize="20sp"
             tools:text="Hungrybox" />
-        <CheckBox
+        <RadioButton
             android:background="@null"
             android:clickable="false"
             android:duplicateParentState="false"
             android:gravity="center_vertical"
-            android:id="@+id/view_checkable_item_check"
+            android:id="@+id/view_checkable_item_radio"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
     </LinearLayout>

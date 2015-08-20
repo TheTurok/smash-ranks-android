@@ -91,6 +91,7 @@ public class ConsoleActivity extends BaseToolbarListActivity {
             case R.id.activity_console_menu_clear_log:
                 mClearLog.setEnabled(false);
                 Console.clearLogMessages();
+                notifyDataSetChanged();
                 break;
 
             default:

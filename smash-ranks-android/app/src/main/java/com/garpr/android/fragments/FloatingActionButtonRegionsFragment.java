@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.garpr.android.R;
 import com.garpr.android.misc.Utils;
@@ -60,9 +61,9 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
         final Resources res = getResources();
         final int floatingActionButtonSize = res.getDimensionPixelSize(
                 R.dimen.floating_action_button_size);
-        final int rootPadding = res.getDimensionPixelSize(R.dimen.root_padding);
+        final int margin = ((ViewGroup.MarginLayoutParams) mSave.getLayoutParams()).bottomMargin;
 
-        final int bottom = floatingActionButtonSize + (rootPadding * 2);
+        final int bottom = floatingActionButtonSize + (margin * 2);
         final int start = ViewCompat.getPaddingStart(recyclerView);
         final int end = ViewCompat.getPaddingEnd(recyclerView);
         final int top = recyclerView.getPaddingTop();
@@ -76,19 +77,14 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Utils.onGlobalLayout(mSave, new Runnable() {
-            @Override
-            public void run() {
-                final Region region = Settings.Region.get();
+        final Region region = Settings.Region.get();
 
-                if (mSelectedRegion == null || region.equals(mSelectedRegion)) {
-                    mSelectedRegion = region;
-                    mSave.hide();
-                } else {
-                    mSave.show();
-                }
-            }
-        });
+        if (mSelectedRegion == null || region.equals(mSelectedRegion)) {
+            mSelectedRegion = region;
+            mSave.hide();
+        } else {
+            mSave.show();
+        }
     }
 
 
@@ -127,7 +123,7 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
             mSave.show();
         }
 
-        mSave.setVisibility(View.VISIBLE);
+        mSave.show();
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -140,7 +136,7 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
     @Override
     protected void showError() {
         super.showError();
-        mSave.setVisibility(View.GONE);
+        mSave.hide();
     }
 
 

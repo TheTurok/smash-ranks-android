@@ -158,7 +158,7 @@ public class PlayersFragment extends BaseListToolbarFragment implements
 
 
     @Override
-    protected String getFragmentName() {
+    public String getFragmentName() {
         return TAG;
     }
 

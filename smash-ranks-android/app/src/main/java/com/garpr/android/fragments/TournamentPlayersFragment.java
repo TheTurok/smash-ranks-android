@@ -3,7 +3,6 @@ package com.garpr.android.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +77,7 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
 
 
     @Override
-    protected String getFragmentName() {
+    public String getFragmentName() {
         return TAG;
     }
 
@@ -182,8 +181,8 @@ public class TournamentPlayersFragment extends TournamentViewPagerFragment imple
 
 
         private TournamentPlayersAdapter() {
-            mBgGray = ContextCompat.getColor(getActivity(), R.color.gray);
-            mBgHighlight = ContextCompat.getColor(getActivity(), R.color.overlay_bright);
+            mBgGray = getColorCompat(R.color.gray);
+            mBgHighlight = getColorCompat(R.color.overlay_bright);
         }
 
 

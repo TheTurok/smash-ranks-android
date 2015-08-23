@@ -110,12 +110,6 @@ public abstract class RegionsFragment extends BaseListFragment implements
     }
 
 
-    @Override
-    protected String getFragmentName() {
-        return TAG;
-    }
-
-
     public Region getSelectedRegion() {
         return mSelectedRegion;
     }

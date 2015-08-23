@@ -4,6 +4,7 @@ package com.garpr.android.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +26,15 @@ public abstract class BaseFragment extends Fragment implements HeartbeatWithUi,
 
 
 
+    public int getColorCompat(final int colorResId) {
+        return ContextCompat.getColor(getContext(), colorResId);
+    }
+
+
     protected abstract int getContentView();
 
 
-    protected abstract String getFragmentName();
+    public abstract String getFragmentName();
 
 
     protected LayoutInflater getLayoutInflater() {

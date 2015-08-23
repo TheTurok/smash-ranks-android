@@ -54,7 +54,7 @@ public class ToolbarRegionsFragment extends RegionsFragment implements
 
 
     @Override
-    protected String getFragmentName() {
+    public String getFragmentName() {
         return TAG;
     }
 

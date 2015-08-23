@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -159,7 +158,7 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected String getActivityName() {
+    public String getActivityName() {
         return TAG;
     }
 
@@ -495,8 +494,8 @@ public class HeadToHeadActivity extends BaseToolbarListActivity implements
         private MatchesAdapter() {
             super(getRecyclerView());
 
-            mColorLose = ContextCompat.getColor(HeadToHeadActivity.this, R.color.lose_pink);
-            mColorWin = ContextCompat.getColor(HeadToHeadActivity.this, R.color.win_green);
+            mColorLose = getColorCompat(R.color.lose_pink);
+            mColorWin = getColorCompat(R.color.win_green);
         }
 
 

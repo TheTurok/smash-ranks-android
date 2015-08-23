@@ -48,7 +48,7 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
 
 
     @Override
-    protected String getFragmentName() {
+    public String getFragmentName() {
         return TAG;
     }
 

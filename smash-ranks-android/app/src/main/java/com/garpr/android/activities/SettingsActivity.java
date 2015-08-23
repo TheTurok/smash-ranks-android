@@ -78,7 +78,7 @@ public class SettingsActivity extends BaseToolbarActivity {
 
 
     @Override
-    protected String getActivityName() {
+    public String getActivityName() {
         return TAG;
     }
 

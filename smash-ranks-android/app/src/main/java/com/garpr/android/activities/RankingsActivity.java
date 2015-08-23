@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -140,7 +139,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected String getActivityName() {
+    public String getActivityName() {
         return TAG;
     }
 
@@ -467,8 +466,8 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         private RankingsAdapter() {
             super(getRecyclerView());
 
-            mBgGray = ContextCompat.getColor(RankingsActivity.this, R.color.gray);
-            mBgHighlight = ContextCompat.getColor(RankingsActivity.this, R.color.overlay_bright);
+            mBgGray = getColorCompat(R.color.gray);
+            mBgHighlight = getColorCompat(R.color.overlay_bright);
         }
 
 

@@ -4,7 +4,6 @@ package com.garpr.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -159,7 +158,7 @@ public class PlayerActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected String getActivityName() {
+    public String getActivityName() {
         return TAG;
     }
 
@@ -596,10 +595,10 @@ public class PlayerActivity extends BaseToolbarListActivity implements
         private MatchesAdapter() {
             super(getRecyclerView());
 
-            mBgGray = ContextCompat.getColor(PlayerActivity.this, R.color.gray);
-            mBgHighlight = ContextCompat.getColor(PlayerActivity.this, R.color.overlay_bright);
-            mColorLose = ContextCompat.getColor(PlayerActivity.this, R.color.lose_pink);
-            mColorWin = ContextCompat.getColor(PlayerActivity.this, R.color.win_green);
+            mBgGray = getColorCompat(R.color.gray);
+            mBgHighlight = getColorCompat(R.color.overlay_bright);
+            mColorLose = getColorCompat(R.color.lose_pink);
+            mColorWin = getColorCompat(R.color.win_green);
         }
 
 

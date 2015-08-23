@@ -104,7 +104,7 @@ public class TournamentsActivity extends BaseToolbarListActivity implements
 
 
     @Override
-    protected String getActivityName() {
+    public String getActivityName() {
         return TAG;
     }
 

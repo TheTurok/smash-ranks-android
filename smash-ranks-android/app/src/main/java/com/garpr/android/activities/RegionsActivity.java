@@ -32,7 +32,7 @@ public class RegionsActivity extends BaseFragmentActivity implements
 
 
     @Override
-    protected String getActivityName() {
+    public String getActivityName() {
         return TAG;
     }
 

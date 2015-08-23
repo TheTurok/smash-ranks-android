@@ -3,7 +3,6 @@ package com.garpr.android.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
 
 
     @Override
-    protected String getFragmentName() {
+    public String getFragmentName() {
         return TAG;
     }
 
@@ -116,8 +115,8 @@ public class TournamentMatchesFragment extends TournamentViewPagerFragment imple
 
 
         private TournamentMatchesAdapter() {
-            mBgGray = ContextCompat.getColor(getActivity(), R.color.gray);
-            mBgHighlight = ContextCompat.getColor(getActivity(), R.color.overlay_bright);
+            mBgGray = getColorCompat(R.color.gray);
+            mBgHighlight = getColorCompat(R.color.overlay_bright);
         }
 
 

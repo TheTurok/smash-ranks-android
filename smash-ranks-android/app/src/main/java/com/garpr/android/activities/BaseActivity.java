@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -33,7 +34,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
 
 
 
-    protected abstract String getActivityName();
+    public abstract String getActivityName();
+
+
+    public int getColorCompat(final int colorResId) {
+        return ContextCompat.getColor(this, colorResId);
+    }
 
 
     protected abstract int getContentView();

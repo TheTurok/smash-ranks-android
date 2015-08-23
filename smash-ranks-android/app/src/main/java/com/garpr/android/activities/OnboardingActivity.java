@@ -60,7 +60,7 @@ public class OnboardingActivity extends BaseActivity implements PlayersFragment.
 
 
     @Override
-    protected String getActivityName() {
+    public String getActivityName() {
         return TAG;
     }
 

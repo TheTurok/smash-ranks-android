@@ -78,7 +78,7 @@ public class WelcomeFragment extends BaseFragment {
 
 
     @Override
-    protected String getFragmentName() {
+    public String getFragmentName() {
         return TAG;
     }
 

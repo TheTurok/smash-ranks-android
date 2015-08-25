@@ -1,6 +1,7 @@
 package com.garpr.android.calls;
 
 
+import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
 
 
@@ -13,9 +14,15 @@ public abstract class RegionBasedCall<T> extends Call<T> {
     }
 
 
+    Region getRegion() {
+        return Settings.Region.get();
+    }
+
+
     @Override
     String getUrl() {
-        final String regionId = Settings.Region.get().getId();
+        final Region region = getRegion();
+        final String regionId = region.getId();
         return super.getUrl() + regionId + '/';
     }
 

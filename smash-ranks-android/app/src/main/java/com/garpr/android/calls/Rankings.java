@@ -5,6 +5,7 @@ import com.garpr.android.misc.Console;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.models.RankingsBundle;
 import com.garpr.android.models.RankingsBundle.DateWrapper;
+import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
 
 import org.json.JSONException;
@@ -82,6 +83,12 @@ public final class Rankings {
         @Override
         String getCallName() {
             return TAG;
+        }
+
+
+        @Override
+        Region getRegion() {
+            return Settings.User.Region.get();
         }
 
 

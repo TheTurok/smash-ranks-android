@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.garpr.android.R;
 import com.garpr.android.misc.Utils;
@@ -61,9 +60,10 @@ public class FloatingActionButtonRegionsFragment extends RegionsFragment {
         final Resources res = getResources();
         final int floatingActionButtonSize = res.getDimensionPixelSize(
                 R.dimen.floating_action_button_size);
-        final int margin = ((ViewGroup.MarginLayoutParams) mSave.getLayoutParams()).bottomMargin;
+        final int floatingActionButtonMargin = res.getDimensionPixelSize(
+                R.dimen.floating_action_button_margin);
 
-        final int bottom = floatingActionButtonSize + (margin * 2);
+        final int bottom = floatingActionButtonSize + (floatingActionButtonMargin * 2);
         final int start = ViewCompat.getPaddingStart(recyclerView);
         final int end = ViewCompat.getPaddingEnd(recyclerView);
         final int top = recyclerView.getPaddingTop();

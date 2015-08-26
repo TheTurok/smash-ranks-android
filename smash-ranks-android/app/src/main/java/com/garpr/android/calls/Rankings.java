@@ -30,9 +30,9 @@ public final class Rankings {
     private static abstract class BaseRankingsCall<T> extends RegionBasedCall<T> {
 
 
-        BaseRankingsCall(final Response<T> response, final boolean ignoreCache)
+        BaseRankingsCall(final Response<T> response, final boolean ignoreCache, final Region region)
                 throws IllegalArgumentException {
-            super(response, ignoreCache);
+            super(response, ignoreCache, region);
         }
 
 
@@ -75,7 +75,7 @@ public final class Rankings {
 
         private CheckForRankingsUpdatesCall(final Response<Result> response)
                 throws IllegalArgumentException {
-            super(response, true);
+            super(response, true, Settings.User.Region.get());
             mCurrentRankingsDate = Settings.RankingsDate.get();
         }
 
@@ -83,12 +83,6 @@ public final class Rankings {
         @Override
         String getCallName() {
             return TAG;
-        }
-
-
-        @Override
-        Region getRegion() {
-            return Settings.User.Region.get();
         }
 
 
@@ -115,7 +109,7 @@ public final class Rankings {
 
         private RankingsCall(final Response<RankingsBundle> response, final boolean ignoreCache)
                 throws IllegalArgumentException {
-            super(response, ignoreCache);
+            super(response, ignoreCache, Settings.Region.get());
         }
 
 

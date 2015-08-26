@@ -8,21 +8,26 @@ import com.garpr.android.settings.Settings;
 public abstract class RegionBasedCall<T> extends Call<T> {
 
 
+    private final Region mRegion;
+
+
+
+
     RegionBasedCall(final Response<T> response, final boolean ignoreCache)
             throws IllegalArgumentException {
-        super(response, ignoreCache);
+        this(response, ignoreCache, Settings.Region.get());
     }
 
 
-    Region getRegion() {
-        return Settings.Region.get();
+    RegionBasedCall(final Response<T> response, final boolean ignoreCache, final Region region) {
+        super(response, ignoreCache);
+        mRegion = region;
     }
 
 
     @Override
     String getUrl() {
-        final Region region = getRegion();
-        final String regionId = region.getId();
+        final String regionId = mRegion.getId();
         return super.getUrl() + regionId + '/';
     }
 

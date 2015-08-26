@@ -90,7 +90,7 @@ public final class SyncManager extends GcmTaskService implements Heartbeat {
 
             @Override
             public void success(final Rankings.Result result) {
-                if (result.updateAvailable()) {
+                if (result == Rankings.Result.UPDATE_AVAILABLE) {
                     Console.d(TAG, "A new roster is available");
                     Notifications.showRankingsUpdated();
                 } else {

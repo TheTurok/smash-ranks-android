@@ -11,7 +11,7 @@ import com.garpr.android.App;
 import com.garpr.android.R;
 import com.garpr.android.activities.RankingsActivity;
 import com.garpr.android.models.Region;
-import com.garpr.android.settings.Settings;
+import com.garpr.android.settings.Settings.User;
 
 
 /**
@@ -41,7 +41,7 @@ public final class Notifications {
                 .setSmallIcon(R.drawable.notification)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
-        final Region region = Settings.Region.get();
+        final Region region = User.Region.get();
         final String contentText = context.getString(R.string.x_rankings_have_been_updated,
                 region.getName());
         builder.setContentText(contentText);

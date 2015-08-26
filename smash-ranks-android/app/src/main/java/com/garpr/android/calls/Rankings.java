@@ -7,6 +7,7 @@ import com.garpr.android.models.RankingsBundle;
 import com.garpr.android.models.RankingsBundle.DateWrapper;
 import com.garpr.android.models.Region;
 import com.garpr.android.settings.Settings;
+import com.garpr.android.settings.Settings.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,7 +76,7 @@ public final class Rankings {
 
         private CheckForRankingsUpdatesCall(final Response<Result> response)
                 throws IllegalArgumentException {
-            super(response, true, Settings.User.Region.get());
+            super(response, true, User.Region.get());
             mCurrentRankingsDate = Settings.RankingsDate.get();
         }
 
@@ -129,17 +130,7 @@ public final class Rankings {
 
 
     public enum Result {
-        NO_UPDATE, UPDATE_AVAILABLE;
-
-
-        public boolean noUpdate() {
-            return equals(NO_UPDATE);
-        }
-
-
-        public boolean updateAvailable() {
-            return equals(UPDATE_AVAILABLE);
-        }
+        NO_UPDATE, UPDATE_AVAILABLE
     }
 
 

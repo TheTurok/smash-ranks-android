@@ -93,6 +93,11 @@ public final class App extends Application {
             NetworkCache.clear();
             Settings.deleteAll();
         }
+
+        if (lastVersion < 52) {
+            // stored rankings date didn't necessarily reflect the user's region's date
+            Settings.RankingsDate.delete();
+        }
     }
 
 

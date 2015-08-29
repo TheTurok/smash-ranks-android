@@ -1,6 +1,7 @@
 package com.garpr.android.activities;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -145,6 +146,33 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
     @Override
     public String toString() {
         return getActivityName();
+    }
+
+
+
+
+    protected static class IntentBuilder {
+
+
+        protected final Intent mIntent;
+
+
+        protected IntentBuilder(final Context context, final Class c) {
+            mIntent = new Intent(context, c);
+        }
+
+
+        public IntentBuilder addFlags(final int flags) {
+            mIntent.addFlags(flags);
+            return this;
+        }
+
+
+        public Intent build() {
+            return mIntent;
+        }
+
+
     }
 
 

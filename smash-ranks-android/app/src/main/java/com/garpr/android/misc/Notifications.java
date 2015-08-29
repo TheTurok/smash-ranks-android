@@ -42,11 +42,13 @@ public final class Notifications {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
         final Region region = User.Region.get();
-        final String contentText = context.getString(R.string.x_rankings_have_been_updated,
-                region.getName());
-        builder.setContentText(contentText);
+        builder.setContentText(context.getString(R.string.x_rankings_have_been_updated,
+                region.getName()));
 
-        final Intent intent = new Intent(context, RankingsActivity.class);
+        final Intent intent = new RankingsActivity.IntentBuilder(context)
+                .isFromRankingsUpdate()
+                .build();
+
         final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);

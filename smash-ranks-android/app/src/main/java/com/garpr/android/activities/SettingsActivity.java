@@ -14,9 +14,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.garpr.android.App;
+import com.garpr.android.BuildConfig;
 import com.garpr.android.R;
 import com.garpr.android.misc.Constants;
 import com.garpr.android.misc.NetworkCache;
+import com.garpr.android.misc.Notifications;
 import com.garpr.android.misc.SyncManager;
 import com.garpr.android.misc.Utils;
 import com.garpr.android.models.Region;
@@ -44,6 +46,7 @@ public class SettingsActivity extends BaseToolbarActivity {
     private PreferenceView mRegion;
     private PreferenceView mSyncStatus;
     private PreferenceView mVersion;
+    private TextView mGenerateNotification;
     private TextView mGitHub;
     private TextView mRateApp;
     private TextView mServer;
@@ -62,6 +65,7 @@ public class SettingsActivity extends BaseToolbarActivity {
     private void findViews() {
         mAuthor = (PreferenceView) findViewById(R.id.activity_settings_author);
         mConsole = (PreferenceView) findViewById(R.id.activity_settings_console);
+        mGenerateNotification = (TextView) findViewById(R.id.activity_settings_generate_notification);
         mGitHub = (TextView) findViewById(R.id.activity_settings_github);
         mGooglePlayServicesError = (PreferenceView) findViewById(R.id.activity_settings_google_play_services_error);
         mNetworkCache = (PreferenceView) findViewById(R.id.activity_settings_network_cache);
@@ -306,6 +310,16 @@ public class SettingsActivity extends BaseToolbarActivity {
                     DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0));
         } else {
             mSyncStatus.setSubTitleText(R.string.sync_has_yet_to_occur);
+        }
+
+        if (BuildConfig.DEBUG) {
+            mGenerateNotification.setVisibility(View.VISIBLE);
+            mGenerateNotification.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    Notifications.showRankingsUpdated();
+                }
+            });
         }
     }
 

@@ -21,6 +21,8 @@ public class NavigationHeaderView extends RelativeLayout implements Heartbeat,
         RegionSetting.RegionListener {
 
 
+    private static final String TAG = "NavigationHeaderView";
+
     private boolean mIsAlive;
     private TextView mPlayer;
     private TextView mRegion;
@@ -61,9 +63,11 @@ public class NavigationHeaderView extends RelativeLayout implements Heartbeat,
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mIsAlive = true;
-        updateRegion();
-        updatePlayer();
+
+        if (!mIsAlive) {
+            mIsAlive = true;
+            updateRegion();
+        }
     }
 
 
@@ -78,6 +82,7 @@ public class NavigationHeaderView extends RelativeLayout implements Heartbeat,
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        mIsAlive = true;
         findViews();
         updateRegion();
         updatePlayer();
@@ -92,6 +97,12 @@ public class NavigationHeaderView extends RelativeLayout implements Heartbeat,
                 updateRegion();
             }
         });
+    }
+
+
+    @Override
+    public String toString() {
+        return TAG;
     }
 
 

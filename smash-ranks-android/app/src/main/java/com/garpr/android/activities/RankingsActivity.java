@@ -2,6 +2,7 @@ package com.garpr.android.activities;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.garpr.android.misc.Console;
 import com.garpr.android.misc.ListUtils;
 import com.garpr.android.misc.ListUtils.AlphabeticallyComparable;
 import com.garpr.android.misc.ListUtils.SpecialFilterable;
+import com.garpr.android.misc.NetworkCache;
 import com.garpr.android.misc.RecyclerAdapter;
 import com.garpr.android.misc.SyncManager;
 import com.garpr.android.misc.Utils;
@@ -42,6 +44,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
         SearchView.OnQueryTextListener {
 
 
+    private static final String EXTRA_IS_FROM_RANKINGS_UPDATE = "EXTRA_IS_FROM_RANKINGS_UPDATE";
     private static final String KEY_PLAYERS = "KEY_PLAYERS";
     private static final String KEY_RANKINGS_DATE = "KEY_RANKINGS_DATE";
     private static final String TAG = "RankingsActivity";
@@ -62,9 +65,7 @@ public class RankingsActivity extends BaseToolbarListActivity implements
 
 
     public static void start(final Activity activity) {
-        final Intent intent = new Intent(activity, RankingsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        activity.startActivity(intent);
+        activity.startActivity(new IntentBuilder(activity).build());
     }
 
 
@@ -177,6 +178,14 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final Intent intent = getIntent();
+        if (intent != null && intent.getBooleanExtra(EXTRA_IS_FROM_RANKINGS_UPDATE, false)) {
+            intent.putExtra(EXTRA_IS_FROM_RANKINGS_UPDATE, false);
+            Settings.Region.set(User.Region.get());
+            NetworkCache.clear();
+        }
+
         mInUsersRegion = User.areWeInTheUsersRegion();
         mUserPlayer = User.Player.get();
 
@@ -334,6 +343,24 @@ public class RankingsActivity extends BaseToolbarListActivity implements
     }
 
 
+
+
+    public static final class IntentBuilder extends BaseActivity.IntentBuilder {
+
+
+        public IntentBuilder(final Context context) {
+            super(context, RankingsActivity.class);
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
+
+
+        public IntentBuilder isFromRankingsUpdate() {
+            mIntent.putExtra(EXTRA_IS_FROM_RANKINGS_UPDATE, true);
+            return this;
+        }
+
+
+    }
 
 
     private static final class ListItem implements AlphabeticallyComparable, SpecialFilterable {

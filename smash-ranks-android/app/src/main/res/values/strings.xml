@@ -45,6 +45,7 @@
         progresses. <![CDATA[<i>Where do you stand?</i>]]></string>
     <string name="gar_pr_x">GAR PR: %s</string>
     <string name="general">General</string>
+    <string name="generate_notification">Generate notification</string>
     <string name="go">Go</string>
     <string name="google_play_services_unavailable">Google Play services unavailable</string>
     <string name="go_">Go!</string>

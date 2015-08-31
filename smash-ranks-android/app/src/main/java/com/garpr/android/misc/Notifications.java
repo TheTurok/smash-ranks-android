@@ -27,7 +27,8 @@ public final class Notifications {
 
 
     public static void clear() {
-        NotificationManagerCompat.from(App.getContext()).cancelAll();
+        final Context context = App.getContext();
+        NotificationManagerCompat.from(context).cancelAll();
     }
 
 
@@ -37,7 +38,7 @@ public final class Notifications {
                 .setAutoCancel(true)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL)
                 .setContentTitle(context.getString(R.string.gar_pr))
-                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setSmallIcon(R.drawable.notification)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 

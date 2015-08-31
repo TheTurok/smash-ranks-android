@@ -3,6 +3,7 @@ package com.garpr.android.views;
 
 import android.content.Context;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.widget.LinearLayout;
@@ -26,13 +27,13 @@ public class PreferenceView extends LinearLayout {
 
 
     @Override
-    protected void dispatchRestoreInstanceState(final SparseArray<Parcelable> container) {
+    protected void dispatchRestoreInstanceState(@NonNull final SparseArray<Parcelable> container) {
         dispatchThawSelfOnly(container);
     }
 
 
     @Override
-    protected void dispatchSaveInstanceState(final SparseArray<Parcelable> container) {
+    protected void dispatchSaveInstanceState(@NonNull final SparseArray<Parcelable> container) {
         dispatchFreezeSelfOnly(container);
     }
 
